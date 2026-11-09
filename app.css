@@ -168,3 +168,23 @@ textarea.note.has{border-color:var(--warn);background:var(--warnb)}
 .hd h1{font-size:20px}.hd p{font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .tile{border-color:var(--cardline);box-shadow:var(--cardshadow);border-radius:14px;padding:10px 12px}
 .tile b{font-size:20px}
+
+.welcome{position:fixed;inset:0;z-index:80;background:var(--bg);overflow-y:auto;padding:calc(var(--sat) + 28px) 24px calc(var(--sab) + 24px)}
+.w-in{max-width:420px;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center}
+.w-icon{border-radius:24px;box-shadow:0 8px 24px rgba(11,92,173,.3)}
+.welcome h1{font:700 26px/1.2 var(--fc);margin-top:18px}
+.w-sub{color:var(--muted);margin-top:6px;font-size:15px}
+.w-feat{list-style:none;padding:0;margin:22px 0 0;text-align:left;width:100%;display:grid;gap:10px}
+.w-feat li{position:relative;padding-left:30px;font-size:15px}
+.w-feat li::before{content:"✓";position:absolute;left:0;top:0;width:20px;height:20px;border-radius:10px;background:var(--goodb);color:var(--good);font-weight:700;font-size:12px;text-align:center;line-height:20px}
+.w-how{width:100%;margin-top:26px;background:var(--card);border:1px solid var(--cardline);border-radius:16px;padding:16px;text-align:left}
+.w-btn{width:100%;border:0;border-radius:14px;padding:15px;font-size:17px;font-weight:700;background:var(--accent);color:var(--accent-ink)}
+.w-small{font-size:13px;color:var(--muted);margin-top:8px;text-align:center}
+.w-steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:14px}
+.w-steps li{counter-increment:s;position:relative;padding-left:38px;font-size:15.5px;line-height:1.4}
+.w-steps li::before{content:counter(s);position:absolute;left:0;top:-2px;width:26px;height:26px;border-radius:13px;background:var(--accent);color:var(--accent-ink);font-weight:700;text-align:center;line-height:26px;font-size:14px}
+.w-share{display:inline-flex;vertical-align:-3px;color:var(--accent)}
+.w-arrow{text-align:center;font-size:30px;color:var(--accent);margin-top:10px}
+@media (prefers-reduced-motion:no-preference){.w-arrow{animation:bob 1.2s ease-in-out infinite}@keyframes bob{50%{transform:translateY(8px)}}}
+.w-warn{font-size:15px;margin-bottom:12px}
+.w-skip{margin-top:18px;border:0;background:transparent;color:var(--muted);font-size:14px;text-decoration:underline;padding:10px}

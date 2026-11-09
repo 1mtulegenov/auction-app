@@ -387,8 +387,34 @@ function installSheet() {
   if (ios && !isStandalone()) h = '<p class="banner" style="display:block">Вы на iPhone: шаги ниже.</p>' + h;
   openSheet('Установить на телефон', h, true);
 }
-window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); S.deferredInstall = e; });
-window.addEventListener('appinstalled', () => { S.deferredInstall = null; toast('Приложение установлено'); });
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); S.deferredInstall = e; if ($('#welcome')) welcome(); });
+function platform() {
+  const ua = navigator.userAgent, ios = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (ios) return /CriOS|FxiOS|EdgiOS|Telegram|WhatsApp|Instagram|FBAN|FBAV|Line\/|GSA\//i.test(ua) || !/Safari/i.test(ua) ? 'ios-other' : 'ios';
+  if (/android/i.test(ua)) return 'android';
+  return 'desktop';
+}
+function welcome() {
+  const pf = platform();
+  let el = $('#welcome'); if (!el) { el = document.createElement('div'); el.id = 'welcome'; el.className = 'welcome'; document.body.appendChild(el); document.body.style.overflow = 'hidden'; }
+  let how = '';
+  if (pf === 'android' && S.deferredInstall) how = '<button class="w-btn" data-act="w-install">Установить приложение</button><p class="w-small">Иконка появится в списке приложений, как у обычного приложения.</p>';
+  else if (pf === 'android') how = '<ol class="w-steps"><li>Нажмите <b>⋮</b> справа вверху в Chrome</li><li>Выберите <b>«Установить приложение»</b></li><li>Нажмите <b>«Установить»</b></li></ol>';
+  else if (pf === 'ios') how = '<ol class="w-steps"><li>Нажмите <b>«Поделиться»</b> <span class="w-share">' + SHARE_ICON + '</span> внизу экрана</li><li>Прокрутите и выберите <b>«На экран „Домой“»</b></li><li>Нажмите <b>«Добавить»</b></li></ol><div class="w-arrow" aria-hidden="true">↓</div>';
+  else if (pf === 'ios-other') how = '<p class="w-warn">На iPhone приложение ставится только из <b>Safari</b>. Скопируйте ссылку и откройте её в Safari.</p><button class="w-btn" data-act="w-copy">Скопировать ссылку</button>';
+  el.innerHTML = '<div class="w-in"><img src="icons/icon-512.png" alt="" width="104" height="104" class="w-icon"><h1>Аукционы Хьюстона</h1><p class="w-sub">Лоты автоаукционов с MMR, максимальной ставкой и прибылью</p>'
+    + '<ul class="w-feat"><li>Подборка машин на каждые торги</li><li>Сканер VIN: наведите камеру, и машина откроется</li><li>Работает на площадке без интернета</li><li>Новые лоты приходят сами</li></ul>'
+    + '<div class="w-how">' + how + '</div><button class="w-skip" data-act="w-skip">Открыть без установки</button></div>';
+}
+const SHARE_ICON = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
+function closeWelcome(remember) { const el = $('#welcome'); if (el) el.remove(); document.body.style.overflow = ''; if (remember) LS.set('w-skip', Date.now()); }
+document.addEventListener('click', async e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.act === 'w-skip') closeWelcome(true);
+  else if (t.dataset.act === 'w-copy') copy(location.href.split('#')[0]);
+  else if (t.dataset.act === 'w-install' && S.deferredInstall) { S.deferredInstall.prompt(); const r = await S.deferredInstall.userChoice; S.deferredInstall = null; if (r.outcome === 'accepted') closeWelcome(false); else welcome(); }
+});
+window.addEventListener('appinstalled', () => { S.deferredInstall = null; closeWelcome(false); toast('Приложение установлено'); });
 
 /* ---------- общее ---------- */
 let toastT;
@@ -496,6 +522,8 @@ async function start() {
     LS.set('seen-newest', newest);
     const tb = LS.get('tab', 'home'); S.tab = ['home', 'picks', 'lots', 'results', 'more'].includes(tb) ? tb : 'home';
     render();
+    const sk = LS.get('w-skip', 0);
+    if (!isStandalone() && platform() !== 'desktop' && Date.now() - sk > 3 * 864e5) welcome();
   } catch (e) {
     $('#view').innerHTML = '<p class="empty">Не удалось загрузить данные. Проверьте интернет и откройте приложение ещё раз.</p>';
   }

@@ -1,5 +1,5 @@
 /* Сервис-воркер: приложение открывается без интернета, данные обновляются при каждом запуске со связью. */
-const VERSION = '57d4819461';
+const VERSION = 'dba9a762c1';
 const SHELL = 'shell-' + VERSION, DATA = 'data-v1';
 const FILES = ['./', 'index.html', 'app.css', 'app.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'vendor/zxing.min.js'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(SHELL).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
