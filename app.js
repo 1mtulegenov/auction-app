@@ -551,6 +551,45 @@ async function handleVin(raw, fromCamera) {
   res.hidden = false;
   res.innerHTML = '<b class="vin">' + E(v) + '</b><br>' + (v.length === 17 ? 'Этой машины нет в каталогах приложения.' : 'Ничего не нашлось. Введите VIN целиком или последние 6–8 символов.') + (v.length === 17 ? '<br><button class="btn" data-act="copy" data-v="' + E(v) + '">Скопировать VIN</button>' : '');
 }
+/* распознавание напечатанного VIN (Tesseract, работает на телефоне без интернета после первой загрузки) */
+let OCR = null;
+function ocrWorker() {
+  if (!OCR) OCR = (async () => {
+    if (!window.Tesseract) await new Promise((ok, bad) => { const s = document.createElement('script'); s.src = 'vendor/tess/tesseract.min.js'; s.onload = ok; s.onerror = bad; document.head.appendChild(s); });
+    const base = new URL('vendor/tess/', location.href).href;
+    const w = await Tesseract.createWorker('eng', 1, { workerPath: base + 'worker.min.js', corePath: base, langPath: base, gzip: true, workerBlobURL: false });
+    await w.setParameters({ tessedit_char_whitelist: 'ABCDEFGHJKLMNPRSTUVWXYZ0123456789', tessedit_pageseg_mode: '6' });
+    return w;
+  })().catch(e => { OCR = null; throw e; });
+  return OCR;
+}
+const VW = { A: 1, B: 2, C: 3, D: 4, E: 5, F: 6, G: 7, H: 8, J: 1, K: 2, L: 3, M: 4, N: 5, P: 7, R: 9, S: 2, T: 3, U: 4, V: 5, W: 6, X: 7, Y: 8, Z: 9 };
+function vinCheckOk(v) { const w = [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2]; let s = 0; for (let i = 0; i < 17; i++) { const c = v[i]; s += (/\d/.test(c) ? +c : VW[c] || 0) * w[i]; } const r = s % 11; return v[8] === (r === 10 ? 'X' : String(r)); }
+function ocrCandidates(text) {
+  const out = [], seen = new Set(), add = (v, t) => { if (!seen.has(v)) { seen.add(v); out.push({ v, t }); } };
+  String(text || '').toUpperCase().split(/\n/).forEach(line => {
+    const t = line.replace(/[^A-Z0-9]/g, '').replace(/O|Q/g, '0').replace(/I/g, '1');
+    if (t.length === 17) add(t, 'line');
+    if (t.length === 18 || t.length === 19) for (let i = 0; i < t.length; i++) { const d = t.slice(0, i) + t.slice(i + 1); if (d.length === 17) add(d, 'del'); else for (let j = 0; j < d.length; j++) add(d.slice(0, j) + d.slice(j + 1), 'del'); }
+    for (let i = 0; i + 17 <= t.length; i++) add(t.slice(i, i + 17), 'win');
+  });
+  return out;
+}
+function nearVin(v, idx) {
+  let best = null, bd = 9, tie = false;
+  for (const k in idx) { let d = 0; for (let i = 0; i < 17 && d <= 2; i++) if (k[i] !== v[i]) d++; if (d < bd) { bd = d; best = k; tie = false; } else if (d === bd && k !== best) tie = true; }
+  return bd <= 2 && !tie ? { vin: best, d: bd } : null;
+}
+let ocrK = 0;
+async function ocrFrame(cv) {
+  const w = await ocrWorker(); const r = await w.recognize(cv);
+  const idx = await vinIndex(); const cands = ocrCandidates(r.data.text);
+  for (const c of cands) if (idx[c.v]) return { vin: c.v, exact: true };
+  for (const c of cands) { const n = nearVin(c.v, idx); if (n) return { vin: n.vin, read: c.v, d: n.d }; }
+  for (const c of cands) if (c.t !== 'win' && vinCheckOk(c.v)) return { vin: c.v, unknown: true };
+  const raw = (r.data.text || '').replace(/[^A-Z0-9\n]/gi, '').split('\n').sort((a, b) => b.length - a.length)[0];
+  return raw && raw.length >= 10 ? { raw } : null;
+}
 async function decoderFor() {
   if ('BarcodeDetector' in window) {
     try {
@@ -569,7 +608,7 @@ async function decoderFor() {
 async function openScan() {
   const el = document.createElement('div'); el.className = 'scan'; el.id = 'scan';
   el.innerHTML = '<div class="bar"><button data-act="scan-close">Закрыть</button><button data-act="torch" id="torch" hidden>Фонарик</button></div><video playsinline muted autoplay></video><div class="frame"></div>'
-    + '<p class="hint" id="scanHint">Наведите на штрихкод VIN: стойка водительской двери, лобовое стекло или наклейка в документах.</p><div class="res" id="scanRes" hidden></div>'
+    + '<p class="hint" id="scanHint">Наведите на штрихкод или надпись VIN, чтобы она была в рамке. Держите телефон ровно, 15–25 см.</p><div class="res" id="scanRes" hidden></div>'
     + '<form id="scanForm"><input id="vinIn" placeholder="VIN или последние 6 символов" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="search" aria-label="VIN"><button>Найти</button></form>';
   document.body.appendChild(el); document.body.style.overflow = 'hidden';
   try { history.pushState({ scan: 1 }, ''); } catch (e) {}
@@ -589,7 +628,26 @@ async function openScan() {
   const decode = await decoderFor().catch(() => null);
   if (!decode) { $('#scanHint').textContent = 'Сканер не загрузился. Введите VIN вручную.'; return; }
   const cv = document.createElement('canvas'), cx = cv.getContext('2d', { willReadFrequently: true });
-  let n = 0, last = '';
+  let n = 0, last = '', ocrBusy = false, ocrReady = false, seen = {};
+  $('#scanHint').dataset.base = $('#scanHint').textContent;
+  ocrWorker().then(() => { ocrReady = true; }).catch(() => { if (alive) $('#scanHint').textContent = 'Чтение надписи не загрузилось, работает только штрихкод и ручной ввод.'; });
+  const runOcr = () => {
+    if (ocrBusy || !ocrReady || !alive || !video.videoWidth) return;
+    ocrBusy = true;
+    const vw = video.videoWidth, vh = video.videoHeight, sh = Math.round(vh * .3), sy = Math.round((vh - sh) / 2), sw = Math.round(vw * .9), sx = Math.round((vw - sw) / 2);
+    const oc = document.createElement('canvas'), k = Math.min([0.6, 1, 2][ocrK++ % 3], 2400 / sw); oc.width = Math.round(sw * k); oc.height = Math.round(sh * k);
+    const ox = oc.getContext('2d'); ox.filter = 'grayscale(1) contrast(1.4)'; ox.drawImage(video, sx, sy, sw, sh, 0, 0, oc.width, oc.height);
+    ocrFrame(oc).then(async r => {
+      if (!r || !alive) return;
+      if (r.raw) { $('#scanHint').textContent = 'Читаю надпись: ' + r.raw + '…'; return; }
+      seen[r.vin] = (seen[r.vin] || 0) + 1;
+      if (r.exact || seen[r.vin] >= 2) {
+        $('#vinIn').value = r.vin; if (r.vin === last) return; last = r.vin;
+        if (r.unknown) { const res = $('#scanRes'); res.hidden = false; res.innerHTML = 'Прочитал VIN <b class="vin">' + E(r.vin) + '</b>. Сверьте с надписью: если есть ошибка, исправьте в поле внизу. Этой машины нет в каталогах приложения.<br><button class="btn" data-act="copy" data-v="' + E(r.vin) + '">Скопировать VIN</button>'; if (navigator.vibrate) navigator.vibrate(60); }
+        else await handleVin(r.vin, false);
+      } else $('#scanHint').textContent = 'Читаю надпись: ' + (r.read || r.vin) + '…';
+    }).catch(() => {}).finally(() => { ocrBusy = false; });
+  };
   const tick = async () => {
     if (!alive) return;
     if (video.videoWidth) {
@@ -603,6 +661,7 @@ async function openScan() {
       const txt = await decode(cv);
       if (txt && alive) { const v = cleanVin(txt); if (VIN_RE.test(v) && v !== last) { last = v; $('#vinIn').value = v; await handleVin(v, true); } }
     }
+    runOcr();
     if (alive) timer = setTimeout(tick, 120);
   };
   tick();

@@ -11,6 +11,7 @@
 - `index.html`, `app.css`, `app.js` — само приложение
 - `sw.js` — офлайн-кэш и обновления, `manifest.webmanifest` и `icons/` — установка на телефон
 - `data/index.json` — список дат и версия, `data/<дата>.json` — лоты одной даты
+- `vendor/tess/` — чтение напечатанного VIN (Tesseract.js, Apache 2.0)
 - `vendor/zxing.min.js` — сканер штрихкодов VIN (ZXing, Apache 2.0)
 - `tools/build_data.py` — превращает DATA дэшборда в файлы приложения
 
