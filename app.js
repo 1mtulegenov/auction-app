@@ -87,25 +87,40 @@ function factText(x) {
 }
 
 /* ---------- карточка лота ---------- */
+const VERDICT = { 'Основная': ['v-buy', 'Брать'], 'Флип': ['v-flip', 'Флип'], 'Дорого': ['v-exp', 'Дорого'] };
+function statusLine(x) {
+  const it = [];
+  const add = (c, t) => it.push('<span class="st ' + c + '"><i></i>' + t + '</span>');
+  if (x.ttl) add(x.ttlbad ? 'bad' : 'ok', E(x.ttl));
+  else if (x.cls === 'salvage') add('bad', 'Salvage / без тайтла');
+  if (x.t && x.auc !== 'H1C' && x.t !== 'At Auction') add('warn', 'Тайтла нет на площадке');
+  if (x.cls === 'noinop') add('bad', 'Не на ходу / нет ключа');
+  if (x.hist) add('bad', 'Пометка в истории');
+  if (x.auc === 'CMX' && x.mech) add('bad', 'Дефект двигателя/КПП');
+  if (x.l === 'Green') add('ok', 'Зелёный свет'); else if (String(x.l || '').includes('Red')) add('bad', 'Красный свет'); else if (x.l === 'Yellow') add('warn', 'Жёлтый свет');
+  if (x.g) { const g = parseFloat(x.g); add(g >= 4 ? 'ok' : g < 3 ? 'bad' : 'warn', 'Оценка ' + E(x.g)); }
+  return it.join('');
+}
+function hotLine(x) {
+  const a = (hasAnn(x) ? (x.ar || x.a) : '') || '';
+  const hot = a.split(/;\s*/).filter(t => HOT_R.test(t) || HOT_Y.test(t));
+  if (!hot.length && x.whyn && (HOT_R.test(x.whyn) || HOT_Y.test(x.whyn))) hot.push(x.whyn);
+  return hot.length ? '<p class="warnline">' + hot.map(t => '<span class="' + (HOT_R.test(t) ? 'hot-r' : 'hot-y') + '">' + E(t) + '</span>').join(' ') + '</p>' : '';
+}
 function lotCard(x) {
-  const n = noteOf(x), ch = chance(x);
-  let chips = titleChip(x) + lightChip(x);
-  if (x.g) { const g = parseFloat(x.g); chips += '<span class="chip ' + (g >= 4 ? 'good' : g < 3 ? 'bad' : 'warn') + '">Оценка ' + E(x.g) + '</span>'; }
-  if (x.t && x.auc !== 'H1C') chips += x.t === 'At Auction' ? '<span class="chip good">Тайтл на месте</span>' : '<span class="chip warn">Тайтла нет на площадке</span>';
-  if (x.cls && x.cls !== 'clean' && x.cls !== 'salvage') chips += '<span class="chip ' + CLS[x.cls][0] + '">' + CLS[x.cls][1] + '</span>';
-  if (x.hist) chips += '<span class="chip bad">Пометка в истории</span>';
-  if (ch) chips += '<span class="chip ' + ch[0] + '">Шанс: ' + ch[1] + '</span>';
-  return '<div class="lot ' + (STAT[x.stat] || '') + '" role="button" tabindex="0" data-lot="' + E(x.k) + '">'
-    + '<div class="lot-top"><span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + slot(x) + (x.stat ? ' · ' + E(x.stat) : '') + '</span></div>'
-    + '<button class="star' + (isFav(x) ? ' on' : '') + '" data-fav="' + E(x.k) + '" aria-label="В избранное" aria-pressed="' + isFav(x) + '">' + (isFav(x) ? '★' : '☆') + '</button>'
+  const n = noteOf(x), v = VERDICT[x.stat], fav = isFav(x);
+  const prof = x.prof == null ? '—' : (x.prof > 0 ? '+' : '') + M(x.prof);
+  return '<article class="lot" role="button" tabindex="0" data-lot="' + E(x.k) + '">'
+    + '<div class="lot-top"><span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + slot(x) + '</span>' + (v ? '<span class="verdict ' + v[0] + '">' + v[1] + '</span>' : '') + '</div>'
+    + '<button class="star' + (fav ? ' on' : '') + '" data-fav="' + E(x.k) + '" aria-label="В избранное" aria-pressed="' + fav + '">' + (fav ? '★' : '☆') + '</button>'
     + '<h3>' + E(carName(x)) + '</h3>'
-    + '<p class="sub">' + (x.o > 500 ? N(x.o) + ' mi · ' : '') + E(COLOR[x.c] || String(x.c || '').toLowerCase()) + (x.demand ? ' · спрос ' + x.demand + '/10' : '') + '</p>'
-    + (chips ? '<div class="chips">' + chips + '</div>' : '')
-    + (hasAnn(x) ? '<p class="ann">' + hl(x) + '</p>' : x.whyn && (HOT_R.test(x.whyn) || HOT_Y.test(x.whyn)) ? '<p class="ann">' + hl({ a: x.whyn }) + '</p>' : '')
-    + '<div class="nums3"><div class="hl"><b>' + M(x.w) + '</b><span>MMR</span></div><div><b>' + M(x.max) + '</b><span>макс. ставка</span></div><div><b class="' + profCls(x) + '">' + M(x.prof) + '</b><span>прибыль</span></div></div>'
+    + '<p class="sub">' + [x.o > 500 ? N(x.o) + ' mi' : '', COLOR[x.c] || String(x.c || '').toLowerCase()].filter(Boolean).map(E).join(' · ') + '</p>'
+    + '<div class="money"><div class="m-main"><span>Макс. ставка</span><b>' + M(x.max) + '</b></div><div><span>Прибыль</span><b class="' + profCls(x) + '">' + prof + '</b></div><div><span>MMR</span><b>' + M(x.w) + '</b></div></div>'
+    + '<div class="status">' + statusLine(x) + '</div>'
+    + hotLine(x)
     + factText(x)
-    + (n ? '<p class="note-pv">📝 ' + E(n.text.slice(0, 120)) + '</p>' : '')
-    + '</div>';
+    + (n ? '<p class="note-pv">' + E(n.text.slice(0, 120)) + '</p>' : '')
+    + '</article>';
 }
 
 /* ---------- фильтры ---------- */
@@ -183,7 +198,7 @@ function render() {
 }
 function installBanner() {
   if (isStandalone() || LS.get('hide-install', false)) return '';
-  return '<div class="banner"><div style="flex:1"><b>Установите как приложение</b><span class="muted">Иконка на экране, открывается без браузера и работает без интернета.</span></div><button class="btn pri" data-act="install">Как</button><button class="x" data-act="hide-install" aria-label="Скрыть">×</button></div>';
+  return '<div class="banner"><button class="banner-go" data-act="install"><b>Установить на телефон</b><span>иконка на экране, работает без интернета</span></button><button class="x" data-act="hide-install" aria-label="Скрыть">×</button></div>';
 }
 function home() {
   const d = S.d;
