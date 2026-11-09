@@ -489,7 +489,7 @@ async function start() {
       reg.addEventListener('updatefound', () => {
         const nw = reg.installing;
         nw && nw.addEventListener('statechange', () => {
-          if (nw.state === 'installed' && navigator.serviceWorker.controller) toast('Вышла новая версия приложения', 'Обновить', () => { nw.postMessage('skip'); });
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) nw.postMessage('skip');
         });
       });
       let reloaded = false; const hadCtrl = !!navigator.serviceWorker.controller;
