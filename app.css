@@ -190,3 +190,13 @@ textarea.note.has{border-color:var(--warn);background:var(--warnb)}
 .w-skip{margin-top:18px;border:0;background:transparent;color:var(--muted);font-size:14px;text-decoration:underline;padding:10px}
 
 .lot{content-visibility:auto;contain-intrinsic-size:auto 230px}
+
+.fees{background:var(--card);border:1px solid var(--cardline);border-radius:14px;padding:12px 14px;margin:0 0 12px;box-shadow:var(--cardshadow)}
+.fees-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.fees-h>b{font-size:15px}.fees-h span{font-size:13px;color:var(--muted)}.fees-h span b{color:var(--ink);font-size:15px}
+.fees-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.fees-row label{font-size:12px;font-weight:600;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.money-in{display:flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:0 10px;color:var(--ink);font-size:16px;font-weight:700}
+.money-in input{border:0;background:transparent;width:100%;min-width:0;padding:9px 0;font-size:17px;font-weight:700;color:var(--ink);outline:none}
+.fees-note{font-size:12px;color:var(--muted);margin-top:8px}
+.menu .flag{font-size:22px}.menu .chk{margin-left:auto;color:var(--accent);font-weight:700}
+.menu button[aria-current="true"]{border-color:var(--accent)}
