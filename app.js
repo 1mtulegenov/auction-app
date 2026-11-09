@@ -286,7 +286,8 @@ function openSheet(title, html, full, actions) {
   sh.innerHTML = (full ? '' : '<div class="grip"></div>') + '<div class="sheet-h"><h2 id="sheetTitle">' + title + '</h2>' + (actions || '') + '<button data-act="close">' + (full ? 'Назад' : 'Готово') + '</button></div>' + html;
   sh.hidden = false; $('#sheetBg').hidden = false; document.body.style.overflow = 'hidden';
   sh.scrollTop = 0;
-  if (!sheetOpen) { try { history.pushState({ sheet: 1 }, ''); } catch (e) {} }
+  if (!sheetOpen) { try { if (S.replaceNext) history.replaceState({ sheet: 1 }, ''); else history.pushState({ sheet: 1 }, ''); } catch (e) {} }
+  S.replaceNext = false;
   sheetOpen = true;
 }
 function closeSheet(fromPop) {
@@ -499,3 +500,122 @@ async function start() {
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') refresh(false); });
 }
 start();
+
+/* ---------- сканер VIN ---------- */
+const VIN_RE = /[A-HJ-NPR-Z0-9]{17}/;
+let VINS = null, scanStop = null;
+async function vinIndex() {
+  if (!VINS) VINS = await getJSON('data/vins.json?v=' + S.index.version);
+  return VINS;
+}
+function cleanVin(t) {
+  let s = String(t || '').toUpperCase().replace(/[^A-Z0-9]/g, '').replace(/O/g, '0').replace(/[IQ]/g, m => m);
+  const m = s.match(VIN_RE); if (m) return m[0];
+  if (s.length === 18 && /^I/.test(s)) return s.slice(1); // Code 39 на импортных машинах начинается с I
+  return s;
+}
+async function findVin(raw) {
+  const v = cleanVin(raw); if (v.length < 5) return { v, hits: [] };
+  const idx = await vinIndex();
+  let hits = idx[v] ? idx[v].map(h => ({ vin: v, d: h[0], k: h[1] })) : [];
+  if (!hits.length) for (const [vin, arr] of Object.entries(idx)) if (vin.endsWith(v) || (v.length >= 10 && vin.startsWith(v))) arr.forEach(h => hits.push({ vin, d: h[0], k: h[1] }));
+  const order = S.index.dates.map(d => d.id);
+  hits.sort((a, b) => (a.d === S.date ? -1 : 0) - (b.d === S.date ? -1 : 0) || order.indexOf(a.d) - order.indexOf(b.d));
+  return { v, hits };
+}
+async function openHit(h) {
+  closeScan(true); S.replaceNext = true;
+  if (S.date !== h.d) { await loadDate(h.d); render(); }
+  detail(h.k);
+}
+async function handleVin(raw, fromCamera) {
+  const res = $('#scanRes'); if (!res) return;
+  const { v, hits } = await findVin(raw);
+  const uniq = [...new Set(hits.map(h => h.vin))];
+  if (hits.length && (uniq.length === 1)) {
+    if (navigator.vibrate) navigator.vibrate(60);
+    const others = hits.slice(1);
+    if (!others.length) return openHit(hits[0]);
+    res.hidden = false;
+    res.innerHTML = '<b>' + E(uniq[0]) + '</b><br>Эта машина есть на нескольких торгах:' + hits.map((h, i) => '<button class="btn" style="width:100%" data-hit="' + i + '">' + E(fmtDate(h.d)) + ' · лот ' + E(h.k.split('|')[1]) + ' · ' + E(AUC[h.k.split('|')[0]] || '') + '</button>').join('');
+    res.onclick = e => { const b = e.target.closest('[data-hit]'); if (b) openHit(hits[+b.dataset.hit]); };
+    return;
+  }
+  if (uniq.length > 1) {
+    res.hidden = false;
+    res.innerHTML = 'Подходят ' + uniq.length + ' машин, выберите:' + hits.slice(0, 8).map((h, i) => '<button class="btn" style="width:100%" data-hit="' + i + '">…' + E(h.vin.slice(-8)) + ' · ' + E(fmtDate(h.d)) + ' · лот ' + E(h.k.split('|')[1]) + '</button>').join('');
+    res.onclick = e => { const b = e.target.closest('[data-hit]'); if (b) openHit(hits[+b.dataset.hit]); };
+    return;
+  }
+  if (fromCamera && v.length !== 17) return;
+  res.hidden = false;
+  res.innerHTML = '<b class="vin">' + E(v) + '</b><br>' + (v.length === 17 ? 'Этой машины нет в каталогах приложения.' : 'Ничего не нашлось. Введите VIN целиком или последние 6–8 символов.') + (v.length === 17 ? '<br><button class="btn" data-act="copy" data-v="' + E(v) + '">Скопировать VIN</button>' : '');
+}
+async function decoderFor() {
+  if ('BarcodeDetector' in window) {
+    try {
+      const f = await BarcodeDetector.getSupportedFormats();
+      const want = ['code_39', 'code_128', 'data_matrix', 'qr_code', 'pdf417'].filter(x => f.includes(x));
+      if (want.includes('code_39')) { const bd = new BarcodeDetector({ formats: want }); return async c => { const r = await bd.detect(c); return r.length ? r[0].rawValue : null; }; }
+    } catch (e) {}
+  }
+  if (!window.ZXing) await new Promise((ok, bad) => { const s = document.createElement('script'); s.src = 'vendor/zxing.min.js'; s.onload = ok; s.onerror = bad; document.head.appendChild(s); });
+  const Z = window.ZXing, hints = new Map();
+  hints.set(Z.DecodeHintType.POSSIBLE_FORMATS, [Z.BarcodeFormat.CODE_39, Z.BarcodeFormat.CODE_128, Z.BarcodeFormat.DATA_MATRIX, Z.BarcodeFormat.QR_CODE, Z.BarcodeFormat.PDF_417]);
+  hints.set(Z.DecodeHintType.TRY_HARDER, true);
+  const rd = new Z.MultiFormatReader(); rd.setHints(hints);
+  return async c => { try { return rd.decodeWithState(new Z.BinaryBitmap(new Z.HybridBinarizer(new Z.HTMLCanvasElementLuminanceSource(c)))).getText(); } catch (e) { return null; } finally { rd.reset(); } };
+}
+async function openScan() {
+  const el = document.createElement('div'); el.className = 'scan'; el.id = 'scan';
+  el.innerHTML = '<div class="bar"><button data-act="scan-close">Закрыть</button><button data-act="torch" id="torch" hidden>Фонарик</button></div><video playsinline muted autoplay></video><div class="frame"></div>'
+    + '<p class="hint" id="scanHint">Наведите на штрихкод VIN: стойка водительской двери, лобовое стекло или наклейка в документах.</p><div class="res" id="scanRes" hidden></div>'
+    + '<form id="scanForm"><input id="vinIn" placeholder="VIN или последние 6 символов" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="search" aria-label="VIN"><button>Найти</button></form>';
+  document.body.appendChild(el); document.body.style.overflow = 'hidden';
+  try { history.pushState({ scan: 1 }, ''); } catch (e) {}
+  vinIndex().catch(() => {});
+  el.querySelector('#scanForm').onsubmit = e => { e.preventDefault(); handleVin($('#vinIn').value, false); };
+  const video = el.querySelector('video');
+  let stream, alive = true, timer;
+  scanStop = () => { alive = false; clearTimeout(timer); if (stream) stream.getTracks().forEach(t => t.stop()); };
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { $('#scanHint').textContent = 'Камера недоступна в этом браузере. Введите VIN вручную.'; return; }
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false });
+  } catch (e) { $('#scanHint').textContent = 'Нет доступа к камере. Разрешите камеру в настройках браузера или введите VIN вручную.'; return; }
+  if (!alive) { stream.getTracks().forEach(t => t.stop()); return; }
+  video.srcObject = stream; try { await video.play(); } catch (e) {}
+  const track = stream.getVideoTracks()[0];
+  try { const cap = track.getCapabilities && track.getCapabilities(); if (cap && cap.torch) { const tb = $('#torch'); tb.hidden = false; let on = false; tb.onclick = () => { on = !on; track.applyConstraints({ advanced: [{ torch: on }] }); }; } if (cap && cap.focusMode && cap.focusMode.includes('continuous')) track.applyConstraints({ advanced: [{ focusMode: 'continuous' }] }); } catch (e) {}
+  const decode = await decoderFor().catch(() => null);
+  if (!decode) { $('#scanHint').textContent = 'Сканер не загрузился. Введите VIN вручную.'; return; }
+  const cv = document.createElement('canvas'), cx = cv.getContext('2d', { willReadFrequently: true });
+  let n = 0, last = '';
+  const tick = async () => {
+    if (!alive) return;
+    if (video.videoWidth) {
+      const vw = video.videoWidth, vh = video.videoHeight, rot = n++ % 3 === 2;
+      // берём полосу по центру кадра (там рамка), каждый третий кадр поворачиваем на 90° для вертикальных штрихкодов
+      const sw = rot ? Math.round(vw * .5) : vw, sh = rot ? vh : Math.round(vh * .45);
+      const sx = Math.round((vw - sw) / 2), sy = Math.round((vh - sh) / 2);
+      const sc = Math.min(1, 1400 / Math.max(sw, sh));
+      if (rot) { cv.width = Math.round(sh * sc); cv.height = Math.round(sw * sc); cx.save(); cx.translate(cv.width, 0); cx.rotate(Math.PI / 2); cx.drawImage(video, sx, sy, sw, sh, 0, 0, sw * sc, sh * sc); cx.restore(); }
+      else { cv.width = Math.round(sw * sc); cv.height = Math.round(sh * sc); cx.drawImage(video, sx, sy, sw, sh, 0, 0, cv.width, cv.height); }
+      const txt = await decode(cv);
+      if (txt && alive) { const v = cleanVin(txt); if (VIN_RE.test(v) && v !== last) { last = v; $('#vinIn').value = v; await handleVin(v, true); } }
+    }
+    if (alive) timer = setTimeout(tick, 120);
+  };
+  tick();
+}
+function closeScan(fromPop) {
+  const el = $('#scan'); if (!el) return;
+  if (scanStop) scanStop(); scanStop = null;
+  el.remove(); document.body.style.overflow = '';
+  if (!fromPop) { try { history.back(); } catch (e) {} }
+}
+window.addEventListener('popstate', () => { if ($('#scan')) closeScan(true); });
+document.addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.id === 'btnScan') openScan();
+  else if (t.dataset.act === 'scan-close') closeScan();
+});

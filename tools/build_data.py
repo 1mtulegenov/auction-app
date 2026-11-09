@@ -80,9 +80,16 @@ def main():
         open(os.path.join(a.out, d['id'] + '.json'), 'w', encoding='utf-8').write(txt)
         idx.append({'id': b['id'], 'label': b['label'], 'title': b['title'], 'n': len(b['lots']),
                     'core': len(b['core']), 'flip': len(b['flip']), 'results': bool(b.get('results'))})
+    vins = {}
+    for d in data['dates']:
+        for r in build_date(d)['lots']:
+            v = str(r.get('vin') or '').upper()
+            if len(v) == 17:
+                vins.setdefault(v, []).append([d['id'], key(r)])
+    open(os.path.join(a.out, 'vins.json'), 'w', encoding='utf-8').write(json.dumps(vins, separators=(',', ':')))
     now = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)
     index = {'version': h.hexdigest()[:10], 'updated': now.isoformat(), 'dates': idx}
-    keep = {d['id'] + '.json' for d in data['dates']} | {'index.json'}
+    keep = {d['id'] + '.json' for d in data['dates']} | {'index.json', 'vins.json'}
     for f in os.listdir(a.out):
         if f.endswith('.json') and f not in keep:
             os.remove(os.path.join(a.out, f))
