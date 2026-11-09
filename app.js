@@ -95,13 +95,14 @@ function statusLine(x) {
   else if (x.cls === 'salvage') add('bad', 'Salvage / без тайтла');
   if (x.t && x.auc !== 'H1C' && x.t !== 'At Auction') add('warn', 'Тайтла нет на площадке');
   if (x.cls === 'noinop') add('bad', 'Не на ходу / нет ключа');
-  if (x.hist) add('bad', 'Пометка в истории');
+  if (x.hist) { const why = (x.ar || '').split(/;\s*/).filter(t => HOT_Y.test(t) || HOT_R.test(t) || /угон|пробег|доработ|тотал|flood/i.test(t)); add('bad', why.length ? 'История: ' + E(why.slice(0, 2).join(', ')) : /серьёзн/.test(x.hx || '') ? 'Серьёзное ДТП в истории' : 'Пометка в истории'); }
   if (x.auc === 'CMX' && x.mech) add('bad', 'Дефект двигателя/КПП');
   if (x.l === 'Green') add('ok', 'Зелёный свет'); else if (String(x.l || '').includes('Red')) add('bad', 'Красный свет'); else if (x.l === 'Yellow') add('warn', 'Жёлтый свет');
   if (x.g) { const g = parseFloat(x.g); add(g >= 4 ? 'ok' : g < 3 ? 'bad' : 'warn', 'Оценка ' + E(x.g)); }
   return it.join('');
 }
 function hotLine(x) {
+  if (x.hist) return '';
   const a = (hasAnn(x) ? (x.ar || x.a) : '') || '';
   const hot = a.split(/;\s*/).filter(t => HOT_R.test(t) || HOT_Y.test(t));
   if (!hot.length && x.whyn && (HOT_R.test(x.whyn) || HOT_Y.test(x.whyn))) hot.push(x.whyn);
