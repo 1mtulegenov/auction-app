@@ -188,3 +188,5 @@ textarea.note.has{border-color:var(--warn);background:var(--warnb)}
 @media (prefers-reduced-motion:no-preference){.w-arrow{animation:bob 1.2s ease-in-out infinite}@keyframes bob{50%{transform:translateY(8px)}}}
 .w-warn{font-size:15px;margin-bottom:12px}
 .w-skip{margin-top:18px;border:0;background:transparent;color:var(--muted);font-size:14px;text-decoration:underline;padding:10px}
+
+.lot{content-visibility:auto;contain-intrinsic-size:auto 230px}

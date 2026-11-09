@@ -25,7 +25,7 @@ const S = {
   favs: LS.get('fav-v1', {}), notes: LS.get('auction-notes-v1', {}),
   f: { q: '', mk: '', au: '', cl: '', st: '', y: '', o: '', p: '', quick: '' , sort: 'stat' },
   rf: { q: '', st: '', sort: 'run' },
-  shown: 60, deferredInstall: null
+  shown: 24, deferredInstall: null
 };
 
 /* ---------- данные ---------- */
@@ -237,12 +237,17 @@ function lotsScreen() {
     + '<div class="count"><span id="cnt"></span><select id="sort" aria-label="Сортировка">' + SORTS.map(([k, l]) => '<option value="' + k + '"' + (S.f.sort === k ? ' selected' : '') + '>' + l + '</option>').join('') + '</select></div>'
     + '<div class="list" id="lotlist"></div><div id="lotmore"></div>';
 }
+let LOTS_CUR = [];
 function drawLots(keep) {
-  const a = applyFilters(S.d.lots);
-  if (!keep) S.shown = 60;
-  $('#cnt').textContent = 'Показано ' + Math.min(a.length, S.shown) + ' из ' + a.length + (a.length !== S.d.lots.length ? ' (всего ' + S.d.lots.length + ')' : '');
-  $('#lotlist').innerHTML = a.length ? a.slice(0, S.shown).map(lotCard).join('') : '<p class="empty">Ничего не нашлось. Попробуйте убрать фильтры.</p>';
-  $('#lotmore').innerHTML = a.length > S.shown ? '<button class="more" data-act="more">Показать ещё ' + Math.min(60, a.length - S.shown) + '</button>' : '';
+  const append = keep === 'append';
+  const a = append ? LOTS_CUR : applyFilters(S.d.lots); LOTS_CUR = a;
+  const from = append ? S.shown - 24 : 0;
+  if (!keep) S.shown = 24;
+  $('#cnt').textContent = 'Найдено ' + a.length + (a.length !== S.d.lots.length ? ' из ' + S.d.lots.length : '');
+  if (append) $('#lotlist').insertAdjacentHTML('beforeend', a.slice(from, S.shown).map(lotCard).join(''));
+  else $('#lotlist').innerHTML = a.length ? a.slice(0, S.shown).map(lotCard).join('') : '<p class="empty">Ничего не нашлось. Попробуйте убрать фильтры.</p>';
+  $('#lotmore').innerHTML = a.length > S.shown ? '<button class="more" data-act="more">Показать ещё</button>' : '';
+  const mb = $('#lotmore .more'); if (mb && 'IntersectionObserver' in window) { const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { io.disconnect(); S.shown += 24; drawLots('append'); } }, { rootMargin: '800px' }); io.observe(mb); }
 }
 function filterSheet() {
   const d = S.d, f = S.f;
@@ -459,7 +464,7 @@ document.addEventListener('click', async e => {
   if (t.id === 'btnTheme') { cycleTheme(); return; }
   switch (ds.act) {
     case 'close': closeSheet(); break;
-    case 'more': S.shown += 60; drawLots(true); break;
+    case 'more': S.shown += 24; drawLots('append'); break;
     case 'rmore': S.rshown += 80; drawResults(true); break;
     case 'fapply': {
       const v = id => { const el = $('#' + id); return el ? el.value : ''; };
@@ -522,6 +527,7 @@ async function start() {
     LS.set('seen-newest', newest);
     const tb = LS.get('tab', 'home'); S.tab = ['home', 'picks', 'lots', 'results', 'more'].includes(tb) ? tb : 'home';
     render();
+    warmScanner();
     const sk = LS.get('w-skip', 0);
     if (!isStandalone() && platform() !== 'desktop' && Date.now() - sk > 3 * 864e5) welcome();
   } catch (e) {
@@ -595,8 +601,16 @@ async function handleVin(raw, fromCamera) {
   res.hidden = false;
   res.innerHTML = '<b class="vin">' + E(v) + '</b><br>' + (v.length === 17 ? 'Этой машины нет в каталогах приложения.' : 'Ничего не нашлось. Введите VIN целиком или последние 6–8 символов.') + (v.length === 17 ? '<br><button class="btn" data-act="copy" data-v="' + E(v) + '">Скопировать VIN</button>' : '');
 }
-/* распознавание напечатанного VIN (Tesseract, работает на телефоне без интернета после первой загрузки) */
-let OCR = null;
+/* ---------- распознавание: штрихкод и сверка в фоновом потоке, текст в Tesseract (тоже фоновый поток) ---------- */
+let SW_ = null, swReady = null, swCb = null, OCR = null;
+function scanWorker() {
+  if (!swReady) swReady = new Promise(ok => {
+    SW_ = new Worker('scan-worker.js');
+    SW_.onmessage = e => { if (e.data.type === 'ready') ok(SW_); else if (swCb) swCb(e.data); };
+    vinIndex().then(idx => SW_.postMessage({ type: 'idx', idx })).catch(() => {});
+  });
+  return swReady;
+}
 function ocrWorker() {
   if (!OCR) OCR = (async () => {
     if (!window.Tesseract) await new Promise((ok, bad) => { const s = document.createElement('script'); s.src = 'vendor/tess/tesseract.min.js'; s.onload = ok; s.onerror = bad; document.head.appendChild(s); });
@@ -607,108 +621,76 @@ function ocrWorker() {
   })().catch(e => { OCR = null; throw e; });
   return OCR;
 }
-const VW = { A: 1, B: 2, C: 3, D: 4, E: 5, F: 6, G: 7, H: 8, J: 1, K: 2, L: 3, M: 4, N: 5, P: 7, R: 9, S: 2, T: 3, U: 4, V: 5, W: 6, X: 7, Y: 8, Z: 9 };
-function vinCheckOk(v) { const w = [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2]; let s = 0; for (let i = 0; i < 17; i++) { const c = v[i]; s += (/\d/.test(c) ? +c : VW[c] || 0) * w[i]; } const r = s % 11; return v[8] === (r === 10 ? 'X' : String(r)); }
-function ocrCandidates(text) {
-  const out = [], seen = new Set(), add = (v, t) => { if (!seen.has(v)) { seen.add(v); out.push({ v, t }); } };
-  String(text || '').toUpperCase().split(/\n/).forEach(line => {
-    const t = line.replace(/[^A-Z0-9]/g, '').replace(/O|Q/g, '0').replace(/I/g, '1');
-    if (t.length === 17) add(t, 'line');
-    if (t.length === 18 || t.length === 19) for (let i = 0; i < t.length; i++) { const d = t.slice(0, i) + t.slice(i + 1); if (d.length === 17) add(d, 'del'); else for (let j = 0; j < d.length; j++) add(d.slice(0, j) + d.slice(j + 1), 'del'); }
-    for (let i = 0; i + 17 <= t.length; i++) add(t.slice(i, i + 17), 'win');
-  });
-  return out;
+// прогрев: сканер готов мгновенно, когда его открывают
+function warmScanner() {
+  const go = () => { scanWorker(); if (LS.get('scan-used', false)) ocrWorker().catch(() => {}); };
+  if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 4000 }); else setTimeout(go, 2500);
 }
-function nearVin(v, idx) {
-  let best = null, bd = 9, tie = false;
-  for (const k in idx) { let d = 0; for (let i = 0; i < 17 && d <= 2; i++) if (k[i] !== v[i]) d++; if (d < bd) { bd = d; best = k; tie = false; } else if (d === bd && k !== best) tie = true; }
-  return bd <= 2 && !tie ? { vin: best, d: bd } : null;
-}
-let ocrK = 0;
-async function ocrFrame(cv) {
-  const w = await ocrWorker(); const r = await w.recognize(cv);
-  const idx = await vinIndex(); const cands = ocrCandidates(r.data.text);
-  for (const c of cands) if (idx[c.v]) return { vin: c.v, exact: true };
-  for (const c of cands) { const n = nearVin(c.v, idx); if (n) return { vin: n.vin, read: c.v, d: n.d }; }
-  for (const c of cands) if (c.t !== 'win' && vinCheckOk(c.v)) return { vin: c.v, unknown: true };
-  const raw = (r.data.text || '').replace(/[^A-Z0-9\n]/gi, '').split('\n').sort((a, b) => b.length - a.length)[0];
-  return raw && raw.length >= 10 ? { raw } : null;
-}
-async function decoderFor() {
-  if ('BarcodeDetector' in window) {
-    try {
-      const f = await BarcodeDetector.getSupportedFormats();
-      const want = ['code_39', 'code_128', 'data_matrix', 'qr_code', 'pdf417'].filter(x => f.includes(x));
-      if (want.includes('code_39')) { const bd = new BarcodeDetector({ formats: want }); return async c => { const r = await bd.detect(c); return r.length ? r[0].rawValue : null; }; }
-    } catch (e) {}
-  }
-  if (!window.ZXing) await new Promise((ok, bad) => { const s = document.createElement('script'); s.src = 'vendor/zxing.min.js'; s.onload = ok; s.onerror = bad; document.head.appendChild(s); });
-  const Z = window.ZXing, hints = new Map();
-  hints.set(Z.DecodeHintType.POSSIBLE_FORMATS, [Z.BarcodeFormat.CODE_39, Z.BarcodeFormat.CODE_128, Z.BarcodeFormat.DATA_MATRIX, Z.BarcodeFormat.QR_CODE, Z.BarcodeFormat.PDF_417]);
-  hints.set(Z.DecodeHintType.TRY_HARDER, true);
-  const rd = new Z.MultiFormatReader(); rd.setHints(hints);
-  return async c => { try { return rd.decodeWithState(new Z.BinaryBitmap(new Z.HybridBinarizer(new Z.HTMLCanvasElementLuminanceSource(c)))).getText(); } catch (e) { return null; } finally { rd.reset(); } };
-}
+
 async function openScan() {
+  LS.set('scan-used', true);
   const el = document.createElement('div'); el.className = 'scan'; el.id = 'scan';
   el.innerHTML = '<div class="bar"><button data-act="scan-close">Закрыть</button><button data-act="torch" id="torch" hidden>Фонарик</button></div><video playsinline muted autoplay></video><div class="frame"></div>'
-    + '<p class="hint" id="scanHint">Наведите на штрихкод или надпись VIN, чтобы она была в рамке. Держите телефон ровно, 15–25 см.</p><div class="res" id="scanRes" hidden></div>'
+    + '<p class="hint" id="scanHint">Наведите на штрихкод или надпись VIN, чтобы она была в рамке.</p><div class="res" id="scanRes" hidden></div>'
     + '<form id="scanForm"><input id="vinIn" placeholder="VIN или последние 6 символов" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="search" aria-label="VIN"><button>Найти</button></form>';
   document.body.appendChild(el); document.body.style.overflow = 'hidden';
   try { history.pushState({ scan: 1 }, ''); } catch (e) {}
-  vinIndex().catch(() => {});
   el.querySelector('#scanForm').onsubmit = e => { e.preventDefault(); handleVin($('#vinIn').value, false); };
-  const video = el.querySelector('video');
-  let stream, alive = true, timer;
-  scanStop = () => { alive = false; clearTimeout(timer); if (stream) stream.getTracks().forEach(t => t.stop()); };
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { $('#scanHint').textContent = 'Камера недоступна в этом браузере. Введите VIN вручную.'; return; }
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false });
-  } catch (e) { $('#scanHint').textContent = 'Нет доступа к камере. Разрешите камеру в настройках браузера или введите VIN вручную.'; return; }
+  const video = el.querySelector('video'), hint = $('#scanHint');
+  let stream, alive = true, raf = 0;
+  scanStop = () => { alive = false; cancelAnimationFrame(raf); swCb = null; if (stream) stream.getTracks().forEach(t => t.stop()); };
+  const wP = scanWorker(), oP = ocrWorker().catch(() => null);   // грузятся параллельно с камерой
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { hint.textContent = 'Камера недоступна в этом браузере. Введите VIN вручную.'; return; }
+  try { stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false }); }
+  catch (e) { hint.textContent = 'Нет доступа к камере. Разрешите камеру в настройках браузера или введите VIN вручную.'; return; }
   if (!alive) { stream.getTracks().forEach(t => t.stop()); return; }
   video.srcObject = stream; try { await video.play(); } catch (e) {}
   const track = stream.getVideoTracks()[0];
   try { const cap = track.getCapabilities && track.getCapabilities(); if (cap && cap.torch) { const tb = $('#torch'); tb.hidden = false; let on = false; tb.onclick = () => { on = !on; track.applyConstraints({ advanced: [{ torch: on }] }); }; } if (cap && cap.focusMode && cap.focusMode.includes('continuous')) track.applyConstraints({ advanced: [{ focusMode: 'continuous' }] }); } catch (e) {}
-  const decode = await decoderFor().catch(() => null);
-  if (!decode) { $('#scanHint').textContent = 'Сканер не загрузился. Введите VIN вручную.'; return; }
+
+  const W = await wP; if (!alive) return;
   const cv = document.createElement('canvas'), cx = cv.getContext('2d', { willReadFrequently: true });
-  let n = 0, last = '', ocrBusy = false, ocrReady = false, seen = {};
-  $('#scanHint').dataset.base = $('#scanHint').textContent;
-  ocrWorker().then(() => { ocrReady = true; }).catch(() => { if (alive) $('#scanHint').textContent = 'Чтение надписи не загрузилось, работает только штрихкод и ручной ввод.'; });
-  const runOcr = () => {
-    if (ocrBusy || !ocrReady || !alive || !video.videoWidth) return;
-    ocrBusy = true;
-    const vw = video.videoWidth, vh = video.videoHeight, sh = Math.round(vh * .3), sy = Math.round((vh - sh) / 2), sw = Math.round(vw * .9), sx = Math.round((vw - sw) / 2);
-    const oc = document.createElement('canvas'), k = Math.min([0.6, 1, 2][ocrK++ % 3], 2400 / sw); oc.width = Math.round(sw * k); oc.height = Math.round(sh * k);
-    const ox = oc.getContext('2d'); ox.filter = 'grayscale(1) contrast(1.4)'; ox.drawImage(video, sx, sy, sw, sh, 0, 0, oc.width, oc.height);
-    ocrFrame(oc).then(async r => {
-      if (!r || !alive) return;
-      if (r.raw) { $('#scanHint').textContent = 'Читаю надпись: ' + r.raw + '…'; return; }
+  const oc = document.createElement('canvas'), ox = oc.getContext('2d', { willReadFrequently: true });
+  let zBusy = false, oBusy = false, n = 0, done = false, seen = {}, last = '', ocr = null, ocrK = 0;
+  oP.then(w => { ocr = w; });
+  const accept = async (vin, how) => {
+    if (done || !alive) return; $('#vinIn').value = vin;
+    if (how === 'unknown') { if (vin === last) return; last = vin; const res = $('#scanRes'); res.hidden = false; res.innerHTML = 'Прочитал VIN <b class="vin">' + E(vin) + '</b>. Сверьте с надписью: если есть ошибка, исправьте в поле внизу. Этой машины нет в каталогах приложения.<br><button class="btn" data-act="copy" data-v="' + E(vin) + '">Скопировать VIN</button>'; if (navigator.vibrate) navigator.vibrate(60); return; }
+    done = true; await handleVin(vin, false); done = !!$('#scan') ? false : true;
+  };
+  swCb = m => {
+    if (m.type === 'code') { zBusy = false; if (m.vin) accept(m.vin, m.known ? 'known' : 'unknown'); }
+    else if (m.type === 'ocr') {
+      oBusy = false; const r = m.res; if (!r || !alive) return;
+      if (r.raw) { hint.textContent = 'Читаю надпись: ' + r.raw + '…'; return; }
       seen[r.vin] = (seen[r.vin] || 0) + 1;
-      if (r.exact || seen[r.vin] >= 2) {
-        $('#vinIn').value = r.vin; if (r.vin === last) return; last = r.vin;
-        if (r.unknown) { const res = $('#scanRes'); res.hidden = false; res.innerHTML = 'Прочитал VIN <b class="vin">' + E(r.vin) + '</b>. Сверьте с надписью: если есть ошибка, исправьте в поле внизу. Этой машины нет в каталогах приложения.<br><button class="btn" data-act="copy" data-v="' + E(r.vin) + '">Скопировать VIN</button>'; if (navigator.vibrate) navigator.vibrate(60); }
-        else await handleVin(r.vin, false);
-      } else $('#scanHint').textContent = 'Читаю надпись: ' + (r.read || r.vin) + '…';
-    }).catch(() => {}).finally(() => { ocrBusy = false; });
-  };
-  const tick = async () => {
-    if (!alive) return;
-    if (video.videoWidth) {
-      const vw = video.videoWidth, vh = video.videoHeight, rot = n++ % 3 === 2;
-      // берём полосу по центру кадра (там рамка), каждый третий кадр поворачиваем на 90° для вертикальных штрихкодов
-      const sw = rot ? Math.round(vw * .5) : vw, sh = rot ? vh : Math.round(vh * .45);
-      const sx = Math.round((vw - sw) / 2), sy = Math.round((vh - sh) / 2);
-      const sc = Math.min(1, 1400 / Math.max(sw, sh));
-      if (rot) { cv.width = Math.round(sh * sc); cv.height = Math.round(sw * sc); cx.save(); cx.translate(cv.width, 0); cx.rotate(Math.PI / 2); cx.drawImage(video, sx, sy, sw, sh, 0, 0, sw * sc, sh * sc); cx.restore(); }
-      else { cv.width = Math.round(sw * sc); cv.height = Math.round(sh * sc); cx.drawImage(video, sx, sy, sw, sh, 0, 0, cv.width, cv.height); }
-      const txt = await decode(cv);
-      if (txt && alive) { const v = cleanVin(txt); if (VIN_RE.test(v) && v !== last) { last = v; $('#vinIn').value = v; await handleVin(v, true); } }
+      if (r.exact || (r.d === 1) || seen[r.vin] >= 2) accept(r.vin, r.unknown ? 'unknown' : 'known');
+      else hint.textContent = 'Читаю надпись: ' + (r.read || r.vin) + '…';
     }
-    runOcr();
-    if (alive) timer = setTimeout(tick, 120);
   };
-  tick();
+  const loop = () => {
+    if (!alive) return;
+    const vw = video.videoWidth, vh = video.videoHeight;
+    if (vw) {
+      if (!zBusy) {   // штрихкод: полоса по центру, уменьшенная до ~1000 px; каждый третий кадр — вертикальный штрихкод
+        const rot = n++ % 3 === 2;
+        const sw = rot ? Math.round(vw * .5) : vw, sh = rot ? vh : Math.round(vh * .45), sx = (vw - sw) >> 1, sy = (vh - sh) >> 1;
+        const k = Math.min(1, 1000 / Math.max(sw, sh)); cv.width = Math.round(sw * k); cv.height = Math.round(sh * k);
+        cx.drawImage(video, sx, sy, sw, sh, 0, 0, cv.width, cv.height);
+        const img = cx.getImageData(0, 0, cv.width, cv.height);
+        zBusy = true; W.postMessage({ type: 'frame', w: img.width, h: img.height, buf: img.data.buffer, rot }, [img.data.buffer]);
+      }
+      if (ocr && !oBusy) {   // надпись: узкая полоса рамки, разные масштабы по очереди
+        oBusy = true;
+        const sh = Math.round(vh * .26), sy = (vh - sh) >> 1, sw = Math.round(vw * .9), sx = (vw - sw) >> 1, k = Math.min([0.55, 0.85, 1.3][ocrK++ % 3], 1800 / sw);
+        oc.width = Math.round(sw * k); oc.height = Math.round(sh * k); ox.drawImage(video, sx, sy, sw, sh, 0, 0, oc.width, oc.height);
+        ocr.recognize(oc).then(r => { if (alive) W.postMessage({ type: 'text', text: r.data.text }); else oBusy = false; }).catch(() => { oBusy = false; });
+      }
+    }
+    raf = requestAnimationFrame(loop);
+  };
+  hint.textContent = 'Наведите на штрихкод или надпись VIN, чтобы она была в рамке.';
+  loop();
 }
 function closeScan(fromPop) {
   const el = $('#scan'); if (!el) return;
