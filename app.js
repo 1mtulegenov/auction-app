@@ -331,7 +331,7 @@ function filterSheet() {
     + (aucs.length > 1 ? '<label for="f_au">' + T('Площадка') + '</label><select id="f_au">' + opt([['', T('Все площадки')]].concat(aucs.map(a => [a, AUC[a] || a])), f.au) + '</select>' : '')
     + '<label for="f_cl">' + T('История и тайтл') + '</label><select id="f_cl">' + opt([['', T('Любая')], ['clean', T('Без пометок')], ['hist', T('Пометки на чистом тайтле')], ['noinop', T('Не на ходу, нет ключа')], ['salvage', T('Salvage, rebuilt, без тайтла')]], f.cl) + '</select>'
     + '<label for="f_st">' + T('Решение') + '</label><select id="f_st">' + opt([['', T('Любое')]].concat(st.map(s => [s, T(s)])), f.st) + '</select>'
-    + '<div class="row"><div><label for="f_y">' + T('Год от') + '</label><input id="f_y" type="number" inputmode="numeric" value="' + E(f.y) + '" placeholder="2012"></div><div><label for="f_o">' + T('Пробег до') + '</label><input id="f_o" type="number" inputmode="numeric" value="' + E(f.o) + '" placeholder="150000"></div><div><label for="f_p">' + T('MMR до') + '</label><input id="f_p" type="number" inputmode="numeric" value="' + E(f.p) + '" placeholder="8000"></div></div>'
+    + '<div class="row"><div><label for="f_y">' + T('Год от') + '</label><input id="f_y" type="number" inputmode="numeric" value="' + E(f.y) + '"></div><div><label for="f_o">' + T('Пробег до') + '</label><input id="f_o" type="number" inputmode="numeric" value="' + E(f.o) + '"></div><div><label for="f_p">' + T('MMR до') + '</label><input id="f_p" type="number" inputmode="numeric" value="' + E(f.p) + '"></div></div>'
     + '<div class="btns"><button class="btn" data-act="freset">' + T('Сбросить') + '</button><button class="btn pri" data-act="fapply">' + T('Показать') + '</button></div></div>', false);
 }
 function resultsScreen() {
