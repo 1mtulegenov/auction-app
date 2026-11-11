@@ -5,6 +5,8 @@ const LOCALE = { en: 'en-US', ru: 'ru-RU', uk: 'uk-UA', es: 'es-US', kk: 'kk-KZ'
 const LI = { en: 0, uk: 1, es: 2, kk: 3 }[LANG];
 document.documentElement.lang = LANG;
 const I18N = {
+"Заметка сохранена": ["Note saved", "Нотатку збережено", "Nota guardada", "Жазба сақталды"],
+"Сохранить": ["Save", "Зберегти", "Guardar", "Сақтау"],
 "Наведите полосу на строку VIN.": ["Point the strip at the VIN line.", "Наведіть смугу на рядок VIN.", "Apunte la franja a la línea del VIN.", "Жолақты VIN жолына бағыттаңыз."],
 "Наведите полосу на строку VIN или штрихкод.": ["Point the strip at the VIN line or barcode.", "Наведіть смугу на рядок VIN або штрихкод.", "Apunte la franja a la línea del VIN o al código de barras.", "Жолақты VIN жолына немесе штрихкодқа бағыттаңыз."],
 "турбо": ["turbo", "турбо", "turbo", "турбо"],

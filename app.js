@@ -489,6 +489,7 @@ function openSheet(title, html, full, actions) {
   sh.innerHTML = (full ? '' : '<div class="grip"></div>') + '<div class="sheet-h"><h2 id="sheetTitle">' + title + '</h2>' + (actions || '') + '<button data-act="close">' + (full ? T('Назад') : T('Готово')) + '</button></div>' + html;
   sh.hidden = false; $('#sheetBg').hidden = false; document.body.style.overflow = 'hidden';
   sh.scrollTop = 0;
+  if (!sheetOpen) S.sheetY = window.scrollY;
   if (!sheetOpen) { try { if (S.replaceNext) history.replaceState({ sheet: 1 }, ''); else history.pushState({ sheet: 1 }, ''); } catch (e) {} }
   S.replaceNext = false;
   sheetOpen = true; S.openLot = S.pendingLot || null; S.pendingLot = null;
@@ -533,7 +534,7 @@ function detail(k) {
     + (x.demand ? '<p class="p"><b>' + T('Спрос ') + x.demand + '/10</b>' + (x.sell ? T(', продаётся за ') + E(weeks(x.sell)) : '') + '</p>' : '') + '</div>')
     + (x.sale != null && !isInop(x) ? '<div class="d-card"><h3>' + T('Калькулятор ставки') + '</h3><div class="calc"><input id="bid" type="number" inputmode="numeric" value="' + E(bid) + '" aria-label="' + T('Ваша ставка, $') + '"><div class="calc-out" id="calcOut"></div></div></div>' : '')
     + (info ? '<div class="d-card">' + info + '</div>' : '')
-    + '<div class="d-card"><h3><label for="note">' + T('Заметка после осмотра') + (n && n.date && n.date !== S.date ? T(' (от ') + fmtDate(n.date) + T(', лот ') + E(n.run) + ')' : '') + '</label></h3><textarea class="note' + (n ? ' has' : '') + '" id="note" data-k="' + E(k) + '" placeholder="' + T('Что увидели: кузов, мотор, салон, запах, ошибки') + '">' + E(n ? n.text : '') + '</textarea><p class="muted" id="nstat" style="font-size:12.5px;margin-top:4px">' + T('Хранится на этом телефоне и привязана к VIN.') + '</p></div>'
+    + '<div class="d-card"><h3><label for="note">' + T('Заметка после осмотра') + (n && n.date && n.date !== S.date ? T(' (от ') + fmtDate(n.date) + T(', лот ') + E(n.run) + ')' : '') + '</label></h3><textarea class="note' + (n ? ' has' : '') + '" id="note" data-k="' + E(k) + '" placeholder="' + T('Что увидели: кузов, мотор, салон, запах, ошибки') + '">' + E(n ? n.text : '') + '</textarea><div class="note-bar"><p class="muted" id="nstat" style="font-size:12.5px">' + T('Хранится на этом телефоне и привязана к VIN.') + '</p><button class="btn" data-act="note-done">' + T('Сохранить') + '</button></div></div>'
     + '<div class="d-card"><p class="vin">VIN ' + E(x.vin || T('нет')) + '</p><div class="btns">'
     + '<button class="btn" data-fav="' + E(k) + '">' + (isFav(x) ? T('★ В избранном') : T('☆ В избранное')) + '</button>'
     + (x.vin ? '<button class="btn" data-act="copy" data-v="' + E(x.vin) + '">' + T('Скопировать VIN') + '</button>' : '')
@@ -688,6 +689,7 @@ document.addEventListener('click', async e => {
   if (t.id === 'btnTheme') { cycleTheme(); return; }
   switch (ds.act) {
     case 'close': closeSheet(); break;
+    case 'note-done': { const ta = $('#note'); if (ta) { saveNote(ta); ta.blur(); } toast(T('Заметка сохранена')); break; }
     case 'more': S.shown += 24; drawLots('append'); break;
     case 'rmore': S.rshown += 80; drawResults(true); break;
     case 'fapply': {
@@ -724,6 +726,11 @@ document.addEventListener('input', e => {
   else if (id === 'fee_auc' || id === 'fee_dealer') { clearTimeout(qT); qT = setTimeout(setFees, 250); }
   else if (id === 'bid') { const x = S.d.map[$('#note').dataset.k]; calc(x); }
   else if (id === 'note') { const st = $('#nstat'); if (st) st.textContent = T('Сохранится, когда закончите'); clearTimeout(qT); qT = setTimeout(() => saveNote(e.target), 800); }
+});
+// iPhone: после клавиатуры экран остаётся сдвинутым, и кнопка «Назад» уходит за верх. Возвращаем на место.
+document.addEventListener('focusout', e => {
+  if (!sheetOpen || !e.target.matches('#sheet textarea, #sheet input')) return;
+  setTimeout(() => { if (document.activeElement && document.activeElement.matches('#sheet textarea, #sheet input')) return; window.scrollTo(0, S.sheetY || 0); const h = $('#sheet .sheet-h'); if (h && h.getBoundingClientRect().top < 0) $('#sheet').scrollTop = 0; }, 60);
 });
 document.addEventListener('change', e => {
   if (e.target.id === 'sort') { S.f.sort = e.target.value; drawLots(); }

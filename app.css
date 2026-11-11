@@ -269,3 +269,4 @@ html[data-font="mono"]{--f:'IBM Plex Mono',ui-monospace,Menlo,monospace;--fc:'IB
 .money.two{grid-template-columns:1fr 1fr}
 
 .scan .scan-line{position:absolute;z-index:2;left:50%;transform:translateX(-50%);top:calc(47% + 14px);max-width:90%;height:34px;background:#fff;border-radius:6px}
+.note-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}.note-bar .btn{flex:none;padding:8px 16px}
