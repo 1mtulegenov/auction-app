@@ -173,13 +173,12 @@ function photoUrl(x) { if (!x.ph) return ''; const p = x.ph.split('/'); const sf
 function photo(x, cls, lazy) { const u = photoUrl(x); return u ? '<img class="' + cls + '" src="' + u + '" alt="" referrerpolicy="no-referrer" decoding="async"' + (lazy ? ' loading="lazy"' : '') + ' onerror="this.remove()">' : ''; }
 function lotCard(x) {
   const n = noteOf(x), v = VERDICT[x.stat], fav = isFav(x);
-  const prof = x.prof == null ? '—' : (x.prof > 0 ? '+' : '') + M(x.prof);
   return '<article class="lot' + (x.past && x.past.length ? ' seen ' + seenLv(x) : '') + '" role="button" tabindex="0" data-lot="' + E(x.k) + '">'
     + '<div class="lot-top"><span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + slot(x) + '</span>' + (v ? '<span class="verdict ' + v[0] + '">' + v[1] + '</span>' : '') + '</div>'
     + '<button class="star' + (fav ? ' on' : '') + '" data-fav="' + E(x.k) + '" aria-label="' + T('В избранное') + '" aria-pressed="' + fav + '">' + (fav ? '★' : '☆') + '</button>'
     + '<div class="lot-id">' + photo(x, 'thumb', true) + '<div><h3>' + E(carName(x)) + '</h3>'
     + '<p class="sub">' + [x.o > 500 ? N(x.o) + ' mi' : '', COLOR[x.c] || String(x.c || '').toLowerCase()].filter(Boolean).map(E).join(' · ') + '</p></div></div>'
-    + (isInop(x) ? '<div class="money inop"><div class="m-main"><span>MMR</span><b>' + M(x.w) + '</b></div><div class="m-note">' + T('Неходячая: прибыль не считаем') + '</div></div>' : '<div class="money"><div class="m-main"><span>' + T('Макс. ставка') + '</span><b>' + M(x.max) + '</b></div><div><span>' + T('Прибыль') + '</span><b class="' + profCls(x) + '">' + prof + '</b></div><div><span>MMR</span><b>' + M(x.w) + '</b></div></div>')
+    + (isInop(x) ? '<div class="money inop"><div class="m-main"><span>MMR</span><b>' + M(x.w) + '</b></div><div class="m-note">' + T('Неходячая: прибыль не считаем') + '</div></div>' : '<div class="money two"><div class="m-main"><span>MMR</span><b>' + M(x.w) + '</b></div><div class="m-main"><span>' + T('Ретейл') + '</span><b>' + M(x.r) + '</b></div></div>')
     + '<div class="status">' + statusLine(x) + '</div>'
     + pastCard(x)
     + hotLine(x)
