@@ -121,6 +121,7 @@ function statusLine(x) {
   if (x.auc === 'CMX' && x.mech) add('bad', T('Дефект двигателя/КПП'));
   if (x.l === 'Green') add('ok', T('Зелёный свет')); else if (String(x.l || '').includes('Red')) add('bad', T('Красный свет')); else if (x.l === 'Yellow') add('warn', T('Жёлтый свет'));
   if (x.g) { const g = parseFloat(x.g); add(g >= 4 ? 'ok' : g < 3 ? 'bad' : 'warn', T('Оценка ') + E(x.g)); }
+  if (x.past && x.past.length) { const lp = x.past.filter(p => p.p).slice(-1)[0]; add('warn', T('Была на торгах') + ' ' + x.past.length + '×' + (lp ? ', ' + M(lp.p) : '')); }
   return it.join('');
 }
 function hotLine(x) {
@@ -147,7 +148,7 @@ function lotCard(x) {
 }
 
 /* ---------- фильтры ---------- */
-const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('7 марок')], ['clean', T('Без пометок')], ['title', T('Тайтл на месте')], ['profit', T('Прибыль ') + '> 0'], ['notes', T('С заметкой')]];
+const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('7 марок')], ['clean', T('Без пометок')], ['title', T('Тайтл на месте')], ['profit', T('Прибыль ') + '> 0'], ['past', T('Были на торгах')], ['notes', T('С заметкой')]];
 const SORTS = [['stat', T('Сначала подборка')], ['prof', T('Прибыль больше')], ['w', T('MMR меньше')], ['wd', T('MMR больше')], ['run', T('По номеру лота')], ['y', T('Новее')], ['o', T('Пробег меньше')], ['diff', T('Ретейл − MMR больше')]];
 function applyFilters(list) {
   const f = S.f, q = f.q.toLowerCase().trim(), y = +f.y || 0, o = +f.o || 0, p = +f.p || 0;
@@ -169,6 +170,7 @@ function applyFilters(list) {
       case 'title': return x.t === 'At Auction';
       case 'profit': return x.prof > 0;
       case 'notes': return !!noteOf(x);
+      case 'past': return !!(x.past && x.past.length);
     }
     return true;
   });

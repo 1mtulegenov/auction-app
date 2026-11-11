@@ -959,6 +959,12 @@ const I18N = {
 "Por qué no está en la selección:",
 "Неге іріктемеде жоқ:"
 ],
+"Были на торгах": [
+"Ran before",
+"Були на торгах",
+"Ya en subasta",
+"Бұрын саудада"
+],
 "Была на торгах": [
 "Ran at auction before",
 "Була на торгах",
