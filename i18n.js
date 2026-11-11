@@ -5,6 +5,9 @@ const LOCALE = { en: 'en-US', ru: 'ru-RU', uk: 'uk-UA', es: 'es-US', kk: 'kk-KZ'
 const LI = { en: 0, uk: 1, es: 2, kk: 3 }[LANG];
 document.documentElement.lang = LANG;
 const I18N = {
+"ретейл, оценка": ["retail, estimate", "ретейл, оцінка", "retail, estimado", "ретейл, бағалау"],
+"MMR, оценка": ["MMR, estimate", "MMR, оцінка", "MMR, estimado", "MMR, бағалау"],
+"Новый лот: Manheim ещё не смотрели. MMR и ретейл оценены по похожим машинам с прошлых торгов.": ["New lot: not checked on Manheim yet. MMR and retail are estimated from similar cars at past auctions.", "Новий лот: Manheim ще не дивилися. MMR і ретейл оцінені за схожими машинами з минулих торгів.", "Lote nuevo: aún no se revisó en Manheim. MMR y retail estimados según autos similares de subastas pasadas.", "Жаңа лот: Manheim әлі қаралмады. MMR мен ретейл өткен саудалардағы ұқсас көліктер бойынша бағаланды."],
 "Заметка сохранена": ["Note saved", "Нотатку збережено", "Nota guardada", "Жазба сақталды"],
 "Сохранить": ["Save", "Зберегти", "Guardar", "Сақтау"],
 "Наведите полосу на строку VIN.": ["Point the strip at the VIN line.", "Наведіть смугу на рядок VIN.", "Apunte la franja a la línea del VIN.", "Жолақты VIN жолына бағыттаңыз."],
