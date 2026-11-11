@@ -9,3 +9,4 @@
 
 Фото и история 11 ноября сняты с EDGE через Chrome пользователя (tools/photos_*.txt, tools/edge_dump_*.txt).
 - Filter fields (year, mileage, MMR) have no example placeholders, by request.
+- Offer label: 'ушла на оффер за $X. Не отдали' (by request).
