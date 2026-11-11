@@ -1187,6 +1187,12 @@ const I18N = {
 "primero elige la marca",
 "алдымен марканы таңдаңыз"
 ],
+"Run номер": [
+"Run number",
+"Run номер",
+"Número de run",
+"Run нөмірі"
+],
 "Уже была на торгах": [
 "Already ran at auction",
 "Вже була на торгах",
