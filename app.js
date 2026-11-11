@@ -121,8 +121,29 @@ function statusLine(x) {
   if (x.auc === 'CMX' && x.mech) add('bad', T('Дефект двигателя/КПП'));
   if (x.l === 'Green') add('ok', T('Зелёный свет')); else if (String(x.l || '').includes('Red')) add('bad', T('Красный свет')); else if (x.l === 'Yellow') add('warn', T('Жёлтый свет'));
   if (x.g) { const g = parseFloat(x.g); add(g >= 4 ? 'ok' : g < 3 ? 'bad' : 'warn', T('Оценка ') + E(x.g)); }
-  if (x.past && x.past.length) { const lp = x.past.filter(p => p.p).slice(-1)[0]; add('warn', T('Была на торгах') + ' ' + x.past.length + '×' + (lp ? ', ' + M(lp.p) : '')); }
   return it.join('');
+}
+/* прошлые появления машины на торгах: продана / ушла на оффер / не продана */
+function pastRes(p) {
+  if (p.s === 'offer') return T('ушла на оффер') + (p.p ? ' ' + T('за') + ' ' + M(p.p) : '');
+  if (p.s === 'nosale') return T('не продана');
+  if (p.s === 'gone') return T('снята');
+  if (p.p) return T('продана за') + ' ' + M(p.p);
+  return T('итога нет в базе');
+}
+function pastHead(x) {
+  const P = x.past, c = s => P.filter(p => p.s === s && (s !== 'sold' || p.p)).length;
+  const sold = c('sold'), off = c('offer'), no = c('nosale');
+  const parts = [];
+  if (sold) parts.push(T('продана') + ' ' + sold + '×');
+  if (off) parts.push(T('на оффер') + ' ' + off + '×');
+  if (no) parts.push(T('не продана') + ' ' + no + '×');
+  return T('Уже была на торгах') + ' ' + P.length + '×' + (parts.length ? ' · ' + parts.join(', ') : '');
+}
+function pastLine(p) { return fmtDate(p.d) + ' · ' + E(p.a) + (p.run ? ', ' + T('лот') + ' ' + E(p.run) : '') + ' — ' + pastRes(p); }
+function pastCard(x) {
+  if (!x.past || !x.past.length) return '';
+  return '<div class="seen-pv"><b>' + pastHead(x) + '</b>' + x.past.slice(-3).map(p => '<span>' + pastLine(p) + '</span>').join('') + '</div>';
 }
 function hotLine(x) {
   if (x.hist) return '';
@@ -134,13 +155,14 @@ function hotLine(x) {
 function lotCard(x) {
   const n = noteOf(x), v = VERDICT[x.stat], fav = isFav(x);
   const prof = x.prof == null ? '—' : (x.prof > 0 ? '+' : '') + M(x.prof);
-  return '<article class="lot" role="button" tabindex="0" data-lot="' + E(x.k) + '">'
+  return '<article class="lot' + (x.past && x.past.length ? ' seen' : '') + '" role="button" tabindex="0" data-lot="' + E(x.k) + '">'
     + '<div class="lot-top"><span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + slot(x) + '</span>' + (v ? '<span class="verdict ' + v[0] + '">' + v[1] + '</span>' : '') + '</div>'
     + '<button class="star' + (fav ? ' on' : '') + '" data-fav="' + E(x.k) + '" aria-label="' + T('В избранное') + '" aria-pressed="' + fav + '">' + (fav ? '★' : '☆') + '</button>'
     + '<h3>' + E(carName(x)) + '</h3>'
     + '<p class="sub">' + [x.o > 500 ? N(x.o) + ' mi' : '', COLOR[x.c] || String(x.c || '').toLowerCase()].filter(Boolean).map(E).join(' · ') + '</p>'
     + '<div class="money"><div class="m-main"><span>' + T('Макс. ставка') + '</span><b>' + M(x.max) + '</b></div><div><span>' + T('Прибыль') + '</span><b class="' + profCls(x) + '">' + prof + '</b></div><div><span>MMR</span><b>' + M(x.w) + '</b></div></div>'
     + '<div class="status">' + statusLine(x) + '</div>'
+    + pastCard(x)
     + hotLine(x)
     + factText(x)
     + (n ? '<p class="note-pv">' + E(n.text.slice(0, 120)) + '</p>' : '')
@@ -361,7 +383,7 @@ function detail(k) {
   if (x.cr) info += '<p class="p acc">' + E(x.cr) + '</p>';
   if (hasAnn(x)) info += '<p class="p">' + T('Пометка аукциона: ') + hl(x) + '</p>';
   if (x.whyn) info += '<p class="p">' + T('Почему не в подборке: ') + (HOT_R.test(x.whyn) ? '<span class="hot-r">' + E(x.whyn) + '</span>' : HOT_Y.test(x.whyn) ? '<span class="hot-y">' + E(x.whyn) + '</span>' : E(x.whyn)) + '</p>';
-  if (x.past && x.past.length) { const lp = x.past.filter(p => p.p).slice(-1)[0]; info += '<p class="p wrn"><b>' + T('Была на торгах') + ': ' + x.past.length + '×</b> ' + x.past.map(p => fmtDate(p.d) + ' ' + E(p.a) + (p.run ? ', ' + T('лот') + ' ' + E(p.run) : '') + ' — ' + (p.p ? T('итог') + ' ' + M(p.p) : p.s === 'nosale' ? T('не продана') : p.s === 'gone' ? T('снята') : T('итога нет в базе'))).join('; ') + '.' + (lp && x.w && lp.p < .7 * x.w ? T(' Последний итог намного ниже MMR: возможен скрытый дефект.') : '') + '</p>'; }
+  if (x.past && x.past.length) { const lp = x.past.filter(p => p.p).slice(-1)[0]; info += '<div class="p seen"><b>' + pastHead(x) + '</b><ul>' + x.past.map(p => '<li>' + pastLine(p) + '</li>').join('') + '</ul>' + (lp && x.w && lp.p < .7 * x.w ? '<span class="wrn-t">' + T(' Последний итог намного ниже MMR: возможен скрытый дефект.') + '</span>' : '') + '</div>'; }
   else if (x.prior) info += '<p class="p wrn">' + T('Уже была на торгах ') + fmtDate(x.prior.date) + T(' за ') + M(x.prior.price) + '.' + (x.w && x.prior.price < .7 * x.w ? T(' Это намного ниже MMR: возможен скрытый дефект.') : '') + '</p>';
   if (x.seen) info += '<p class="p wrn">' + T('Была в каталоге ') + E(x.seen) + T(': выставляется повторно.') + '</p>';
   if (x.hx) info += '<p class="p ' + (x.hxbad ? 'wrn' : '') + '"><b>' + T('История (AutoCheck):') + '</b> ' + E(x.hx) + '</p>';

@@ -1007,6 +1007,30 @@ const I18N = {
 "El último resultado está muy por debajo del MMR: posible defecto oculto.",
 "Соңғы нәтиже MMR-ден әлдеқайда төмен: жасырын ақау болуы мүмкін."
 ],
+"ушла на оффер": [
+"went to offer",
+"пішла на офер",
+"pasó a oferta",
+"офферге кетті"
+],
+"продана за": [
+"sold for",
+"продана за",
+"vendido por",
+"сатылды:"
+],
+"продана": [
+"sold",
+"продана",
+"vendido",
+"сатылды"
+],
+"на оффер": [
+"to offer",
+"на офер",
+"a oferta",
+"офферге"
+],
 "Уже была на торгах": [
 "Already ran at auction",
 "Вже була на торгах",

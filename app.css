@@ -200,3 +200,14 @@ textarea.note.has{border-color:var(--warn);background:var(--warnb)}
 .fees-note{font-size:12px;color:var(--muted);margin-top:8px}
 .menu .flag{font-size:22px}.menu .chk{margin-left:auto;color:var(--accent);font-weight:700}
 .menu button[aria-current="true"]{border-color:var(--accent)}
+/* машина уже была на торгах — синяя подсветка */
+:root{--seen:#1d6fd6;--seenb:#e8f1fd}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--seen:#7cb8f2;--seenb:#132a40}}
+:root[data-theme="dark"]{--seen:#7cb8f2;--seenb:#132a40}
+.lot.seen{border-color:var(--seen);box-shadow:inset 4px 0 0 var(--seen),var(--cardshadow)}
+.seen-pv{margin-top:10px;background:var(--seenb);color:var(--ink);border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.4;display:flex;flex-direction:column;gap:2px}
+.seen-pv b{color:var(--seen);font-weight:700}
+.p.seen{background:var(--seenb);border-left:3px solid var(--seen);border-radius:0 10px 10px 0;padding:8px 10px}
+.p.seen b{color:var(--seen)}
+.p.seen ul{margin:6px 0 0;padding-left:18px}.p.seen li{margin:2px 0}
+.p.seen .wrn-t{display:block;margin-top:6px;color:var(--warn);font-weight:600}
