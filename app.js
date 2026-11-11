@@ -84,7 +84,8 @@ function lotUrl(x) { return x.u ? x.u : x.s ? 'https://www.edgepipeline.com/comp
 function favKey(x) { return S.date + '|' + x.k; }
 function isFav(x) { return !!S.favs[favKey(x)]; }
 function noteOf(x) { const n = x.vin && S.notes[x.vin]; return n && n.text ? n : null; }
-function runKey(r) { const m = String(r || '').match(/^([A-Za-z]*)\D*(\d+)/); return m ? [m[1].toUpperCase(), +m[2]] : [String(r || ''), 0]; }
+// номер лота = линия + номер: «D-0054» → ['D', 0, 54], «11-0078» → ['', 11, 78]
+function runKey(r) { const m = String(r || '').replace(/\s/g, '').match(/^([A-Za-z]*)(\d*)[-\/]?(\d*)$/); return m ? [m[1].toUpperCase(), +m[2] || 0, +m[3] || 0] : [String(r || ''), 0, 0]; }
 function annText(x) { return (LANG === 'en' || LANG === 'es') ? (x.a || x.ar || '') : (x.ar || x.a || ''); }
 function hl(x) { const a = annText(x); return a.split(/;\s*/).filter(Boolean).map(t => HOT_R.test(t) ? '<span class="hot-r">' + E(t) + '</span>' : HOT_Y.test(t) ? '<span class="hot-y">' + E(t) + '</span>' : E(t)).join('; '); }
 function hasAnn(x) { const a = x.a || x.ar || ''; return a && !/^\s*(GREEN LIGHT|AS[- ]IS,?)\s*$/i.test(a); }
@@ -183,7 +184,7 @@ function lotCard(x) {
 
 /* ---------- фильтры ---------- */
 const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('7 марок')], ['clean', T('Без пометок')], ['title', T('Тайтл на месте')], ['profit', T('Прибыль ') + '> 0'], ['inop', T('Неходячие')], ['past', T('Были на торгах')], ['notes', T('С заметкой')]];
-const SORTS = [['stat', T('Сначала подборка')], ['prof', T('Прибыль больше')], ['w', T('MMR меньше')], ['wd', T('MMR больше')], ['run', T('По номеру лота')], ['y', T('Новее')], ['o', T('Пробег меньше')], ['diff', T('Ретейл − MMR больше')]];
+const SORTS = [['stat', T('Сначала подборка')], ['prof', T('Прибыль больше')], ['w', T('MMR меньше')], ['wd', T('MMR больше')], ['run', T('По номеру лота')], ['mk', T('По марке и модели')], ['y', T('Новее')], ['o', T('Пробег меньше')], ['diff', T('Ретейл − MMR больше')]];
 function applyFilters(list) {
   const f = S.f, q = f.q.toLowerCase().trim(), y = +f.y || 0, o = +f.o || 0, p = +f.p || 0;
   const lotQ = q.replace(/\s/g, '').toUpperCase();
@@ -216,7 +217,8 @@ function applyFilters(list) {
     prof: (u, v) => nn(v.prof, -1e9) - nn(u.prof, -1e9),
     w: (u, v) => nn(u.w, 1e9) - nn(v.w, 1e9),
     wd: (u, v) => nn(v.w, -1e9) - nn(u.w, -1e9),
-    run: (u, v) => { const a1 = runKey(u.run), b1 = runKey(v.run); return a1[0].localeCompare(b1[0]) || a1[1] - b1[1]; },
+    run: (u, v) => { const a1 = runKey(u.run), b1 = runKey(v.run); return String(u.auc).localeCompare(String(v.auc)) || a1[0].localeCompare(b1[0]) || a1[1] - b1[1] || a1[2] - b1[2]; },
+    mk: (u, v) => String(u.mk || '').localeCompare(String(v.mk || '')) || String(u.md || '').localeCompare(String(v.md || '')) || (v.y || 0) - (u.y || 0),
     y: (u, v) => (v.y || 0) - (u.y || 0),
     o: (u, v) => nn(u.o, 1e9) - nn(v.o, 1e9),
     diff: (u, v) => (v.w == null ? -1e9 : v.r - v.w) - (u.w == null ? -1e9 : u.r - u.w)
@@ -340,7 +342,7 @@ function drawResults(keep) {
   const R = S.d.results || [], q = S.rf.q.toLowerCase().trim(), st = S.rf.st, s = S.rf.sort;
   const m = x => x.w || x.mmr, df = x => m(x) && x.fact ? x.fact - m(x) : null;
   let a = R.filter(x => (!st || x.ss === st || (st === 'sold' && !x.ss && x.fact)) && (!q || (x.run + ' ' + x.d).toLowerCase().includes(q)));
-  a.sort((u, v) => s === 'up' ? (df(v) ?? -1e9) - (df(u) ?? -1e9) : s === 'down' ? (df(u) ?? 1e9) - (df(v) ?? 1e9) : s === 'f' ? (u.fact || 1e9) - (v.fact || 1e9) : (() => { const a1 = runKey(u.run), b1 = runKey(v.run); return a1[0].localeCompare(b1[0]) || a1[1] - b1[1]; })());
+  a.sort((u, v) => s === 'up' ? (df(v) ?? -1e9) - (df(u) ?? -1e9) : s === 'down' ? (df(u) ?? 1e9) - (df(v) ?? 1e9) : s === 'f' ? (u.fact || 1e9) - (v.fact || 1e9) : (() => { const a1 = runKey(u.run), b1 = runKey(v.run); return String(u.auc).localeCompare(String(v.auc)) || a1[0].localeCompare(b1[0]) || a1[1] - b1[1] || a1[2] - b1[2]; })());
   if (!keep) S.rshown = 80;
   $('#rcnt').textContent = T('Показано ') + Math.min(a.length, S.rshown) + T(' из ') + a.length;
   $('#rlist').innerHTML = a.slice(0, S.rshown).map(x => { const k = x.auc + '|' + x.run, has = S.d.map[k], d1 = df(x);
