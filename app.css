@@ -240,3 +240,24 @@ html[data-font="mono"]{--f:'IBM Plex Mono',ui-monospace,Menlo,monospace;--fc:'IB
 .pc input:checked+span i{color:inherit;opacity:.8}
 .pc input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
 .md-g{margin:8px 0 10px}.md-g>b{display:block;font-size:13px;margin:0 0 6px}
+
+/* ---------- компьютер: широкий экран ---------- */
+@media (min-width:1024px){
+  body{padding-left:92px}
+  .tabbar{top:0;right:auto;width:92px;flex-direction:column;justify-content:flex-start;gap:4px;border-top:0;border-right:1px solid var(--line);padding:calc(var(--sat) + 70px) 0 16px}
+  .tabbar button{flex:none;min-height:64px;font-size:11.5px;border-radius:12px;margin:0 8px;position:relative}
+  .tabbar button:hover{background:var(--chip)}
+  .tabbar .badge{margin-left:26px;margin-top:2px}
+  .top-row,.dates,main{max-width:1440px}
+  .top-row,.dates{padding-left:24px;padding-right:24px}
+  main{padding:16px 24px 40px}
+  .list{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .lot:hover{border-color:var(--accent)}
+  .lot:active{transform:none}
+  .sheet{left:auto;right:0;top:0;bottom:0;width:min(620px,100vw - 92px);max-width:none;max-height:none;border-radius:0;margin:0;padding-top:var(--sat);box-shadow:-10px 0 40px rgba(0,0,0,.22)}
+  .sheet.full{left:auto;width:min(720px,100vw - 92px)}
+  .toast{bottom:24px}
+  .welcome .w-in{max-width:520px}
+  @media (prefers-reduced-motion:no-preference){.sheet:not([hidden]){animation:side .18s ease-out}@keyframes side{from{transform:translateX(40px);opacity:.6}to{transform:none;opacity:1}}}
+}
+@media (min-width:1500px){.list{grid-template-columns:repeat(4,minmax(0,1fr))}}

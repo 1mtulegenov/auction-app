@@ -5,6 +5,15 @@ const LOCALE = { en: 'en-US', ru: 'ru-RU', uk: 'uk-UA', es: 'es-US', kk: 'kk-KZ'
 const LI = { en: 0, uk: 1, es: 2, kk: 3 }[LANG];
 document.documentElement.lang = LANG;
 const I18N = {
+"Установить на компьютер": ["Install on computer", "Встановити на комп'ютер", "Instalar en la computadora", "Компьютерге орнату"],
+"отдельное окно и иконка на рабочем столе": ["own window and a desktop icon", "окреме вікно та іконка на робочому столі", "ventana propia e icono en el escritorio", "жеке терезе және жұмыс үстеліндегі белгіше"],
+"Windows и Mac, без магазина приложений": ["Windows and Mac, no app store", "Windows і Mac, без магазину застосунків", "Windows y Mac, sin tienda de apps", "Windows және Mac, қолданбалар дүкенінсіз"],
+"Нажмите кнопку, и «Аукционы» откроются в отдельном окне, а иконка появится на рабочем столе и в меню «Пуск» или в Dock.": ["Press the button and Auctions will open in its own window, with an icon on the desktop and in the Start menu or Dock.", "Натисніть кнопку, і «Аукціони» відкриються в окремому вікні, а іконка з'явиться на робочому столі та в меню «Пуск» або в Dock.", "Pulse el botón y Subastas se abrirá en su propia ventana, con un icono en el escritorio y en el menú Inicio o el Dock.", "Батырманы басыңыз, «Аукциондар» жеке терезеде ашылады, белгіше жұмыс үстелінде және «Бастау» мәзірінде немесе Dock-та пайда болады."],
+"Компьютер: Chrome или Edge": ["Computer: Chrome or Edge", "Комп'ютер: Chrome або Edge", "Computadora: Chrome o Edge", "Компьютер: Chrome немесе Edge"],
+" или ": [" or ", " або ", " o ", " немесе "],
+"Нажмите значок установки ⊕ справа в адресной строке.": ["Click the install icon ⊕ on the right of the address bar.", "Натисніть значок встановлення ⊕ праворуч в адресному рядку.", "Haga clic en el icono de instalar ⊕ a la derecha de la barra de direcciones.", "Мекенжай жолының оң жағындағы ⊕ орнату белгішесін басыңыз."],
+"Если значка нет: меню ⋮ → «Трансляция, сохранение и отправка» → «Установить страницу как приложение». В Edge: ⋯ → «Приложения» → «Установить этот сайт как приложение».": ["No icon? Menu ⋮ → “Cast, save, and share” → “Install page as app”. In Edge: ⋯ → “Apps” → “Install this site as an app”.", "Немає значка: меню ⋮ → «Трансляція, збереження й надсилання» → «Установити сторінку як застосунок». В Edge: ⋯ → «Програми» → «Інсталювати цей сайт як програму».", "¿Sin icono? Menú ⋮ → «Enviar, guardar y compartir» → «Instalar página como aplicación». En Edge: ⋯ → «Aplicaciones» → «Instalar este sitio como aplicación».", "Белгіше жоқ болса: ⋮ мәзірі → «Трансляциялау, сақтау және бөлісу» → «Бетті қолданба ретінде орнату». Edge-де: ⋯ → «Қолданбалар» → «Бұл сайтты қолданба ретінде орнату»."],
+"Меню «Файл» → «Добавить в Dock».": ["File menu → “Add to Dock”.", "Меню «Файл» → «Додати в Dock».", "Menú Archivo → «Añadir al Dock».", "«Файл» мәзірі → «Dock-қа қосу»."],
 "чёрный": [
 "black",
 "чорний",

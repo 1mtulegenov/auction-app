@@ -264,9 +264,11 @@ function render() {
   else if (S.tab === 'results') { v.innerHTML = resultsScreen(); drawResults(); }
   else v.innerHTML = more();
 }
+function installTitle() { return platform() === 'desktop' ? T('Установить на компьютер') : T('Установить на телефон'); }
 function installBanner() {
   if (isStandalone() || LS.get('hide-install', false)) return '';
-  return '<div class="banner"><button class="banner-go" data-act="install"><b>' + T('Установить на телефон') + '</b><span>' + T('иконка на экране, работает без интернета') + '</span></button><button class="x" data-act="hide-install" aria-label="' + T('Скрыть') + '">×</button></div>';
+  const dk = platform() === 'desktop';
+  return '<div class="banner"><button class="banner-go" data-act="install"><b>' + installTitle() + '</b><span>' + (dk ? T('отдельное окно и иконка на рабочем столе') : T('иконка на экране, работает без интернета')) + '</span></button><button class="x" data-act="hide-install" aria-label="' + T('Скрыть') + '">×</button></div>';
 }
 function home() {
   const d = S.d;
@@ -364,7 +366,7 @@ function more() {
   return '<div class="menu">' + '<button data-act="lang"><span class="ic flag">' + cur[1] + '</span><span>' + T('Язык') + '<small>' + cur[2] + '</small></span></button>'
     + '<button data-act="notes"><span class="ic">📝</span><span>' + T('Мои заметки') + '<small>' + (notes.length ? notes.length + T(' шт., привязаны к VIN') : T('Пока нет. Пишутся в карточке машины.')) + '</small></span></button>'
     + '<button data-act="how"><span class="ic">🧮</span><span>' + T('Как считается прибыль') + '<small>' + T('MMR, сбор, цена продажи, максимальная ставка') + '</small></span></button>'
-    + '<button data-act="install"><span class="ic">📲</span><span>' + T('Установить на телефон') + '<small>' + (isStandalone() ? T('Уже установлено') : T('iPhone и Android, без App Store')) + '</small></span></button>'
+    + '<button data-act="install"><span class="ic">📲</span><span>' + installTitle() + '<small>' + (isStandalone() ? T('Уже установлено') : platform() === 'desktop' ? T('Windows и Mac, без магазина приложений') : T('iPhone и Android, без App Store')) + '</small></span></button>'
     + '<button data-act="share-app"><span class="ic">🔗</span><span>' + T('Поделиться приложением') + '<small>' + T('Отправить ссылку другу') + '</small></span></button>'
     + '<button data-act="refresh"><span class="ic">🔄</span><span>' + T('Проверить обновления') + '<small>' + T('Данные от ') + E(fmtUpdated(S.index.updated)) + '</small></span></button>'
     + '<button data-act="font"><span class="ic">Aa</span><span>' + T('Шрифт') + '<small>' + fontLabel() + '</small></span></button>'
@@ -490,12 +492,16 @@ function installSheet() {
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   let h = '';
   if (isStandalone()) h = '<p class="txt">' + T('Приложение уже установлено. Обновления приходят сами, когда вы открываете его с интернетом.') + '</p>';
-  else if (S.deferredInstall) h = '<p class="txt">' + T('Нажмите кнопку, и иконка «Аукционы» появится на экране телефона.') + '</p><div class="btns" style="grid-template-columns:1fr"><button class="btn pri" data-act="do-install">' + T('Установить приложение') + '</button></div>';
+  else if (S.deferredInstall) h = '<p class="txt">' + (platform() === 'desktop' ? T('Нажмите кнопку, и «Аукционы» откроются в отдельном окне, а иконка появится на рабочем столе и в меню «Пуск» или в Dock.') : T('Нажмите кнопку, и иконка «Аукционы» появится на экране телефона.')) + '</p><div class="btns" style="grid-template-columns:1fr"><button class="btn pri" data-act="do-install">' + T('Установить приложение') + '</button></div>';
+  const desk = '<h2>' + T('Компьютер: Chrome или Edge') + '</h2><ol class="steps"><li>' + T('Откройте ссылку в ') + '<b>Chrome</b>' + T(' или ') + '<b>Edge</b>.</li><li>' + T('Нажмите значок установки ⊕ справа в адресной строке.') + '</li><li>' + T('Если значка нет: меню ⋮ → «Трансляция, сохранение и отправка» → «Установить страницу как приложение». В Edge: ⋯ → «Приложения» → «Установить этот сайт как приложение».') + '</li></ol>'
+    + '<h2>Mac: Safari</h2><ol class="steps"><li>' + T('Откройте ссылку в ') + '<b>Safari</b>.</li><li>' + T('Меню «Файл» → «Добавить в Dock».') + '</li></ol>';
+  if (platform() === 'desktop') h += desk;
   h += '<h2>iPhone</h2><ol class="steps"><li>' + T('Откройте эту ссылку в ') + '<b>Safari</b>.</li><li>' + T('Нажмите «Поделиться» ') + '<span aria-hidden="true">' + T('(квадрат со стрелкой ↑)') + '</span>' + T(' внизу экрана.') + '</li><li>' + T('Выберите «На экран “Домой”» и нажмите «Добавить».') + '</li></ol>'
     + '<h2>Android</h2><ol class="steps"><li>' + T('Откройте ссылку в ') + '<b>Chrome</b>.</li><li>' + T('Нажмите ⋮ в правом верхнем углу.') + '</li><li>' + T('Выберите «Установить приложение» или «Добавить на главный экран».') + '</li></ol>'
+    + (platform() === 'desktop' ? '' : desk)
     + '<p class="txt muted" style="margin-top:12px">' + T('После установки приложение открывается без браузера, помнит избранное и заметки и работает на аукционе даже без связи. Новые лоты приходят сами.') + '</p>';
   if (ios && !isStandalone()) h = '<p class="banner" style="display:block">' + T('Вы на iPhone: шаги ниже.') + '</p>' + h;
-  openSheet(T('Установить на телефон'), h, true);
+  openSheet(installTitle(), h, true);
 }
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); S.deferredInstall = e; if ($('#welcome')) welcome(); });
 function platform() {
@@ -598,7 +604,7 @@ document.addEventListener('click', async e => {
     case 'font': fontSheet(); break;
   }
 });
-document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.lot[data-lot]')) { e.preventDefault(); detail(e.target.dataset.lot); } if (e.key === 'Escape' && sheetOpen) closeSheet(); });
+document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.lot[data-lot]')) { e.preventDefault(); detail(e.target.dataset.lot); } if (e.key === 'Escape' && sheetOpen) closeSheet(); if (e.key === '/' && !sheetOpen && !e.target.matches('input,textarea,select') && $('#q')) { e.preventDefault(); $('#q').focus(); } });
 $('#sheetBg').addEventListener('click', () => closeSheet());
 let qT;
 document.addEventListener('input', e => {

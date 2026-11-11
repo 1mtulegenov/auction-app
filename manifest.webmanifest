@@ -6,7 +6,7 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "background_color": "#f2f4f7",
   "theme_color": "#0b5cad",
   "icons": [
@@ -40,6 +40,12 @@
       "sizes": "1082x2202",
       "type": "image/jpeg",
       "form_factor": "narrow"
+    },
+    {
+      "src": "icons/screens/w1.png",
+      "sizes": "1440x900",
+      "type": "image/png",
+      "form_factor": "wide"
     }
   ],
   "categories": [
