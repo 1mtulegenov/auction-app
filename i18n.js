@@ -959,6 +959,48 @@ const I18N = {
 "Por qué no está en la selección:",
 "Неге іріктемеде жоқ:"
 ],
+"Была на торгах": [
+"Ran at auction before",
+"Була на торгах",
+"Ya estuvo en subasta",
+"Саудада болған"
+],
+"лот": [
+"lot",
+"лот",
+"lote",
+"лот"
+],
+"итог": [
+"result",
+"підсумок",
+"resultado",
+"нәтиже"
+],
+"не продана": [
+"not sold",
+"не продана",
+"no vendido",
+"сатылмады"
+],
+"снята": [
+"withdrawn",
+"знята",
+"retirado",
+"алынып тасталды"
+],
+"итога нет в базе": [
+"no result in our data",
+"підсумку немає в базі",
+"sin resultado en nuestros datos",
+"базада нәтиже жоқ"
+],
+"Последний итог намного ниже MMR: возможен скрытый дефект.": [
+"Last result is far below MMR: possible hidden defect.",
+"Останній підсумок набагато нижчий за MMR: можливий прихований дефект.",
+"El último resultado está muy por debajo del MMR: posible defecto oculto.",
+"Соңғы нәтиже MMR-ден әлдеқайда төмен: жасырын ақау болуы мүмкін."
+],
 "Уже была на торгах": [
 "Already ran at auction",
 "Вже була на торгах",
