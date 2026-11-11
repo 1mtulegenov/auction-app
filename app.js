@@ -153,14 +153,17 @@ function hotLine(x) {
   if (!hot.length && x.whyn && (HOT_R.test(x.whyn) || HOT_Y.test(x.whyn))) hot.push(x.whyn);
   return hot.length ? '<p class="warnline">' + hot.map(t => '<span class="' + (HOT_R.test(t) ? 'hot-r' : 'hot-y') + '">' + E(t) + '</span>').join(' ') + '</p>' : '';
 }
+/* главное фото лота с EDGE (CDN autolookout, превью 400×300) */
+function photoUrl(x) { return x.ph ? 'https://file3.autolookout.net/' + x.ph + '/O3Jlc29sdXRpb246NDAweDMwMDs=/00' : ''; }
+function photo(x, cls, lazy) { const u = photoUrl(x); return u ? '<img class="' + cls + '" src="' + u + '" alt="" referrerpolicy="no-referrer" decoding="async"' + (lazy ? ' loading="lazy"' : '') + ' onerror="this.remove()">' : ''; }
 function lotCard(x) {
   const n = noteOf(x), v = VERDICT[x.stat], fav = isFav(x);
   const prof = x.prof == null ? '—' : (x.prof > 0 ? '+' : '') + M(x.prof);
   return '<article class="lot' + (x.past && x.past.length ? ' seen ' + seenLv(x) : '') + '" role="button" tabindex="0" data-lot="' + E(x.k) + '">'
     + '<div class="lot-top"><span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + slot(x) + '</span>' + (v ? '<span class="verdict ' + v[0] + '">' + v[1] + '</span>' : '') + '</div>'
     + '<button class="star' + (fav ? ' on' : '') + '" data-fav="' + E(x.k) + '" aria-label="' + T('В избранное') + '" aria-pressed="' + fav + '">' + (fav ? '★' : '☆') + '</button>'
-    + '<h3>' + E(carName(x)) + '</h3>'
-    + '<p class="sub">' + [x.o > 500 ? N(x.o) + ' mi' : '', COLOR[x.c] || String(x.c || '').toLowerCase()].filter(Boolean).map(E).join(' · ') + '</p>'
+    + '<div class="lot-id">' + photo(x, 'thumb', true) + '<div><h3>' + E(carName(x)) + '</h3>'
+    + '<p class="sub">' + [x.o > 500 ? N(x.o) + ' mi' : '', COLOR[x.c] || String(x.c || '').toLowerCase()].filter(Boolean).map(E).join(' · ') + '</p></div></div>'
     + '<div class="money"><div class="m-main"><span>' + T('Макс. ставка') + '</span><b>' + M(x.max) + '</b></div><div><span>' + T('Прибыль') + '</span><b class="' + profCls(x) + '">' + prof + '</b></div><div><span>MMR</span><b>' + M(x.w) + '</b></div></div>'
     + '<div class="status">' + statusLine(x) + '</div>'
     + pastCard(x)
@@ -391,7 +394,7 @@ function detail(k) {
   if (x.hx) info += '<p class="p ' + (x.hxbad ? 'wrn' : '') + '"><b>' + T('История (AutoCheck):') + '</b> ' + E(x.hx) + '</p>';
   if (x.risk) info += '<p class="p"><b>' + T('Слабые места модели') + '</b>' + T(' (в прибыль не входят): ') + E(x.risk) + '</p>';
   if (x.cons) info += '<p class="p muted">' + T('Продавец: ') + E(x.cons) + (x.drv && x.drv !== 'N/A' ? ' · ' + E(x.drv) : '') + (x.eng ? ' · ' + E(x.eng) : '') + '</p>';
-  const html = '<div class="d-card"><div class="lot-top"><span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + dLabel(S.d) + ', ' + slot(x) + '</span></div>'
+  const html = '<div class="d-card">' + photo(x, 'd-photo', false) + '<div class="lot-top"><span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + dLabel(S.d) + ', ' + slot(x) + '</span></div>'
     + '<h3 class="d-name">' + E(carName(x)) + '</h3><p class="sub">' + (x.o > 500 ? N(x.o) + ' mi · ' : '') + E(COLOR[x.c] || String(x.c || '').toLowerCase()) + (x.tr ? ' · Manheim: ' + E(x.tr) : '') + '</p>'
     + (chips ? '<div class="chips">' + chips + '</div>' : '') + factText(x) + '</div>'
     + '<div class="d-card"><div class="grid6"><div class="hl"><b>' + M(x.w) + '</b><span>Adjusted MMR</span></div><div><b>' + M(x.w != null ? x.w + FEE : null) + '</b><span>' + T('MMR + сбор ') + M(FEE) + '</span></div><div><b>' + M(x.r) + '</b><span>' + T('ретейл Manheim') + '</span></div><div><b>' + M(x.sale) + '</b><span>' + T('цена продажи') + '</span></div><div><b class="' + profCls(x) + '">' + M(x.prof) + '</b><span>' + T('прибыль по MMR') + '</span></div><div><b>' + M(x.max) + '</b><span>' + T('макс. ставка') + (x.margin ? T(' (прибыль ') + M(x.margin) + ')' : '') + '</span></div></div>'
