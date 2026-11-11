@@ -5,6 +5,8 @@ const LOCALE = { en: 'en-US', ru: 'ru-RU', uk: 'uk-UA', es: 'es-US', kk: 'kk-KZ'
 const LI = { en: 0, uk: 1, es: 2, kk: 3 }[LANG];
 document.documentElement.lang = LANG;
 const I18N = {
+"ушла на оффер за": ["went to offer at", "пішла на офер за", "fue a oferta por", "офферге кетті, бағасы"],
+"Не отдали": ["Not sold", "Не віддали", "No la vendieron", "Берілмеді"],
 "Неходячая: прибыль не считаем": ["Non-running: no profit calc", "Неходова: прибуток не рахуємо", "No arranca: sin cálculo de ganancia", "Жүрмейді: пайда есептелмейді"],
 "Неходячая машина: прибыль, цену продажи и макс. ставку не считаем, только MMR.": ["Non-running car: no profit, resale price or max bid, MMR only.", "Неходова машина: прибуток, ціну продажу й макс. ставку не рахуємо, лише MMR.", "Auto que no arranca: sin ganancia, precio de venta ni puja máxima, solo MMR.", "Жүрмейтін көлік: пайда, сату бағасы мен макс. ставка есептелмейді, тек MMR."],
 "Установить на компьютер": ["Install on computer", "Встановити на комп'ютер", "Instalar en la computadora", "Компьютерге орнату"],
