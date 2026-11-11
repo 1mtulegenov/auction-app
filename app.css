@@ -211,3 +211,8 @@ textarea.note.has{border-color:var(--warn);background:var(--warnb)}
 .p.seen b{color:var(--seen)}
 .p.seen ul{margin:6px 0 0;padding-left:18px}.p.seen li{margin:2px 0}
 .p.seen .wrn-t{display:block;margin-top:6px;color:var(--warn);font-weight:600}
+/* уровень повтора: 1× салатовый, 2× жёлтый, 3+ красный */
+.sv1{--seen:#5aa10a;--seenb:#eefadf}.sv2{--seen:#b58500;--seenb:#fff5cc}.sv3{--seen:#d93025;--seenb:#fde7e5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sv1{--seen:#9ee05a;--seenb:#1f3312}:root:not([data-theme="light"]) .sv2{--seen:#f2cb4c;--seenb:#3a3012}:root:not([data-theme="light"]) .sv3{--seen:#f28b82;--seenb:#3d1d1b}}
+:root[data-theme="dark"] .sv1{--seen:#9ee05a;--seenb:#1f3312}:root[data-theme="dark"] .sv2{--seen:#f2cb4c;--seenb:#3a3012}:root[data-theme="dark"] .sv3{--seen:#f28b82;--seenb:#3d1d1b}
+.lot.seen{border-width:2px}
