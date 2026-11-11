@@ -1055,6 +1055,66 @@ const I18N = {
 "monto desconocido",
 "сомасы белгісіз"
 ],
+"Шрифт": [
+"Font",
+"Шрифт",
+"Fuente",
+"Қаріп"
+],
+"Размер текста": [
+"Text size",
+"Розмір тексту",
+"Tamaño del texto",
+"Мәтін өлшемі"
+],
+"Системный": [
+"System",
+"Системний",
+"Del sistema",
+"Жүйелік"
+],
+"Nunito, округлый": [
+"Nunito, rounded",
+"Nunito, округлий",
+"Nunito, redondeada",
+"Nunito, дөңгелек"
+],
+"PT Serif, с засечками": [
+"PT Serif, serif",
+"PT Serif, із зарубками",
+"PT Serif, con serifa",
+"PT Serif, серифті"
+],
+"IBM Plex Mono, моноширинный": [
+"IBM Plex Mono, monospace",
+"IBM Plex Mono, моноширинний",
+"IBM Plex Mono, monoespaciada",
+"IBM Plex Mono, бірдей енді"
+],
+"Мелкий": [
+"Small",
+"Дрібний",
+"Pequeño",
+"Кіші"
+],
+"Обычный": [
+"Normal",
+"Звичайний",
+"Normal",
+"Қалыпты"
+],
+"Крупный": [
+"Large",
+"Великий",
+"Grande",
+"Ірі"
+],
+"Очень крупный": [
+"Extra large",
+"Дуже великий",
+"Muy grande",
+"Өте ірі"
+],
 "Уже была на торгах": [
 "Already ran at auction",
 "Вже була на торгах",

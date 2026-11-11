@@ -344,6 +344,7 @@ function more() {
     + '<button data-act="install"><span class="ic">📲</span><span>' + T('Установить на телефон') + '<small>' + (isStandalone() ? T('Уже установлено') : T('iPhone и Android, без App Store')) + '</small></span></button>'
     + '<button data-act="share-app"><span class="ic">🔗</span><span>' + T('Поделиться приложением') + '<small>' + T('Отправить ссылку другу') + '</small></span></button>'
     + '<button data-act="refresh"><span class="ic">🔄</span><span>' + T('Проверить обновления') + '<small>' + T('Данные от ') + E(fmtUpdated(S.index.updated)) + '</small></span></button>'
+    + '<button data-act="font"><span class="ic">Aa</span><span>' + T('Шрифт') + '<small>' + fontLabel() + '</small></span></button>'
     + '<button data-act="theme"><span class="ic">◐</span><span>' + T('Тема оформления') + '<small>' + ({ light: T('Светлая'), dark: T('Тёмная') }[LS.get('theme', '')] || T('Как в системе')) + '</small></span></button>'
     + '</div><p class="foot">' + T('Аукционы Хьюстона · версия данных ') + E(S.index.version) + '<br>' + T('Цены ориентировочные: MMR и ретейл Manheim, без осмотра машины.') + '</p>';
 }
@@ -444,6 +445,18 @@ function setFees() {
   const t = $('#feeTot'); if (t) t.textContent = M(FEE);
   const best = $('#bestList'); if (best) best.innerHTML = bestLots().map(lotCard).join('');
 }
+/* ---------- шрифт и размер текста ---------- */
+const FONTS = [['sys', 'Системный'], ['nunito', 'Nunito, округлый'], ['serif', 'PT Serif, с засечками'], ['mono', 'IBM Plex Mono, моноширинный']];
+const SIZES = [[0.9, 'Мелкий'], [1, 'Обычный'], [1.1, 'Крупный'], [1.25, 'Очень крупный']];
+function fontPref() { const p = LS.get('font-v1', {}) || {}; return { f: FONTS.some(x => x[0] === p.f) ? p.f : 'sys', z: SIZES.some(x => x[0] === p.z) ? p.z : 1 }; }
+function applyFont() { const p = fontPref(); document.documentElement.dataset.font = p.f; document.body.style.zoom = p.z === 1 ? '' : p.z; }
+function fontLabel() { const p = fontPref(); return T(FONTS.find(x => x[0] === p.f)[1]) + ' · ' + T(SIZES.find(x => x[0] === p.z)[1]).toLowerCase(); }
+function fontSheet() {
+  const p = fontPref();
+  openSheet(T('Шрифт'), '<p class="sec-t">' + T('Размер текста') + '</p><div class="seg fsize">' + SIZES.map(([z, n]) => '<button data-fz="' + z + '" aria-pressed="' + (z === p.z) + '" style="font-size:' + Math.round(13 * z) + 'px">' + T(n) + '</button>').join('') + '</div>'
+    + '<p class="sec-t">' + T('Шрифт') + '</p><div class="menu">' + FONTS.map(([k, n]) => '<button data-ff="' + k + '"' + (k === p.f ? ' aria-current="true"' : '') + '><span class="ic ff-' + k + '">Aa</span><span class="ff-' + k + '">' + T(n) + '<small>2019 Toyota Camry SE · $4,350</small></span>' + (k === p.f ? '<span class="chk">✓</span>' : '') + '</button>').join('') + '</div>', false);
+}
+function setFont(k, v) { const p = fontPref(); p[k] = v; LS.set('font-v1', p); applyFont(); fontSheet(); if (!['home','picks','lots','results'].includes(S.tab)) render(); }
 function langSheet() {
   openSheet(T('Язык'), '<div class="menu">' + LANGS.map(([k, f, n]) => '<button data-lang="' + k + '"' + (k === LANG ? ' aria-current="true"' : '') + '><span class="ic flag">' + f + '</span><span>' + n + '</span>' + (k === LANG ? '<span class="chk">✓</span>' : '') + '</button>').join('') + '</div>', false);
 }
@@ -506,7 +519,7 @@ async function copy(text) {
   catch (e) { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); toast(T('Скопировано')); } catch (x) {} t.remove(); }
 }
 function applyTheme() { const t = LS.get('theme', ''); if (t) document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
-function cycleTheme() { const t = LS.get('theme', ''); LS.set('theme', t === '' ? 'dark' : t === 'dark' ? 'light' : ''); applyTheme(); toast({ dark: T('Тёмная тема'), light: T('Светлая тема'), '': T('Тема как в системе') }[LS.get('theme', '')]); if (S.tab === 'more') render(); }
+function cycleTheme() { const t = LS.get('theme', ''); LS.set('theme', t === '' ? 'dark' : t === 'dark' ? 'light' : ''); applyTheme(); toast({ dark: T('Тёмная тема'), light: T('Светлая тема'), '': T('Тема как в системе') }[LS.get('theme', '')]); if (!['home','picks','lots','results'].includes(S.tab)) render(); }
 function go(tab) { S.tab = tab; LS.set('tab', tab); render(); window.scrollTo(0, 0); }
 function toggleFav(k) {
   const x = S.d.map[k]; if (!x) return;
@@ -522,6 +535,8 @@ document.addEventListener('click', async e => {
   const ds = t.dataset;
   if (ds.fav) { e.stopPropagation(); toggleFav(ds.fav); return; }
   if (ds.lang) { LS.set('lang', ds.lang); location.reload(); return; }
+  if (ds.ff) { setFont('f', ds.ff); return; }
+  if (ds.fz) { setFont('z', +ds.fz); return; }
   if (ds.tab) { if (sheetOpen) closeSheet(); go(ds.tab); return; }
   if (ds.date) { await loadDate(ds.date); S.f.quick = S.f.quick === 'fav' ? 'fav' : S.f.quick; render(); window.scrollTo(0, 0); return; }
   if (ds.go) { if (ds.pick) S.picks = ds.pick; if (ds.au != null) { S.f.au = ds.au; } if (ds.quick != null) S.f.quick = ds.quick; go(ds.go); return; }
@@ -555,6 +570,7 @@ document.addEventListener('click', async e => {
     case 'refresh': await refresh(true); break;
     case 'theme': cycleTheme(); break;
     case 'lang': langSheet(); break;
+    case 'font': fontSheet(); break;
   }
 });
 document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.lot[data-lot]')) { e.preventDefault(); detail(e.target.dataset.lot); } if (e.key === 'Escape' && sheetOpen) closeSheet(); });
@@ -622,6 +638,7 @@ async function start() {
   refresh(false);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') refresh(false); });
 }
+applyFont();
 start();
 
 /* ---------- сканер VIN ---------- */
