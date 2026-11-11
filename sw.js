@@ -1,7 +1,7 @@
 /* Сервис-воркер: приложение открывается без интернета, данные обновляются при каждом запуске со связью. */
-const VERSION = 'd4f23181dc';
+const VERSION = '83e05ce4c3';
 const SHELL = 'shell-' + VERSION, DATA = 'data-v1';
-const FILES = ['./', 'index.html', 'app.css', 'fonts.css', 'i18n.js', 'app.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'vendor/zxing.min.js', 'scan-worker.js'];
+const FILES = ['./', 'index.html', 'app.css', 'fonts.css', 'i18n.js', 'app.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'vendor/zxing.min.js', 'scan-worker.js', 'vinline.js'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(SHELL).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('message', e => { if (e.data === 'skip') self.skipWaiting(); });
 self.addEventListener('activate', e => {
@@ -13,7 +13,7 @@ self.addEventListener('fetch', e => {
   if (u.pathname.endsWith('/data/index.json')) { e.respondWith(netFirst(e.request)); return; }
   if (u.pathname.includes('/data/')) { e.respondWith(dataFile(e.request)); return; }
   if (e.request.mode === 'navigate') { e.respondWith(shellFirst(new Request('index.html'))); return; }
-  if (/\.(js|css|html|webmanifest)$/.test(u.pathname) && !u.pathname.includes('/vendor/') && !u.pathname.endsWith('scan-worker.js')) { e.respondWith(shellFirst(e.request)); return; }
+  if (/\.(js|css|html|webmanifest)$/.test(u.pathname) && !u.pathname.includes('/vendor/') && !u.pathname.endsWith('scan-worker.js') && !u.pathname.endsWith('vinline.js')) { e.respondWith(shellFirst(e.request)); return; }
   if (u.pathname.includes('/vendor/')) { e.respondWith(caches.open('vendor-v1').then(async c => (await c.match(e.request, { ignoreSearch: true })) || fetch(e.request).then(r => { if (r.ok) c.put(e.request, r.clone()); return r; }))); return; }
   e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
 });

@@ -1,5 +1,5 @@
 /* Фоновый поток сканера: штрихкод (ZXing) и сверка прочитанного текста с VIN из каталогов. Главный поток не тормозит. */
-importScripts('vendor/zxing.min.js');
+importScripts('vendor/zxing.min.js', 'vinline.js');
 const Z = self.ZXing, hints = new Map();
 hints.set(Z.DecodeHintType.POSSIBLE_FORMATS, [Z.BarcodeFormat.CODE_39, Z.BarcodeFormat.CODE_128, Z.BarcodeFormat.DATA_MATRIX, Z.BarcodeFormat.QR_CODE, Z.BarcodeFormat.PDF_417]);
 hints.set(Z.DecodeHintType.TRY_HARDER, true);
@@ -28,17 +28,48 @@ function near(v) {
   for (let n = 0; n < KEYS.length; n++) { const k = KEYS[n]; let d = 0; for (let i = 0; i < 17 && d <= 2; i++) if (k.charCodeAt(i) !== v.charCodeAt(i)) d++; if (d < bd) { bd = d; best = k; tie = false; } else if (d === bd && k !== best) tie = true; }
   return bd <= 2 && !tie ? { vin: best, d: bd } : null;
 }
+// расстояние Левенштейна с отсечкой: сколько букв надо поправить, вставить или убрать
+// буквы, которые OCR часто путает: замена между ними стоит полшага
+const CONF = new Set(['T7', '7T', 'Z2', '2Z', 'S5', '5S', 'B8', '8B', 'G6', '6G', 'D0', '0D', '1L', 'L1', '1T', 'T1', 'U0', '0U', 'V4', 'A4', '4A', 'M8', 'N4', 'J3', '3J', 'E3', 'Y7', '17', '71']);
+function lev(a, b, max) {
+  if (Math.abs(a.length - b.length) > max) return max + 1;
+  let prev = new Array(b.length + 1), cur = new Array(b.length + 1);
+  for (let j = 0; j <= b.length; j++) prev[j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    cur[0] = i; let lo = cur[0];
+    for (let j = 1; j <= b.length; j++) { const x = a[i - 1], y = b[j - 1], c = x === y ? 0 : CONF.has(x + y) ? 0.5 : 1; cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + c); if (cur[j] < lo) lo = cur[j]; }
+    if (lo > max) return max + 1;
+    const t = prev; prev = cur; cur = t;
+  }
+  return prev[b.length];
+}
+// строка, прочитанная с ошибками (лишняя или пропущенная буква): ищем ближайший VIN из каталогов
+function nearLev(t) {
+  if (t.length < 14 || t.length > 20 || !KEYS.length) return null;
+  const max = t.length >= 15 ? 3.5 : 3;
+  let best = null, bd = max + 1, tie = false;
+  for (let n = 0; n < KEYS.length; n++) { const d = lev(t, KEYS[n], bd); if (d < bd) { bd = d; best = KEYS[n]; tie = false; } else if (d === bd && KEYS[n] !== best) tie = true; }
+  return best && !tie && bd <= max ? { vin: best, d: bd } : null;
+}
 function matchText(text) {
   const cs = candidates(text);
   for (const c of cs) if (IDX[c.v]) return { vin: c.v, exact: true };
   for (const c of cs) { const n = near(c.v); if (n) return { vin: n.vin, read: c.v, d: n.d }; }
-  for (const c of cs) if (c.t !== 'win' && checkOk(c.v)) return { vin: c.v, unknown: true };
+  for (const line of String(text || '').toUpperCase().split(/\n/)) { const t = line.replace(/[^A-Z0-9]/g, '').replace(/O|Q/g, '0').replace(/I/g, '1'); const n = nearLev(t); if (n) return { vin: n.vin, read: t, d: n.d }; }
+  // VIN не из каталогов: только с верной контрольной цифрой и цифрами в конце (у всех VIN последние знаки — цифры)
+  for (const c of cs) if (c.t !== 'win' && checkOk(c.v) && /\d{4}$/.test(c.v) && /^[1-9A-HJ-NPR-Z]/.test(c.v)) return { vin: c.v, unknown: true };
   const raw = String(text || '').replace(/[^A-Z0-9\n]/gi, '').split('\n').sort((a, b) => b.length - a.length)[0];
   return raw && raw.length >= 10 ? { raw } : null;
 }
 onmessage = e => {
   const m = e.data;
   if (m.type === 'idx') { IDX = m.idx || {}; KEYS = Object.keys(IDX); return; }
+  if (m.type === 'line') {   // кадр полосы → чистые строки текста для распознавания
+    const t0 = Date.now();
+    const lines = findVinLines(new Uint8ClampedArray(m.buf), m.w, m.h).slice(0, 3);
+    postMessage({ type: 'lines', ms: Date.now() - t0, lines: lines.map(l => ({ w: l.w, h: l.h, buf: l.data.buffer })) }, lines.map(l => l.data.buffer));
+    return;
+  }
   if (m.type === 'text') { postMessage({ type: 'ocr', res: matchText(m.text) }); return; }
   if (m.type === 'frame') {
     const px = new Uint8ClampedArray(m.buf), w = m.w, h = m.h, n = w * h;
