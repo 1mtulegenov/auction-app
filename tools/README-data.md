@@ -8,3 +8,4 @@
 Иначе пропадут правильная история (продана / ушла на оффер) и фото.
 
 Фото и история 11 ноября сняты с EDGE через Chrome пользователя (tools/photos_*.txt, tools/edge_dump_*.txt).
+- Filter fields (year, mileage, MMR) have no example placeholders, by request.
