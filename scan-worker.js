@@ -61,13 +61,20 @@ function matchText(text) {
   const raw = String(text || '').replace(/[^A-Z0-9\n]/gi, '').split('\n').sort((a, b) => b.length - a.length)[0];
   return raw && raw.length >= 10 ? { raw } : null;
 }
+let lineN = 0;
 onmessage = e => {
   const m = e.data;
   if (m.type === 'idx') { IDX = m.idx || {}; KEYS = Object.keys(IDX); return; }
   if (m.type === 'line') {   // кадр полосы → чистые строки текста для распознавания
     const t0 = Date.now();
-    const lines = findVinLines(new Uint8ClampedArray(m.buf), m.w, m.h).slice(0, 3);
-    postMessage({ type: 'lines', ms: Date.now() - t0, lines: lines.map(l => ({ w: l.w, h: l.h, buf: l.data.buffer })) }, lines.map(l => l.data.buffer));
+    // каждая найденная строка в двух видах: чистые контуры букв и выпрямленная серая картинка
+    // (серая спасает буквы, у которых край слился с рамкой наклейки или бликом)
+    const lines = [];
+    // размер букв для распознавания меняем от кадра к кадру: где OCR ошибся на одном, другой обычно читает
+    const th = [34, 28, 42][lineN++ % 3];
+    for (const l of findVinLines(new Uint8ClampedArray(m.buf), m.w, m.h, { th }).slice(0, 2)) lines.push({ w: l.w, h: l.h, buf: l.data.buffer }, { w: l.gw, h: l.gh, buf: l.gdata.buffer });
+    lines.length = Math.min(lines.length, 3);
+    postMessage({ type: 'lines', ms: Date.now() - t0, lines }, lines.map(l => l.buf));
     return;
   }
   if (m.type === 'text') { postMessage({ type: 'ocr', res: matchText(m.text) }); return; }

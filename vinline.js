@@ -83,6 +83,9 @@
       // буквы VIN идут плотно: выкидываем хвосты с большими разрывами
       if (cnt < 8) continue;
       const run = densest(inl, hh);
+      // штрихкод под VIN: тонкие палочки одной высоты тоже выстраиваются в «строку»; у букв средняя ширина ≥ 0.35 высоты
+      const asp = run.map(k => k.w / k.h).sort((a, b) => a - b);
+      if (asp[asp.length >> 1] < 0.35) continue;
       const sc = scoreRun(run.length);
       const myr = run.reduce((t, k) => t + k.cy, 0) / run.length;
       if (run.length >= 8) cands.push({ cs: run, h: hh, sl, ax: A.cx, ay: A.cy, score: sc - Math.abs(myr - H / 2) / H * 30, my: run.reduce((t, k) => t + k.cy, 0) / run.length, mx: run.reduce((t, k) => t + k.cx, 0) / run.length });
@@ -101,21 +104,37 @@
     return bestR;
   }
   // чистая выпрямленная строка: только пиксели найденных букв, высота букв ~th пикселей
-  function render(line, lab, w, h, th) {
+  function render(line, lab, w, h, th, G, bright, band, GT) {
+    let g0 = 0, gk = 1;
+    if (G) { // растяжка контраста: средняя яркость букв → 0, фона вокруг → 255
+      let si = 0, ni = 0, so = 0, no = 0; const lx0 = Math.min(...line.cs.map(k => k.x0)), lx1 = Math.max(...line.cs.map(k => k.x1));
+      const idz = new Set(line.cs.map(k => k.id));
+      for (const k of line.cs) for (let y = k.y0; y <= k.y1; y++) for (let x = k.x0; x <= k.x1; x++) { const v = G[y * w + x]; if (idz.has(lab[y * w + x])) { si += v; ni++; } else { so += v; no++; } }
+      const fi = si / Math.max(1, ni), fo = so / Math.max(1, no); g0 = fi; gk = 255 / ((fo - fi) || 1);
+      if (bright) { g0 = fo; gk = 255 / ((fi - fo) || 1); }
+    }
     const ids = new Set((line.all || line.cs).map(k => k.id));
     const x0 = Math.min(...line.cs.map(k => k.x0)), x1 = Math.max(...line.cs.map(k => k.x1));
     const ang = Math.atan(line.sl), ca = Math.cos(ang), sa = Math.sin(ang);
     const s = th / line.h, pad = Math.round(th * 0.6);
     const A0 = line.cs[0], yRef = A0.cy - line.sl * A0.cx;   // y линии при x=0
     const OW = Math.round((x1 - x0 + 1) * s / ca) + pad * 2, OH = Math.round(th * 1.6) + pad * 2;
-    const out = new Uint8ClampedArray(OW * OH * 4).fill(255);
+    const out = new Uint8ClampedArray(OW * OH * 4).fill(255), lim2 = (line.h * (band || 0.75)) ** 2, bx = line.h * 0.4;
     // обратное отображение: для каждого пикселя результата ищем исходный
     for (let oy = 0; oy < OH; oy++) for (let ox = 0; ox < OW; ox++) {
       const u = (ox - pad) / s, v = (oy - OH / 2) / s;   // u вдоль строки от x0, v поперёк
       const sx = x0 + u * ca - v * sa, sy = yRef + line.sl * x0 + u * sa + v * ca;
       const ix = Math.round(sx), iy = Math.round(sy);
       if (ix < 0 || iy < 0 || ix >= w || iy >= h) continue;
-      if (ids.has(lab[iy * w + ix])) { const j = (oy * OW + ox) * 4; out[j] = out[j + 1] = out[j + 2] = 0; }
+      if (G) { if (v * v > lim2 || u < -bx || u > x1 - x0 + bx) continue; const j = (oy * OW + ox) * 4; let gv = (G[iy * w + ix] - g0) * gk; if (bright) gv = 255 - gv;  out[j] = out[j + 1] = out[j + 2] = gv; }
+      else if (ids.has(lab[iy * w + ix])) { const j = (oy * OW + ox) * 4; out[j] = out[j + 1] = out[j + 2] = 0; }
+    }
+    if (G) { // свет по наклейке неровный: растягиваем контраст по столбцам (окно ~ширина буквы)
+      const lo = new Float32Array(OW).fill(255), hi = new Float32Array(OW), R = Math.round(th * 0.8);
+      for (let x = 0; x < OW; x++) for (let y = 0; y < OH; y++) { const v = out[(y * OW + x) * 4]; if (v < lo[x]) lo[x] = v; if (v > hi[x]) hi[x] = v; }
+      const L2 = new Float32Array(OW), H2 = new Float32Array(OW);
+      for (let x = 0; x < OW; x++) { let a = 255, b = 0; for (let i = Math.max(0, x - R); i <= Math.min(OW - 1, x + R); i++) { if (lo[i] < a) a = lo[i]; if (hi[i] > b) b = hi[i]; } L2[x] = a; H2[x] = b; }
+      for (let y = 0; y < OH; y++) for (let x = 0; x < OW; x++) { const j = (y * OW + x) * 4, d = H2[x] - L2[x]; if (d < 30) continue; const v = (out[j] - L2[x]) * 255 / d; out[j] = out[j + 1] = out[j + 2] = GT ? (v < GT ? 0 : 255) : v; }
     }
     return { w: OW, h: OH, data: out, n: line.cs.length };
   }
@@ -133,7 +152,8 @@
           if (line.cs.length < 10) continue;
           if (out.some(o => o.bright === bright && Math.abs(o.my - line.my) < 0.8 * line.h && Math.abs(o.mx - line.mx) < 6 * line.h)) continue;
           line = withFragments(line, cs);
-          out.push(Object.assign(render(line, lab, w, h, opt.th || 34), { bright, T, score: line.score, my: line.my, mx: line.mx }));
+          const g = render(line, lab, w, h, opt.th || 34, L, bright, opt.band, opt.gt);
+          out.push(Object.assign(render(line, lab, w, h, opt.th || 34), { gw: g.w, gh: g.h, gdata: g.data, bright, T, score: line.score, my: line.my, mx: line.mx }));
         }
       }
     }

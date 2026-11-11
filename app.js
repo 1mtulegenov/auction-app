@@ -895,6 +895,17 @@ function warmScanner() {
   if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 4000 }); else setTimeout(go, 2500);
 }
 
+// камера между открытиями сканера не выключается сразу: браузер не спрашивает разрешение снова.
+// Поток «паркуется» (кадры не идут) и закрывается через 3 минуты или когда приложение свернули.
+let camKeep = null, camTimer = 0;
+function camRelease() { clearTimeout(camTimer); if (camKeep) camKeep.getTracks().forEach(t => t.stop()); camKeep = null; }
+function camPark(st) { if (camKeep && camKeep !== st) camRelease(); camKeep = st; st.getTracks().forEach(t => { try { if (t.getSettings && t.getSettings().torch) t.applyConstraints({ advanced: [{ torch: false }] }); } catch (e) {} t.enabled = false; }); clearTimeout(camTimer); camTimer = setTimeout(camRelease, 180000); }
+function camTake() {
+  const st = camKeep; clearTimeout(camTimer); camKeep = null;
+  if (!st || !st.getVideoTracks().some(t => t.readyState === 'live')) { if (st) st.getTracks().forEach(t => t.stop()); return null; }
+  st.getTracks().forEach(t => { t.enabled = true; }); return st;
+}
+document.addEventListener('visibilitychange', () => { if (document.hidden && !$('#scan')) camRelease(); });
 async function openScan() {
   LS.set('scan-used', true);
   const el = document.createElement('div'); el.className = 'scan'; el.id = 'scan';
@@ -906,12 +917,12 @@ async function openScan() {
   el.querySelector('#scanForm').onsubmit = e => { e.preventDefault(); handleVin($('#vinIn').value, false); };
   const video = el.querySelector('video'), hint = $('#scanHint');
   let stream, alive = true, raf = 0;
-  scanStop = () => { alive = false; cancelAnimationFrame(raf); swCb = null; if (stream) stream.getTracks().forEach(t => t.stop()); };
+  scanStop = () => { alive = false; cancelAnimationFrame(raf); swCb = null; if (stream) camPark(stream); };
   const wP = scanWorker(), oP = ocrWorker().catch(() => null);   // грузятся параллельно с камерой
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { hint.textContent = T('Камера недоступна в этом браузере. Введите VIN вручную.'); return; }
-  try { stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false }); }
+  try { stream = camTake() || await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false }); }
   catch (e) { hint.textContent = T('Нет доступа к камере. Разрешите камеру в настройках браузера или введите VIN вручную.'); return; }
-  if (!alive) { stream.getTracks().forEach(t => t.stop()); return; }
+  if (!alive) { camPark(stream); return; }
   video.srcObject = stream; try { await video.play(); } catch (e) {}
   const track = stream.getVideoTracks()[0];
   try { const cap = track.getCapabilities && track.getCapabilities(); if (cap && cap.torch) { const tb = $('#torch'); tb.hidden = false; let on = false; tb.onclick = () => { on = !on; track.applyConstraints({ advanced: [{ torch: on }] }); }; } if (cap && cap.focusMode && cap.focusMode.includes('continuous')) track.applyConstraints({ advanced: [{ focusMode: 'continuous' }] }); } catch (e) {}
