@@ -163,6 +163,8 @@ function hotLine(x) {
   return hot.length ? '<p class="warnline">' + hot.map(t => '<span class="' + (HOT_R.test(t) ? 'hot-r' : 'hot-y') + '">' + E(t) + '</span>').join(' ') + '</p>' : '';
 }
 /* главное фото лота с EDGE (CDN autolookout, превью 400×300) */
+// номер фото на CDN EDGE растёт со временем загрузки: чем больше, тем позже машину выставили
+function phId(x) { if (!x.ph) return -1; const p = x.ph.split('/'); return +(p[1] + p[2]) || -1; }
 function photoUrl(x) { if (!x.ph) return ''; const p = x.ph.split('/'); const sf = p.length > 3 ? p.pop() : '00'; return 'https://file3.autolookout.net/' + p.join('/') + '/O3Jlc29sdXRpb246NDAweDMwMDs=/' + sf; }
 function photo(x, cls, lazy) { const u = photoUrl(x); return u ? '<img class="' + cls + '" src="' + u + '" alt="" referrerpolicy="no-referrer" decoding="async"' + (lazy ? ' loading="lazy"' : '') + ' onerror="this.remove()">' : ''; }
 function lotCard(x) {
@@ -183,8 +185,8 @@ function lotCard(x) {
 }
 
 /* ---------- фильтры ---------- */
-const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('7 марок')], ['clean', T('Без пометок')], ['title', T('Тайтл на месте')], ['profit', T('Прибыль ') + '> 0'], ['inop', T('Неходячие')], ['past', T('Были на торгах')], ['notes', T('С заметкой')]];
-const SORTS = [['stat', T('Сначала подборка')], ['prof', T('Прибыль больше')], ['w', T('MMR меньше')], ['wd', T('MMR больше')], ['run', T('По номеру лота')], ['mk', T('По марке и модели')], ['y', T('Новее')], ['o', T('Пробег меньше')], ['diff', T('Ретейл − MMR больше')]];
+const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('7 марок')], ['inop', T('Неходячие')], ['clean', T('Без пометок')], ['title', T('Тайтл на месте')], ['profit', T('Прибыль ') + '> 0'], ['past', T('Были на торгах')], ['notes', T('С заметкой')]];
+const SORTS = [['stat', T('Сначала подборка')], ['prof', T('Прибыль больше')], ['w', T('MMR меньше')], ['wd', T('MMR больше')], ['diff', T('Ретейл − MMR больше')], ['time', T('Аукцион и время')], ['mk', T('Марка, модель, год')], ['ymm', T('Год, марка, модель')], ['run', T('Номер лота')], ['o', T('Пробег меньше')], ['new', T('Недавно выставленные')], ['y', T('Год новее')]];
 function applyFilters(list) {
   const f = S.f, q = f.q.toLowerCase().trim(), y = +f.y || 0, o = +f.o || 0, p = +f.p || 0;
   const lotQ = q.replace(/\s/g, '').toUpperCase();
@@ -218,6 +220,9 @@ function applyFilters(list) {
     w: (u, v) => nn(u.w, 1e9) - nn(v.w, 1e9),
     wd: (u, v) => nn(v.w, -1e9) - nn(u.w, -1e9),
     run: (u, v) => { const a1 = runKey(u.run), b1 = runKey(v.run); return String(u.auc).localeCompare(String(v.auc)) || a1[0].localeCompare(b1[0]) || a1[1] - b1[1] || a1[2] - b1[2]; },
+    ymm: (u, v) => (v.y || 0) - (u.y || 0) || String(u.mk || '').localeCompare(String(v.mk || '')) || String(u.md || '').localeCompare(String(v.md || '')),
+    time: (u, v) => slot(u).localeCompare(slot(v)) || by.run(u, v),
+    new: (u, v) => phId(v) - phId(u) || by.run(u, v),
     mk: (u, v) => String(u.mk || '').localeCompare(String(v.mk || '')) || String(u.md || '').localeCompare(String(v.md || '')) || (v.y || 0) - (u.y || 0),
     y: (u, v) => (v.y || 0) - (u.y || 0),
     o: (u, v) => nn(u.o, 1e9) - nn(v.o, 1e9),
