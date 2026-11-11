@@ -83,6 +83,110 @@ function fmtUpdated(iso) {
 /* ---------- помощники ---------- */
 function slot(x) { if (x.auc === 'CMX') return '8:00'; if (x.auc === 'ANA') return x.cls === 'noinop' ? '9:30' : '10:00'; if (x.auc === 'AAH') return '13:00'; if (x.auc === 'H1C') return '16:30'; return String(x.run)[0] === '7' ? '13:00' : '11:45'; }
 function carName(x) { return [x.y, x.mk, x.md, x.st].filter(Boolean).join(' '); }
+/* заголовок: год, марка, модель · объём и название мотора · комплектация */
+const GM = /^(Chevrolet|GMC|Cadillac|Buick)$/i, FCA = /^(Ram|Dodge|Jeep|Chrysler|Fiat)$/i, TOY = /^(Toyota|Lexus|Scion)$/i, HON = /^(Honda|Acura)$/i, NIS = /^(Nissan|INFINITI)$/i, HK = /^(Hyundai|Kia|Genesis)$/i, VAG = /^(Volkswagen|Audi)$/i, FRD = /^(Ford|Lincoln|Mercury)$/i;
+function engParse(x) {
+  const m = String(x.tr || '').match(/(\d+\.\d)\s+(\d+)cyl\.?\s*([A-Za-z]+)?/);
+  if (m) return { v: m[1], c: +m[2], f: m[3] || '' };
+  const e = String(x.eng || '').match(/(\d+\.\d)/);
+  return e ? { v: e[1], c: 0, f: '' } : null;
+}
+function engName(x, v, c, f) {
+  const mk = x.mk || '', md = String(x.md || ''), y = +x.y || 0, tr = String(x.tr || '') + ' ' + (x.st || '');
+  if (/diesel/i.test(f)) {
+    if (FRD.test(mk)) return 'Power Stroke';
+    if (GM.test(mk)) return 'Duramax';
+    if (/^(Ram|Dodge)$/i.test(mk) && (v === '6.7' || v === '5.9')) return 'Cummins';
+    if (NIS.test(mk) && v === '5.0') return 'Cummins';
+    if (FCA.test(mk) && v === '3.0') return 'EcoDiesel';
+    if (VAG.test(mk)) return 'TDI';
+    return '';
+  }
+  if (FRD.test(mk)) {
+    if (/EcoBoost/i.test(tr)) return 'EcoBoost';
+    if (['1.0', '1.5', '1.6', '2.3', '2.7'].includes(v) && y >= 2013) return 'EcoBoost';
+    if (v === '2.0') return /Focus|Fiesta/i.test(md) && !/ST\b/.test(tr) ? '' : y >= 2013 ? 'EcoBoost' : '';
+    if (v === '3.5') return /F-?150|Expedition|Navigator|Transit/i.test(md) && y >= 2011 ? 'EcoBoost' : '';
+    if (v === '5.0' && y >= 2011) return 'Coyote';
+    if (v === '5.4' || v === '6.8') return 'Triton';
+    if (v === '6.2' && c === 8) return 'Boss';
+    if (v === '7.3' && y >= 2020) return 'Godzilla';
+    if (v === '3.7' || (v === '3.3' && y >= 2018)) return 'Cyclone';
+    return '';
+  }
+  if (GM.test(mk)) {
+    if (v === '6.2' && /Corvette|Camaro/i.test(md)) return '';
+    if (['5.3', '6.2', '4.3'].includes(v) && c >= 6) return y >= 2014 ? 'EcoTec3' : 'Vortec';
+    if (['1.2', '1.3', '1.4', '1.5'].includes(v) && y >= 2011 && !/Spark/i.test(md)) return T('турбо');
+    if (v === '4.8' || v === '6.0') return 'Vortec';
+    if (v === '2.7' && c === 4) return 'TurboMax';
+    if (v === '2.4' && c === 4) return 'Ecotec';
+    return '';
+  }
+  if (FCA.test(mk)) {
+    if (v === '5.7' || v === '6.4') return 'HEMI';
+    if (v === '6.2' && c === 8) return 'HEMI Hellcat';
+    if (v === '3.6') return 'Pentastar';
+    if (v === '2.4' && y >= 2013) return 'Tigershark';
+    if (v === '4.7' || v === '3.7') return 'PowerTech';
+    return '';
+  }
+  if (TOY.test(mk)) {
+    return ({ '1.8': '2ZR', '2.4': '2AZ', '2.7': '2TR', '3.5': '2GR', '4.0': '1GR', '3.3': '3MZ', '4.7': '2UZ', '4.6': '1UR', '5.7': '3UR' })[v]
+      || (v === '2.5' && c === 4 ? (y >= 2019 ? 'A25A' : '2AR') : '')
+      || (v === '2.0' && c === 4 ? (y >= 2019 ? 'M20A' : '3ZR') : '')
+      || (v === '3.4' ? (y >= 2022 ? 'V35A турбо' : '5VZ') : '');
+  }
+  if (HON.test(mk)) {
+    if (v === '1.5') return y >= 2016 ? 'L15B турбо' : 'L15';
+    if (v === '2.3' && /RDX/i.test(md)) return 'K23 ' + T('турбо');
+    return ({ '2.0': 'K20', '2.4': 'K24', '3.5': 'J35', '1.8': 'R18', '3.2': 'J32' })[v] || '';
+  }
+  if (NIS.test(mk)) {
+    if (v === '2.5' && c === 4) return /Altima/i.test(md) && y >= 2019 ? 'PR25' : 'QR25';
+    if (v === '1.5' && c === 3) return 'VC-Turbo';
+    if (v === '3.0' && c === 6) return 'VR30 турбо';
+    return ({ '1.8': 'MRA8', '1.6': 'HR16', '2.0': 'MR20', '3.5': 'VQ35', '3.7': 'VQ37', '4.0': 'VQ40', '3.8': 'VQ38', '5.6': 'VK56' })[v] || '';
+  }
+  if (HK.test(mk)) {
+    if (v === '2.4') return 'Theta II';
+    if (v === '2.5' && y >= 2020) return 'Smartstream';
+    if (v === '1.6' && y >= 2020 && /K5|Sonata|Seltos|Kona/i.test(md)) return T('турбо');
+    return ({ '1.6': 'Gamma', '1.8': 'Nu', '3.3': 'Lambda', '3.5': 'Lambda', '3.8': 'Lambda', '5.0': 'Tau' })[v] || '';
+  }
+  if (/^BMW$/i.test(mk)) {
+    if (v === '3.0' && c === 6) return y >= 2011 ? 'турбо' : '';
+    if (v === '2.0') return 'турбо';
+    if (v === '4.4') return 'битурбо';
+    return '';
+  }
+  if (VAG.test(mk)) {
+    if (v === '2.0' && /Jetta|Beetle|Golf/i.test(md) && y <= 2014 && !/GLI|GTI|TSI|Turbo/i.test(tr)) return '';
+    if (['1.4', '1.5', '1.8', '2.0'].includes(v) && y >= 2009) return /Audi/i.test(mk) ? 'TFSI' : 'TSI';
+    if (v === '3.6') return 'VR6';
+    return '';
+  }
+  if (/^Mercedes/i.test(mk)) { if (v === '2.0') return 'турбо'; if ((v === '4.6' || v === '4.7') && y >= 2011) return 'битурбо'; return ''; }
+  if (/^Volvo$/i.test(mk) && v === '2.0') return T('турбо');
+  if (/^Subaru$/i.test(mk)) return v === '2.4' ? 'Boxer турбо' : 'Boxer';
+  if (/^Mazda$/i.test(mk) && (v === '2.0' || v === '2.5') && y >= 2014) return 'Skyactiv';
+  return '';
+}
+function engineTag(x) {
+  if (/^Tesla$/i.test(x.mk || '')) return T('электро');
+  const p = engParse(x); if (!p || p.v === '0.0') return '';
+  const inl = /^(BMW|INEOS)$/i.test(x.mk || '') || (/^Volvo$/i.test(x.mk || '') && p.c === 6);
+  const lay = p.c >= 6 ? (inl && p.c === 6 ? 'I6' : 'V' + p.c) : '';
+  let nm = engName(x, p.v, p.c, p.f);
+  if (/\b\d\.\dT\b|Turbo/i.test(String(x.tr || '') + ' ' + (x.st || '')) && !/турбо|Turbo|EcoBoost|TSI|TFSI|TurboMax/i.test(nm)) nm = (nm ? nm + ' ' : '') + T('турбо');
+  return [p.v, lay, nm, /diesel/i.test(p.f) ? T('дизель') : ''].filter(Boolean).join(' ');
+}
+function carTitle(x) {
+  const eng = engineTag(x);
+  // из комплектации убираем то, что уже сказано про мотор и кузов
+  const trim = String(x.st || '').replace(/\b\d\.\d(L|T)?\b|\b[VI]\d\b|\b\d-cyl\b|\b\d-Spd\b|\b(AT|MT|CVT)\b|\(Natl\)|\b[24]dr\b|\bSdn\b|\bSedan\b/gi, ' ').replace(/[()]/g, ' ').replace(/\s+/g, ' ').trim();
+  return [[x.y, x.mk, x.md].filter(Boolean).join(' '), eng, trim].filter(Boolean).join('\u00a0· ');
+}
 function fmtDate(id) { const p = String(id || '').split('-'); return p.length === 3 ? p[2] + '.' + p[1] : ''; }
 function lotUrl(x) { return x.u ? x.u : x.s ? 'https://www.edgepipeline.com/components/vehicle/detail/' + x.s : ''; }
 function favKey(x) { return S.date + '|' + x.k; }
@@ -176,7 +280,7 @@ function lotCard(x) {
   return '<article class="lot' + (x.past && x.past.length ? ' seen ' + seenLv(x) : '') + '" role="button" tabindex="0" data-lot="' + E(x.k) + '">'
     + '<div class="lot-top"><span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + slot(x) + '</span>' + (v ? '<span class="verdict ' + v[0] + '">' + v[1] + '</span>' : '') + '</div>'
     + '<button class="star' + (fav ? ' on' : '') + '" data-fav="' + E(x.k) + '" aria-label="' + T('В избранное') + '" aria-pressed="' + fav + '">' + (fav ? '★' : '☆') + '</button>'
-    + '<div class="lot-id">' + photo(x, 'thumb', true) + '<div><h3>' + E(carName(x)) + '</h3>'
+    + '<div class="lot-id">' + photo(x, 'thumb', true) + '<div><h3>' + E(carTitle(x)) + '</h3>'
     + '<p class="sub">' + [x.o > 500 ? N(x.o) + ' mi' : '', COLOR[x.c] || String(x.c || '').toLowerCase()].filter(Boolean).map(E).join(' · ') + '</p></div></div>'
     + (isInop(x) ? '<div class="money inop"><div class="m-main"><span>MMR</span><b>' + M(x.w) + '</b></div><div class="m-note">' + T('Неходячая: прибыль не считаем') + '</div></div>' : '<div class="money two"><div class="m-main"><span>MMR</span><b>' + M(x.w) + '</b></div><div class="m-main"><span>' + T('Ретейл') + '</span><b>' + M(x.r) + '</b></div></div>')
     + '<div class="status">' + statusLine(x) + '</div>'
@@ -194,7 +298,7 @@ function applyFilters(list) {
   const f = S.f, q = f.q.toLowerCase().trim(), y = +f.y || 0, o = +f.o || 0, p = +f.p || 0;
   const lotQ = q.replace(/\s/g, '').toUpperCase();
   let a = list.filter(x => {
-    if (q) { const hay = (x.run + ' ' + carName(x) + ' ' + (x.vin || '')).toLowerCase(); if (!hay.includes(q) && String(x.run).replace(/[\s-]/g, '').toUpperCase() !== lotQ.replace(/-/g, '')) return false; }
+    if (q) { const hay = (x.run + ' ' + carName(x) + ' ' + engineTag(x) + ' ' + (x.vin || '')).toLowerCase(); if (!hay.includes(q) && String(x.run).replace(/[\s-]/g, '').toUpperCase() !== lotQ.replace(/-/g, '')) return false; }
     if (f.mk.length && !f.mk.includes(x.mk)) return false;
     if (f.md.length && f.md.some(k => k.startsWith(x.mk + '|')) && !f.md.includes(x.mk + '|' + x.md)) return false;
     if (f.au && x.auc !== f.au) return false;
@@ -422,7 +526,7 @@ function detail(k) {
   if (x.risk) info += '<p class="p"><b>' + T('Слабые места модели') + '</b>' + T(' (в прибыль не входят): ') + E(x.risk) + '</p>';
   if (x.cons) info += '<p class="p muted">' + T('Продавец: ') + E(x.cons) + (x.drv && x.drv !== 'N/A' ? ' · ' + E(x.drv) : '') + (x.eng ? ' · ' + E(x.eng) : '') + '</p>';
   const html = '<div class="d-card">' + photo(x, 'd-photo', false) + '<div class="lot-top"><span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + dLabel(S.d) + ', ' + slot(x) + '</span></div>'
-    + '<h3 class="d-name">' + E(carName(x)) + '</h3><p class="sub">' + (x.o > 500 ? N(x.o) + ' mi · ' : '') + E(COLOR[x.c] || String(x.c || '').toLowerCase()) + (x.tr ? ' · Manheim: ' + E(x.tr) : '') + '</p>'
+    + '<h3 class="d-name">' + E(carTitle(x)) + '</h3><p class="sub">' + (x.o > 500 ? N(x.o) + ' mi · ' : '') + E(COLOR[x.c] || String(x.c || '').toLowerCase()) + (x.tr ? ' · Manheim: ' + E(x.tr) : '') + '</p>'
     + (chips ? '<div class="chips">' + chips + '</div>' : '') + factText(x) + '</div>'
     + (isInop(x) ? '<div class="d-card"><div class="grid6"><div class="hl"><b>' + M(x.w) + '</b><span>Adjusted MMR</span></div></div><p class="muted" style="margin-top:6px">' + T('Неходячая машина: прибыль, цену продажи и макс. ставку не считаем, только MMR.') + '</p></div>' : '')
     + (isInop(x) ? '' : '<div class="d-card"><div class="grid6"><div class="hl"><b>' + M(x.w) + '</b><span>Adjusted MMR</span></div><div><b>' + M(x.w != null ? x.w + FEE : null) + '</b><span>' + T('MMR + сбор ') + M(FEE) + '</span></div><div><b>' + M(x.r) + '</b><span>' + T('ретейл Manheim') + '</span></div><div><b>' + M(x.sale) + '</b><span>' + T('цена продажи') + '</span></div><div><b class="' + profCls(x) + '">' + M(x.prof) + '</b><span>' + T('прибыль по MMR') + '</span></div><div><b>' + M(x.max) + '</b><span>' + T('макс. ставка') + (x.margin ? T(' (прибыль ') + M(x.margin) + ')' : '') + '</span></div></div>'
