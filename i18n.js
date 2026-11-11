@@ -1049,6 +1049,12 @@ const I18N = {
 "probablemente el mismo auto",
 "сірә, сол көлік"
 ],
+"сумма неизвестна": [
+"amount unknown",
+"сума невідома",
+"monto desconocido",
+"сомасы белгісіз"
+],
 "Уже была на торгах": [
 "Already ran at auction",
 "Вже була на торгах",
