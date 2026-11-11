@@ -125,7 +125,7 @@ function statusLine(x) {
 }
 /* прошлые появления машины на торгах: продана / ушла на оффер / не продана */
 function pastRes(p) {
-  if (p.s === 'offer') return T('ушла на оффер') + (p.p ? ' ' + T('за') + ' ' + M(p.p) : '');
+  if (p.s === 'offer') return '<b class="offer">' + T('ушла на оффер, не отдали') + (p.p ? ': ' + M(p.p) : '') + '</b>' + (p.p ? '' : ' (' + T('сумму оффера пост-сейл не показывает') + ')');
   if (p.s === 'nosale') return T('не продана');
   if (p.s === 'gone') return T('снята');
   if (p.p) return T('продана за') + ' ' + M(p.p);
@@ -140,7 +140,7 @@ function pastHead(x) {
   if (no) parts.push(T('не продана') + ' ' + no + '×');
   return T('Уже была на торгах') + ' ' + P.length + '×' + (parts.length ? ' · ' + parts.join(', ') : '');
 }
-function pastLine(p) { return fmtDate(p.d) + ' · ' + E(p.a) + (p.run ? ', ' + T('лот') + ' ' + E(p.run) : '') + ' — ' + pastRes(p); }
+function pastLine(p) { return fmtDate(p.d) + ' · ' + E(p.a) + (p.run ? ', ' + T('лот') + ' ' + E(p.run) : '') + ' — ' + pastRes(p) + (p.q ? ' · ' + T('вероятно та же машина') : ''); }
 function seenLv(x) { const n = x.past ? x.past.length : 0; return n >= 3 ? 'sv3' : n === 2 ? 'sv2' : 'sv1'; }
 function pastCard(x) {
   if (!x.past || !x.past.length) return '';

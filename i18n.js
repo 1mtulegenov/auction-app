@@ -1031,6 +1031,24 @@ const I18N = {
 "a oferta",
 "офферге"
 ],
+"ушла на оффер, не отдали": [
+"went to offer, not released",
+"пішла на офер, не віддали",
+"fue a oferta, no se liberó",
+"офферге кетті, бермеді"
+],
+"сумму оффера пост-сейл не показывает": [
+"post-sale doesn't show the offer amount",
+"суму оферу пост-сейл не показує",
+"el post-sale no muestra el monto de la oferta",
+"пост-сейл оффер сомасын көрсетпейді"
+],
+"вероятно та же машина": [
+"likely the same car",
+"ймовірно та сама машина",
+"probablemente el mismo auto",
+"сірә, сол көлік"
+],
 "Уже была на торгах": [
 "Already ran at auction",
 "Вже була на торгах",

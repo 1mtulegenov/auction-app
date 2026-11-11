@@ -216,3 +216,4 @@ textarea.note.has{border-color:var(--warn);background:var(--warnb)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sv1{--seen:#9ee05a;--seenb:#1f3312}:root:not([data-theme="light"]) .sv2{--seen:#f2cb4c;--seenb:#3a3012}:root:not([data-theme="light"]) .sv3{--seen:#f28b82;--seenb:#3d1d1b}}
 :root[data-theme="dark"] .sv1{--seen:#9ee05a;--seenb:#1f3312}:root[data-theme="dark"] .sv2{--seen:#f2cb4c;--seenb:#3a3012}:root[data-theme="dark"] .sv3{--seen:#f28b82;--seenb:#3d1d1b}
 .lot.seen{border-width:2px}
+.seen-pv .offer,.p.seen .offer{color:var(--bad);font-weight:700}
