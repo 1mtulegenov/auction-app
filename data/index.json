@@ -1,7 +1,16 @@
 {
- "version": "cabbbd754f",
- "updated": "2026-11-09T13:27:25+00:00",
+ "version": "2be72710da",
+ "updated": "2026-11-11T01:42:15+00:00",
  "dates": [
+  {
+   "id": "2026-11-11",
+   "label": "11 ноября",
+   "title": "AAA Central Houston и Houston's 1st Choice, среда 11 ноября",
+   "n": 673,
+   "core": 22,
+   "flip": 66,
+   "results": false
+  },
   {
    "id": "2026-11-10",
    "label": "10 ноября",
