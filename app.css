@@ -261,3 +261,5 @@ html[data-font="mono"]{--f:'IBM Plex Mono',ui-monospace,Menlo,monospace;--fc:'IB
   @media (prefers-reduced-motion:no-preference){.sheet:not([hidden]){animation:side .18s ease-out}@keyframes side{from{transform:translateX(40px);opacity:.6}to{transform:none;opacity:1}}}
 }
 @media (min-width:1500px){.list{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.money.inop{grid-template-columns:auto 1fr;align-items:center}
+.money .m-note{font-size:13px;color:var(--muted);text-align:right}
