@@ -108,6 +108,12 @@ function factText(x) {
   return '';
 }
 
+/* ---------- неходячие: линии, где аукцион продаёт машины не на ходу ---------- */
+// AAA - Central Houston: линия 7 (правило Максата). Другие аукционы добавить сюда, когда станут известны их линии.
+const INOP_LANES = { AAA: ['7'] };
+function lane(x) { return String(x.run || '').split('-')[0].trim(); }
+function inopLane(x) { return (INOP_LANES[x.auc] || []).includes(lane(x)); }
+function isInop(x) { return x.cls === 'noinop' || inopLane(x); }
 /* ---------- карточка лота ---------- */
 const VERDICT = { 'Основная': ['v-buy', T('Брать')], 'Флип': ['v-flip', T('Флип')], 'Дорого': ['v-exp', T('Дорого')] };
 function statusLine(x) {
@@ -116,7 +122,8 @@ function statusLine(x) {
   if (x.ttl) add(x.ttlbad ? 'bad' : 'ok', E(x.ttl));
   else if (x.cls === 'salvage') add('bad', T('Salvage / без тайтла'));
   if (x.t && x.auc !== 'H1C' && x.t !== 'At Auction') add('warn', T('Тайтла нет на площадке'));
-  if (x.cls === 'noinop') add('bad', T('Не на ходу / нет ключа'));
+  if (inopLane(x)) add('bad', T('Неходячая, линия') + ' ' + E(lane(x)));
+  else if (x.cls === 'noinop') add('bad', T('Не на ходу / нет ключа'));
   if (x.hist) { const why = annText(x).split(/;\s*/).filter(t => HOT_Y.test(t) || HOT_R.test(t) || /угон|пробег|доработ|тотал|flood/i.test(t)); add('bad', why.length ? T('История: ') + E(why.slice(0, 2).join(', ')) : /серьёзн/.test(x.hx || '') ? T('Серьёзное ДТП в истории') : T('Пометка в истории')); }
   if (x.auc === 'CMX' && x.mech) add('bad', T('Дефект двигателя/КПП'));
   if (x.l === 'Green') add('ok', T('Зелёный свет')); else if (String(x.l || '').includes('Red')) add('bad', T('Красный свет')); else if (x.l === 'Yellow') add('warn', T('Жёлтый свет'));
@@ -154,7 +161,7 @@ function hotLine(x) {
   return hot.length ? '<p class="warnline">' + hot.map(t => '<span class="' + (HOT_R.test(t) ? 'hot-r' : 'hot-y') + '">' + E(t) + '</span>').join(' ') + '</p>' : '';
 }
 /* главное фото лота с EDGE (CDN autolookout, превью 400×300) */
-function photoUrl(x) { return x.ph ? 'https://file3.autolookout.net/' + x.ph + '/O3Jlc29sdXRpb246NDAweDMwMDs=/00' : ''; }
+function photoUrl(x) { if (!x.ph) return ''; const p = x.ph.split('/'); const sf = p.length > 3 ? p.pop() : '00'; return 'https://file3.autolookout.net/' + p.join('/') + '/O3Jlc29sdXRpb246NDAweDMwMDs=/' + sf; }
 function photo(x, cls, lazy) { const u = photoUrl(x); return u ? '<img class="' + cls + '" src="' + u + '" alt="" referrerpolicy="no-referrer" decoding="async"' + (lazy ? ' loading="lazy"' : '') + ' onerror="this.remove()">' : ''; }
 function lotCard(x) {
   const n = noteOf(x), v = VERDICT[x.stat], fav = isFav(x);
@@ -174,7 +181,7 @@ function lotCard(x) {
 }
 
 /* ---------- фильтры ---------- */
-const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('7 марок')], ['clean', T('Без пометок')], ['title', T('Тайтл на месте')], ['profit', T('Прибыль ') + '> 0'], ['past', T('Были на торгах')], ['notes', T('С заметкой')]];
+const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('7 марок')], ['clean', T('Без пометок')], ['title', T('Тайтл на месте')], ['profit', T('Прибыль ') + '> 0'], ['inop', T('Неходячие')], ['past', T('Были на торгах')], ['notes', T('С заметкой')]];
 const SORTS = [['stat', T('Сначала подборка')], ['prof', T('Прибыль больше')], ['w', T('MMR меньше')], ['wd', T('MMR больше')], ['run', T('По номеру лота')], ['y', T('Новее')], ['o', T('Пробег меньше')], ['diff', T('Ретейл − MMR больше')]];
 function applyFilters(list) {
   const f = S.f, q = f.q.toLowerCase().trim(), y = +f.y || 0, o = +f.o || 0, p = +f.p || 0;
@@ -197,6 +204,7 @@ function applyFilters(list) {
       case 'profit': return x.prof > 0;
       case 'notes': return !!noteOf(x);
       case 'past': return !!(x.past && x.past.length);
+      case 'inop': return isInop(x);
     }
     return true;
   });
