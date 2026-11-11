@@ -229,3 +229,14 @@ html[data-font="mono"]{--f:'IBM Plex Mono',ui-monospace,Menlo,monospace;--fc:'IB
 .lot-id{display:flex;gap:12px;align-items:center;margin-top:9px}.lot-id>div{min-width:0;flex:1}.lot-id h3{margin-top:0}
 .thumb{width:84px;height:63px;flex:none;object-fit:cover;border-radius:10px;background:var(--well)}
 .d-photo{display:block;width:calc(100% + 24px);margin:-12px -12px 12px;aspect-ratio:4/3;max-height:52vh;object-fit:cover;border-radius:11px 11px 0 0;background:var(--well)}
+/* множественный выбор марок и моделей */
+.f-hint{font-weight:500;color:var(--faint);text-transform:none}
+.pick-chips{display:flex;flex-wrap:wrap;gap:6px}
+.pc{position:relative;margin:0!important;display:inline-block!important}
+.pc input{position:absolute;opacity:0;pointer-events:none}
+.pc span{display:inline-block;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:6px 11px;font-size:14px;font-weight:600;color:var(--ink)}
+.pc span i{font-style:normal;font-weight:500;color:var(--muted);font-size:12px}
+.pc input:checked+span{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.pc input:checked+span i{color:inherit;opacity:.8}
+.pc input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+.md-g{margin:8px 0 10px}.md-g>b{display:block;font-size:13px;margin:0 0 6px}

@@ -35,7 +35,7 @@ const S = {
   index: null, date: null, d: null, cache: {},
   tab: 'home', picks: 'core',
   favs: LS.get('fav-v1', {}), notes: LS.get('auction-notes-v1', {}),
-  f: { q: '', mk: '', au: '', cl: '', st: '', y: '', o: '', p: '', quick: '' , sort: 'stat' },
+  f: { q: '', mk: [], md: [], au: '', cl: '', st: '', y: '', o: '', p: '', quick: '' , sort: 'stat' },
   rf: { q: '', st: '', sort: 'run' },
   shown: 24, deferredInstall: null
 };
@@ -192,7 +192,8 @@ function applyFilters(list) {
   const lotQ = q.replace(/\s/g, '').toUpperCase();
   let a = list.filter(x => {
     if (q) { const hay = (x.run + ' ' + carName(x) + ' ' + (x.vin || '')).toLowerCase(); if (!hay.includes(q) && String(x.run).replace(/[\s-]/g, '').toUpperCase() !== lotQ.replace(/-/g, '')) return false; }
-    if (f.mk && x.mk !== f.mk) return false;
+    if (f.mk.length && !f.mk.includes(x.mk)) return false;
+    if (f.md.length && f.md.some(k => k.startsWith(x.mk + '|')) && !f.md.includes(x.mk + '|' + x.md)) return false;
     if (f.au && x.auc !== f.au) return false;
     if (f.cl && x.cls !== f.cl) return false;
     if (f.st && x.stat !== f.st) return false;
@@ -231,7 +232,7 @@ function applyFilters(list) {
   a.sort(by[f.sort] || by.stat);
   return a;
 }
-function activeFilterCount() { const f = S.f; return ['mk', 'au', 'cl', 'st', 'y', 'o', 'p'].filter(k => f[k]).length; }
+function activeFilterCount() { const f = S.f; return ['au', 'cl', 'st', 'y', 'o', 'p'].filter(k => f[k]).length + (f.mk.length ? 1 : 0) + (f.md.length ? 1 : 0); }
 
 /* ---------- экраны ---------- */
 const ICONS = {
@@ -320,10 +321,13 @@ function filterSheet() {
   const d = S.d, f = S.f;
   const opt = (arr, v) => arr.map(([k, l]) => '<option value="' + E(k) + '"' + (String(v) === String(k) ? ' selected' : '') + '>' + E(l) + '</option>').join('');
   const mk = [...new Set(d.lots.map(x => x.mk).filter(Boolean))].sort();
+  const cnt = {}, mods = {};
+  d.lots.forEach(x => { if (!x.mk) return; cnt[x.mk] = (cnt[x.mk] || 0) + 1; const g = mods[x.mk] = mods[x.mk] || {}; const md = x.md || '—'; g[md] = (g[md] || 0) + 1; });
   const aucs = [...new Set(d.lots.map(x => x.auc))];
   const st = [...new Set(d.lots.map(x => x.stat).filter(Boolean))];
   openSheet(T('Фильтры'), '<div class="fl">'
-    + '<label for="f_mk">' + T('Марка') + '</label><select id="f_mk">' + opt([['', T('Все марки')]].concat(mk.map(m => [m, m])), f.mk) + '</select>'
+    + '<label>' + T('Марка') + ' <small class="f-hint">' + T('можно несколько') + '</small></label><div class="pick-chips" id="f_mk">' + mk.map(m => '<label class="pc"><input type="checkbox" value="' + E(m) + '"' + (f.mk.includes(m) ? ' checked' : '') + '><span>' + E(m) + ' <i>' + cnt[m] + '</i></span></label>').join('') + '</div>'
+    + '<label>' + T('Модель') + ' <small class="f-hint">' + T('сначала выберите марку') + '</small></label><div id="f_md">' + mk.map(m => '<div class="md-g" data-mk="' + E(m) + '"' + (f.mk.includes(m) ? '' : ' hidden') + '><b>' + E(m) + '</b><div class="pick-chips">' + Object.keys(mods[m]).sort().map(md => '<label class="pc"><input type="checkbox" value="' + E(m + '|' + md) + '"' + (f.md.includes(m + '|' + md) ? ' checked' : '') + '><span>' + E(md) + ' <i>' + mods[m][md] + '</i></span></label>').join('') + '</div></div>').join('') + '</div>'
     + (aucs.length > 1 ? '<label for="f_au">' + T('Площадка') + '</label><select id="f_au">' + opt([['', T('Все площадки')]].concat(aucs.map(a => [a, AUC[a] || a])), f.au) + '</select>' : '')
     + '<label for="f_cl">' + T('История и тайтл') + '</label><select id="f_cl">' + opt([['', T('Любая')], ['clean', T('Без пометок')], ['hist', T('Пометки на чистом тайтле')], ['noinop', T('Не на ходу, нет ключа')], ['salvage', T('Salvage, rebuilt, без тайтла')]], f.cl) + '</select>'
     + '<label for="f_st">' + T('Решение') + '</label><select id="f_st">' + opt([['', T('Любое')]].concat(st.map(s => [s, T(s)])), f.st) + '</select>'
@@ -572,10 +576,12 @@ document.addEventListener('click', async e => {
     case 'rmore': S.rshown += 80; drawResults(true); break;
     case 'fapply': {
       const v = id => { const el = $('#' + id); return el ? el.value : ''; };
-      Object.assign(S.f, { mk: v('f_mk'), au: v('f_au'), cl: v('f_cl'), st: v('f_st'), y: v('f_y'), o: v('f_o'), p: v('f_p') });
+      const chk = id => [...document.querySelectorAll('#' + id + ' input:checked')].map(i => i.value);
+      const mks = chk('f_mk');
+      Object.assign(S.f, { mk: mks, md: chk('f_md').filter(k => mks.includes(k.split('|')[0])), au: v('f_au'), cl: v('f_cl'), st: v('f_st'), y: v('f_y'), o: v('f_o'), p: v('f_p') });
       closeSheet(); if (S.tab !== 'lots') go('lots'); else render(); break;
     }
-    case 'freset': Object.assign(S.f, { mk: '', au: '', cl: '', st: '', y: '', o: '', p: '' }); closeSheet(); render(); break;
+    case 'freset': Object.assign(S.f, { mk: [], md: [], au: '', cl: '', st: '', y: '', o: '', p: '' }); closeSheet(); render(); break;
     case 'notes': notesSheet(); break;
     case 'how': howSheet(); break;
     case 'install': installSheet(); break;
@@ -607,6 +613,7 @@ document.addEventListener('change', e => {
   if (e.target.id === 'sort') { S.f.sort = e.target.value; drawLots(); }
   else if (e.target.id === 'rsort') { S.rf.sort = e.target.value; drawResults(); }
   else if (e.target.id === 'note') saveNote(e.target);
+  else if (e.target.closest('#f_mk')) { const g = document.querySelector('#f_md .md-g[data-mk="' + CSS.escape(e.target.value) + '"]'); if (g) g.hidden = !e.target.checked; }
 });
 
 async function refresh(manual) {
