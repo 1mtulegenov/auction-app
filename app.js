@@ -18,7 +18,8 @@ const COLOR = { BLACK: T('чёрный'), WHITE: T('белый'), GRAY: T('се�
 const CLS = { salvage: ['bad', T('Salvage, rebuilt или без тайтла')], noinop: ['bad', T('Не на ходу или нет ключа')], hist: ['warn', T('Пометка на чистом тайтле')], clean: ['good', T('Без пометок')] };
 const STAT = { 'Основная': 's-main', 'Флип': 's-flip', 'Дорого': 's-exp' };
 const SS = { sold: T('Продана'), offer: T('Buy Now / оффер'), none: T('Не продана'), gone: T('Снята'), rerun: T('Снова на торгах') };
-const HOT_R = /двигател|коробк|раздатк|дифференциал|не на ходу|engine|transmission|motor|trans\b|drivetrain/i;
+const HOT_R0 = /двигател|коробк|раздатк|дифференциал|не на ходу|engine|transmission|motor|trans\b|drivetrain/i, HOT_OK = /зелёный свет|гаранти|guarant|gty|green light|engine runs|eng starts|вернуть при проблеме/i;
+const HOT_R = { test: t => HOT_R0.test(t) && !HOT_OK.test(t) };
 const HOT_Y = /град|рам|кузов|structural|frame|hail|крыш|подушк|airbag|утоплен|flood|salvage|rebuilt|тотал|odometer|tmu/i;
 
 const $ = s => document.querySelector(s);
