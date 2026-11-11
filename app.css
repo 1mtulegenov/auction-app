@@ -263,3 +263,6 @@ html[data-font="mono"]{--f:'IBM Plex Mono',ui-monospace,Menlo,monospace;--fc:'IB
 @media (min-width:1500px){.list{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .money.inop{grid-template-columns:auto 1fr;align-items:center}
 .money .m-note{font-size:13px;color:var(--muted);text-align:right}
+.to-top{position:fixed;right:16px;bottom:calc(70px + var(--sab));z-index:35;width:46px;height:46px;border-radius:23px;border:1px solid var(--line);background:var(--card);color:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.18)}
+.to-top[hidden]{display:none}
+@media (min-width:1024px){.to-top{bottom:24px;right:24px}}

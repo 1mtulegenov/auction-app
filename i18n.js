@@ -5,6 +5,7 @@ const LOCALE = { en: 'en-US', ru: 'ru-RU', uk: 'uk-UA', es: 'es-US', kk: 'kk-KZ'
 const LI = { en: 0, uk: 1, es: 2, kk: 3 }[LANG];
 document.documentElement.lang = LANG;
 const I18N = {
+"Наверх": ["Back to top","Нагору","Arriba","Жоғарыға"],
 "ушла на оффер за": ["went to offer at", "пішла на офер за", "fue a oferta por", "офферге кетті, бағасы"],
 "Не отдали": ["Not sold", "Не віддали", "No la vendieron", "Берілмеді"],
 "Неходячая: прибыль не считаем": ["Non-running: no profit calc", "Неходова: прибуток не рахуємо", "No arranca: sin cálculo de ganancia", "Жүрмейді: пайда есептелмейді"],

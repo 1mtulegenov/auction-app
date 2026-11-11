@@ -264,7 +264,7 @@ function render() {
   const v = $('#view');
   if (S.tab === 'home') v.innerHTML = home();
   else if (S.tab === 'picks') v.innerHTML = picks();
-  else if (S.tab === 'lots') { v.innerHTML = lotsScreen(); drawLots(); }
+  else if (S.tab === 'lots') { v.innerHTML = lotsScreen(); drawLots(S.keepShown ? true : undefined); }
   else if (S.tab === 'results') { v.innerHTML = resultsScreen(); drawResults(); }
   else v.innerHTML = more();
 }
@@ -388,20 +388,22 @@ function openSheet(title, html, full, actions) {
   sh.scrollTop = 0;
   if (!sheetOpen) { try { if (S.replaceNext) history.replaceState({ sheet: 1 }, ''); else history.pushState({ sheet: 1 }, ''); } catch (e) {} }
   S.replaceNext = false;
-  sheetOpen = true;
+  sheetOpen = true; S.openLot = S.pendingLot || null; S.pendingLot = null;
 }
 function closeSheet(fromPop) {
   if (!sheetOpen) return;
   const ta = $('#sheet textarea.note'); if (ta) saveNote(ta);
   $('#sheet').hidden = true; $('#sheetBg').hidden = true; document.body.style.overflow = '';
-  sheetOpen = false;
+  sheetOpen = false; S.openLot = null;
   if (!fromPop) { try { history.back(); } catch (e) {} }
-  if (S.tab === 'lots') drawLots(true); else if (S.tab !== 'results') render();
+  if (S.tab === 'lots') drawLots(true); else if (S.tab !== 'results') keepScroll(render);
+  saveView();
 }
 window.addEventListener('popstate', () => { if (sheetOpen) closeSheet(true); });
 
 function detail(k) {
   const x = S.d.map[k]; if (!x) return;
+  S.pendingLot = k; setTimeout(saveView, 0);
   const n = noteOf(x), link = lotUrl(x), ch = chance(x);
   const bid = x.max != null && x.max > 0 ? x.max : x.w || '';
   let chips = titleChip(x) + lightChip(x);
@@ -554,7 +556,7 @@ async function copy(text) {
 }
 function applyTheme() { const t = LS.get('theme', ''); if (t) document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
 function cycleTheme() { const t = LS.get('theme', ''); LS.set('theme', t === '' ? 'dark' : t === 'dark' ? 'light' : ''); applyTheme(); toast({ dark: T('Тёмная тема'), light: T('Светлая тема'), '': T('Тема как в системе') }[LS.get('theme', '')]); if (!['home','picks','lots','results'].includes(S.tab)) render(); }
-function go(tab) { S.tab = tab; LS.set('tab', tab); render(); window.scrollTo(0, 0); }
+function go(tab) { S.tab = tab; LS.set('tab', tab); render(); window.scrollTo(0, 0); topBtn(); saveView(); }
 function toggleFav(k) {
   const x = S.d.map[k]; if (!x) return;
   const fk = favKey(x); if (S.favs[fk]) delete S.favs[fk]; else S.favs[fk] = 1;
@@ -627,13 +629,31 @@ document.addEventListener('change', e => {
   else if (e.target.closest('#f_mk')) { const g = document.querySelector('#f_md .md-g[data-mk="' + CSS.escape(e.target.value) + '"]'); if (g) g.hidden = !e.target.checked; }
 });
 
+/* ---------- запоминаем экран: вкладка, фильтры, прокрутка, открытый лот ---------- */
+function saveView() {
+  if (!S.d) return;
+  const x = sheetOpen && S.openLot ? S.openLot : null;
+  LS.set('view-v1', { tab: S.tab, date: S.date, f: S.f, picks: S.picks, shown: S.shown, y: Math.round(window.scrollY), lot: x, ts: Date.now() });
+}
+let saveT;
+window.addEventListener('scroll', () => { clearTimeout(saveT); saveT = setTimeout(saveView, 250); topBtn(); }, { passive: true });
+window.addEventListener('pagehide', saveView);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveView(); });
+function keepScroll(fn) { const y = window.scrollY; S.keepShown = true; try { fn(); } finally { S.keepShown = false; } window.scrollTo(0, y); }
+/* кнопка «наверх» */
+function topBtn() {
+  let b = $('#toTop');
+  if (!b) { b = document.createElement('button'); b.id = 'toTop'; b.className = 'to-top'; b.setAttribute('aria-label', T('Наверх')); b.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>'; b.hidden = true; b.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' })); document.body.appendChild(b); }
+  b.hidden = window.scrollY < 600;
+}
+
 async function refresh(manual) {
   try {
     const old = S.index && S.index.version;
     await loadIndex(true);
     if (S.index.version !== old) {
       const keep = S.index.dates.some(d => d.id === S.date) ? S.date : S.index.dates[0].id;
-      await loadDate(keep); if (!sheetOpen) render();
+      await loadDate(keep); if (!sheetOpen) keepScroll(render);
     } else if (manual) toast(T('У вас последняя версия'));
     if (navigator.serviceWorker && navigator.serviceWorker.controller) { const r = await navigator.serviceWorker.getRegistration(); if (r) r.update(); }
   } catch (e) { if (manual) toast(T('Нет связи, показываю сохранённые данные')); }
@@ -649,10 +669,21 @@ async function start() {
     const first = S.index.dates.some(d => d.id === want) && want !== null ? want : S.index.dates[0].id;
     // новая дата аукциона в данных: открываем её
     const newest = S.index.dates[0].id, seenNewest = LS.get('seen-newest', null);
-    await loadDate(seenNewest && seenNewest !== newest ? newest : first);
+    const jump = seenNewest && seenNewest !== newest;
+    await loadDate(jump ? newest : first);
     LS.set('seen-newest', newest);
     const tb = LS.get('tab', 'home'); S.tab = ['home', 'picks', 'lots', 'results', 'more'].includes(tb) ? tb : 'home';
-    render();
+    // возвращаемся туда, где были: фильтры, прокрутка, открытый лот
+    const sv = LS.get('view-v1', null);
+    const same = sv && !jump && sv.date === S.date;
+    if (same) {
+      if (sv.f) S.f = { ...S.f, ...sv.f, mk: Array.isArray(sv.f.mk) ? sv.f.mk : [], md: Array.isArray(sv.f.md) ? sv.f.md : [] };
+      if (sv.picks) S.picks = sv.picks;
+      if (sv.shown) S.shown = Math.min(+sv.shown || 24, 2000);
+      S.keepShown = true;
+    }
+    render(); S.keepShown = false;
+    if (same) { requestAnimationFrame(() => { window.scrollTo(0, sv.y || 0); topBtn(); }); if (sv.lot && S.d.map[sv.lot]) { S.replaceNext = false; detail(sv.lot); } }
     warmScanner();
     const sk = LS.get('w-skip', 0);
     if (!isStandalone() && platform() !== 'desktop' && Date.now() - sk > 3 * 864e5) welcome();
