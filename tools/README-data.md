@@ -11,3 +11,4 @@
 - Filter fields (year, mileage, MMR) have no example placeholders, by request.
 - Offer label: 'ушла на оффер за $X. Не отдали' (by request).
 - 11.11 вечером добавлены 183 новых лота H1C (tools/add_h1c_est.py): MMR оценён по похожим, без Manheim; помечены est=1.
+- Неходячие линии (правило Максата): AAA - Central Houston линия 7, AAA - Houston линия T. В app.js INOP_LANES, в tools/build_aah.py линия T помечается noinop.

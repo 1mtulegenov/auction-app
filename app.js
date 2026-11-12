@@ -235,8 +235,8 @@ function factText(x) {
 }
 
 /* ---------- неходячие: линии, где аукцион продаёт машины не на ходу ---------- */
-// AAA - Central Houston: линия 7 (правило Максата). Другие аукционы добавить сюда, когда станут известны их линии.
-const INOP_LANES = { AAA: ['7'] };
+// AAA - Central Houston: линия 7, AAA - Houston: линия T (правила Максата). Другие аукционы добавить сюда, когда станут известны их линии.
+const INOP_LANES = { AAA: ['7'], AAH: ['T'] };
 function lane(x) { return String(x.run || '').split('-')[0].trim(); }
 function inopLane(x) { return (INOP_LANES[x.auc] || []).includes(lane(x)); }
 function isInop(x) { return x.cls === 'noinop' || inopLane(x); }

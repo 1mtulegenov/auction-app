@@ -194,6 +194,7 @@ for line in open('tools/aah_presale_%s.txt' % date):
         if sold_l: flag = flag or ('уже продана до торгов (' + sold_l + ')')
     # отбор
     why = ''
+    if run.split('-')[0] == 'T': lot['cls'] = 'noinop'; flag = flag or 'не на ходу (линия T)'
     if flag: why = flag
     if why: pass
     elif not allowed(mk, md, st): why = 'марка вне списка'
