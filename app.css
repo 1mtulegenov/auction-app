@@ -293,3 +293,13 @@ html,body{max-width:100%;overflow-x:clip}
 .fl-gn .fl-in{grid-column:auto}
 .fl-who{font-size:11.5px;color:var(--muted);padding-left:2px}
 @media (min-width:760px){.fl-gn{grid-column:auto}}
+/* экран входа */
+html.gated body{overflow:hidden}
+#gate{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px 16px calc(24px + env(safe-area-inset-bottom))}
+.gate-box{max-width:360px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px}
+.gate-box img{border-radius:18px}
+.gate-box h1{font-size:24px}
+.gate-box p{color:var(--muted);line-height:1.45}
+.gate-err{color:var(--bad)!important}
+.gate-muted{font-size:14px}
+.gate-box .btn{width:100%;min-height:48px;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px}

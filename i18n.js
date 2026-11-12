@@ -221,6 +221,13 @@ const I18N = {
 " · заметки общие. Нажмите, чтобы выйти": [" · notes are shared. Tap to sign out", " · нотатки спільні. Натисніть, щоб вийти", " · notas compartidas. Toque para salir", " · жазбалар ортақ. Шығу үшін басыңыз"],
 "Войти через Google": ["Sign in with Google", "Увійти через Google", "Iniciar sesión con Google", "Google арқылы кіру"],
 "Чтобы заметки были видны всем и было видно, кто их оставил": ["So notes are visible to everyone, with who wrote them", "Щоб нотатки бачили всі й було видно, хто їх залишив", "Para que todos vean las notas y quién las dejó", "Жазбаларды бәрі көріп, кім қалдырғаны көрінуі үшін"],
+"Аукционы Хьюстона": ["Houston Auctions", "Аукціони Х'юстона", "Subastas de Houston", "Хьюстон аукциондары"],
+"Для этой почты доступ не открыт:": ["This email has no access:", "Для цієї пошти доступ не відкрито:", "Este correo no tiene acceso:", "Бұл поштаға рұқсат жоқ:"],
+"Попросите владельца добавить её.": ["Ask the owner to add it.", "Попросіть власника додати її.", "Pida al propietario que lo agregue.", "Иесінен қосуын сұраңыз."],
+"Войдите через Google один раз. Дальше приложение будет открываться сразу.": ["Sign in with Google once. After that the app opens right away.", "Увійдіть через Google один раз. Далі застосунок відкриватиметься одразу.", "Inicie sesión con Google una vez. Después la app se abrirá directamente.", "Google арқылы бір рет кіріңіз. Кейін қолданба бірден ашылады."],
+"Загрузка…": ["Loading…", "Завантаження…", "Cargando…", "Жүктелуде…"],
+"Войти с другой почтой": ["Use another email", "Увійти з іншою поштою", "Usar otro correo", "Басқа поштамен кіру"],
+"Нет связи. Для первого входа нужен интернет.": ["No connection. The first sign-in needs internet.", "Немає зв'язку. Для першого входу потрібен інтернет.", "Sin conexión. El primer inicio de sesión necesita internet.", "Байланыс жоқ. Алғашқы кіру үшін интернет керек."],
 "Не продана": [
 "Not sold",
 "Не продано",
