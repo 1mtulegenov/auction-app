@@ -1,5 +1,5 @@
 'use strict';
-/* Аукционы Хьюстона — мобильное приложение (PWA). Данные: data/index.json и data/<дата>.json */
+/* Аукционы Хьюстона — мобильное приложение (PWA). © 2026 Maxat Tulegenov. All rights reserved. Данные: data/index.json и data/<дата>.json */
 const FEES = { auc: 700, dealer: 0, ...LS0('fees-v1', {}) };
 function LS0(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
 const feeTotal = () => (+FEES.auc || 0) + (+FEES.dealer || 0);
@@ -516,7 +516,7 @@ function more() {
     + '<button data-act="refresh"><span class="ic">🔄</span><span>' + T('Проверить обновления') + '<small>' + T('Данные от ') + E(fmtUpdated(S.index.updated)) + '</small></span></button>'
     + '<button data-act="font"><span class="ic">Aa</span><span>' + T('Шрифт') + '<small>' + fontLabel() + '</small></span></button>'
     + '<button data-act="theme"><span class="ic">◐</span><span>' + T('Тема оформления') + '<small>' + ({ light: T('Светлая'), dark: T('Тёмная') }[LS.get('theme', '')] || T('Как в системе')) + '</small></span></button>'
-    + '</div><p class="foot">' + T('Аукционы Хьюстона · версия данных ') + E(S.index.version) + '<br>' + T('Цены ориентировочные: MMR и ретейл Manheim, без осмотра машины.') + '</p>';
+    + '</div><p class="foot">' + T('Аукционы Хьюстона · версия данных ') + E(S.index.version) + '<br>' + T('Цены ориентировочные: MMR и ретейл Manheim, без осмотра машины.') + '<br>© 2026 Maxat Tulegenov. ' + T('Все права защищены.') + '</p>';
 }
 
 /* ---------- шторка ---------- */

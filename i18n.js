@@ -5,6 +5,7 @@ const LOCALE = { en: 'en-US', ru: 'ru-RU', uk: 'uk-UA', es: 'es-US', kk: 'kk-KZ'
 const LI = { en: 0, uk: 1, es: 2, kk: 3 }[LANG];
 document.documentElement.lang = LANG;
 const I18N = {
+"Все права защищены.": ["All rights reserved.", "Усі права захищені.", "Todos los derechos reservados.", "Барлық құқықтар қорғалған."],
 " — лота больше нет в каталоге": [" — lot no longer in the catalog", " — лота більше немає в каталозі", " — el lote ya no está en el catálogo", " — лот каталогта енді жоқ"],
 "Избранное": ["Favorites", "Обране", "Favoritos", "Таңдаулылар"],
 "Добавлено в избранное": ["Added to favorites", "Додано в обране", "Añadido a favoritos", "Таңдаулыларға қосылды"],
