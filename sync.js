@@ -17,7 +17,7 @@ window.Sync = (() => {
     document.documentElement.classList.add('gated');
     const t = s => (window.T ? T(s) : s);
     g.innerHTML = '<div class="gate-box"><img src="icons/icon-192.png" alt="" width="72" height="72"><h1>' + t('Аукционы Хьюстона') + '</h1>'
-      + '<p>' + (mode === 'denied' ? t('Для этой почты доступ не открыт:') + ' <b>' + (st.user ? st.user.email : '') + '</b>. ' + t('Попросите владельца добавить её.') : t('Войдите через Google один раз. Дальше приложение будет открываться сразу.')) + '</p>'
+      + '<p>' + (mode === 'denied' ? t('Для этой почты доступ не открыт:') + ' <b>' + (st.user ? st.user.email : '') + '</b>. ' + t('Для запроса доступа напишите на почту') + ' <a href="mailto:1mtulegenov@gmail.com?subject=' + encodeURIComponent('Доступ к приложению Аукционы') + '">1mtulegenov@gmail.com</a>' : t('Войдите через Google один раз. Дальше приложение будет открываться сразу.')) + '</p>'
       + (msg ? '<p class="gate-err">' + msg + '</p>' : '')
       + (mode === 'wait' ? '<p class="gate-muted">' + t('Загрузка…') + '</p>'
         : mode === 'denied' ? '<button class="btn pri" id="gateOut">' + t('Войти с другой почтой') + '</button>'
@@ -31,7 +31,7 @@ window.Sync = (() => {
   const fail = e => { st.err = humanErr(e); console.warn('sync', e); emit(); };
   function humanErr(e) {
     const c = (e && e.code) || '';
-    if (c === 'permission-denied' || /permission/i.test(c)) return 'Этой почте доступ не открыт. Попросите владельца добавить её в список.';
+    if (c === 'permission-denied' || /permission/i.test(c)) return 'Этой почте доступ не открыт. Для запроса доступа напишите на 1mtulegenov@gmail.com';
     if (/popup-blocked|popup-closed|cancelled-popup/.test(c)) return 'Окно входа закрылось. Попробуйте ещё раз.';
     if (/network/.test(c)) return 'Нет связи. Заметки отправятся, когда появится интернет.';
     if (/unauthorized-domain/.test(c)) return 'Домен приложения не добавлен в Firebase (Authorized domains).';
