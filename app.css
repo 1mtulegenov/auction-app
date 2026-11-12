@@ -274,3 +274,18 @@ html[data-font="mono"]{--f:'IBM Plex Mono',ui-monospace,Menlo,monospace;--fc:'IB
 /* iOS: не увеличивать страницу при фокусе на полях; ничего не шире экрана */
 html,body{max-width:100%;overflow-x:clip}
 @media (hover:none){input,select,textarea{font-size:max(16px,1em)}.count select{font-size:16px}}
+/* избранное списком */
+.flist{background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.fl-h{display:none}
+.fl-r{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:10px 12px;border-top:1px solid var(--line)}
+.fl-r:first-of-type{border-top:0}
+.fl-run{font:inherit;font-weight:700;color:var(--acc);background:none;border:0;padding:0;cursor:pointer;font-variant-numeric:tabular-nums}
+.fl-car{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
+.fl-mmr{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fl-in{grid-column:1/-1;width:100%;min-width:0;box-sizing:border-box;resize:none;overflow:hidden;font:inherit;font-size:14px;line-height:1.35;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:inherit}
+.fl-in.buy{border-style:dashed}
+@media (min-width:760px){
+ .fl-h{display:grid;grid-template-columns:80px minmax(0,1.3fr) 80px minmax(0,1fr) minmax(0,1fr);gap:10px;padding:8px 12px;font-size:12px;color:var(--muted);font-weight:600}
+ .fl-r{grid-template-columns:80px minmax(0,1.3fr) 80px minmax(0,1fr) minmax(0,1fr);border-top:1px solid var(--line)}
+ .fl-in{grid-column:auto}
+}

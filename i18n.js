@@ -206,6 +206,14 @@ const I18N = {
 ", por encima de nuestra oferta",
 ", біздің ставкадан жоғары"
 ],
+"Список": ["List", "Список", "Lista", "Тізім"],
+"Список избранного": ["Favorites list", "Список обраного", "Lista de favoritos", "Таңдаулылар тізімі"],
+"Лот": ["Lot", "Лот", "Lote", "Лот"],
+"Машина": ["Car", "Авто", "Auto", "Көлік"],
+"Заметка": ["Note", "Нотатка", "Nota", "Жазба"],
+"Для покупки": ["For purchase", "Для покупки", "Para compra", "Сатып алуға"],
+"нет VIN": ["no VIN", "немає VIN", "sin VIN", "VIN жоқ"],
+"Заметка общая для машины (по VIN). Заметка для покупки удаляется, когда машину убирают из избранного.": ["The note is shared for the car (by VIN). The purchase note is deleted when the car is removed from favorites.", "Нотатка спільна для авто (за VIN). Нотатка для покупки видаляється, коли авто прибирають з обраного.", "La nota es común para el auto (por VIN). La nota de compra se borra al quitar el auto de favoritos.", "Жазба көлікке ортақ (VIN бойынша). Сатып алу жазбасы таңдаулыдан алынғанда өшеді."],
 "Не продана": [
 "Not sold",
 "Не продано",
