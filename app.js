@@ -838,46 +838,70 @@ document.addEventListener('change', e => {
   else if (e.target.closest('#f_mk')) { const g = document.querySelector('#f_md .md-g[data-mk="' + CSS.escape(e.target.value) + '"]'); if (g) g.hidden = !e.target.checked; }
 });
 
-// список избранного: свой порядок перетаскиванием за ≡ (мышь и палец). Порядок пишется в избранное и синхронизируется.
+// список избранного: свой порядок перетаскиванием за ≡ (мышь и палец). Строка едет за пальцем, соседние плавно расступаются.
+// Порядок пишется в избранное и синхронизируется.
 (function () {
-  let row = null, list = null, pid = null, scrollT = null, lastY = 0;
-  function moveTo(y) {
-    lastY = y;
-    const rows = [...list.querySelectorAll('.fl-r')];
-    for (const r of rows) {
-      if (r === row) continue;
-      const b = r.getBoundingClientRect(), mid = b.top + b.height / 2;
-      const before = row.compareDocumentPosition(r) & Node.DOCUMENT_POSITION_PRECEDING;
-      if (before && y < mid) { list.insertBefore(row, r); if (navigator.vibrate) navigator.vibrate(5); return; }
-      if (!before && y > mid) { list.insertBefore(row, r.nextSibling); if (navigator.vibrate) navigator.vibrate(5); }
-    }
+  const EASE = 'transform .22s cubic-bezier(.2,.8,.2,1)';
+  let row = null, list = null, pid = null, rows = [], tops = [], from = 0, to = 0, h = 0, y0 = 0, s0 = 0, lastY = 0, scrollT = null, done = false;
+  function layout() {
+    const dy = lastY - y0 + (window.scrollY - s0);
+    const c = tops[from] + h / 2 + dy;
+    let t = from;
+    for (let i = 0; i < rows.length; i++) if (i !== from) { const m = tops[i] + rows[i].offsetHeight / 2; if (i < from && c < m) { t = i; break; } if (i > from && c > m) t = i; }
+    if (t !== to) { to = t; if (navigator.vibrate) navigator.vibrate(4); }
+    rows.forEach((r, i) => { if (i === from) return; r.style.transform = from < i && i <= to ? 'translateY(' + -h + 'px)' : to <= i && i < from ? 'translateY(' + h + 'px)' : ''; });
+    row.style.transform = 'translateY(' + dy + 'px) scale(1.045)';
   }
   function edgeScroll() {
     clearInterval(scrollT);
     scrollT = setInterval(() => {
-      if (!row) return clearInterval(scrollT);
-      const d = lastY < 70 ? -12 : lastY > innerHeight - 90 ? 12 : 0;
-      if (d) { window.scrollBy(0, d); moveTo(lastY); }
-    }, 30);
+      if (!row || done) return clearInterval(scrollT);
+      const v = lastY < 80 ? -Math.min(14, (80 - lastY) / 4 + 2) : lastY > innerHeight - 100 ? Math.min(14, (lastY - innerHeight + 100) / 4 + 2) : 0;
+      if (v) { window.scrollBy(0, v); layout(); }
+    }, 16);
   }
   function end() {
-    if (!row) return;
-    clearInterval(scrollT);
-    row.classList.remove('drag'); list.classList.remove('dragging'); document.body.classList.remove('fl-dragging');
-    const now = Date.now();
-    [...list.querySelectorAll('.fl-r')].forEach((r, i) => { const f = S.favs[r.dataset.fid]; if (f && f.o !== i) { f.o = i; f.ts2 = now; } });
-    row = list = pid = null; S.dragging = false;
-    if (S.flSort !== 'manual') { S.flSort = 'manual'; LS.set('flist-sort', 'manual'); const sel = $('#flsort'); if (sel) sel.value = 'manual'; }
-    saveFavs();
+    if (!row || done) return;
+    done = true; clearInterval(scrollT);
+    // доезжаем до своего места, потом переставляем в DOM без рывка
+    const off = to > from ? tops[to] + rows[to].offsetHeight - (tops[from] + h) : tops[to] - tops[from];
+    row.style.transition = EASE + ',box-shadow .22s ease';
+    row.style.transform = 'translateY(' + (off - (window.scrollY - s0)) + 'px)';
+    row.classList.add('drop');
+    document.body.classList.remove('fl-dragging');
+    setTimeout(() => {
+      const ref = to > from ? rows[to].nextSibling : rows[to];
+      if (to !== from) list.insertBefore(row, ref);
+      rows.forEach(r => { r.style.transition = 'none'; r.style.transform = ''; });
+      row.classList.remove('drag', 'drop'); list.classList.remove('dragging');
+      void list.offsetHeight;
+      rows.forEach(r => { r.style.transition = ''; });
+      if (to !== from) {
+        const now = Date.now();
+        [...list.querySelectorAll('.fl-r')].forEach((r, i) => { const f = S.favs[r.dataset.fid]; if (f && f.o !== i) { f.o = i; f.ts2 = now; } });
+        if (S.flSort !== 'manual') { S.flSort = 'manual'; LS.set('flist-sort', 'manual'); const sel = $('#flsort'); if (sel) sel.value = 'manual'; }
+        saveFavs();
+      }
+      row = list = pid = null; rows = []; S.dragging = false;
+    }, 230);
   }
   document.addEventListener('pointerdown', e => {
-    const g = e.target.closest && e.target.closest('.fl-grip'); if (!g) return;
+    const g = e.target.closest && e.target.closest('.fl-grip'); if (!g || row) return;
     e.preventDefault();
-    row = g.closest('.fl-r'); list = row.parentNode; pid = e.pointerId; S.dragging = true;
+    row = g.closest('.fl-r'); list = row.parentNode; pid = e.pointerId; S.dragging = true; done = false;
+    rows = [...list.querySelectorAll('.fl-r')]; from = to = rows.indexOf(row);
+    s0 = window.scrollY; tops = rows.map(r => r.getBoundingClientRect().top + s0);
+    h = from < rows.length - 1 ? tops[from + 1] - tops[from] : row.offsetHeight;
+    y0 = lastY = e.clientY;
     try { g.setPointerCapture(pid); } catch (er) {}
-    row.classList.add('drag'); list.classList.add('dragging'); document.body.classList.add('fl-dragging'); if (navigator.vibrate) navigator.vibrate(15); lastY = e.clientY; edgeScroll();
+    rows.forEach(r => { r.style.transition = r === row ? 'transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s ease' : EASE + ',filter .18s ease,opacity .18s ease'; });
+    row.classList.add('drag'); list.classList.add('dragging'); document.body.classList.add('fl-dragging');
+    row.style.transform = 'scale(1.045)';
+    setTimeout(() => { if (row && !done) row.style.transition = 'box-shadow .18s ease'; }, 180);
+    if (navigator.vibrate) navigator.vibrate(15);
+    edgeScroll();
   });
-  document.addEventListener('pointermove', e => { if (row && e.pointerId === pid) { e.preventDefault(); moveTo(e.clientY); } }, { passive: false });
+  document.addEventListener('pointermove', e => { if (row && !done && e.pointerId === pid) { e.preventDefault(); lastY = e.clientY; layout(); } }, { passive: false });
   document.addEventListener('pointerup', e => { if (row && e.pointerId === pid) end(); });
   document.addEventListener('pointercancel', e => { if (row && e.pointerId === pid) end(); });
   // iOS: не даём странице прокручиваться, пока тянем строку
