@@ -206,6 +206,8 @@ function lotUrl(x) { return x.u ? x.u : x.s ? 'https://www.edgepipeline.com/comp
 function favKey(x) { return (x._d || S.date) + '|' + x.k; }
 function isFav(x) { return !!((x.vin && S.favs[x.vin]) || S.favs[favKey(x)]); }
 function noteOf(x) { const n = x.vin && S.notes[x.vin]; return n && n.text ? n : null; }
+function noteWho(n) { if (!n || !n.by) return ''; const t = n.updatedAt ? new Date(n.updatedAt) : null; const when = t && !isNaN(t) ? t.toLocaleString(LOCALE, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''; return (n.cby && n.cby !== n.by ? T('Написал ') + n.cby + ', ' + T('изменил ') : T('Написал ')) + n.by + (when ? ', ' + when : ''); }
+function noteStatus(n) { const Y = window.Sync && Sync.st; if (n && n.by) return noteWho(n); if (Y && Y.user) return T('Общая заметка: увидят все, кто вошёл.'); if (Y && Y.on) return T('Сейчас только на этом устройстве. Войдите через Google во вкладке «Ещё», чтобы заметку видели все.'); return T('Хранится на этом телефоне и привязана к VIN.'); }
 // номер лота = линия + номер: «D-0054» → ['D', 0, 54], «11-0078» → ['', 11, 78]
 function runKey(r) { const m = String(r || '').replace(/\s/g, '').match(/^([A-Za-z]*)(\d*)[-\/]?(\d*)$/); return m ? [m[1].toUpperCase(), +m[2] || 0, +m[3] || 0] : [String(r || ''), 0, 0]; }
 function annText(x) { return (LANG === 'en' || LANG === 'es') ? (x.a || x.ar || '') : (x.ar || x.a || ''); }
@@ -465,7 +467,7 @@ async function favListScreen() {
       + rows.map(([fid, f, x]) => { const nt = noteOf(x);
         return '<div class="fl-r"><button class="fl-run" data-lot="' + E(x.k) + '"' + (id !== S.date ? ' data-fd="' + E(id) + '"' : '') + '>' + E(x.run) + '</button>'
           + '<span class="fl-car">' + E(carName(x)) + '</span><span class="fl-mmr">' + (x.est && x.w ? '≈' : '') + M(x.w) + '</span>'
-          + (x.vin ? '<textarea class="fl-in" rows="1" data-gn="' + E(x.vin) + '" data-d="' + E(id) + '" data-k="' + E(x.k) + '" placeholder="' + T('Заметка') + '">' + E(nt ? nt.text : '') + '</textarea>' : '<span class="muted fl-in">' + T('нет VIN') + '</span>')
+          + (x.vin ? '<div class="fl-gn"><textarea class="fl-in" rows="1" data-gn="' + E(x.vin) + '" data-d="' + E(id) + '" data-k="' + E(x.k) + '" placeholder="' + T('Заметка') + '">' + E(nt ? nt.text : '') + '</textarea>' + (nt && nt.by ? '<small class="fl-who">' + E(noteWho(nt)) + '</small>' : '') + '</div>' : '<span class="muted fl-in">' + T('нет VIN') + '</span>')
           + '<textarea class="fl-in buy" rows="1" data-bn="' + E(fid) + '" placeholder="' + T('Для покупки') + '">' + E(f.bn || '') + '</textarea></div>'; }).join('') + '</div>';
   }
   return '<div class="hd"><h1>' + T('Список избранного') + '</h1><p>' + (n ? T('Заметка общая для машины (по VIN). Заметка для покупки удаляется, когда машину убирают из избранного.') : '') + '</p></div>'
@@ -474,7 +476,7 @@ async function favListScreen() {
 function setNote(vin, text, x, date) {
   const prev = S.notes[vin]; text = String(text || '').trim();
   if ((prev ? prev.text : '') === text) return false;
-  if (text) S.notes[vin] = { text, date: date || S.date, run: x ? x.run : prev && prev.run, car: x ? carName(x) : prev && prev.car, updatedAt: new Date().toISOString() };
+  if (text) S.notes[vin] = Object.assign({ text, date: date || S.date, run: x ? x.run : prev && prev.run, car: x ? carName(x) : prev && prev.car, updatedAt: new Date().toISOString() }, prev && prev.cby ? { cby: prev.cby, cat: prev.cat } : {});
   else S.notes[vin] = { text: '', updatedAt: new Date().toISOString(), del: 1 };
   LS.set('auction-notes-v1', S.notes);
   if (window.Sync) Sync.pushNote(vin, S.notes[vin]);
@@ -547,7 +549,9 @@ function drawResults(keep) {
 function more() {
   const notes = Object.entries(S.notes).filter(([, n]) => n && n.text);
   const cur = LANGS.find(l => l[0] === LANG);
-  return '<div class="menu">' + '<button data-act="lang"><span class="ic flag">' + cur[1] + '</span><span>' + T('Язык') + '<small>' + cur[2] + '</small></span></button>'
+  const Y = window.Sync && Sync.st;
+  const acc = Y && Y.on ? '<button data-act="auth"><span class="ic">👤</span><span>' + (Y.user ? E(Y.user.name) + '<small>' + E(Y.user.email) + T(' · заметки общие. Нажмите, чтобы выйти') + '</small>' : T('Войти через Google') + '<small>' + (Y.err ? E(Y.err) : T('Чтобы заметки были видны всем и было видно, кто их оставил')) + '</small>') + '</span></button>' : '';
+  return '<div class="menu">' + acc + '<button data-act="lang"><span class="ic flag">' + cur[1] + '</span><span>' + T('Язык') + '<small>' + cur[2] + '</small></span></button>'
     + '<button data-act="notes"><span class="ic">📝</span><span>' + T('Мои заметки') + '<small>' + (notes.length ? notes.length + T(' шт., привязаны к VIN') : T('Пока нет. Пишутся в карточке машины.')) + '</small></span></button>'
     + '<button data-act="how"><span class="ic">🧮</span><span>' + T('Как считается прибыль') + '<small>' + T('MMR, сбор, цена продажи, максимальная ставка') + '</small></span></button>'
     + '<button data-act="install"><span class="ic">📲</span><span>' + installTitle() + '<small>' + (isStandalone() ? T('Уже установлено') : platform() === 'desktop' ? T('Windows и Mac, без магазина приложений') : T('iPhone и Android, без App Store')) + '</small></span></button>'
@@ -613,7 +617,7 @@ function detail(k) {
     + (x.demand ? '<p class="p"><b>' + T('Спрос ') + x.demand + '/10</b>' + (x.sell ? T(', продаётся за ') + E(weeks(x.sell)) : '') + '</p>' : '') + '</div>')
     + (x.sale != null && !isInop(x) ? '<div class="d-card"><h3>' + T('Калькулятор ставки') + '</h3><div class="calc"><input id="bid" type="number" inputmode="numeric" value="' + E(bid) + '" aria-label="' + T('Ваша ставка, $') + '"><div class="calc-out" id="calcOut"></div></div></div>' : '')
     + (info ? '<div class="d-card">' + info + '</div>' : '')
-    + '<div class="d-card"><h3><label for="note">' + T('Заметка после осмотра') + (n && n.date && n.date !== S.date ? T(' (от ') + fmtDate(n.date) + T(', лот ') + E(n.run) + ')' : '') + '</label></h3><textarea class="note' + (n ? ' has' : '') + '" id="note" data-k="' + E(k) + '" placeholder="' + T('Что увидели: кузов, мотор, салон, запах, ошибки') + '">' + E(n ? n.text : '') + '</textarea><div class="note-bar"><p class="muted" id="nstat" style="font-size:12.5px">' + T('Хранится на этом телефоне и привязана к VIN.') + '</p><button class="btn" data-act="note-done">' + T('Сохранить') + '</button></div></div>'
+    + '<div class="d-card"><h3><label for="note">' + T('Заметка после осмотра') + (n && n.date && n.date !== S.date ? T(' (от ') + fmtDate(n.date) + T(', лот ') + E(n.run) + ')' : '') + '</label></h3><textarea class="note' + (n ? ' has' : '') + '" id="note" data-k="' + E(k) + '" placeholder="' + T('Что увидели: кузов, мотор, салон, запах, ошибки') + '">' + E(n ? n.text : '') + '</textarea><div class="note-bar"><p class="muted" id="nstat" style="font-size:12.5px">' + E(noteStatus(n)) + '</p><button class="btn" data-act="note-done">' + T('Сохранить') + '</button></div></div>'
     + '<div class="d-card"><p class="vin">VIN ' + E(x.vin || T('нет')) + '</p><div class="btns">'
     + '<button class="btn" data-fav="' + E(k) + '">' + (isFav(x) ? T('★ В избранном') : T('☆ В избранное')) + '</button>'
     + (x.vin ? '<button class="btn" data-act="copy" data-v="' + E(x.vin) + '">' + T('Скопировать VIN') + '</button>' : '')
@@ -637,7 +641,7 @@ function saveNote(ta) {
 }
 function notesSheet() {
   const list = Object.entries(S.notes).filter(([, n]) => n && n.text).sort((a, b) => String(b[1].updatedAt || '').localeCompare(String(a[1].updatedAt || '')));
-  openSheet(T('Мои заметки'), list.length ? '<div class="rows">' + list.map(([v, n]) => '<div class="r"><div class="l"><b>' + E(n.car || '') + '</b><br><small>' + fmtDate(n.date) + T(' · лот ') + E(n.run) + ' · <span class="vin">' + E(v) + '</span></small><p style="margin-top:4px">' + E(n.text) + '</p></div></div>').join('') + '</div><div class="btns"><button class="btn pri" data-act="share-notes">' + T('Отправить все заметки') + '</button><button class="btn" data-act="copy-notes">' + T('Скопировать') + '</button></div><p class="muted" style="font-size:13px;margin-top:10px">' + T('Отправьте заметки в чат с Claude, и он учтёт их в следующем анализе.') + '</p>' : '<p class="empty">' + T('Заметок пока нет. Откройте машину и напишите, что увидели на осмотре.') + '</p>', true);
+  openSheet(T('Мои заметки'), list.length ? '<div class="rows">' + list.map(([v, n]) => '<div class="r"><div class="l"><b>' + E(n.car || '') + '</b><br><small>' + fmtDate(n.date) + T(' · лот ') + E(n.run) + ' · <span class="vin">' + E(v) + '</span></small><p style="margin-top:4px">' + E(n.text) + '</p>' + (n.by ? '<small>' + E(noteWho(n)) + '</small>' : '') + '</div></div>').join('') + '</div><div class="btns"><button class="btn pri" data-act="share-notes">' + T('Отправить все заметки') + '</button><button class="btn" data-act="copy-notes">' + T('Скопировать') + '</button></div><p class="muted" style="font-size:13px;margin-top:10px">' + T('Отправьте заметки в чат с Claude, и он учтёт их в следующем анализе.') + '</p>' : '<p class="empty">' + T('Заметок пока нет. Откройте машину и напишите, что увидели на осмотре.') + '</p>', true);
 }
 function notesText() { return Object.entries(S.notes).filter(([, n]) => n && n.text).map(([v, n]) => fmtDate(n.date) + ' ' + (n.run || '') + ' ' + (n.car || '') + ' VIN ' + v + ': ' + n.text).join('\n'); }
 function howSheet() {
@@ -780,6 +784,7 @@ document.addEventListener('click', async e => {
     }
     case 'freset': Object.assign(S.f, { mk: [], md: [], au: '', cl: '', st: '', y: '', o: '', p: '' }); closeSheet(); render(); break;
     case 'notes': notesSheet(); break;
+    case 'auth': { const Y = window.Sync && Sync.st; if (!Y) break; if (Y.user) await Sync.signOut(); else await Sync.signIn(); render(); break; }
     case 'how': howSheet(); break;
     case 'install': installSheet(); break;
     case 'do-install': if (S.deferredInstall) { S.deferredInstall.prompt(); const r = await S.deferredInstall.userChoice; if (r.outcome === 'accepted') closeSheet(); S.deferredInstall = null; } break;
@@ -819,6 +824,16 @@ document.addEventListener('change', e => {
   else if (e.target.matches('.fl-in')) saveListInput(e.target);
   else if (e.target.closest('#f_mk')) { const g = document.querySelector('#f_md .md-g[data-mk="' + CSS.escape(e.target.value) + '"]'); if (g) g.hidden = !e.target.checked; }
 });
+
+// заметки пришли из базы: обновляем то, что на экране, не трогая поле, в котором сейчас пишут
+window.addEventListener('notes-updated', () => {
+  const a = document.activeElement, typing = a && a.matches && a.matches('textarea,input');
+  const ta = $('#note');
+  if (sheetOpen && ta) { const x = S.d.map[ta.dataset.k], n = x && noteOf(x), st = $('#nstat'); if (a !== ta) { ta.value = n ? n.text : ''; ta.classList.toggle('has', !!n); } if (st && (a !== ta || (n && n.by))) st.textContent = noteStatus(n); }
+  if (typing || sheetOpen) return;
+  if (S.tab === 'flist' || S.tab === 'fav' || S.tab === 'home') keepScroll(render); else if (S.tab === 'lots') drawLots(true);
+});
+window.addEventListener('sync-state', () => { if (S.tab === 'more' && !sheetOpen) render(); });
 
 /* ---------- запоминаем экран: вкладка, фильтры, прокрутка, открытый лот ---------- */
 function saveView() {

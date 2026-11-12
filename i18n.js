@@ -214,6 +214,13 @@ const I18N = {
 "Для покупки": ["For purchase", "Для покупки", "Para compra", "Сатып алуға"],
 "нет VIN": ["no VIN", "немає VIN", "sin VIN", "VIN жоқ"],
 "Заметка общая для машины (по VIN). Заметка для покупки удаляется, когда машину убирают из избранного.": ["The note is shared for the car (by VIN). The purchase note is deleted when the car is removed from favorites.", "Нотатка спільна для авто (за VIN). Нотатка для покупки видаляється, коли авто прибирають з обраного.", "La nota es común para el auto (por VIN). La nota de compra se borra al quitar el auto de favoritos.", "Жазба көлікке ортақ (VIN бойынша). Сатып алу жазбасы таңдаулыдан алынғанда өшеді."],
+"Написал ": ["Written by ", "Написав ", "Escrito por ", "Жазған "],
+"изменил ": ["edited by ", "змінив ", "editado por ", "өзгерткен "],
+"Общая заметка: увидят все, кто вошёл.": ["Shared note: everyone signed in will see it.", "Спільна нотатка: побачать усі, хто увійшов.", "Nota compartida: la verán todos los que iniciaron sesión.", "Ортақ жазба: кірген барлығы көреді."],
+"Сейчас только на этом устройстве. Войдите через Google во вкладке «Ещё», чтобы заметку видели все.": ["Only on this device for now. Sign in with Google in the More tab so everyone can see the note.", "Поки лише на цьому пристрої. Увійдіть через Google у вкладці «Ще», щоб нотатку бачили всі.", "Por ahora solo en este dispositivo. Inicie sesión con Google en la pestaña Más para que todos vean la nota.", "Әзірге тек осы құрылғыда. Жазбаны бәрі көруі үшін «Тағы» бөлімінде Google арқылы кіріңіз."],
+" · заметки общие. Нажмите, чтобы выйти": [" · notes are shared. Tap to sign out", " · нотатки спільні. Натисніть, щоб вийти", " · notas compartidas. Toque para salir", " · жазбалар ортақ. Шығу үшін басыңыз"],
+"Войти через Google": ["Sign in with Google", "Увійти через Google", "Iniciar sesión con Google", "Google арқылы кіру"],
+"Чтобы заметки были видны всем и было видно, кто их оставил": ["So notes are visible to everyone, with who wrote them", "Щоб нотатки бачили всі й було видно, хто їх залишив", "Para que todos vean las notas y quién las dejó", "Жазбаларды бәрі көріп, кім қалдырғаны көрінуі үшін"],
 "Не продана": [
 "Not sold",
 "Не продано",

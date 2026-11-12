@@ -289,3 +289,7 @@ html,body{max-width:100%;overflow-x:clip}
  .fl-r{grid-template-columns:80px minmax(0,1.3fr) 80px minmax(0,1fr) minmax(0,1fr);border-top:1px solid var(--line)}
  .fl-in{grid-column:auto}
 }
+.fl-gn{grid-column:1/-1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.fl-gn .fl-in{grid-column:auto}
+.fl-who{font-size:11.5px;color:var(--muted);padding-left:2px}
+@media (min-width:760px){.fl-gn{grid-column:auto}}
