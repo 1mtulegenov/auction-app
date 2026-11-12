@@ -223,7 +223,7 @@ const I18N = {
 "Чтобы заметки были видны всем и было видно, кто их оставил": ["So notes are visible to everyone, with who wrote them", "Щоб нотатки бачили всі й було видно, хто їх залишив", "Para que todos vean las notas y quién las dejó", "Жазбаларды бәрі көріп, кім қалдырғаны көрінуі үшін"],
 "Аукционы Хьюстона": ["Houston Auctions", "Аукціони Х'юстона", "Subastas de Houston", "Хьюстон аукциондары"],
 "Для этой почты доступ не открыт:": ["This email has no access:", "Для цієї пошти доступ не відкрито:", "Este correo no tiene acceso:", "Бұл поштаға рұқсат жоқ:"],
-"Попросите владельца добавить её.": ["Ask the owner to add it.", "Попросіть власника додати її.", "Pida al propietario que lo agregue.", "Иесінен қосуын сұраңыз."],
+"Для запроса доступа напишите на почту": ["To request access, email", "Щоб отримати доступ, напишіть на пошту", "Para solicitar acceso, escriba a", "Рұқсат сұрау үшін поштаға жазыңыз"],
 "Войдите через Google один раз. Дальше приложение будет открываться сразу.": ["Sign in with Google once. After that the app opens right away.", "Увійдіть через Google один раз. Далі застосунок відкриватиметься одразу.", "Inicie sesión con Google una vez. Después la app se abrirá directamente.", "Google арқылы бір рет кіріңіз. Кейін қолданба бірден ашылады."],
 "Загрузка…": ["Loading…", "Завантаження…", "Cargando…", "Жүктелуде…"],
 "Войти с другой почтой": ["Use another email", "Увійти з іншою поштою", "Usar otro correo", "Басқа поштамен кіру"],
