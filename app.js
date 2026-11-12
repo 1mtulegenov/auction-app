@@ -38,7 +38,7 @@ const LS = {
 const S = {
   index: null, date: null, d: null, cache: {},
   tab: 'home', picks: 'core',
-  favs: loadFavs(), notes: LS.get('auction-notes-v1', {}),
+  favs: loadFavs(), favDel: LS.get('fav-del-v1', {}), notes: LS.get('auction-notes-v1', {}),
   f: { q: '', mk: [], md: [], au: '', cl: '', st: '', y: '', o: '', p: '', quick: '' , sort: 'stat' },
   rf: { q: '', st: '', sort: 'run' },
   shown: 24, deferredInstall: null
@@ -52,7 +52,7 @@ function loadFavs() {
   if (!f) { f = {}; const old = LS.get('fav-v1', {}); Object.keys(old).forEach(k => { const i = k.indexOf('|'); f[k] = { d: k.slice(0, i), k: k.slice(i + 1), ts: Date.now() }; }); LS.set('fav-v2', f); }
   return f;
 }
-function saveFavs() { LS.set('fav-v2', S.favs); try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {} }
+function saveFavs(local) { LS.set('fav-v2', S.favs); LS.set('fav-del-v1', S.favDel); if (!local && window.Sync && Sync.pushFavs) Sync.pushFavs(); try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {} }
 
 /* ---------- данные ---------- */
 async function getJSON(url, fresh) {
@@ -744,8 +744,8 @@ function go(tab) { S.tab = tab; LS.set('tab', tab); render(); window.scrollTo(0,
 function toggleFav(k, fd) {
   const d = fd && S.cache[fd] ? S.cache[fd] : S.d, x = d.map[k]; if (!x) return;
   const fk = favKey(x), on = !isFav(x);
-  if (on) S.favs[x.vin || fk] = { d: x._d || S.date, k: x.k, t: carTitle(x), ts: Date.now() };
-  else { if (x.vin) delete S.favs[x.vin]; delete S.favs[fk]; }
+  if (on) { S.favs[x.vin || fk] = { d: x._d || S.date, k: x.k, t: carTitle(x), ts: Date.now() }; delete S.favDel[x.vin || fk]; }
+  else { const now = Date.now(); if (x.vin) { delete S.favs[x.vin]; S.favDel[x.vin] = now; } delete S.favs[fk]; S.favDel[fk] = now; }
   saveFavs();
   toast(on ? T('Добавлено в избранное') : T('Убрано из избранного'));
   document.querySelectorAll('[data-fav="' + CSS.escape(k) + '"]').forEach(b => { if ((b.dataset.fd || '') !== (fd || '')) return; if (b.classList.contains('star')) { b.classList.toggle('on', on); b.textContent = on ? '★' : '☆'; b.setAttribute('aria-pressed', on); } else b.textContent = on ? T('★ В избранном') : T('☆ В избранное'); });
@@ -834,6 +834,7 @@ window.addEventListener('notes-updated', () => {
   if (typing || sheetOpen) return;
   if (S.tab === 'flist' || S.tab === 'fav' || S.tab === 'home') keepScroll(render); else if (S.tab === 'lots') drawLots(true);
 });
+window.addEventListener('favs-updated', () => { const a = document.activeElement; if (sheetOpen || (a && a.matches && a.matches('textarea,input'))) return; if (S.tab === 'fav' || S.tab === 'flist' || S.tab === 'home') keepScroll(render); else if (S.tab === 'lots') drawLots(true); });
 window.addEventListener('sync-state', () => { if (S.tab === 'more' && !sheetOpen) render(); });
 
 /* ---------- запоминаем экран: вкладка, фильтры, прокрутка, открытый лот ---------- */

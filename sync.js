@@ -108,6 +108,7 @@ window.Sync = (() => {
       if ((e.code || '') === 'permission-denied') { st.denied = true; okSet(false); fail(e); gate('denied'); return; }
       fail(e); if (okGet()) gate('hide');
     }
+    startFavs();
     unsub = onSnapshot(collection(db, 'notes'), { includeMetadataChanges: false }, qs => {
       let ch = false;
       qs.docChanges().forEach(c => {
@@ -123,7 +124,49 @@ window.Sync = (() => {
       emit();
     }, fail);
   }
-  function stop() { if (unsub) { unsub(); unsub = null; } st.live = false; }
+  function stop() { if (unsub) { unsub(); unsub = null; } if (unsubF) { unsubF(); unsubF = null; } st.live = false; }
+
+  // избранное и заметки «для покупки»: личные, в users/{uid}/data/favs, общие для всех устройств этого человека.
+  // Удаления помним отдельно (favDel: id -> время), чтобы удалённое на одном телефоне не вернулось с другого.
+  let unsubF = null, favRef = null, lastFav = '';
+  const fts = f => (f && (f.ts2 > f.ts ? f.ts2 : f.ts)) || 0;
+  function mergeFavs(rf, rd) {
+    const del = Object.assign({}, rd || {});
+    for (const [k, t] of Object.entries(S.favDel || {})) del[k] = Math.max(del[k] || 0, t);
+    const out = {};
+    for (const src of [rf || {}, S.favs || {}]) for (const [k, f] of Object.entries(src)) {
+      if (!f || !f.d) continue;
+      if ((del[k] || 0) >= fts(f)) continue;
+      if (!out[k] || fts(f) > fts(out[k])) out[k] = f;
+    }
+    const old = Date.now() - 45 * 864e5;
+    for (const k of Object.keys(del)) if (del[k] < old || out[k]) delete del[k];
+    return { favs: out, del };
+  }
+  function startFavs() {
+    const { doc, onSnapshot } = F.fs;
+    favRef = doc(db, 'users', st.user.uid, 'data', 'favs');
+    unsubF = onSnapshot(favRef, snap => {
+      if (snap.metadata.hasPendingWrites) return;
+      const r = snap.exists() ? snap.data() : {};
+      const m = mergeFavs(r.favs, r.del);
+      const before = JSON.stringify(S.favs);
+      S.favs = m.favs; S.favDel = m.del;
+      saveFavs(true);
+      if (JSON.stringify(m.favs) !== before) window.dispatchEvent(new CustomEvent('favs-updated'));
+      if (JSON.stringify(r.favs || {}) !== JSON.stringify(m.favs) || JSON.stringify(r.del || {}) !== JSON.stringify(m.del)) pushFavs();
+    }, fail);
+  }
+  let favT = null;
+  function pushFavs() {
+    if (!favRef || !st.user) return;
+    clearTimeout(favT);
+    favT = setTimeout(async () => {
+      const body = JSON.stringify([S.favs, S.favDel]);
+      if (body === lastFav) return;
+      try { await F.fs.setDoc(favRef, { favs: S.favs, del: S.favDel, at: F.fs.serverTimestamp() }); lastFav = body; } catch (e) { fail(e); }
+    }, 300);
+  }
 
   async function pushNote(vin, n) {
     if (!db || !st.user || !vin) return false;
@@ -142,5 +185,5 @@ window.Sync = (() => {
     } catch (e) { fail(e); return false; }
   }
   init();
-  return { st, signIn, signOut, pushNote };
+  return { st, signIn, signOut, pushNote, pushFavs };
 })();
