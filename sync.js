@@ -47,7 +47,7 @@ window.Sync = (() => {
       auth = au.getAuth(a);
       await au.setPersistence(auth, au.browserLocalPersistence).catch(() => {});
       try { db = fs.initializeFirestore(a, { localCache: fs.persistentLocalCache() }); } catch (e) { db = fs.getFirestore(a); }
-      au.getRedirectResult(auth).catch(fail);
+      if (!(await finishGoogle())) au.getRedirectResult(auth).catch(fail);
       au.onAuthStateChanged(auth, u => { st.user = u ? { uid: u.uid, name: u.displayName || u.email, email: u.email, photo: u.photoURL } : null; st.ready = true; st.err = ''; emit(); if (u) start(); else { stop(); okSet(false); gate('login'); } });
     } catch (e) {
       // нет связи: кто уже входил, работает дальше; первый вход требует интернета
@@ -55,12 +55,37 @@ window.Sync = (() => {
       if (!okGet()) gate('login', (window.T ? T('Нет связи. Для первого входа нужен интернет.') : 'Нет связи.'));
     }
   }
+  // Установленное приложение на iPhone и мобильные браузеры: вход Firebase через всплывающее окно там ломается
+  // (окно открывается отдельно и теряет состояние). Поэтому уводим всё окно на страницу Google и возвращаемся
+  // на свой же адрес с id_token, а Firebase принимает этот токен (signInWithCredential).
+  const standalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  const mobile = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const RET = () => location.origin + location.pathname.replace(/index\.html$/, '');
+  function googleRedirect() {
+    const rnd = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, '0')).join('');
+    const state = rnd(), nonce = rnd();
+    try { localStorage.setItem('g-oauth', JSON.stringify({ state, nonce, ts: Date.now() })); } catch (e) {}
+    const q = new URLSearchParams({ client_id: cfg.googleClientId, redirect_uri: RET(), response_type: 'id_token', scope: 'openid email profile', nonce, state, prompt: 'select_account' });
+    location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + q;
+  }
+  async function finishGoogle() {
+    if (!/id_token=|error=/.test(location.hash)) return false;
+    const h = new URLSearchParams(location.hash.slice(1));
+    let saved = null; try { saved = JSON.parse(localStorage.getItem('g-oauth') || 'null'); localStorage.removeItem('g-oauth'); } catch (e) {}
+    history.replaceState(null, '', location.pathname + location.search);
+    if (h.get('error')) { st.err = 'Google: ' + h.get('error'); emit(); return true; }
+    if (!saved || saved.state !== h.get('state')) { st.err = 'Вход прерван, попробуйте ещё раз.'; emit(); return true; }
+    try { await F.au.signInWithCredential(auth, F.au.GoogleAuthProvider.credential(h.get('id_token'))); } catch (e) { fail(e); }
+    return true;
+  }
   async function signIn() {
     if (!auth) return;
+    if (cfg.googleClientId && (standalone() || mobile())) { googleRedirect(); return; }
     const p = new F.au.GoogleAuthProvider(); p.setCustomParameters({ prompt: 'select_account' });
     try { await F.au.signInWithPopup(auth, p); }
     catch (e) {
-      if (/popup-blocked|operation-not-supported|web-storage/.test(e.code || '')) { try { await F.au.signInWithRedirect(auth, p); } catch (e2) { fail(e2); } }
+      if (/popup-blocked|operation-not-supported|web-storage|popup-closed|cancelled/.test(e.code || '') && cfg.googleClientId) googleRedirect();
+      else if (/popup-blocked|operation-not-supported|web-storage/.test(e.code || '')) { try { await F.au.signInWithRedirect(auth, p); } catch (e2) { fail(e2); } }
       else fail(e);
     }
   }

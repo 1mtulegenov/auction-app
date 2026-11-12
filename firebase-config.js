@@ -6,5 +6,7 @@ window.FIREBASE_CONFIG = {
   projectId: 'auction-app-3bf47',
   storageBucket: 'auction-app-3bf47.firebasestorage.app',
   messagingSenderId: '268775212771',
-  appId: '1:268775212771:web:f3ea9ebb5cc4df653ce7d6'
+  appId: '1:268775212771:web:f3ea9ebb5cc4df653ce7d6',
+  // OAuth-клиент Google (Web client, создан Firebase) для входа в установленном приложении на телефоне
+  googleClientId: '268775212771-gnoenhkphoub0l7vabdbhiubi19d6t75.apps.googleusercontent.com'
 };
