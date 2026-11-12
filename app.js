@@ -863,7 +863,7 @@ document.addEventListener('change', e => {
   function end() {
     if (!row) return;
     clearInterval(scrollT);
-    row.classList.remove('drag'); list.classList.remove('dragging');
+    row.classList.remove('drag'); list.classList.remove('dragging'); document.body.classList.remove('fl-dragging');
     const now = Date.now();
     [...list.querySelectorAll('.fl-r')].forEach((r, i) => { const f = S.favs[r.dataset.fid]; if (f && f.o !== i) { f.o = i; f.ts2 = now; } });
     row = list = pid = null; S.dragging = false;
@@ -875,7 +875,7 @@ document.addEventListener('change', e => {
     e.preventDefault();
     row = g.closest('.fl-r'); list = row.parentNode; pid = e.pointerId; S.dragging = true;
     try { g.setPointerCapture(pid); } catch (er) {}
-    row.classList.add('drag'); list.classList.add('dragging'); lastY = e.clientY; edgeScroll();
+    row.classList.add('drag'); list.classList.add('dragging'); document.body.classList.add('fl-dragging'); if (navigator.vibrate) navigator.vibrate(15); lastY = e.clientY; edgeScroll();
   });
   document.addEventListener('pointermove', e => { if (row && e.pointerId === pid) { e.preventDefault(); moveTo(e.clientY); } }, { passive: false });
   document.addEventListener('pointerup', e => { if (row && e.pointerId === pid) end(); });

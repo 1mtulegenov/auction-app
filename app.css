@@ -286,7 +286,11 @@ html,body{max-width:100%;overflow-x:clip}
 .fl-in.buy{border-style:dashed}
 .fl-grip{grid-column:-2;grid-row:1/span 2;align-self:stretch;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;width:34px;padding:0;margin:-6px -6px -6px 0;border:0;background:none;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .fl-grip i{display:block;width:18px;height:2px;border-radius:1px;background:var(--muted)}
-.fl-r.drag{position:relative;z-index:2;background:var(--card);box-shadow:0 6px 20px rgba(0,0,0,.25);border-radius:10px;outline:2px solid var(--accent)}
+.fl-r{transition:transform .18s ease,box-shadow .18s ease,filter .18s ease,opacity .18s ease}
+.fl-r.drag{position:relative;z-index:3;background:var(--card);transform:scale(1.045);box-shadow:0 14px 34px rgba(0,0,0,.32);border-radius:12px;outline:2px solid var(--accent)}
+.flist.dragging{overflow:visible}
+body.fl-dragging .fl-r:not(.drag),body.fl-dragging #view .hd,body.fl-dragging #view h2,body.fl-dragging .fav-sort,body.fl-dragging .fl-h{filter:blur(2px);opacity:.55}
+@media (prefers-reduced-motion:reduce){.fl-r{transition:none}.fl-r.drag{transform:none}}
 .fl-r.drag .fl-grip{cursor:grabbing}
 .flist.dragging{-webkit-user-select:none;user-select:none}
 .fav-sort{justify-content:flex-end}
