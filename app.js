@@ -41,6 +41,7 @@ const S = {
   favs: loadFavs(), favDel: LS.get('fav-del-v1', {}), notes: LS.get('auction-notes-v1', {}),
   f: { q: '', mk: [], md: [], au: '', cl: '', st: '', y: '', o: '', p: '', quick: '' , sort: 'stat' },
   rf: { q: '', st: '', sort: 'run' },
+  favSort: LS.get('fav-sort', 'run'), flSort: LS.get('flist-sort', 'manual'),
   shown: 24, deferredInstall: null
 };
 
@@ -310,6 +311,32 @@ function lotCard(x) {
 /* ---------- фильтры ---------- */
 const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('7 марок')], ['inop', T('Неходячие')], ['clean', T('Без пометок')], ['title', T('Тайтл на месте')], ['profit', T('Прибыль ') + '> 0'], ['past', T('Были на торгах')], ['notes', T('С заметкой')]];
 const SORTS = [['stat', T('Сначала подборка')], ['prof', T('Прибыль больше')], ['w', T('MMR меньше')], ['wd', T('MMR больше')], ['diff', T('Ретейл − MMR больше')], ['time', T('Аукцион и время')], ['mk', T('Марка, модель, год')], ['ymm', T('Год, марка, модель')], ['run', T('Run номер')], ['o', T('Пробег меньше')], ['new', T('Недавно выставленные')], ['y', T('Год новее')]];
+const STAT_ORDER = { 'Основная': 0, 'Флип': 1, 'Дорого': 2, 'Вне критериев': 3, 'Нет': 4 };
+const nnv = (v, d) => v == null ? d : v;
+const LOT_SORT = {
+  stat: (u, v) => (nnv(STAT_ORDER[u.stat], 9) - nnv(STAT_ORDER[v.stat], 9)) || (nnv(v.prof, -1e9) - nnv(u.prof, -1e9)),
+  prof: (u, v) => nnv(v.prof, -1e9) - nnv(u.prof, -1e9),
+  w: (u, v) => nnv(u.w, 1e9) - nnv(v.w, 1e9),
+  wd: (u, v) => nnv(v.w, -1e9) - nnv(u.w, -1e9),
+  run: (u, v) => { const a1 = runKey(u.run), b1 = runKey(v.run); return String(u.auc).localeCompare(String(v.auc)) || a1[0].localeCompare(b1[0]) || a1[1] - b1[1] || a1[2] - b1[2]; },
+  ymm: (u, v) => (v.y || 0) - (u.y || 0) || String(u.mk || '').localeCompare(String(v.mk || '')) || String(u.md || '').localeCompare(String(v.md || '')),
+  time: (u, v) => slot(u).localeCompare(slot(v)) || LOT_SORT.run(u, v),
+  new: (u, v) => phId(v) - phId(u) || LOT_SORT.run(u, v),
+  mk: (u, v) => String(u.mk || '').localeCompare(String(v.mk || '')) || String(u.md || '').localeCompare(String(v.md || '')) || (v.y || 0) - (u.y || 0),
+  y: (u, v) => (v.y || 0) - (u.y || 0),
+  o: (u, v) => nnv(u.o, 1e9) - nnv(v.o, 1e9),
+  diff: (u, v) => (v.w == null ? -1e9 : v.r - v.w) - (u.w == null ? -1e9 : u.r - u.w)
+};
+// свой порядок (перетаскивание в списке избранного): поле o у записи избранного, синхронизируется вместе с избранным
+const favOrd = f => (f && f.o != null ? f.o : 1e9);
+const FAV_SORTS = () => [['manual', T('Свой порядок')]].concat(SORTS.filter(([k]) => k !== 'stat' && k !== 'new'));
+function sortFavRows(rows, key) {
+  const run = LOT_SORT.run;
+  return rows.sort(key === 'manual' ? (a, b) => favOrd(a[1]) - favOrd(b[1]) || run(a[2], b[2]) : (a, b) => (LOT_SORT[key] || run)(a[2], b[2]) || run(a[2], b[2]));
+}
+function favSortSel(id, cur) {
+  return '<div class="count fav-sort"><span></span><select id="' + id + '" aria-label="' + T('Сортировка') + '">' + FAV_SORTS().map(([k, l]) => '<option value="' + k + '"' + (cur === k ? ' selected' : '') + '>' + l + '</option>').join('') + '</select></div>';
+}
 function applyFilters(list) {
   const f = S.f, q = f.q.toLowerCase().trim(), y = +f.y || 0, o = +f.o || 0, p = +f.p || 0;
   const lotQ = q.replace(/\s/g, '').toUpperCase();
@@ -336,23 +363,7 @@ function applyFilters(list) {
     }
     return true;
   });
-  const order = { 'Основная': 0, 'Флип': 1, 'Дорого': 2, 'Вне критериев': 3, 'Нет': 4 };
-  const nn = (v, d) => v == null ? d : v;
-  const by = {
-    stat: (u, v) => (nn(order[u.stat], 9) - nn(order[v.stat], 9)) || (nn(v.prof, -1e9) - nn(u.prof, -1e9)),
-    prof: (u, v) => nn(v.prof, -1e9) - nn(u.prof, -1e9),
-    w: (u, v) => nn(u.w, 1e9) - nn(v.w, 1e9),
-    wd: (u, v) => nn(v.w, -1e9) - nn(u.w, -1e9),
-    run: (u, v) => { const a1 = runKey(u.run), b1 = runKey(v.run); return String(u.auc).localeCompare(String(v.auc)) || a1[0].localeCompare(b1[0]) || a1[1] - b1[1] || a1[2] - b1[2]; },
-    ymm: (u, v) => (v.y || 0) - (u.y || 0) || String(u.mk || '').localeCompare(String(v.mk || '')) || String(u.md || '').localeCompare(String(v.md || '')),
-    time: (u, v) => slot(u).localeCompare(slot(v)) || by.run(u, v),
-    new: (u, v) => phId(v) - phId(u) || by.run(u, v),
-    mk: (u, v) => String(u.mk || '').localeCompare(String(v.mk || '')) || String(u.md || '').localeCompare(String(v.md || '')) || (v.y || 0) - (u.y || 0),
-    y: (u, v) => (v.y || 0) - (u.y || 0),
-    o: (u, v) => nn(u.o, 1e9) - nn(v.o, 1e9),
-    diff: (u, v) => (v.w == null ? -1e9 : v.r - v.w) - (u.w == null ? -1e9 : u.r - u.w)
-  };
-  a.sort(by[f.sort] || by.stat);
+  a.sort(LOT_SORT[f.sort] || LOT_SORT.stat);
   return a;
 }
 function activeFilterCount() { const f = S.f; return ['au', 'cl', 'st', 'y', 'o', 'p'].filter(k => f[k]).length + (f.mk.length ? 1 : 0) + (f.md.length ? 1 : 0); }
@@ -432,12 +443,12 @@ function picks() {
 async function favScreen() {
   const by = {};
   Object.entries(S.favs).forEach(([id, f]) => { if (f && f.d) (by[f.d] = by[f.d] || []).push(f); });
-  const known = new Set(S.index.dates.map(d => d.id));
+  const known = new Set(S.index.dates.map(d => d.id)), key = S.favSort;
   const ids = Object.keys(by).sort().reverse();
   let h = '', n = 0;
   for (const id of ids) {
     let lots = [];
-    if (known.has(id)) { try { const d = await getDate(id); lots = by[id].map(f => d.map[f.k]).filter(Boolean); } catch (e) {} }
+    if (known.has(id)) { try { const d = await getDate(id); lots = sortFavRows(by[id].map(f => [null, f, d.map[f.k]]).filter(r => r[2]), key).map(r => r[2]); } catch (e) {} }
     const lost = by[id].filter(f => !lots.some(x => x.k === f.k));
     if (!lots.length && !lost.length) continue;
     n += lots.length + lost.length;
@@ -447,29 +458,30 @@ async function favScreen() {
       + lost.map(f => '<p class="muted">' + E(f.t || f.k) + (known.has(id) ? T(' — лота больше нет в каталоге') : T(' — этой даты уже нет в приложении')) + '</p>').join('');
   }
   return '<div class="hd"><h1>' + T('Избранное') + '</h1><p>' + (n ? T('Машин: ') + n + T('. Сохраняется на этом телефоне, для всех дат.') : '') + '</p></div>'
-    + (h || '<p class="empty">' + T('Пока пусто. Нажмите ☆ на карточке машины, чтобы собрать свой список на торги.') + '</p>');
+    + (n ? favSortSel('favsort', key) : '') + (h || '<p class="empty">' + T('Пока пусто. Нажмите ☆ на карточке машины, чтобы собрать свой список на торги.') + '</p>');
 }
 // избранное списком: лот, машина, MMR, общая заметка (по VIN) и заметка для покупки (живёт, пока машина в избранном)
 async function favListScreen() {
   const by = {};
   Object.entries(S.favs).forEach(([id, f]) => { if (f && f.d) (by[f.d] = by[f.d] || []).push([id, f]); });
-  const known = new Set(S.index.dates.map(d => d.id));
+  const known = new Set(S.index.dates.map(d => d.id)), key = S.flSort, man = key === 'manual';
   let h = '', n = 0;
   for (const id of Object.keys(by).sort().reverse()) {
     if (!known.has(id)) continue;
     let d; try { d = await getDate(id); } catch (e) { continue; }
-    const rows = by[id].map(([fid, f]) => [fid, f, d.map[f.k]]).filter(r => r[2]).sort((a, b) => { const u = runKey(a[2].run), v = runKey(b[2].run); return String(a[2].auc).localeCompare(String(b[2].auc)) || u[0].localeCompare(v[0]) || u[1] - v[1] || u[2] - v[2]; });
+    const rows = by[id].map(([fid, f]) => [fid, f, d.map[f.k]]).filter(r => r[2]);
+    sortFavRows(rows, key);
     if (!rows.length) continue;
     n += rows.length;
     const dd = S.index.dates.find(x => x.id === id);
-    h += '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + '</span></h2><div class="flist">'
-      + '<div class="fl-h"><span>' + T('Лот') + '</span><span>' + T('Машина') + '</span><span>MMR</span><span>' + T('Для покупки') + '</span></div>'
-      + rows.map(([fid, f, x]) => {         return '<div class="fl-r"><button class="fl-run" data-lot="' + E(x.k) + '"' + (id !== S.date ? ' data-fd="' + E(id) + '"' : '') + '>' + E(x.run) + '</button>'
+    h += '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + '</span></h2><div class="flist' + (man ? ' man' : '') + '">'
+      + '<div class="fl-h"><span>' + T('Лот') + '</span><span>' + T('Машина') + '</span><span>MMR</span><span>' + T('Для покупки') + '</span><span></span></div>'
+      + rows.map(([fid, f, x]) => {         return '<div class="fl-r" data-fid="' + E(fid) + '"><button class="fl-run" data-lot="' + E(x.k) + '"' + (id !== S.date ? ' data-fd="' + E(id) + '"' : '') + '>' + E(x.run) + '</button>'
           + '<span class="fl-car">' + E(carName(x)) + '</span><span class="fl-mmr">' + (x.est && x.w ? '≈' : '') + M(x.w) + '</span>'
-          + '<textarea class="fl-in buy" rows="1" data-bn="' + E(fid) + '" placeholder="' + T('Для покупки') + '">' + E(f.bn || '') + '</textarea></div>'; }).join('') + '</div>';
+          + '<textarea class="fl-in buy" rows="1" data-bn="' + E(fid) + '" placeholder="' + T('Для покупки') + '">' + E(f.bn || '') + '</textarea><button class="fl-grip" aria-label="' + T('Перетащить') + '" title="' + T('Перетащить') + '"><i></i><i></i><i></i></button></div>'; }).join('') + '</div>';
   }
-  return '<div class="hd"><h1>' + T('Список избранного') + '</h1><p>' + (n ? T('Заметка для покупки удаляется, когда машину убирают из избранного.') : '') + '</p></div>'
-    + (h || '<p class="empty">' + T('Пока пусто. Нажмите ☆ на карточке машины, чтобы собрать свой список на торги.') + '</p>');
+  return '<div class="hd"><h1>' + T('Список избранного') + '</h1><p>' + (n ? T('Заметка для покупки удаляется, когда машину убирают из избранного.') + ' ' + T('Порядок меняется перетаскиванием за ≡ справа.') : '') + '</p></div>'
+    + (n ? favSortSel('flsort', key) : '') + (h || '<p class="empty">' + T('Пока пусто. Нажмите ☆ на карточке машины, чтобы собрать свой список на торги.') + '</p>');
 }
 function setNote(vin, text, x, date) {
   const prev = S.notes[vin]; text = String(text || '').trim();
@@ -819,10 +831,58 @@ document.addEventListener('focusout', e => {
 document.addEventListener('change', e => {
   if (e.target.id === 'sort') { S.f.sort = e.target.value; drawLots(); }
   else if (e.target.id === 'rsort') { S.rf.sort = e.target.value; drawResults(); }
+  else if (e.target.id === 'favsort') { S.favSort = e.target.value; LS.set('fav-sort', S.favSort); keepScroll(render); }
+  else if (e.target.id === 'flsort') { S.flSort = e.target.value; LS.set('flist-sort', S.flSort); keepScroll(render); }
   else if (e.target.id === 'note') saveNote(e.target);
   else if (e.target.matches('.fl-in')) saveListInput(e.target);
   else if (e.target.closest('#f_mk')) { const g = document.querySelector('#f_md .md-g[data-mk="' + CSS.escape(e.target.value) + '"]'); if (g) g.hidden = !e.target.checked; }
 });
+
+// список избранного: свой порядок перетаскиванием за ≡ (мышь и палец). Порядок пишется в избранное и синхронизируется.
+(function () {
+  let row = null, list = null, pid = null, scrollT = null, lastY = 0;
+  function moveTo(y) {
+    lastY = y;
+    const rows = [...list.querySelectorAll('.fl-r')];
+    for (const r of rows) {
+      if (r === row) continue;
+      const b = r.getBoundingClientRect(), mid = b.top + b.height / 2;
+      const before = row.compareDocumentPosition(r) & Node.DOCUMENT_POSITION_PRECEDING;
+      if (before && y < mid) { list.insertBefore(row, r); if (navigator.vibrate) navigator.vibrate(5); return; }
+      if (!before && y > mid) { list.insertBefore(row, r.nextSibling); if (navigator.vibrate) navigator.vibrate(5); }
+    }
+  }
+  function edgeScroll() {
+    clearInterval(scrollT);
+    scrollT = setInterval(() => {
+      if (!row) return clearInterval(scrollT);
+      const d = lastY < 70 ? -12 : lastY > innerHeight - 90 ? 12 : 0;
+      if (d) { window.scrollBy(0, d); moveTo(lastY); }
+    }, 30);
+  }
+  function end() {
+    if (!row) return;
+    clearInterval(scrollT);
+    row.classList.remove('drag'); list.classList.remove('dragging');
+    const now = Date.now();
+    [...list.querySelectorAll('.fl-r')].forEach((r, i) => { const f = S.favs[r.dataset.fid]; if (f && f.o !== i) { f.o = i; f.ts2 = now; } });
+    row = list = pid = null; S.dragging = false;
+    if (S.flSort !== 'manual') { S.flSort = 'manual'; LS.set('flist-sort', 'manual'); const sel = $('#flsort'); if (sel) sel.value = 'manual'; }
+    saveFavs();
+  }
+  document.addEventListener('pointerdown', e => {
+    const g = e.target.closest && e.target.closest('.fl-grip'); if (!g) return;
+    e.preventDefault();
+    row = g.closest('.fl-r'); list = row.parentNode; pid = e.pointerId; S.dragging = true;
+    try { g.setPointerCapture(pid); } catch (er) {}
+    row.classList.add('drag'); list.classList.add('dragging'); lastY = e.clientY; edgeScroll();
+  });
+  document.addEventListener('pointermove', e => { if (row && e.pointerId === pid) { e.preventDefault(); moveTo(e.clientY); } }, { passive: false });
+  document.addEventListener('pointerup', e => { if (row && e.pointerId === pid) end(); });
+  document.addEventListener('pointercancel', e => { if (row && e.pointerId === pid) end(); });
+  // iOS: не даём странице прокручиваться, пока тянем строку
+  document.addEventListener('touchmove', e => { if (row) e.preventDefault(); }, { passive: false });
+})();
 
 // заметки пришли из базы: обновляем то, что на экране, не трогая поле, в котором сейчас пишут
 window.addEventListener('notes-updated', () => {
@@ -832,7 +892,7 @@ window.addEventListener('notes-updated', () => {
   if (typing || sheetOpen) return;
   if (S.tab === 'flist' || S.tab === 'fav' || S.tab === 'home') keepScroll(render); else if (S.tab === 'lots') drawLots(true);
 });
-window.addEventListener('favs-updated', () => { const a = document.activeElement; if (sheetOpen || (a && a.matches && a.matches('textarea,input'))) return; if (S.tab === 'fav' || S.tab === 'flist' || S.tab === 'home') keepScroll(render); else if (S.tab === 'lots') drawLots(true); });
+window.addEventListener('favs-updated', () => { const a = document.activeElement; if (S.dragging || sheetOpen || (a && a.matches && a.matches('textarea,input'))) return; if (S.tab === 'fav' || S.tab === 'flist' || S.tab === 'home') keepScroll(render); else if (S.tab === 'lots') drawLots(true); });
 window.addEventListener('sync-state', () => { if (S.tab === 'more' && !sheetOpen) render(); });
 
 /* ---------- запоминаем экран: вкладка, фильтры, прокрутка, открытый лот ---------- */
