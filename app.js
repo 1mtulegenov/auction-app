@@ -552,7 +552,7 @@ function more() {
   const Y = window.Sync && Sync.st;
   const acc = Y && Y.on ? '<button data-act="auth"><span class="ic">👤</span><span>' + (Y.user ? E(Y.user.name) + '<small>' + E(Y.user.email) + T(' · заметки общие. Нажмите, чтобы выйти') + '</small>' : T('Войти через Google') + '<small>' + (Y.err ? E(Y.err) : T('Чтобы заметки были видны всем и было видно, кто их оставил')) + '</small>') + '</span></button>' : '';
   return '<div class="menu">' + acc + '<button data-act="lang"><span class="ic flag">' + cur[1] + '</span><span>' + T('Язык') + '<small>' + cur[2] + '</small></span></button>'
-    + '<button data-act="notes"><span class="ic">📝</span><span>' + T('Мои заметки') + '<small>' + (notes.length ? notes.length + T(' шт., привязаны к VIN') : T('Пока нет. Пишутся в карточке машины.')) + '</small></span></button>'
+    + '<button data-act="notes"><span class="ic">📝</span><span>' + T('Заметки') + '<small>' + (notes.length ? notes.length + T(' шт., привязаны к VIN') : T('Пока нет. Пишутся в карточке машины.')) + '</small></span></button>'
     + '<button data-act="how"><span class="ic">🧮</span><span>' + T('Как считается прибыль') + '<small>' + T('MMR, сбор, цена продажи, максимальная ставка') + '</small></span></button>'
     + '<button data-act="install"><span class="ic">📲</span><span>' + installTitle() + '<small>' + (isStandalone() ? T('Уже установлено') : platform() === 'desktop' ? T('Windows и Mac, без магазина приложений') : T('iPhone и Android, без App Store')) + '</small></span></button>'
     + '<button data-act="share-app"><span class="ic">🔗</span><span>' + T('Поделиться приложением') + '<small>' + T('Отправить ссылку другу') + '</small></span></button>'
@@ -641,7 +641,7 @@ function saveNote(ta) {
 }
 function notesSheet() {
   const list = Object.entries(S.notes).filter(([, n]) => n && n.text).sort((a, b) => String(b[1].updatedAt || '').localeCompare(String(a[1].updatedAt || '')));
-  openSheet(T('Мои заметки'), list.length ? '<div class="rows">' + list.map(([v, n]) => '<div class="r"><div class="l"><b>' + E(n.car || '') + '</b><br><small>' + fmtDate(n.date) + T(' · лот ') + E(n.run) + ' · <span class="vin">' + E(v) + '</span></small><p style="margin-top:4px">' + E(n.text) + '</p>' + (n.by ? '<small>' + E(noteWho(n)) + '</small>' : '') + '</div></div>').join('') + '</div><div class="btns"><button class="btn pri" data-act="share-notes">' + T('Отправить все заметки') + '</button><button class="btn" data-act="copy-notes">' + T('Скопировать') + '</button></div><p class="muted" style="font-size:13px;margin-top:10px">' + T('Отправьте заметки в чат с Claude, и он учтёт их в следующем анализе.') + '</p>' : '<p class="empty">' + T('Заметок пока нет. Откройте машину и напишите, что увидели на осмотре.') + '</p>', true);
+  openSheet(T('Заметки'), list.length ? '<div class="rows">' + list.map(([v, n]) => '<button class="r" data-nv="' + E(v) + '" data-nd="' + E(n.date || '') + '"><div class="l"><b>' + E(n.car || '') + '</b><br><small>' + fmtDate(n.date) + T(' · лот ') + E(n.run) + ' · <span class="vin">' + E(v) + '</span></small><p style="margin-top:4px">' + E(n.text) + '</p>' + (n.by ? '<small>' + E(noteWho(n)) + '</small>' : '') + '</div></button>').join('') + '</div><div class="btns"><button class="btn pri" data-act="share-notes">' + T('Отправить все заметки') + '</button><button class="btn" data-act="copy-notes">' + T('Скопировать') + '</button></div><p class="muted" style="font-size:13px;margin-top:10px">' + T('Отправьте заметки в чат с Claude, и он учтёт их в следующем анализе.') + '</p>' : '<p class="empty">' + T('Заметок пока нет. Откройте машину и напишите, что увидели на осмотре.') + '</p>', true);
 }
 function notesText() { return Object.entries(S.notes).filter(([, n]) => n && n.text).map(([v, n]) => fmtDate(n.date) + ' ' + (n.run || '') + ' ' + (n.car || '') + ' VIN ' + v + ': ' + n.text).join('\n'); }
 function howSheet() {
@@ -767,6 +767,7 @@ document.addEventListener('click', async e => {
   if (ds.pauc != null) { S.pickAuc = ds.pauc; render(); return; }
   if (ds.quick != null) { S.f.quick = ds.quick; document.querySelectorAll('[data-quick]').forEach(b => b.setAttribute('aria-pressed', b.dataset.quick === ds.quick)); drawLots(); return; }
   if (ds.rst != null) { S.rf.st = ds.rst; document.querySelectorAll('[data-rst]').forEach(b => b.setAttribute('aria-pressed', b.dataset.rst === ds.rst)); drawResults(); return; }
+  if (ds.nv) { const known = S.index.dates.some(d => d.id === ds.nd); if (!known) { toast(T('Этой даты уже нет в приложении')); return; } const d = await getDate(ds.nd), x = d.lots.find(l => l.vin === ds.nv); if (!x) return; closeSheet(); if (ds.nd !== S.date) { await loadDate(ds.nd); render(); } setTimeout(() => detail(x.k), 50); return; }
   if (ds.lot) { if (ds.fd && ds.fd !== S.date) { await loadDate(ds.fd); datesBar(); } detail(ds.lot); return; }
   if (t.id === 'btnFilters') { filterSheet(); return; }
   if (t.id === 'btnTheme') { cycleTheme(); return; }
