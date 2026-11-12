@@ -5,6 +5,13 @@ const LOCALE = { en: 'en-US', ru: 'ru-RU', uk: 'uk-UA', es: 'es-US', kk: 'kk-KZ'
 const LI = { en: 0, uk: 1, es: 2, kk: 3 }[LANG];
 document.documentElement.lang = LANG;
 const I18N = {
+" — лота больше нет в каталоге": [" — lot no longer in the catalog", " — лота більше немає в каталозі", " — el lote ya no está en el catálogo", " — лот каталогта енді жоқ"],
+"Избранное": ["Favorites", "Обране", "Favoritos", "Таңдаулылар"],
+"Добавлено в избранное": ["Added to favorites", "Додано в обране", "Añadido a favoritos", "Таңдаулыларға қосылды"],
+"Убрано из избранного": ["Removed from favorites", "Прибрано з обраного", "Quitado de favoritos", "Таңдаулылардан алынды"],
+" — этой даты уже нет в приложении": [" — this date is no longer in the app", " — цієї дати вже немає в застосунку", " — esta fecha ya no está en la app", " — бұл күн қолданбада енді жоқ"],
+"Машин: ": ["Cars: ", "Машин: ", "Autos: ", "Көліктер: "],
+". Сохраняется на этом телефоне, для всех дат.": [". Saved on this phone, for all dates.", ". Зберігається на цьому телефоні, для всіх дат.", ". Se guarda en este teléfono, para todas las fechas.", ". Осы телефонда, барлық күндер үшін сақталады."],
 "ретейл, оценка": ["retail, estimate", "ретейл, оцінка", "retail, estimado", "ретейл, бағалау"],
 "MMR, оценка": ["MMR, estimate", "MMR, оцінка", "MMR, estimado", "MMR, бағалау"],
 "Новый лот: Manheim ещё не смотрели. MMR и ретейл оценены по похожим машинам с прошлых торгов.": ["New lot: not checked on Manheim yet. MMR and retail are estimated from similar cars at past auctions.", "Новий лот: Manheim ще не дивилися. MMR і ретейл оцінені за схожими машинами з минулих торгів.", "Lote nuevo: aún no se revisó en Manheim. MMR y retail estimados según autos similares de subastas pasadas.", "Жаңа лот: Manheim әлі қаралмады. MMR мен ретейл өткен саудалардағы ұқсас көліктер бойынша бағаланды."],

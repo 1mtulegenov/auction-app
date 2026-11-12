@@ -58,8 +58,8 @@ button.tile{width:100%}
 .count select{border:0;background:transparent;color:var(--accent);font-weight:600;font-size:13px;text-align:right;max-width:60%}
 
 /* lot card */
-.list{display:grid;gap:12px}
-@media(min-width:760px){.list{grid-template-columns:1fr 1fr}}
+.list{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:760px){.list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .lot{position:relative;background:var(--card);border:1px solid var(--cardline);border-radius:16px;padding:14px 16px 14px;box-shadow:var(--cardshadow);text-align:left;width:100%;display:block;color:inherit;cursor:pointer;transition:transform .08s}
 .lot:active{transform:scale(.99)}
 .lot-top{display:flex;align-items:center;gap:8px;padding-right:38px;font-size:13px;color:var(--muted);min-width:0}
@@ -71,7 +71,7 @@ button.tile{width:100%}
 .sub{font-size:13.5px;color:var(--muted)}
 .star{position:absolute;top:6px;right:6px;width:42px;height:42px;border:0;background:transparent;font-size:21px;color:var(--faint);border-radius:21px;line-height:1}
 .star.on{color:#e0a800}
-.money{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:8px;margin-top:12px;padding:10px 12px;background:var(--well);border-radius:12px;font-variant-numeric:tabular-nums}
+.money{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:12px;padding:10px 12px;background:var(--well);border-radius:12px;font-variant-numeric:tabular-nums}
 .money span{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
 .money b{display:block;font:700 16px var(--fc);margin-top:1px}
 .money .m-main b{font-size:20px;color:var(--ink)}
@@ -93,7 +93,7 @@ button.tile{width:100%}
 
 /* sheet */
 .sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:40}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--bg);border-radius:16px 16px 0 0;max-height:94vh;overflow-y:auto;overscroll-behavior:contain;padding:0 16px calc(20px + var(--sab));box-shadow:0 -8px 30px rgba(0,0,0,.2);max-width:900px;margin:0 auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--bg);border-radius:16px 16px 0 0;max-height:94vh;max-height:94dvh;overflow-y:auto;overscroll-behavior:contain;padding:0 16px calc(20px + var(--sab));box-shadow:0 -8px 30px rgba(0,0,0,.2);max-width:900px;margin:0 auto}
 .sheet.full{top:0;max-height:none;border-radius:0;padding-top:var(--sat)}
 .sheet-h{position:sticky;top:0;background:var(--bg);display:flex;align-items:center;gap:8px;padding:10px 0 8px;z-index:2;border-bottom:1px solid var(--line);margin-bottom:10px}
 .sheet-h h2{margin:0;font-size:17px;flex:1;min-width:0}
@@ -189,7 +189,7 @@ textarea.note.has{border-color:var(--warn);background:var(--warnb)}
 .w-warn{font-size:15px;margin-bottom:12px}
 .w-skip{margin-top:18px;border:0;background:transparent;color:var(--muted);font-size:14px;text-decoration:underline;padding:10px}
 
-.lot{content-visibility:auto;contain-intrinsic-size:auto 230px}
+.lot{min-width:0}
 
 .fees{background:var(--card);border:1px solid var(--cardline);border-radius:14px;padding:12px 14px;margin:0 0 12px;box-shadow:var(--cardshadow)}
 .fees-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.fees-h>b{font-size:15px}.fees-h span{font-size:13px;color:var(--muted)}.fees-h span b{color:var(--ink);font-size:15px}
@@ -266,7 +266,11 @@ html[data-font="mono"]{--f:'IBM Plex Mono',ui-monospace,Menlo,monospace;--fc:'IB
 .to-top{position:fixed;right:16px;bottom:calc(70px + var(--sab));z-index:35;width:46px;height:46px;border-radius:23px;border:1px solid var(--line);background:var(--card);color:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.18)}
 .to-top[hidden]{display:none}
 @media (min-width:1024px){.to-top{bottom:24px;right:24px}}
-.money.two{grid-template-columns:1fr 1fr}
+.money.two{grid-template-columns:repeat(2,minmax(0,1fr))}
 
 .scan .scan-line{position:absolute;z-index:2;left:50%;transform:translateX(-50%);top:calc(47% + 14px);max-width:90%;height:34px;background:#fff;border-radius:6px}
 .note-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}.note-bar .btn{flex:none;padding:8px 16px}
+
+/* iOS: не увеличивать страницу при фокусе на полях; ничего не шире экрана */
+html,body{max-width:100%;overflow-x:clip}
+@media (hover:none){input,select,textarea{font-size:max(16px,1em)}.count select{font-size:16px}}

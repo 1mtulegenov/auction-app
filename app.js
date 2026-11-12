@@ -38,11 +38,21 @@ const LS = {
 const S = {
   index: null, date: null, d: null, cache: {},
   tab: 'home', picks: 'core',
-  favs: LS.get('fav-v1', {}), notes: LS.get('auction-notes-v1', {}),
+  favs: loadFavs(), notes: LS.get('auction-notes-v1', {}),
   f: { q: '', mk: [], md: [], au: '', cl: '', st: '', y: '', o: '', p: '', quick: '' , sort: 'stat' },
   rf: { q: '', st: '', sort: 'run' },
   shown: 24, deferredInstall: null
 };
+
+/* ---------- избранное ----------
+   Хранится на телефоне, общее для всех дат: ключ — VIN (если есть), иначе «дата|площадка|лот».
+   Старый формат fav-v1 (ключ «дата|лот») переносится один раз. */
+function loadFavs() {
+  let f = LS.get('fav-v2', null);
+  if (!f) { f = {}; const old = LS.get('fav-v1', {}); Object.keys(old).forEach(k => { const i = k.indexOf('|'); f[k] = { d: k.slice(0, i), k: k.slice(i + 1), ts: Date.now() }; }); LS.set('fav-v2', f); }
+  return f;
+}
+function saveFavs() { LS.set('fav-v2', S.favs); try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {} }
 
 /* ---------- данные ---------- */
 async function getJSON(url, fresh) {
@@ -58,12 +68,16 @@ async function loadIndex(fresh) {
   LS.set('data-ver', idx.version);
   return idx;
 }
-async function loadDate(id) {
+async function getDate(id) {
   if (!S.cache[id]) {
     const d = await getJSON('data/' + id + '.json?v=' + S.index.version);
-    d.map = {}; d.lots.forEach(x => { x.k = x.auc + '|' + x.run; d.map[x.k] = x; });
+    d.map = {}; d.lots.forEach(x => { x.k = x.auc + '|' + x.run; x._d = id; d.map[x.k] = x; });
     applyFees(d); S.cache[id] = d;
   }
+  return S.cache[id];
+}
+async function loadDate(id) {
+  await getDate(id);
   S.date = id; S.d = S.cache[id]; LS.set('cur-date', id);
 }
 const KK_M = ['қаңтар', 'ақпан', 'наурыз', 'сәуір', 'мамыр', 'маусым', 'шілде', 'тамыз', 'қыркүйек', 'қазан', 'қараша', 'желтоқсан'], KK_W = ['жексенбі', 'дүйсенбі', 'сейсенбі', 'сәрсенбі', 'бейсенбі', 'жұма', 'сенбі'];
@@ -189,8 +203,8 @@ function carTitle(x) {
 }
 function fmtDate(id) { const p = String(id || '').split('-'); return p.length === 3 ? p[2] + '.' + p[1] : ''; }
 function lotUrl(x) { return x.u ? x.u : x.s ? 'https://www.edgepipeline.com/components/vehicle/detail/' + x.s : ''; }
-function favKey(x) { return S.date + '|' + x.k; }
-function isFav(x) { return !!S.favs[favKey(x)]; }
+function favKey(x) { return (x._d || S.date) + '|' + x.k; }
+function isFav(x) { return !!((x.vin && S.favs[x.vin]) || S.favs[favKey(x)]); }
 function noteOf(x) { const n = x.vin && S.notes[x.vin]; return n && n.text ? n : null; }
 // номер лота = линия + номер: «D-0054» → ['D', 0, 54], «11-0078» → ['', 11, 78]
 function runKey(r) { const m = String(r || '').replace(/\s/g, '').match(/^([A-Za-z]*)(\d*)[-\/]?(\d*)$/); return m ? [m[1].toUpperCase(), +m[2] || 0, +m[3] || 0] : [String(r || ''), 0, 0]; }
@@ -276,10 +290,10 @@ function phId(x) { if (!x.ph) return -1; const p = x.ph.split('/'); return +(p[1
 function photoUrl(x) { if (!x.ph) return ''; const p = x.ph.split('/'); const sf = p.length > 3 ? p.pop() : '00'; return 'https://file3.autolookout.net/' + p.join('/') + '/O3Jlc29sdXRpb246NDAweDMwMDs=/' + sf; }
 function photo(x, cls, lazy) { const u = photoUrl(x); return u ? '<img class="' + cls + '" src="' + u + '" alt="" referrerpolicy="no-referrer" decoding="async"' + (lazy ? ' loading="lazy"' : '') + ' onerror="this.remove()">' : ''; }
 function lotCard(x) {
-  const n = noteOf(x), v = VERDICT[x.stat], fav = isFav(x);
-  return '<article class="lot' + (x.past && x.past.length ? ' seen ' + seenLv(x) : '') + '" role="button" tabindex="0" data-lot="' + E(x.k) + '">'
+  const n = noteOf(x), v = VERDICT[x.stat], fav = isFav(x), fd = x._d && x._d !== S.date ? ' data-fd="' + E(x._d) + '"' : '';
+  return '<article class="lot' + (x.past && x.past.length ? ' seen ' + seenLv(x) : '') + '" role="button" tabindex="0" data-lot="' + E(x.k) + '"' + fd + '>'
     + '<div class="lot-top"><span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + slot(x) + '</span>' + (v ? '<span class="verdict ' + v[0] + '">' + v[1] + '</span>' : '') + '</div>'
-    + '<button class="star' + (fav ? ' on' : '') + '" data-fav="' + E(x.k) + '" aria-label="' + T('В избранное') + '" aria-pressed="' + fav + '">' + (fav ? '★' : '☆') + '</button>'
+    + '<button class="star' + (fav ? ' on' : '') + '" data-fav="' + E(x.k) + '"' + fd + ' aria-label="' + T('В избранное') + '" aria-pressed="' + fav + '">' + (fav ? '★' : '☆') + '</button>'
     + '<div class="lot-id">' + photo(x, 'thumb', true) + '<div><h3>' + E(carTitle(x)) + '</h3>'
     + '<p class="sub">' + [x.o > 500 ? N(x.o) + ' mi' : '', COLOR[x.c] || String(x.c || '').toLowerCase()].filter(Boolean).map(E).join(' · ') + '</p></div></div>'
     + (isInop(x) ? '<div class="money inop"><div class="m-main"><span>MMR</span><b>' + M(x.w) + '</b></div><div class="m-note">' + T('Неходячая: прибыль не считаем') + '</div></div>' : '<div class="money two"><div class="m-main"><span>' + (x.est ? T('MMR, оценка') : 'MMR') + '</span><b>' + (x.est && x.w != null ? '≈' : '') + M(x.w) + '</b></div><div class="m-main"><span>' + T('Ретейл') + '</span><b>' + (x.est && x.r != null ? '≈' : '') + M(x.r) + '</b></div></div>')
@@ -344,13 +358,14 @@ function activeFilterCount() { const f = S.f; return ['au', 'cl', 'st', 'y', 'o'
 /* ---------- экраны ---------- */
 const ICONS = {
   home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>',
+  fav: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>',
   picks: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>',
   lots: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/></svg>',
   results: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
   more: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>'
 };
 function tabs() {
-  const t = [['home', T('Главное')], ['picks', T('Подборка')], ['lots', T('Все лоты')]];
+  const t = [['home', T('Главное')], ['fav', T('Избранное')], ['lots', T('Все лоты')]];
   if (S.d && S.d.results) t.push(['results', T('Итоги')]);
   t.push(['more', T('Ещё')]);
   if (S.tab === 'results' && !(S.d && S.d.results)) S.tab = 'home';
@@ -367,6 +382,7 @@ function render() {
   const v = $('#view');
   if (S.tab === 'home') v.innerHTML = home();
   else if (S.tab === 'picks') v.innerHTML = picks();
+  else if (S.tab === 'fav') { v.innerHTML = '<p class="empty">…</p>'; favScreen().then(h => { if (S.tab === 'fav') v.innerHTML = h; }); }
   else if (S.tab === 'lots') { v.innerHTML = lotsScreen(); drawLots(S.keepShown ? true : undefined); }
   else if (S.tab === 'results') { v.innerHTML = resultsScreen(); drawResults(); }
   else v.innerHTML = more();
@@ -388,7 +404,7 @@ function home() {
     + '<button class="tile" data-go="lots" data-quick=""><b>' + d.lots.length + '</b><span>' + T('лотов в каталоге') + '</span></button>'
     + '<button class="tile" data-go="picks" data-pick="core"><b>' + d.core.length + '</b><span>' + T('дороже $5 000 в подборке') + '</span></button>'
     + '<button class="tile" data-go="picks" data-pick="flip"><b>' + d.flip.length + '</b><span>' + T('для флипа до $5 000') + '</span></button>'
-    + '<button class="tile" data-go="picks" data-pick="fav"><b>' + favN + '</b><span>' + T('в избранном') + (notesN ? T(', заметок ') + notesN : '') + '</span></button>'
+    + '<button class="tile" data-go="fav"><b>' + favN + '</b><span>' + T('в избранном') + (notesN ? T(', заметок ') + notesN : '') + '</span></button>'
     + '</div>'
     + (Object.keys(aucs).length > 1 ? '<h2>' + T('Площадки') + '</h2><div class="rows">' + Object.entries(aucs).map(([a, o]) => '<button class="r" data-go="lots" data-au="' + a + '"><div class="l"><b>' + E(AUC[a] || a) + '</b><br><small>' + T('старт около ') + o.t + '</small></div><div class="rt"><b>' + o.n + '</b><small>' + T('лотов') + '</small></div></button>').join('') + '</div>' : '')
     + (best.length ? '<h2>' + T('Лучшие по прибыли') + '</h2><div class="list" id="bestList">' + best.map(lotCard).join('') + '</div><button class="more" data-go="picks">' + T('Вся подборка') + '</button>' : '')
@@ -397,8 +413,9 @@ function home() {
 function bestLots() { const d = S.d; return d.core.concat(d.flip).map(k => d.map[k]).filter(Boolean).sort((a, b) => (b.prof || 0) - (a.prof || 0)).slice(0, 6); }
 function picks() {
   const d = S.d;
-  const seg = [['core', '$5 000+', d.core.length], ['flip', T('Флип'), d.flip.length], ['fav', T('★ Мои'), d.lots.filter(isFav).length]];
-  let list = S.picks === 'fav' ? d.lots.filter(isFav) : (d[S.picks] || []).map(k => d.map[k]).filter(Boolean);
+  if (S.picks === 'fav') S.picks = 'core';
+  const seg = [['core', '$5 000+', d.core.length], ['flip', T('Флип'), d.flip.length]];
+  let list = (d[S.picks] || []).map(k => d.map[k]).filter(Boolean);
   const aucs = [...new Set(list.map(x => x.auc))];
   const pa = S.pickAuc && aucs.includes(S.pickAuc) ? S.pickAuc : '';
   if (pa) list = list.filter(x => x.auc === pa);
@@ -406,6 +423,27 @@ function picks() {
     + (aucs.length > 1 ? '<div class="qf">' + [''].concat(aucs).map(a => '<button data-pauc="' + a + '" aria-pressed="' + (pa === a) + '">' + (a ? E(AUC[a] || a) : T('Все площадки')) + '</button>').join('') + '</div>' : '')
     + (list.length ? '<div class="list">' + list.map(lotCard).join('') + '</div>'
       : '<p class="empty">' + (S.picks === 'fav' ? T('Пока пусто. Нажмите ☆ на карточке машины, чтобы собрать свой список на торги.') : T('В подборке на эту дату машин нет.')) + '</p>');
+}
+// избранное со всех дат: ближайшие торги сверху
+async function favScreen() {
+  const by = {};
+  Object.entries(S.favs).forEach(([id, f]) => { if (f && f.d) (by[f.d] = by[f.d] || []).push(f); });
+  const known = new Set(S.index.dates.map(d => d.id));
+  const ids = Object.keys(by).sort().reverse();
+  let h = '', n = 0;
+  for (const id of ids) {
+    let lots = [];
+    if (known.has(id)) { try { const d = await getDate(id); lots = by[id].map(f => d.map[f.k]).filter(Boolean); } catch (e) {} }
+    const lost = by[id].filter(f => !lots.some(x => x.k === f.k));
+    if (!lots.length && !lost.length) continue;
+    n += lots.length + lost.length;
+    const dd = S.index.dates.find(d => d.id === id);
+    h += '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + (dd ? ' <span class="muted">' + E(shortAuc(dd.title)) + '</span>' : '') + '</h2>'
+      + (lots.length ? '<div class="list">' + lots.map(lotCard).join('') + '</div>' : '')
+      + lost.map(f => '<p class="muted">' + E(f.t || f.k) + (known.has(id) ? T(' — лота больше нет в каталоге') : T(' — этой даты уже нет в приложении')) + '</p>').join('');
+  }
+  return '<div class="hd"><h1>' + T('Избранное') + '</h1><p>' + (n ? T('Машин: ') + n + T('. Сохраняется на этом телефоне, для всех дат.') : '') + '</p></div>'
+    + (h || '<p class="empty">' + T('Пока пусто. Нажмите ☆ на карточке машины, чтобы собрать свой список на торги.') + '</p>');
 }
 function lotsScreen() {
   const fc = activeFilterCount();
@@ -662,19 +700,22 @@ async function copy(text) {
 function applyTheme() { const t = LS.get('theme', ''); if (t) document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
 function cycleTheme() { const t = LS.get('theme', ''); LS.set('theme', t === '' ? 'dark' : t === 'dark' ? 'light' : ''); applyTheme(); toast({ dark: T('Тёмная тема'), light: T('Светлая тема'), '': T('Тема как в системе') }[LS.get('theme', '')]); if (!['home','picks','lots','results'].includes(S.tab)) render(); }
 function go(tab) { S.tab = tab; LS.set('tab', tab); render(); window.scrollTo(0, 0); topBtn(); saveView(); }
-function toggleFav(k) {
-  const x = S.d.map[k]; if (!x) return;
-  const fk = favKey(x); if (S.favs[fk]) delete S.favs[fk]; else S.favs[fk] = 1;
-  LS.set('fav-v1', S.favs);
-  document.querySelectorAll('[data-fav="' + CSS.escape(k) + '"]').forEach(b => { const on = !!S.favs[fk]; if (b.classList.contains('star')) { b.classList.toggle('on', on); b.textContent = on ? '★' : '☆'; b.setAttribute('aria-pressed', on); } else b.textContent = on ? T('★ В избранном') : T('☆ В избранное'); });
-  if (S.tab === 'picks' && S.picks === 'fav' && !sheetOpen) render();
+function toggleFav(k, fd) {
+  const d = fd && S.cache[fd] ? S.cache[fd] : S.d, x = d.map[k]; if (!x) return;
+  const fk = favKey(x), on = !isFav(x);
+  if (on) S.favs[x.vin || fk] = { d: x._d || S.date, k: x.k, t: carTitle(x), ts: Date.now() };
+  else { if (x.vin) delete S.favs[x.vin]; delete S.favs[fk]; }
+  saveFavs();
+  toast(on ? T('Добавлено в избранное') : T('Убрано из избранного'));
+  document.querySelectorAll('[data-fav="' + CSS.escape(k) + '"]').forEach(b => { if ((b.dataset.fd || '') !== (fd || '')) return; if (b.classList.contains('star')) { b.classList.toggle('on', on); b.textContent = on ? '★' : '☆'; b.setAttribute('aria-pressed', on); } else b.textContent = on ? T('★ В избранном') : T('☆ В избранное'); });
+  if (S.tab === 'fav' && !sheetOpen) render();
 }
 
 document.addEventListener('click', async e => {
   const t = e.target.closest('button,[data-lot],a'); if (!t) return;
   if (e.target === $('#sheetBg')) return;
   const ds = t.dataset;
-  if (ds.fav) { e.stopPropagation(); toggleFav(ds.fav); return; }
+  if (ds.fav) { e.stopPropagation(); toggleFav(ds.fav, ds.fd); return; }
   if (ds.lang) { LS.set('lang', ds.lang); location.reload(); return; }
   if (ds.ff) { setFont('f', ds.ff); return; }
   if (ds.fz) { setFont('z', +ds.fz); return; }
@@ -685,7 +726,7 @@ document.addEventListener('click', async e => {
   if (ds.pauc != null) { S.pickAuc = ds.pauc; render(); return; }
   if (ds.quick != null) { S.f.quick = ds.quick; document.querySelectorAll('[data-quick]').forEach(b => b.setAttribute('aria-pressed', b.dataset.quick === ds.quick)); drawLots(); return; }
   if (ds.rst != null) { S.rf.st = ds.rst; document.querySelectorAll('[data-rst]').forEach(b => b.setAttribute('aria-pressed', b.dataset.rst === ds.rst)); drawResults(); return; }
-  if (ds.lot) { detail(ds.lot); return; }
+  if (ds.lot) { if (ds.fd && ds.fd !== S.date) { await loadDate(ds.fd); datesBar(); } detail(ds.lot); return; }
   if (t.id === 'btnFilters') { filterSheet(); return; }
   if (t.id === 'btnTheme') { cycleTheme(); return; }
   switch (ds.act) {
@@ -717,7 +758,7 @@ document.addEventListener('click', async e => {
     case 'font': fontSheet(); break;
   }
 });
-document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.lot[data-lot]')) { e.preventDefault(); detail(e.target.dataset.lot); } if (e.key === 'Escape' && sheetOpen) closeSheet(); if (e.key === '/' && !sheetOpen && !e.target.matches('input,textarea,select') && $('#q')) { e.preventDefault(); $('#q').focus(); } });
+document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.lot[data-lot]')) { e.preventDefault(); e.target.click(); } if (e.key === 'Escape' && sheetOpen) closeSheet(); if (e.key === '/' && !sheetOpen && !e.target.matches('input,textarea,select') && $('#q')) { e.preventDefault(); $('#q').focus(); } });
 $('#sheetBg').addEventListener('click', () => closeSheet());
 let qT;
 document.addEventListener('input', e => {
@@ -783,7 +824,7 @@ async function start() {
     const jump = seenNewest && seenNewest !== newest;
     await loadDate(jump ? newest : first);
     LS.set('seen-newest', newest);
-    const tb = LS.get('tab', 'home'); S.tab = ['home', 'picks', 'lots', 'results', 'more'].includes(tb) ? tb : 'home';
+    const tb = LS.get('tab', 'home'); S.tab = ['home', 'fav', 'picks', 'lots', 'results', 'more'].includes(tb) ? tb : 'home';
     // возвращаемся туда, где были: фильтры, прокрутка, открытый лот
     const sv = LS.get('view-v1', null);
     const same = sv && !jump && sv.date === S.date;
