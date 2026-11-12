@@ -463,14 +463,12 @@ async function favListScreen() {
     n += rows.length;
     const dd = S.index.dates.find(x => x.id === id);
     h += '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + '</span></h2><div class="flist">'
-      + '<div class="fl-h"><span>' + T('Лот') + '</span><span>' + T('Машина') + '</span><span>MMR</span><span>' + T('Заметка') + '</span><span>' + T('Для покупки') + '</span></div>'
-      + rows.map(([fid, f, x]) => { const nt = noteOf(x);
-        return '<div class="fl-r"><button class="fl-run" data-lot="' + E(x.k) + '"' + (id !== S.date ? ' data-fd="' + E(id) + '"' : '') + '>' + E(x.run) + '</button>'
+      + '<div class="fl-h"><span>' + T('Лот') + '</span><span>' + T('Машина') + '</span><span>MMR</span><span>' + T('Для покупки') + '</span></div>'
+      + rows.map(([fid, f, x]) => {         return '<div class="fl-r"><button class="fl-run" data-lot="' + E(x.k) + '"' + (id !== S.date ? ' data-fd="' + E(id) + '"' : '') + '>' + E(x.run) + '</button>'
           + '<span class="fl-car">' + E(carName(x)) + '</span><span class="fl-mmr">' + (x.est && x.w ? '≈' : '') + M(x.w) + '</span>'
-          + (x.vin ? '<div class="fl-gn"><textarea class="fl-in" rows="1" data-gn="' + E(x.vin) + '" data-d="' + E(id) + '" data-k="' + E(x.k) + '" placeholder="' + T('Заметка') + '">' + E(nt ? nt.text : '') + '</textarea>' + (nt && nt.by ? '<small class="fl-who">' + E(noteWho(nt)) + '</small>' : '') + '</div>' : '<span class="muted fl-in">' + T('нет VIN') + '</span>')
           + '<textarea class="fl-in buy" rows="1" data-bn="' + E(fid) + '" placeholder="' + T('Для покупки') + '">' + E(f.bn || '') + '</textarea></div>'; }).join('') + '</div>';
   }
-  return '<div class="hd"><h1>' + T('Список избранного') + '</h1><p>' + (n ? T('Заметка общая для машины (по VIN). Заметка для покупки удаляется, когда машину убирают из избранного.') : '') + '</p></div>'
+  return '<div class="hd"><h1>' + T('Список избранного') + '</h1><p>' + (n ? T('Заметка для покупки удаляется, когда машину убирают из избранного.') : '') + '</p></div>'
     + (h || '<p class="empty">' + T('Пока пусто. Нажмите ☆ на карточке машины, чтобы собрать свой список на торги.') + '</p>');
 }
 function setNote(vin, text, x, date) {

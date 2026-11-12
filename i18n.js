@@ -229,6 +229,7 @@ const I18N = {
 "Войти с другой почтой": ["Use another email", "Увійти з іншою поштою", "Usar otro correo", "Басқа поштамен кіру"],
 "Нет связи. Для первого входа нужен интернет.": ["No connection. The first sign-in needs internet.", "Немає зв'язку. Для першого входу потрібен інтернет.", "Sin conexión. El primer inicio de sesión necesita internet.", "Байланыс жоқ. Алғашқы кіру үшін интернет керек."],
 "Этой даты уже нет в приложении": ["This date is no longer in the app", "Цієї дати вже немає в застосунку", "Esta fecha ya no está en la app", "Бұл күн қолданбада жоқ"],
+"Заметка для покупки удаляется, когда машину убирают из избранного.": ["The purchase note is deleted when the car is removed from favorites.", "Нотатка для покупки видаляється, коли авто прибирають з обраного.", "La nota de compra se borra al quitar el auto de favoritos.", "Сатып алу жазбасы таңдаулыдан алынғанда өшеді."],
 "Не продана": [
 "Not sold",
 "Не продано",
