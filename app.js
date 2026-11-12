@@ -21,7 +21,7 @@ const SEVEN = /^(Toyota|Honda|Hyundai|BMW|Volkswagen|Kia|Mercedes)/i;
 const COLOR = { BLACK: T('чёрный'), WHITE: T('белый'), GRAY: T('серый'), GREY: T('серый'), SILVER: T('серебристый'), RED: T('красный'), BLUE: T('синий'), BROWN: T('коричневый'), TAN: T('бежевый'), BEIGE: T('бежевый'), GOLD: T('золотистый'), GREEN: T('зелёный'), PURPLE: T('фиолетовый'), BURGUNDY: T('бордовый'), MAROON: T('бордовый'), ORANGE: T('оранжевый'), YELLOW: T('жёлтый'), TEAL: T('бирюзовый') };
 const CLS = { salvage: ['bad', T('Salvage, rebuilt или без тайтла')], noinop: ['bad', T('Не на ходу или нет ключа')], hist: ['warn', T('Пометка на чистом тайтле')], clean: ['good', T('Без пометок')] };
 const STAT = { 'Основная': 's-main', 'Флип': 's-flip', 'Дорого': 's-exp' };
-const SS = { sold: T('Продана'), offer: T('Buy Now / оффер'), none: T('Не продана'), gone: T('Снята'), rerun: T('Снова на торгах') };
+const SS = { sold: T('Продана'), offer: T('На оффере'), none: T('Не продана'), gone: T('Снята'), rerun: T('Снова на торгах') };
 const HOT_R0 = /двигател|коробк|раздатк|дифференциал|не на ходу|engine|transmission|motor|trans\b|drivetrain/i, HOT_OK = /зелёный свет|гаранти|guarant|gty|green light|engine runs|eng starts|вернуть при проблеме/i;
 const HOT_R = { test: t => HOT_R0.test(t) && !HOT_OK.test(t) };
 const HOT_Y = /град|рам|кузов|structural|frame|hail|крыш|подушк|airbag|утоплен|flood|salvage|rebuilt|тотал|odometer|tmu/i;
@@ -228,7 +228,7 @@ function titleChip(x) {
 function factText(x) {
   if (!S.d.results) return '';
   if (x.fact) { const pr = x.sale != null && !isInop(x) ? x.sale - x.fact - FEE : null; return '<p class="fact"><b>' + T('Продана за ') + M(x.fact) + '</b>' + (x.w ? ', ' + Math.round(100 * x.fact / x.w) + T('% от MMR') : '') + (pr != null ? T('. Прибыль была бы ') + M(pr) : '') + (x.max != null ? (x.max >= x.fact ? T('. Наша ставка брала.') : T('. Наша ставка не брала.')) : '') + '</p>'; }
-  if (x.ss) return '<p class="fact">' + E(SS[x.ss] || x.ss) + (x.ss === 'offer' && x.bnf ? ', ' + M(x.bnf) : '') + (x.ss === 'rerun' && x.rr ? T(', лот ') + E(x.rr) : '') + '</p>';
+  if (x.ss) return '<p class="fact">' + E(SS[x.ss] || x.ss) + (x.ss === 'offer' && x.bnf ? ': ' + M(x.bnf) + (x.w ? ', ' + Math.round(100 * x.bnf / x.w) + T('% от MMR') : '') : '') + (x.ss === 'rerun' && x.rr ? T(', лот ') + E(x.rr) : '') + '</p>';
   return '';
 }
 
@@ -484,7 +484,7 @@ function filterSheet() {
 function resultsScreen() {
   const s = S.d.stats || {}, g = o => o && o.r != null ? o.r + '% <small>(' + o.n + ')</small>' : '—';
   return '<div class="hd"><h1>' + T('Итоги торгов') + '</h1><p>' + T('Сколько машины реально стоили относительно MMR.') + '</p></div>'
-    + '<div class="tiles"><div class="tile"><b>' + (s.n ?? '—') + '</b><span>' + T('продано') + (s.u != null ? T(', не продано ') + s.u : '') + '</span></div>'
+    + '<div class="tiles"><div class="tile"><b>' + (s.n ?? '—') + '</b><span>' + T('продано') + (s.off ? T(', на оффере ') + s.off : '') + (s.u != null ? T(', не продано ') + s.u : '') + '</span></div>'
     + '<div class="tile"><b>' + (s.w ?? '—') + '%</b><span>' + T('медиана: цена к MMR') + (s.wn ? ', ' + s.wn + T(' лотов') : '') + '</span></div>'
     + '<div class="tile"><b>' + (s.ps ?? '—') + T(' из ') + (s.pn ?? '—') + '</b><span>' + T('машин подборки продано') + '</span></div>'
     + '<div class="tile"><b>' + (s.pw ?? '—') + '</b><span>' + T('ушли не дороже нашей ставки') + '</span></div></div>'
@@ -502,7 +502,7 @@ function drawResults(keep) {
   if (!keep) S.rshown = 80;
   $('#rcnt').textContent = T('Показано ') + Math.min(a.length, S.rshown) + T(' из ') + a.length;
   $('#rlist').innerHTML = a.slice(0, S.rshown).map(x => { const k = x.auc + '|' + x.run, has = S.d.map[k], d1 = df(x);
-    return '<' + (has ? 'button data-lot="' + E(k) + '"' : 'div') + ' class="r"><div class="l"><b>' + E(x.run) + '</b> <small>' + E(AUC[x.auc] || x.auc) + '</small><br>' + E(x.d) + '<br><small>' + (x.o ? N(x.o) + ' mi · ' : '') + (x.g ? T('оценка ') + E(x.g) + ' · ' : '') + 'MMR ' + M(m(x)) + '</small></div><div class="rt"><b>' + (x.fact ? M(x.fact) : E(SS[x.ss] || '—')) + '</b>' + (d1 != null ? '<small class="' + (d1 > 0 ? 'pos' : d1 < 0 ? 'neg' : '') + '">' + (d1 > 0 ? '+' : '') + M(d1) + ' · ' + Math.round(100 * x.fact / m(x)) + '%</small>' : '') + '</div></' + (has ? 'button' : 'div') + '>'; }).join('') || '<p class="empty">' + T('Ничего не нашлось.') + '</p>';
+    return '<' + (has ? 'button data-lot="' + E(k) + '"' : 'div') + ' class="r"><div class="l"><b>' + E(x.run) + '</b> <small>' + E(AUC[x.auc] || x.auc) + '</small><br>' + E(x.d) + '<br><small>' + (x.o ? N(x.o) + ' mi · ' : '') + (x.g ? T('оценка ') + E(x.g) + ' · ' : '') + 'MMR ' + M(m(x)) + '</small></div><div class="rt"><b>' + (x.fact ? M(x.fact) : x.ss === 'offer' && x.bnf ? M(x.bnf) : E(SS[x.ss] || '—')) + '</b>' + (x.fact || (x.ss === 'offer' && x.bnf) ? '<small class="st' + (x.fact ? '' : ' off') + '">' + E(x.fact ? SS.sold : SS.offer) + '</small>' : '') + (d1 != null ? '<small class="' + (d1 > 0 ? 'pos' : d1 < 0 ? 'neg' : '') + '">' + (d1 > 0 ? '+' : '') + M(d1) + ' · ' + Math.round(100 * x.fact / m(x)) + '%</small>' : '') + '</div></' + (has ? 'button' : 'div') + '>'; }).join('') || '<p class="empty">' + T('Ничего не нашлось.') + '</p>';
   $('#rmore').innerHTML = a.length > S.rshown ? '<button class="more" data-act="rmore">' + T('Показать ещё') + '</button>' : '';
 }
 function more() {
@@ -554,6 +554,7 @@ function detail(k) {
   if (x.cls) chips += '<span class="chip ' + (CLS[x.cls] || CLS.clean)[0] + '">' + (CLS[x.cls] || CLS.clean)[1] + '</span>';
   if (ch) chips += '<span class="chip ' + ch[0] + '">' + T('Шанс купить: ') + ch[1] + '</span>';
   if (x.bn) chips += '<span class="chip">Buy Now ' + M(x.bn) + '</span>';
+  if (x.floor) chips += '<span class="chip' + (x.max != null && x.floor > x.max ? ' warn' : '') + '">' + T('Резерв продавца ') + M(x.floor) + (x.max != null && x.floor > x.max ? T(', выше нашей ставки') : '') + '</span>';
   let info = '';
   if (x.cr) info += '<p class="p acc">' + E(x.cr) + '</p>';
   if (hasAnn(x)) info += '<p class="p">' + T('Пометка аукциона: ') + hl(x) + '</p>';

@@ -128,7 +128,7 @@ textarea.note.has{border-color:var(--warn);background:var(--warnb)}
 .rows .r{display:flex;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);align-items:flex-start;text-align:left;width:100%;background:transparent;border-left:0;border-right:0;border-top:0;color:inherit}
 .rows .r:last-child{border-bottom:0}
 .rows .r .l{flex:1;min-width:0}.rows .r .rt{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.rows .r .rt b{display:block;font-size:15px}.rows .r small{color:var(--muted);font-size:12px}
+.rows .r .rt b{display:block;font-size:15px}.rows .r small{color:var(--muted);font-size:12px}.rows .r .rt small{display:block}.rows .r small.st.off{color:#b7791f}
 
 .menu{display:grid;gap:8px}
 .menu button,.menu a{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-weight:600;text-align:left;text-decoration:none;color:var(--ink);width:100%}
