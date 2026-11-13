@@ -1,0 +1,83 @@
+B-0039|||Title Absent|2300|1050||||0|
+B-0043|||Title Absent|3200|3825||||0|
+B-0077|Yes||Title Absent|2712|4350||||5|Left Front Tire: Worn (Replacement Required); Left Rear Tire: Worn (Replacement Required)
+B-0085|||Title Absent|3748|3950||||0|
+B-0086|||Title Absent|2766|8400||||0|
+B-0045|||Title Absent|5500|3750||||0|
+B-0087|||Title Absent|3298|8300||||0|
+B-0066|Yes|Good|At Auction|0|4275||||6|Front Bumper Right Molding: Missing (Replacement Required); Headlining: Torn (> 12 Inches); Right Front Molding: Missing (Replacement Required)
+B-0105|||Title Absent|5452|3425||||0|
+B-0129|||Title Absent|1796|2400||||0|
+B-0107|||Title Absent|3766|7800||||0|
+B-0131|Yes|Good|Title Absent|3062|2925||||2|
+B-0133|Yes|Good|Title Absent|3000|6275||||3|Left Front Seat Cushion: Torn (5 To 6 Inches); Windshield: Cracked (> 12 Inches)
+B-0114|Yes|Good|Title Absent|5253|4500||||4|Front Center Armrest: Worn (Replacement Required); Left Front Seat Cushion: Worn (Replacement Required)
+B-0117|Yes||Title Absent|3062|0||||3|Front Bumper / Cover: Cracked (1/2 To 1 Inch)
+B-0118|Yes||Title Absent|5499|6750||||5|Left Front Tire: Worn (Replacement Required); Left Rear Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required)
+B-0138|Yes|Good|Title Absent|2800|5725||||4|Rear Bumper: Broken (Replacement Required); Rear Glass: Broken (Replacement Required)
+B-0157|||Title Absent|2498|3300||||0|
+B-0158|||Title Absent|5266|4150||||0|
+B-0137|Yes|Good|Title Absent|2266|3100||||2|Front Bumper: Cracked (5 To 6 Inches)
+B-0159|Yes|Good|Title Absent|2811|1900||||4|
+B-0163|Yes||Title Absent|2812|7325||||3|
+B-0155|||Title Absent|3195|1550||||0|
+B-0165|Yes|Good|Title Absent|5136|4600||||5|Front Center Armrest: Worn (Replacement Required)
+B-0179|Yes|Good|Title Absent|2016|2925||||3|Front Bumper: Broken (Replacement Required); Windshield: Cracked (> 12 Inches)
+B-0183|Yes|Good|Title Absent|3013|5950||||2|
+B-0187|Yes|Good|Title Absent|3513|4150||||3|Front Center Armrest: Worn (Replacement Required)
+B-0196|Yes|Good|Title Absent|4964|3925||||2|
+B-0185|Yes|Good|Title Absent|2266|2625||||7|Front Bumper: Broken (Replacement Required); Left Front Door Panel: Worn (Replacement Required); Left Head Lamp: Broken (Replacement Required); Rear Bumper: Broken (Replacement Required)
+B-0210|Yes|Good|Title Absent|3503|4175||||3|Front Center Armrest: Worn (Replacement Required)
+B-0170|Yes||Title Absent|2513|7450||||3|
+B-0169|Yes|Damaged|Title Absent|4967|4125||||8|Left Front Armrest: Worn (Replacement Required); Left Front Door Handle Cap: Missing (Replacement Required); Warning Light: Air Bag - On (Unacceptable)
+B-0217|||Title Absent|2360|3925||||0|
+B-0242|Yes|Good|Title Absent|1379|3200||||3|Rear Bumper: Broken (Replacement Required)
+B-0224|Yes|Good|Title Absent|1848|2650||||3|
+B-0227|Yes||Title Absent|1766|2100||||4|Front Bumper / Cover: Missing (Replacement Required)
+B-0240|Yes||Title Absent|1816|4775||||3|
+B-0213|Yes||Title Absent|2016|2425||||3|Left Tail Light: Broken (Replacement Required)
+B-0230|Yes||Title Absent|3266|3700||||3|Windshield: Cracked (> 12 Inches)
+B-0229|Yes||Title Absent|2866|4400||||3|
+C-0007|||Title Absent|6800|4025||||0|
+C-0010|||Title Absent|0|1525||||0|
+C-0035|||Title Absent|4500|3275||||0|
+C-0009|||Title Absent|0|4450||||0|
+B-0261|||Title Absent|2480|625||||0|
+B-0245|Yes||Title Absent|5016|5125||||3|
+B-0244|Yes|Good|Title Absent|2816|3875||||3|
+C-0004|||Title Absent|6500|7075||||0|
+C-0056|||Title Absent|7800|6500||||0|
+C-0044|||Title Absent|4000|2675||||0|
+C-0041|||Title Absent|4200|3075||||0|
+C-0040|||Title Absent|4300|1575||||0|
+C-0047|||Title Absent|8000|10300||||0|
+C-0046|||Title Absent|3500|3625||||0|
+C-0057|||Title Absent|3800|5150||||0|
+C-0051|||Title Absent|5200|6075||||0|
+C-0074|||Title Absent|3000|5075||||0|
+C-0059|||Title Absent|0|9300||||0|
+C-0085|Yes|Good|Title Absent|2928|2600||||3|Left Head Lamp: Broken (Replacement Required)
+C-0086|Yes|Good|Title Absent|2766|3575||||5|Front Bumper: Broken (Replacement Required); Lift Gate: Torn (5 To 6 Inches); Windshield: Cracked (> 12 Inches)
+C-0097|Yes||Title Absent|6017|6175||||6|Left Front Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required); Windshield: Cracked (> 12 Inches)
+C-0070|||Title Absent|3500|3900||||0|
+C-0073|Yes||Title Absent|5000|4175||||3|Windshield: Cracked (> 12 Inches); (Replacement Required)
+C-0088|Yes|Good|Title Absent|2984|3450||||5|Front Bumper: Broken (Replacement Required); Windshield: Cracked (> 12 Inches)
+C-0117|||Title Absent|4831|3375||||0|
+C-0105|Yes||Title Absent|2266|5400||||5|
+C-0101|Yes|Good|Title Absent|3438|2225||||3|Rear Bumper: Broken (Replacement Required)
+C-0146|Yes|Good|Title Absent|2766|4325||||3|Front Center Armrest: Worn (Replacement Required)
+C-0098|Yes|Good|Title Absent|2266|3550||||4|Windshield: Cracked (6 To 7 Inches)
+C-0131|Yes|Good|Title Absent|4554|5600||||2|
+C-0143|Yes|Good|Title Absent|3776|5000||||3|Front Center Armrest: Worn (Replacement Required)
+C-0144|Yes|Good|Title Absent|5332|5350||||2|
+C-0155|||Title Absent|4357|2900||||0|
+C-0185|Yes||Title Absent|2266|0||||5|
+C-0183|Yes||Title Absent|2266|1975||||3|
+C-0174|Yes|Good|Title Absent|4035|6225||||3|
+C-0164|Yes|Good|Title Absent|3232|5025||||2|Front Bumper: Broken (Replacement Required)
+C-0163|Yes|Good|Title Absent|2058|2725||||5|Front Center Armrest: Worn (Replacement Required); Left Front Seat Cushion: Worn (Replacement Required)
+C-0162|Yes|Good|Title Absent|1766|2225||||6|Front Center Armrest: Worn (Replacement Required); Windshield: Cracked (> 12 Inches)
+C-0169|Yes||Title Absent|4446|4975||||4|Left Front Seat: Torn (> 12 Inches); Left Front Tire: Worn (Replacement Required)
+C-0210|||Title Absent|3825|4325||||0|
+C-0193|||Title Absent|3766|4875||||0|
+C-0207|Yes|Good|Title Absent|4035|6475||||3|Climate Display / Touch Screen: Cracked (Replacement Required)

@@ -27,7 +27,7 @@ extra = {}
 try:
     for line in open('tools/postsale_extra_%s.txt' % date):
         a, run, y, mk, md, st, col, odo, g = (line.rstrip('\n').split('|') + [''] * 9)[:9]
-        extra[(PFX[a], run)] = {'y': y, 'mk': mk, 'md': md, 'st': st, 'c': col, 'o': int(odo or 0), 'g': g}
+        extra[(PFX.get(a, a), run)] = {'y': y, 'mk': mk, 'md': md, 'st': st, 'c': col, 'o': int(odo or 0), 'g': g}
 except FileNotFoundError:
     pass
 
@@ -66,6 +66,7 @@ for k, (price, s) in ps.items():
 lots = D['lots']
 sold = [l for l in lots if l.get('fact')]
 real = [l for l in sold if l.get('w') and not l.get('est')]
+if not real: real = [l for l in sold if l.get('w')]  # все MMR оценочные (Manheim не было): считаем по оценке
 def grp(f):
     a = [l for l in real if f(l)]
     return {'n': len(a), 'r': ratio([l['fact'] / l['w'] for l in a])}
