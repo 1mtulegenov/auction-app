@@ -740,43 +740,60 @@ function statsDraw() {
   const box = $('#sstB'); if (!box || !SST_ALL) return;
   const lo = SST.from <= SST.to ? SST.from : SST.to, hi = SST.from <= SST.to ? SST.to : SST.from;
   const set = SST_ALL.filter(x => x._d >= lo && x._d <= hi && (!SST.mk || x.mk === SST.mk) && (!SST.auc || x.auc === SST.auc));
-  const sold = set.filter(x => x.ss === 'sold' && x.fact), offer = set.filter(x => x.ss === 'offer'), none = set.filter(x => x.ss === 'none' || x.ss === 'rerun' || x.ss === 'gone');
   if (!set.length) { box.innerHTML = '<p class="empty">' + T('За эти даты итогов торгов нет.') + '</p>'; return; }
-  const vm = sold.filter(x => x.w > 0 && !x.est), rm = vm.map(x => x.fact / x.w);
+  const sold = set.filter(x => x.ss === 'sold' && x.fact), offer = set.filter(x => x.ss === 'offer'), none = set.length - sold.length - offer.length;
+  // MMR: только настоящий Manheim, явные ошибки данных (меньше 40% или больше 200%) не считаем
+  const okM = x => x.w > 0 && !x.est && x.fact / x.w > .4 && x.fact / x.w < 2;
+  const vm = sold.filter(okM), rm = vm.map(x => x.fact / x.w);
   const vf = sold.filter(x => x.floor > 0), rf = vf.map(x => x.fact / x.floor);
-  const fr = vf.map(flRes), G = fr.filter(r => r.c === 'ok').length, Yw = fr.filter(r => r.c === 'warn').length, R = fr.filter(r => r.c === 'bad').length;
-  const k = (l, v, sub) => '<div><span>' + l + '</span><b>' + v + '</b>' + (sub ? '<small>' + sub + '</small>' : '') + '</div>';
-  let h = '<div class="act-u"><div class="act-h"><b>' + T('Итоги') + '</b><small>' + T('Всего лотов с итогом: ') + set.length + '</small></div><div class="act-k">'
-    + k(T('Продано сразу'), sold.length, Math.round(100 * sold.length / set.length) + '%')
-    + k(T('Ушло на оффер'), offer.length, Math.round(100 * offer.length / set.length) + '%')
-    + k(T('Не продано'), none.length, Math.round(100 * none.length / set.length) + '%')
-    + k(T('Средняя цена'), sold.length ? M(Math.round(sold.reduce((a, x) => a + x.fact, 0) / sold.length)) : '—') + '</div></div>';
-  // против MMR
-  const BK = [[0, .7, '< 70%'], [.7, .85, '70–85%'], [.85, .95, '85–95%'], [.95, 1.05, '95–105%'], [1.05, 1.15, '105–115%'], [1.15, 99, '> 115%']];
-  const bars = (arr, bk) => { const n = bk.map(([a, b]) => arr.filter(v => v >= a && v < b).length), mx = Math.max(1, ...n); return '<div class="sst-bars">' + bk.map((b, i) => '<div><span>' + b[2] + '</span><i style="width:' + Math.round(100 * n[i] / mx) + '%"></i><b>' + n[i] + '</b></div>').join('') + '</div>'; };
-  h += '<div class="act-u"><div class="act-h"><b>' + T('Продано сразу против MMR') + '</b><small>' + T('Машин с MMR Manheim: ') + vm.length + T(' (оценки MMR не считаются)') + '</small></div>'
-    + (vm.length ? '<div class="act-k">' + k(T('Медиана'), sPct(sMed(rm)), T('от MMR')) + k(T('Ниже MMR'), Math.round(100 * rm.filter(v => v < 1).length / rm.length) + '%') + k(T('Разница, медиана'), M(Math.round(sMed(vm.map(x => x.fact - x.w))))) + k(T('Выше MMR на 5%+'), Math.round(100 * rm.filter(v => v >= 1.05).length / rm.length) + '%') + '</div>' + bars(rm, BK) : '<p class="muted">' + T('Нет данных') + '</p>') + '</div>';
-  // против floor
-  h += '<div class="act-u"><div class="act-h"><b>' + T('Продано сразу против floor price') + '</b><small>' + T('Машин с floor price: ') + vf.length + '</small></div>'
-    + (vf.length ? '<div class="act-k">' + k(T('Медиана'), sPct(sMed(rf)), T('от floor')) + k(T('Разница, медиана'), (d => (d > 0 ? '+' : d < 0 ? '−' : '') + M(Math.abs(d)))(Math.round(sMed(vf.map(x => x.fact - x.floor)))))
-      + k('🟢 ' + T('по floor и ниже'), G, Math.round(100 * G / vf.length) + '%') + k('🟡 ' + T('немного выше'), Yw, Math.round(100 * Yw / vf.length) + '%') + k('🔴 ' + T('намного выше'), R, Math.round(100 * R / vf.length) + '%') + '</div>'
-      : '<p class="muted">' + T('Floor price есть пока только у части аукционов (AAA Houston 12.11, AutoNation 13.11). Статистика появится, когда будут и floor, и пост-сейл.') + '</p>') + '</div>';
-  // разбивка
-  const grp = (key, title, lab) => {
-    const by = {}; sold.forEach(x => { const g = key(x); if (g) (by[g] = by[g] || []).push(x); });
-    const rows = Object.entries(by).sort((a, b) => b[1].length - a[1].length).slice(0, 40);
-    if (rows.length < 2 && !SST.mk) return '';
-    return '<div class="act-u"><div class="act-h"><b>' + title + '</b></div><table class="sst-t"><thead><tr><th></th><th>' + T('Продано') + '</th><th>' + T('от MMR') + '</th><th>' + T('от floor') + '</th></tr></thead><tbody>'
-      + rows.map(([g, xs]) => { const m1 = xs.filter(x => x.w > 0 && !x.est).map(x => x.fact / x.w), f1 = xs.filter(x => x.floor > 0).map(x => x.fact / x.floor);
-        return '<tr><td>' + E(lab ? lab(g) : g) + '</td><td>' + xs.length + '</td><td>' + sPct(sMed(m1)) + '</td><td>' + (f1.length ? sPct(sMed(f1)) + ' <small>(' + f1.length + ')</small>' : '—') + '</td></tr>'; }).join('') + '</tbody></table></div>';
+  const pc = (n, t) => t ? Math.round(100 * n / t) : 0;
+  // полоса из частей: [доля, класс, подпись]
+  const stack = parts => { const t = parts.reduce((q, p) => q + p[0], 0) || 1;
+    return '<div class="sv-stack">' + parts.filter(p => p[0]).map(p => '<i class="' + p[1] + '" style="flex:' + p[0] + '" title="' + E(p[2]) + ': ' + p[0] + ' (' + pc(p[0], t) + '%)"></i>').join('') + '</div>'
+      + '<div class="sv-leg">' + parts.map(p => '<span><i class="' + p[1] + '"></i>' + E(p[2]) + ' <b>' + pc(p[0], t) + '%</b> <small>' + p[0] + '</small></span>').join('') + '</div>'; };
+  const hero = (big, unit, line) => '<div class="sv-hero"><b>' + big + '</b><span>' + unit + '</span></div><p class="sv-line">' + line + '</p>';
+  let h = '';
+  // 1. что происходит с машинами
+  h += '<section class="sv-card"><h3>' + T('Что стало с машинами') + '</h3>'
+    + hero(pc(sold.length, set.length) + '%', T('отдали сразу'), T('Из ') + set.length + T(' лотов с итогом. Средняя цена ') + (sold.length ? M(Math.round(sold.reduce((q, x) => q + x.fact, 0) / sold.length)) : '—') + '.')
+    + stack([[sold.length, 'c-a', T('Отдали сразу')], [offer.length, 'c-o', T('На оффер')], [none, 'c-n', T('Не продано')]]) + '</section>';
+  // 2. против MMR
+  if (vm.length) {
+    const m = sMed(rm), cheap = rm.filter(v => v < .95).length, near = rm.filter(v => v >= .95 && v <= 1.05).length, dear = rm.length - cheap - near;
+    const pos = v => Math.max(0, Math.min(100, (v - .5) * 100)); // шкала 50–150%
+    h += '<section class="sv-card"><h3>' + T('Цена продажи от MMR') + '</h3>'
+      + hero(Math.round(m * 100) + '%', T('от MMR'), T('Машину с MMR $10,000 обычно отдают примерно за ') + M(Math.round(m * 100) * 100) + '.')
+      + '<div class="sv-scale"><div class="sv-track"><i class="sv-mid" style="left:50%"></i><i class="sv-dot" style="left:' + pos(m) + '%"></i></div><div class="sv-ax"><span>50%</span><span>MMR</span><span>150%</span></div></div>'
+      + stack([[cheap, 'c-g', T('Дешевле MMR')], [near, 'c-n', T('Около MMR')], [dear, 'c-r', T('Дороже MMR')]])
+      + '<p class="sv-note">' + T('Машин с MMR Manheim: ') + vm.length + '</p></section>';
+  }
+  // 3. против floor
+  h += '<section class="sv-card"><h3>' + T('Цена продажи от floor price') + '</h3>';
+  if (vf.length) {
+    const fr = vf.map(flRes), G = fr.filter(r => r.c === 'ok').length, Yw = fr.filter(r => r.c === 'warn').length, R = fr.length - G - Yw;
+    h += hero(pc(G, vf.length) + '%', T('по floor или дешевле'), T('Обычно отдают за ') + Math.round(sMed(rf) * 100) + T('% от floor. Машин с floor: ') + vf.length + '.')
+      + stack([[G, 'c-g', T('По floor и ниже')], [Yw, 'c-y', T('Чуть выше')], [R, 'c-r', T('Намного выше')]]);
+  } else h += '<p class="sv-line">' + T('За эти даты floor price нет. Пока он есть только у AAA Houston 12.11 и AutoNation 13.11 (там ещё нет итогов).') + '</p>';
+  h += '</section>';
+  // 4. сравнение групп: полоса от центра, слева дешевле (зелёная), справа дороже (красная)
+  const div = (title, sub, key, lab, base, min, act) => {
+    const by = {}; sold.forEach(x => { const g = key(x); if (!g) return; const r = base(x); if (r == null) return; (by[g] = by[g] || []).push(r); });
+    const rows = Object.entries(by).filter(([, v]) => v.length >= min).sort((p, q) => q[1].length - p[1].length).slice(0, 14).map(([g, v]) => [g, sMed(v), v.length]);
+    if (rows.length < 2) return '';
+    const mx = Math.max(.1, ...rows.map(r => Math.abs(r[1] - 1)));
+    return '<section class="sv-card"><h3>' + title + '</h3><p class="sv-note">' + sub + '</p><div class="sv-div">'
+      + rows.map(([g, v, n]) => { const d = v - 1, w = Math.round(50 * Math.min(1, Math.abs(d) / mx)), dp = Math.round(d * 100);
+        return '<' + (act ? 'button data-act="' + act + '" data-v="' + E(g) + '"' : 'div') + ' class="sv-row" title="' + E(lab(g)) + ': ' + Math.round(v * 100) + '%, ' + n + T(' шт.') + '"><span class="sv-n">' + E(lab(g)) + ' <small>' + n + '</small></span>'
+          + '<span class="sv-bar"><i class="sv-c"></i><i class="' + (d < 0 ? 'c-g l' : 'c-r r') + '" style="width:' + w + '%"></i></span><b>' + (dp > 0 ? '+' : dp < 0 ? '−' : '') + Math.abs(dp) + '%</b></' + (act ? 'button' : 'div') + '>'; }).join('')
+      + '</div></section>';
   };
-  h += SST.mk ? grp(x => x.md, T('По моделям')) : grp(x => x.mk, T('По маркам'));
-  h += grp(x => x._d + '|' + x.auc, T('По датам и аукционам'), g => { const [d, a] = g.split('|'); const dd = S.index.dates.find(z => z.id === d); return (dd ? dLabel(dd) : d) + ' · ' + (AUC[a] || a); });
-  if (!SST.mk) h += grp(x => x.floor ? (x.cons || '—') : '', T('По продавцам (где есть floor)'));
-  h += '<p class="muted" style="font-size:12.5px">' + T('Считаются только машины, которые отдали сразу на аукционе. Офферы не входят. 🟢 по floor или ниже, 🟡 выше не больше чем на $500 или 5%, 🔴 выше этого.') + '</p>';
+  h += SST.mk ? div(T('Модели: цена от MMR'), T('Слева зелёным: отдают дешевле MMR, справа красным: дороже. Серая цифра: сколько продано.'), x => x.md, g => g, x => okM(x) ? x.fact / x.w : null, 3)
+    : div(T('Марки: цена от MMR'), T('Слева зелёным: отдают дешевле MMR, справа красным: дороже. Серая цифра: сколько продано. Нажмите на марку, чтобы посмотреть только её.'), x => x.mk, g => g, x => okM(x) ? x.fact / x.w : null, 5, 'sst-mk');
+  if (!SST.auc) h += div(T('Аукционы: цена от MMR'), T('Слева зелёным: дешевле MMR, справа красным: дороже.'), x => x.auc, g => AUC[g] || g, x => okM(x) ? x.fact / x.w : null, 5, 'sst-auc');
+  if (!SST.mk) h += div(T('Продавцы: цена от floor'), T('Слева зелёным: отдают ниже floor, справа красным: выше.'), x => x.floor ? x.cons : '', g => g, x => x.floor ? x.fact / x.floor : null, 5);
+  h += '<p class="sv-note">' + T('Считаются только машины, которые отдали сразу на аукционе. Офферы не входят.') + '</p>';
   box.innerHTML = h;
 }
-
 /* ---------- шторка ---------- */
 let sheetOpen = false;
 function openSheet(title, html, full, actions) {
@@ -1109,6 +1126,7 @@ document.addEventListener('click', async e => {
     case 'notes': notesSheet(); break;
     case 'activity': activitySheet(S.actDays || 7); break;
     case 'stats': statsSheet(); break;
+    case 'sst-mk': case 'sst-auc': { const f = ds.act === 'sst-mk' ? 'mk' : 'auc'; SST[f] = ds.v; const sel = $('#sst_' + f); if (sel) sel.value = ds.v; statsDraw(); $('#sheet').scrollTop = 0; break; }
     case 'fl-x': { const f = S.favs[ds.fid]; if (!f) break; if (f.x) delete f.x; else f.x = 1; f.ts2 = Date.now(); saveFavs(); const r = t.closest('.fl-r'); if (r) { r.classList.toggle('gone', !!f.x); t.textContent = f.x ? '↺' : '✕'; t.setAttribute('aria-pressed', !!f.x); t.title = f.x ? T('Вернуть') : T('Ушла, не купили: зачеркнуть'); const L = r.parentNode; if (L) { if (f.x) L.appendChild(r); else { const g = L.querySelector('.fl-r.gone'); L.insertBefore(r, g || null); } } } break; }
     case 'fav-clear': {
       const keep = S.favs, now = Date.now(), n = Object.keys(keep).length; if (!n) break;
