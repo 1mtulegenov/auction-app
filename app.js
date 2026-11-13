@@ -701,7 +701,7 @@ function obdCard(x) {
   const o = obdOf(x), v = o && OBD.verdict(o.codes);
   if (o && o.shots.length) h += '<div class="obd-shots">' + o.shots.map(s => '<button class="obd-th" data-act="obd-view" data-id="' + E(s.id) + '" aria-label="' + T('Открыть скриншот') + '"><img alt="" data-obd="' + E(s.id) + '"' + (OBD_IMG[x.vin + '/' + s.id] ? ' src="' + OBD_IMG[x.vin + '/' + s.id] + '"' : '') + '></button>').join('') + '</div>';
   if (v) h += '<p class="obd-v ' + OBD.SEV[v.s][0] + '"><b>' + E(T(v.t)) + '</b></p>';
-  if (o && o.codes.length) h += '<ul class="obd-list">' + o.codes.map((c, i) => { const f = OBD.info(c.c, c.d), sv = OBD.SEV[f.s]; return '<li class="' + sv[0] + '"><div class="obd-h"><b class="obd-c">' + E(c.c) + '</b><span class="obd-sev">' + T(sv[1]) + '</span>' + (c.st ? '<span class="obd-st">' + T(OBD.ST[c.st]) + '</span>' : '') + '<button class="obd-rm" data-act="obd-rm" data-i="' + i + '" aria-label="' + T('Убрать код') + '">✕</button></div><p class="obd-t">' + E(f.t) + '</p><p class="obd-n">' + E(f.n) + '</p>' + (c.d && f.known ? '<p class="obd-en">ThinkDiag: ' + E(c.d) + '</p>' : '') + '</li>'; }).join('') + '</ul>';
+  if (o && o.codes.length) h += '<ul class="obd-list">' + o.codes.map((c, i) => { const f = OBD.info(c.c, c.d), sv = OBD.SEV[f.s]; return '<li class="' + sv[0] + '"><div class="obd-h"><b class="obd-c' + (c.c ? '' : ' nc') + '">' + E(c.c || T('без кода')) + '</b><span class="obd-sev">' + T(sv[1]) + '</span>' + (c.st ? '<span class="obd-st">' + T(OBD.ST[c.st]) + '</span>' : '') + '<button class="obd-rm" data-act="obd-rm" data-i="' + i + '" aria-label="' + T('Убрать код') + '">✕</button></div><p class="obd-t">' + E(f.t) + '</p><p class="obd-n">' + E(f.n) + '</p>' + (c.c && c.d && f.known ? '<p class="obd-en">ThinkDiag: ' + E(c.d) + '</p>' : '') + '</li>'; }).join('') + '</ul>';
   else if (o) h += '<p class="muted">' + T('Коды на скриншоте не распознались. Введите их ниже.') + '</p>';
   h += '<div class="obd-bar"><label class="btn pri obd-add">' + T('📷 Добавить скриншот') + '<input type="file" accept="image/*" multiple id="obdFile" hidden></label></div>'
     + '<div class="obd-man"><input id="obdIn" type="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="' + T('Код вручную: P0420, U0100') + '" aria-label="' + T('Код ошибки') + '"><button class="btn" data-act="obd-code">' + T('Добавить') + '</button></div>';
@@ -741,13 +741,13 @@ function obdShrink(im) {
   }
   return out;
 }
-// для распознавания: серый, тёмная тема переворачивается в светлую, мелкий скриншот увеличивается
+// для распознавания: красная печать THINKCAR стирается, серый, тёмная тема переворачивается в светлую, мелкий скриншот увеличивается
 function obdPrep(im) {
   const r = Math.max(1, 1400 / im.naturalWidth), c = document.createElement('canvas');
   c.width = Math.round(im.naturalWidth * Math.min(r, 2.5)); c.height = Math.round(im.naturalHeight * Math.min(r, 2.5));
   const g = c.getContext('2d'); g.drawImage(im, 0, 0, c.width, c.height);
   const d = g.getImageData(0, 0, c.width, c.height), p = d.data; let sum = 0;
-  for (let i = 0; i < p.length; i += 4) { const l = .299 * p[i] + .587 * p[i + 1] + .114 * p[i + 2]; p[i] = p[i + 1] = p[i + 2] = l; sum += l; }
+  for (let i = 0; i < p.length; i += 4) { const R = p[i], G = p[i + 1], B = p[i + 2]; const l = (R > 140 && R - G > 60 && R - B > 60) ? 255 : .299 * R + .587 * G + .114 * B; p[i] = p[i + 1] = p[i + 2] = l; sum += l; }
   if (sum / (p.length / 4) < 110) for (let i = 0; i < p.length; i += 4) p[i] = p[i + 1] = p[i + 2] = 255 - p[i];
   g.putImageData(d, 0, 0); return c;
 }
@@ -756,7 +756,7 @@ function ocrText() {
   if (!OCR2) OCR2 = (async () => {
     if (!window.Tesseract) await new Promise((ok, bad) => { const s = document.createElement('script'); s.src = 'vendor/tess/tesseract.min.js'; s.onload = ok; s.onerror = bad; document.head.appendChild(s); });
     const base = new URL('vendor/tess/', location.href).href;
-    return Tesseract.createWorker('eng', 1, { workerPath: base + 'worker.min.js', corePath: base, langPath: base, gzip: true, workerBlobURL: false });
+    return Tesseract.createWorker(['rus', 'eng'], 1, { workerPath: base + 'worker.min.js', corePath: base, langPath: base, gzip: true, workerBlobURL: false });
   })().catch(e => { OCR2 = null; throw e; });
   clearTimeout(ocr2T);
   return OCR2;
@@ -775,10 +775,10 @@ async function obdAdd(files) {
     say(T('Распознаю коды ошибок…'));
     let found = [];
     try { const w = await ocrText(); const r = await w.recognize(obdPrep(im)); found = OBD.parse(r.data.text); ocrIdle(); } catch (e) { console.warn('ocr', e); }
-    const add = found.filter(c => !o.codes.some(z => z.c === c.c));
+    const add = found.filter(c => !o.codes.some(z => c.c ? z.c === c.c : !z.c && z.d === c.d));
     o.codes.push(...add);
     if (add.length) obdSave(x, o);
-    toast(found.length ? T('Найдено кодов: ') + found.length : T('Коды не распознаны: введите вручную'));
+    toast(found.length ? T('Найдено ошибок: ') + found.length : T('Коды не распознаны: введите вручную'));
   }
   obdRedraw();
 }

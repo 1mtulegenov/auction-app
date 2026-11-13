@@ -363,3 +363,4 @@ li.bad .obd-sev{background:var(--badb);color:var(--bad)}li.warn .obd-sev{backgro
 .obd-view{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(12px + var(--sat,0px)) 12px calc(12px + var(--sab,0px))}
 .obd-view img{max-width:100%;max-height:calc(100% - 64px);object-fit:contain;border-radius:8px}
 .obd-vbar{display:flex;gap:10px;margin-top:12px}
+.obd-c.nc{font-family:inherit;font-size:13px;letter-spacing:0;color:var(--muted);font-weight:600}
