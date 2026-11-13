@@ -458,7 +458,7 @@ async function favScreen() {
       + lost.map(f => '<p class="muted">' + E(f.t || f.k) + (known.has(id) ? T(' — лота больше нет в каталоге') : T(' — этой даты уже нет в приложении')) + '</p>').join('');
   }
   return '<div class="hd"><h1>' + T('Избранное') + '</h1><p>' + (n ? T('Машин: ') + n + T('. Сохраняется на этом телефоне, для всех дат.') : '') + '</p></div>'
-    + (n ? favSortSel('favsort', key) : '') + (h || '<p class="empty">' + T('Пока пусто. Нажмите ☆ на карточке машины, чтобы собрать свой список на торги.') + '</p>');
+    + (n ? '<div class="fav-tools">' + favSortSel('favsort', key) + '<button class="btn fav-clear" data-act="fav-clear">' + T('Очистить избранное') + '</button></div>' : '') + (h || '<p class="empty">' + T('Пока пусто. Нажмите ☆ на карточке машины, чтобы собрать свой список на торги.') + '</p>');
 }
 // избранное списком: лот, машина, MMR, общая заметка (по VIN) и заметка для покупки (живёт, пока машина в избранном)
 async function favListScreen() {
@@ -475,10 +475,10 @@ async function favListScreen() {
     n += rows.length;
     const dd = S.index.dates.find(x => x.id === id);
     h += '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + '</span></h2><div class="flist' + (man ? ' man' : '') + '">'
-      + '<div class="fl-h"><span>' + T('Лот') + '</span><span>' + T('Машина') + '</span><span>MMR</span><span>' + T('Для покупки') + '</span><span></span></div>'
-      + rows.map(([fid, f, x]) => {         return '<div class="fl-r" data-fid="' + E(fid) + '"><button class="fl-run" data-lot="' + E(x.k) + '"' + (id !== S.date ? ' data-fd="' + E(id) + '"' : '') + '>' + E(x.run) + '</button>'
+      + '<div class="fl-h"><span>' + T('Лот') + '</span><span>' + T('Машина') + '</span><span>MMR</span><span>' + T('Для покупки') + '</span><span></span><span></span></div>'
+      + rows.map(([fid, f, x]) => {         return '<div class="fl-r' + (f.x ? ' gone' : '') + '" data-fid="' + E(fid) + '"><button class="fl-run" data-lot="' + E(x.k) + '"' + (id !== S.date ? ' data-fd="' + E(id) + '"' : '') + '>' + E(x.run) + '</button>'
           + '<span class="fl-car">' + E(carName(x)) + '</span><span class="fl-mmr">' + (x.est && x.w ? '≈' : '') + M(x.w) + '</span>'
-          + '<textarea class="fl-in buy" rows="1" data-bn="' + E(fid) + '" placeholder="' + T('Для покупки') + '">' + E(f.bn || '') + '</textarea><button class="fl-grip" aria-label="' + T('Перетащить') + '" title="' + T('Перетащить') + '"><i></i><i></i><i></i></button></div>'; }).join('') + '</div>';
+          + '<textarea class="fl-in buy" rows="1" data-bn="' + E(fid) + '" placeholder="' + T('Для покупки') + '">' + E(f.bn || '') + '</textarea><button class="fl-x" data-act="fl-x" data-fid="' + E(fid) + '" aria-pressed="' + !!f.x + '" title="' + (f.x ? T('Вернуть') : T('Ушла, не купили: зачеркнуть')) + '" aria-label="' + (f.x ? T('Вернуть') : T('Зачеркнуть')) + '">' + (f.x ? '↺' : '✕') + '</button><button class="fl-grip" aria-label="' + T('Перетащить') + '" title="' + T('Перетащить') + '"><i></i><i></i><i></i></button></div>'; }).join('') + '</div>';
   }
   return '<div class="hd"><h1>' + T('Список избранного') + '</h1><p>' + (n ? T('Заметка для покупки удаляется, когда машину убирают из избранного.') + ' ' + T('Порядок меняется перетаскиванием за ≡ справа.') : '') + '</p></div>'
     + (n ? favSortSel('flsort', key) : '') + (h || '<p class="empty">' + T('Пока пусто. Нажмите ☆ на карточке машины, чтобы собрать свой список на торги.') + '</p>');
@@ -823,6 +823,14 @@ document.addEventListener('click', async e => {
     case 'freset': Object.assign(S.f, { mk: [], md: [], au: '', cl: '', st: '', y: '', o: '', p: '' }); closeSheet(); render(); break;
     case 'notes': notesSheet(); break;
     case 'activity': activitySheet(S.actDays || 7); break;
+    case 'fl-x': { const f = S.favs[ds.fid]; if (!f) break; if (f.x) delete f.x; else f.x = 1; f.ts2 = Date.now(); saveFavs(); const r = t.closest('.fl-r'); if (r) { r.classList.toggle('gone', !!f.x); t.textContent = f.x ? '↺' : '✕'; t.setAttribute('aria-pressed', !!f.x); t.title = f.x ? T('Вернуть') : T('Ушла, не купили: зачеркнуть'); } break; }
+    case 'fav-clear': {
+      const keep = S.favs, now = Date.now(), n = Object.keys(keep).length; if (!n) break;
+      S.favs = {}; Object.keys(keep).forEach(k => { S.favDel[k] = now; }); saveFavs(); keepScroll(render);
+      toast(T('Избранное очищено: ') + n, T('Вернуть'), () => { const t2 = Date.now(); Object.entries(keep).forEach(([k, f]) => { S.favs[k] = Object.assign({}, f, { ts2: t2 }); delete S.favDel[k]; }); saveFavs(); keepScroll(render); });
+      setTimeout(() => { const tt = $('#toast'); if (tt && tt.querySelector('#toastBtn') && /\d/.test(tt.textContent)) tt.hidden = true; }, 8000);
+      break;
+    }
     case 'act-days': activitySheet(+t.dataset.n); break;
     case 'auth': { const Y = window.Sync && Sync.st; if (!Y) break; if (Y.user) await Sync.signOut(); else await Sync.signIn(); render(); break; }
     case 'how': howSheet(); break;
