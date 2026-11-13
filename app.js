@@ -666,6 +666,7 @@ function more() {
   const acc = Y && Y.on ? '<button data-act="auth"><span class="ic">👤</span><span>' + (Y.user ? E(Y.user.name) + '<small>' + E(Y.user.email) + T(' · заметки общие. Нажмите, чтобы выйти') + '</small>' : T('Войти через Google') + '<small>' + (Y.err ? E(Y.err) : T('Чтобы заметки были видны всем и было видно, кто их оставил')) + '</small>') + '</span></button>' : '';
   return '<div class="menu">' + acc + '<button data-act="lang"><span class="ic flag">' + cur[1] + '</span><span>' + T('Язык') + '<small>' + cur[2] + '</small></span></button>'
     + (window.Sync && Sync.isAdmin && Sync.isAdmin() ? '<button data-act="activity"><span class="ic">📊</span><span>' + T('Активность') + '<small>' + T('Кто сколько раз заходил и сколько минут был в приложении') + '</small></span></button>' : '')
+    + '<button data-act="stats"><span class="ic">📈</span><span>' + T('Статистика продаж') + '<small>' + T('Продано сразу против MMR и floor price: даты, марка, аукцион') + '</small></span></button>'
     + '<button data-act="notes"><span class="ic">📝</span><span>' + T('Заметки') + '<small>' + (notes.length ? notes.length + T(' шт., привязаны к VIN') : T('Пока нет. Пишутся в карточке машины.')) + '</small></span></button>'
     + '<button data-act="how"><span class="ic">🧮</span><span>' + T('Как считается прибыль') + '<small>' + T('MMR, сбор, цена продажи, максимальная ставка') + '</small></span></button>'
     + '<button data-act="install"><span class="ic">📲</span><span>' + installTitle() + '<small>' + (isStandalone() ? T('Уже установлено') : platform() === 'desktop' ? T('Windows и Mac, без магазина приложений') : T('iPhone и Android, без App Store')) + '</small></span></button>'
@@ -700,6 +701,80 @@ async function activitySheet(days) {
     : '<p class="empty">' + T('За этот период заходов нет. Учёт идёт с момента обновления приложения.') + '</p>';
   const sh = $('#sheet'); if (!sh || !sheetOpen || S.actDays !== days) return;
   sh.querySelector('.empty').outerHTML = h + '<p class="muted" style="font-size:12.5px;margin-top:10px">' + T('Вход считается, когда приложение открыли или вернулись в него после перерыва больше 30 минут. Время идёт, только пока приложение на экране.') + '</p>';
+}
+
+/* ---------- статистика продаж: цена «продано сразу» против MMR и floor price ---------- */
+const SST = { from: '', to: '', mk: '', auc: '' };
+let SST_ALL = null, SST_V = '';
+async function sstLoad() {
+  if (SST_ALL && SST_V === S.index.version) return SST_ALL;
+  SST_V = S.index.version;
+  const out = [];
+  for (const dd of S.index.dates) {
+    let d; try { d = await getDate(dd.id); } catch (e) { continue; }
+    d.lots.forEach(x => { if (x.ss) out.push(Object.assign({ _d: dd.id }, x)); });
+  }
+  return (SST_ALL = out);
+}
+const sMed = a => { if (!a.length) return null; const b = [...a].sort((p, q) => p - q), m = b.length >> 1; return b.length % 2 ? b[m] : (b[m - 1] + b[m]) / 2; };
+const sPct = v => v == null ? '—' : Math.round(v * 100) + '%';
+async function statsSheet() {
+  openSheet(T('Статистика продаж'), '<div id="sstF"></div><div id="sstB"><p class="empty">…</p></div>', true);
+  const all = await sstLoad();
+  const sh = $('#sheet'); if (!sh || !sheetOpen || !$('#sstB')) return;
+  const dates = [...new Set(all.map(x => x._d))].sort();
+  if (!SST.from || !dates.includes(SST.from)) SST.from = dates[0] || '';
+  if (!SST.to || !dates.includes(SST.to)) SST.to = dates[dates.length - 1] || '';
+  const mks = [...new Set(all.filter(x => x.mk).map(x => x.mk))].sort((a, b) => a.localeCompare(b));
+  const aucs = [...new Set(all.map(x => x.auc))].sort();
+  const dl = id => { const dd = S.index.dates.find(z => z.id === id); return dd ? dLabel(dd) : fmtDate(id); };
+  const opt = (v, l, cur) => '<option value="' + E(v) + '"' + (v === cur ? ' selected' : '') + '>' + E(l) + '</option>';
+  $('#sstF').innerHTML = '<div class="sst-f">'
+    + '<label><span>' + T('С') + '</span><select id="sst_from">' + dates.map(d => opt(d, dl(d), SST.from)).join('') + '</select></label>'
+    + '<label><span>' + T('По') + '</span><select id="sst_to">' + dates.map(d => opt(d, dl(d), SST.to)).join('') + '</select></label>'
+    + '<label><span>' + T('Марка') + '</span><select id="sst_mk">' + opt('', T('Все марки'), SST.mk) + mks.map(m => opt(m, m, SST.mk)).join('') + '</select></label>'
+    + '<label><span>' + T('Аукцион') + '</span><select id="sst_auc">' + opt('', T('Все аукционы'), SST.auc) + aucs.map(a => opt(a, AUC[a] || a, SST.auc)).join('') + '</select></label></div>';
+  statsDraw();
+}
+function statsDraw() {
+  const box = $('#sstB'); if (!box || !SST_ALL) return;
+  const lo = SST.from <= SST.to ? SST.from : SST.to, hi = SST.from <= SST.to ? SST.to : SST.from;
+  const set = SST_ALL.filter(x => x._d >= lo && x._d <= hi && (!SST.mk || x.mk === SST.mk) && (!SST.auc || x.auc === SST.auc));
+  const sold = set.filter(x => x.ss === 'sold' && x.fact), offer = set.filter(x => x.ss === 'offer'), none = set.filter(x => x.ss === 'none' || x.ss === 'rerun' || x.ss === 'gone');
+  if (!set.length) { box.innerHTML = '<p class="empty">' + T('За эти даты итогов торгов нет.') + '</p>'; return; }
+  const vm = sold.filter(x => x.w > 0 && !x.est), rm = vm.map(x => x.fact / x.w);
+  const vf = sold.filter(x => x.floor > 0), rf = vf.map(x => x.fact / x.floor);
+  const fr = vf.map(flRes), G = fr.filter(r => r.c === 'ok').length, Yw = fr.filter(r => r.c === 'warn').length, R = fr.filter(r => r.c === 'bad').length;
+  const k = (l, v, sub) => '<div><span>' + l + '</span><b>' + v + '</b>' + (sub ? '<small>' + sub + '</small>' : '') + '</div>';
+  let h = '<div class="act-u"><div class="act-h"><b>' + T('Итоги') + '</b><small>' + T('Всего лотов с итогом: ') + set.length + '</small></div><div class="act-k">'
+    + k(T('Продано сразу'), sold.length, Math.round(100 * sold.length / set.length) + '%')
+    + k(T('Ушло на оффер'), offer.length, Math.round(100 * offer.length / set.length) + '%')
+    + k(T('Не продано'), none.length, Math.round(100 * none.length / set.length) + '%')
+    + k(T('Средняя цена'), sold.length ? M(Math.round(sold.reduce((a, x) => a + x.fact, 0) / sold.length)) : '—') + '</div></div>';
+  // против MMR
+  const BK = [[0, .7, '< 70%'], [.7, .85, '70–85%'], [.85, .95, '85–95%'], [.95, 1.05, '95–105%'], [1.05, 1.15, '105–115%'], [1.15, 99, '> 115%']];
+  const bars = (arr, bk) => { const n = bk.map(([a, b]) => arr.filter(v => v >= a && v < b).length), mx = Math.max(1, ...n); return '<div class="sst-bars">' + bk.map((b, i) => '<div><span>' + b[2] + '</span><i style="width:' + Math.round(100 * n[i] / mx) + '%"></i><b>' + n[i] + '</b></div>').join('') + '</div>'; };
+  h += '<div class="act-u"><div class="act-h"><b>' + T('Продано сразу против MMR') + '</b><small>' + T('Машин с MMR Manheim: ') + vm.length + T(' (оценки MMR не считаются)') + '</small></div>'
+    + (vm.length ? '<div class="act-k">' + k(T('Медиана'), sPct(sMed(rm)), T('от MMR')) + k(T('Ниже MMR'), Math.round(100 * rm.filter(v => v < 1).length / rm.length) + '%') + k(T('Разница, медиана'), M(Math.round(sMed(vm.map(x => x.fact - x.w))))) + k(T('Выше MMR на 5%+'), Math.round(100 * rm.filter(v => v >= 1.05).length / rm.length) + '%') + '</div>' + bars(rm, BK) : '<p class="muted">' + T('Нет данных') + '</p>') + '</div>';
+  // против floor
+  h += '<div class="act-u"><div class="act-h"><b>' + T('Продано сразу против floor price') + '</b><small>' + T('Машин с floor price: ') + vf.length + '</small></div>'
+    + (vf.length ? '<div class="act-k">' + k(T('Медиана'), sPct(sMed(rf)), T('от floor')) + k(T('Разница, медиана'), (d => (d > 0 ? '+' : d < 0 ? '−' : '') + M(Math.abs(d)))(Math.round(sMed(vf.map(x => x.fact - x.floor)))))
+      + k('🟢 ' + T('по floor и ниже'), G, Math.round(100 * G / vf.length) + '%') + k('🟡 ' + T('немного выше'), Yw, Math.round(100 * Yw / vf.length) + '%') + k('🔴 ' + T('намного выше'), R, Math.round(100 * R / vf.length) + '%') + '</div>'
+      : '<p class="muted">' + T('Floor price есть пока только у части аукционов (AAA Houston 12.11, AutoNation 13.11). Статистика появится, когда будут и floor, и пост-сейл.') + '</p>') + '</div>';
+  // разбивка
+  const grp = (key, title, lab) => {
+    const by = {}; sold.forEach(x => { const g = key(x); if (g) (by[g] = by[g] || []).push(x); });
+    const rows = Object.entries(by).sort((a, b) => b[1].length - a[1].length).slice(0, 40);
+    if (rows.length < 2 && !SST.mk) return '';
+    return '<div class="act-u"><div class="act-h"><b>' + title + '</b></div><table class="sst-t"><thead><tr><th></th><th>' + T('Продано') + '</th><th>' + T('от MMR') + '</th><th>' + T('от floor') + '</th></tr></thead><tbody>'
+      + rows.map(([g, xs]) => { const m1 = xs.filter(x => x.w > 0 && !x.est).map(x => x.fact / x.w), f1 = xs.filter(x => x.floor > 0).map(x => x.fact / x.floor);
+        return '<tr><td>' + E(lab ? lab(g) : g) + '</td><td>' + xs.length + '</td><td>' + sPct(sMed(m1)) + '</td><td>' + (f1.length ? sPct(sMed(f1)) + ' <small>(' + f1.length + ')</small>' : '—') + '</td></tr>'; }).join('') + '</tbody></table></div>';
+  };
+  h += SST.mk ? grp(x => x.md, T('По моделям')) : grp(x => x.mk, T('По маркам'));
+  h += grp(x => x._d + '|' + x.auc, T('По датам и аукционам'), g => { const [d, a] = g.split('|'); const dd = S.index.dates.find(z => z.id === d); return (dd ? dLabel(dd) : d) + ' · ' + (AUC[a] || a); });
+  if (!SST.mk) h += grp(x => x.floor ? (x.cons || '—') : '', T('По продавцам (где есть floor)'));
+  h += '<p class="muted" style="font-size:12.5px">' + T('Считаются только машины, которые отдали сразу на аукционе. Офферы не входят. 🟢 по floor или ниже, 🟡 выше не больше чем на $500 или 5%, 🔴 выше этого.') + '</p>';
+  box.innerHTML = h;
 }
 
 /* ---------- шторка ---------- */
@@ -1033,6 +1108,7 @@ document.addEventListener('click', async e => {
     case 'freset': Object.assign(S.f, { mk: [], md: [], au: '', cl: '', st: '', y: '', o: '', p: '' }); closeSheet(); render(); break;
     case 'notes': notesSheet(); break;
     case 'activity': activitySheet(S.actDays || 7); break;
+    case 'stats': statsSheet(); break;
     case 'fl-x': { const f = S.favs[ds.fid]; if (!f) break; if (f.x) delete f.x; else f.x = 1; f.ts2 = Date.now(); saveFavs(); const r = t.closest('.fl-r'); if (r) { r.classList.toggle('gone', !!f.x); t.textContent = f.x ? '↺' : '✕'; t.setAttribute('aria-pressed', !!f.x); t.title = f.x ? T('Вернуть') : T('Ушла, не купили: зачеркнуть'); const L = r.parentNode; if (L) { if (f.x) L.appendChild(r); else { const g = L.querySelector('.fl-r.gone'); L.insertBefore(r, g || null); } } } break; }
     case 'fav-clear': {
       const keep = S.favs, now = Date.now(), n = Object.keys(keep).length; if (!n) break;
@@ -1081,6 +1157,7 @@ document.addEventListener('change', e => {
   else if (e.target.id === 'rsort') { S.rf.sort = e.target.value; drawResults(); }
   else if (e.target.id === 'favsort') { S.favSort = e.target.value; LS.set('fav-sort', S.favSort); keepScroll(render); }
   else if (e.target.id === 'flsort') { S.flSort = e.target.value; LS.set('flist-sort', S.flSort); keepScroll(render); }
+  else if (/^sst_/.test(e.target.id)) { SST[e.target.id.slice(4)] = e.target.value; statsDraw(); }
   else if (e.target.id === 'note') saveNote(e.target);
   else if (e.target.matches('.fl-in')) saveListInput(e.target);
   else if (e.target.closest('#f_mk')) { const g = document.querySelector('#f_md .md-g[data-mk="' + CSS.escape(e.target.value) + '"]'); if (g) g.hidden = !e.target.checked; }
