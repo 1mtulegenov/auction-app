@@ -305,7 +305,8 @@ function wifeEval(x) {
   const out = { lv, max, sale3, res, ok, notes, score, word: lv === 'ok' ? 'подходит' : lv === 'warn' ? 'с оговорками' : 'рискованно' };
   _we.set(x, out); return out;
 }
-function wifeOn() { return S.tab === 'lots' && S.f.quick === 'seven'; }
+function isMax() { return !!(window.Sync && Sync.isAdmin && Sync.isAdmin()); }
+function wifeOn() { return S.tab === 'lots' && S.f.quick === 'seven' && isMax(); }
 function wifeHtml(x, full) {
   const v = wifeEval(x);
   const head = '<b>' + T('Жене на 3–4 мес.: ') + v.word + '</b>' + (v.max != null ? '. ' + T('Бить до ') + M(v.max) + T(' (с ') + T('сбором ') + M(v.max + FEE) + ')' : '');
@@ -439,7 +440,7 @@ function applyFilters(list) {
     switch (f.quick) {
       case 'fav': return isFav(x);
       case 'pick': return x.C || x.F;
-      case 'seven': return MAXB.test(x.mk || '') && !isInop(x);
+      case 'seven': return !isMax() || (MAXB.test(x.mk || '') && !isInop(x));
       case 'clean': return x.cls === 'clean' && !x.hist && !x.ttlbad;
       case 'floor': return !!x.floor;
       case 'notes': return !!noteOf(x);
@@ -585,7 +586,7 @@ function saveListInput(t) {
 function lotsScreen() {
   const fc = activeFilterCount();
   return '<div class="searchbar"><input type="search" id="q" placeholder="' + T('Модель, лот или VIN') + '" value="' + E(S.f.q) + '" autocomplete="off" enterkeyhint="search" aria-label="' + T('Поиск') + '"><button id="btnFilters" class="' + (fc ? 'on' : '') + '">' + T('Фильтры') + (fc ? ' · ' + fc : '') + '</button></div>'
-    + '<div class="qf">' + QUICK.map(([k, l]) => '<button data-quick="' + k + '" aria-pressed="' + (S.f.quick === k) + '">' + l + '</button>').join('') + '</div>'
+    + '<div class="qf">' + QUICK.filter(q => q[0] !== 'seven' || isMax()).map(([k, l]) => '<button data-quick="' + k + '" aria-pressed="' + (S.f.quick === k) + '">' + l + '</button>').join('') + '</div>'
     + '<div class="count"><span id="cnt"></span><select id="sort" aria-label="' + T('Сортировка') + '">' + SORTS.map(([k, l]) => '<option value="' + k + '"' + (S.f.sort === k ? ' selected' : '') + '>' + l + '</option>').join('') + '</select></div>'
     + '<div class="list" id="lotlist"></div><div id="lotmore"></div>';
 }
@@ -1146,7 +1147,7 @@ window.addEventListener('notes-updated', () => {
 });
 window.addEventListener('favs-updated', () => { const a = document.activeElement; if (S.dragging || sheetOpen || (a && a.matches && a.matches('textarea,input'))) return; if (S.tab === 'fav' || S.tab === 'flist' || S.tab === 'home') keepScroll(render); else if (S.tab === 'lots') drawLots(true); });
 window.addEventListener('obd-updated', () => { if (sheetOpen) { obdRedraw(); return; } const a = document.activeElement; if (S.dragging || (a && a.matches && a.matches('textarea,input'))) return; if (S.tab === 'fav' || S.tab === 'flist') keepScroll(render); else if (S.tab === 'lots') drawLots(true); });
-window.addEventListener('sync-state', () => { if (S.tab === 'more' && !sheetOpen) render(); });
+window.addEventListener('sync-state', () => { if (S.f.quick === 'seven' && window.Sync && Sync.st.ready && !isMax()) { S.f.quick = ''; if (S.tab === 'lots' && !sheetOpen) render(); } if ((S.tab === 'more' || S.tab === 'lots') && !sheetOpen && S._maxSeen !== isMax()) { S._maxSeen = isMax(); render(); } else if (S.tab === 'more' && !sheetOpen) render(); });
 
 /* ---------- запоминаем экран: вкладка, фильтры, прокрутка, открытый лот ---------- */
 function saveView() {
