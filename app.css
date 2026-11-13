@@ -372,3 +372,4 @@ li.bad .obd-sev{background:var(--badb);color:var(--bad)}li.warn .obd-sev{backgro
 .wife-d{border-left:4px solid var(--good)}.wife-d.warn{border-left-color:#e0a800}.wife-d.bad{border-left-color:var(--bad)}
 .wife-d ul{margin:6px 0 0;padding-left:18px;font-size:14px}.wife-d p{margin:4px 0}
 .money.three{grid-template-columns:repeat(3,minmax(0,1fr))}.money .m-main b.fl-hi{color:var(--warn)}
+.fl-res{margin:4px 0 0;font-size:13px;font-weight:600;display:inline-block;padding:2px 8px;border-radius:6px}.fl-res.ok{background:var(--goodb);color:var(--good)}.fl-res.warn{background:var(--warnb);color:var(--warn)}.fl-res.bad{background:var(--badb);color:var(--bad)}
