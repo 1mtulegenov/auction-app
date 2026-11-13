@@ -207,6 +207,21 @@ function lotUrl(x) { return x.u ? x.u : x.s ? 'https://www.edgepipeline.com/comp
 function favKey(x) { return (x._d || S.date) + '|' + x.k; }
 function isFav(x) { return !!((x.vin && S.favs[x.vin]) || S.favs[favKey(x)]); }
 function noteOf(x) { const n = x.vin && S.notes[x.vin]; return n && n.text ? n : null; }
+// что важно для торгов из текста заметки: «больше не смотреть», своя цена («бить до 3.8», «до 5-6», «ммр 3к»), WS (wholesale)
+function noteFlags(n) {
+  if (!n || !n.text) return null;
+  const s = n.text, k = v => { v = parseFloat(String(v).replace(',', '.')); return v < 100 ? Math.round(v * 1000) : Math.round(v); };
+  const o = {};
+  if (/не\s*(с[мио]+тр|брать)|мусорк|больше\s+не/i.test(s)) o.stop = true;
+  let m = s.match(/(?:бить|бьем|бьём|дать|брать|давать)[^\d.]{0,20}?(?:до|макс)?\s*(\d+(?:[.,]\d+)?)(?:\s*[-–]\s*(\d+(?:[.,]\d+)?))?\s*(?:к|k|тыщ|тыс)?/i)
+    || s.match(/(?:^|[^а-яё])до\s*(\d+(?:[.,]\d+)?)(?:\s*[-–]\s*(\d+(?:[.,]\d+)?))?\s*(?:к|k|тыщ|тыс)?/i)
+    || s.match(/ммр\s*(\d+(?:[.,]\d+)?)\s*(?:к|k)/i);
+  if (m) { const v = k(m[2] || m[1]); if (v >= 300 && v <= 200000) o.bid = v; }
+  if (/дешев|дёшево|не\s*дорого/i.test(s) && !o.bid) o.cheap = true;
+  m = s.match(/(?:\bWS|wholesale)\s*\$?\s*(\d{3,6})/i); if (m) o.ws = +m[1];
+  if (/нет\s+(на\s+месте|в\s+линии)/i.test(s)) o.away = true;
+  return Object.keys(o).length ? o : null;
+}
 function noteWho(n) { if (!n || !n.by) return ''; const t = n.updatedAt ? new Date(n.updatedAt) : null; const when = t && !isNaN(t) ? t.toLocaleString(LOCALE, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''; return (n.cby && n.cby !== n.by ? T('Написал ') + n.cby + ', ' + T('изменил ') : T('Написал ')) + n.by + (when ? ', ' + when : ''); }
 function noteStatus(n) { const Y = window.Sync && Sync.st; if (n && n.by) return noteWho(n); if (Y && Y.user) return T('Общая заметка: увидят все, кто вошёл.'); if (Y && Y.on) return T('Сейчас только на этом устройстве. Войдите через Google во вкладке «Ещё», чтобы заметку видели все.'); return T('Хранится на этом телефоне и привязана к VIN.'); }
 // номер лота = линия + номер: «D-0054» → ['D', 0, 54], «11-0078» → ['', 11, 78]
@@ -255,6 +270,14 @@ function statusLine(x) {
   if (x.auc === 'CMX' && x.mech) add('bad', T('Дефект двигателя/КПП'));
   if (x.l === 'Green') add('ok', T('Зелёный свет')); else if (String(x.l || '').includes('Red')) add('bad', T('Красный свет')); else if (x.l === 'Yellow') add('warn', T('Жёлтый свет'));
   if (x.g) { const g = parseFloat(x.g); add(g >= 4 ? 'ok' : g < 3 ? 'bad' : 'warn', T('Оценка ') + E(x.g)); }
+  const nf = noteFlags(noteOf(x));
+  if (nf) {
+    if (nf.stop) add('bad', T('По заметке: не смотреть'));
+    if (nf.away) add('warn', T('По заметке: не было на месте'));
+    if (nf.bid) add('warn', T('По заметке: бить до ') + M(nf.bid));
+    else if (nf.cheap) add('warn', T('По заметке: только дёшево'));
+    if (nf.ws) add('ok', 'WS ' + M(nf.ws));
+  }
   return it.join('');
 }
 /* прошлые появления машины на торгах: продана / ушла на оффер / не продана */
@@ -477,7 +500,7 @@ async function favListScreen() {
     h += '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + '</span></h2><div class="flist' + (man ? ' man' : '') + '">'
       + '<div class="fl-h"><span>' + T('Лот') + '</span><span>' + T('Машина') + '</span><span>MMR</span><span>' + T('Для покупки') + '</span><span></span><span></span></div>'
       + rows.map(([fid, f, x]) => {         return '<div class="fl-r' + (f.x ? ' gone' : '') + '" data-fid="' + E(fid) + '"><button class="fl-run" data-lot="' + E(x.k) + '"' + (id !== S.date ? ' data-fd="' + E(id) + '"' : '') + '>' + E(x.run) + '</button>'
-          + '<span class="fl-car">' + E(carName(x)) + '</span><span class="fl-mmr">' + (x.est && x.w ? '≈' : '') + M(x.w) + '</span>'
+          + '<span class="fl-car">' + E(carName(x)) + ((nf => nf ? (nf.stop ? ' <em class="fl-tag bad">' + T('не смотреть') + '</em>' : '') + (nf.bid ? ' <em class="fl-tag">' + T('до ') + M(nf.bid) + '</em>' : '') : '')(noteFlags(noteOf(x)))) + '</span><span class="fl-mmr">' + (x.est && x.w ? '≈' : '') + M(x.w) + '</span>'
           + '<textarea class="fl-in buy" rows="1" data-bn="' + E(fid) + '" placeholder="' + T('Для покупки') + '">' + E(f.bn || '') + '</textarea><button class="fl-x" data-act="fl-x" data-fid="' + E(fid) + '" aria-pressed="' + !!f.x + '" title="' + (f.x ? T('Вернуть') : T('Ушла, не купили: зачеркнуть')) + '" aria-label="' + (f.x ? T('Вернуть') : T('Зачеркнуть')) + '">' + (f.x ? '↺' : '✕') + '</button><button class="fl-grip" aria-label="' + T('Перетащить') + '" title="' + T('Перетащить') + '"><i></i><i></i><i></i></button></div>'; }).join('') + '</div>';
   }
   return '<div class="hd"><h1>' + T('Список избранного') + '</h1><p>' + (n ? T('Заметка для покупки удаляется, когда машину убирают из избранного.') + ' ' + T('Порядок меняется перетаскиванием за ≡ справа.') : '') + '</p></div>'
@@ -649,7 +672,7 @@ function detail(k) {
     + '<h3 class="d-name">' + E(carTitle(x)) + '</h3><p class="sub">' + (x.o > 500 ? N(x.o) + ' mi · ' : '') + E(COLOR[x.c] || String(x.c || '').toLowerCase()) + (x.tr ? (x.est ? ' · EDGE: ' : ' · Manheim: ') + E(x.tr) : '') + '</p>'
     + (chips ? '<div class="chips">' + chips + '</div>' : '') + factText(x) + '</div>'
     + (isInop(x) ? '<div class="d-card"><div class="grid6"><div class="hl"><b>' + M(x.w) + '</b><span>Adjusted MMR</span></div></div><p class="muted" style="margin-top:6px">' + T('Неходячая машина: прибыль, цену продажи и макс. ставку не считаем, только MMR.') + '</p></div>' : '')
-    + (isInop(x) ? '' : '<div class="d-card"><div class="grid6"><div class="hl"><b>' + M(x.w) + '</b><span>Adjusted MMR</span></div><div><b>' + M(x.w != null ? x.w + FEE : null) + '</b><span>' + T('MMR + сбор ') + M(FEE) + '</span></div><div><b>' + M(x.r) + '</b><span>' + (x.est ? T('ретейл, оценка') : T('ретейл Manheim')) + '</span></div><div><b>' + M(x.sale) + '</b><span>' + T('цена продажи') + '</span></div><div><b class="' + profCls(x) + '">' + M(x.prof) + '</b><span>' + T('прибыль по MMR') + '</span></div><div><b>' + M(x.max) + '</b><span>' + T('макс. ставка') + (x.margin ? T(' (прибыль ') + M(x.margin) + ')' : '') + '</span></div></div>'
+    + (isInop(x) ? '' : '<div class="d-card"><div class="grid6"><div class="hl"><b>' + M(x.w) + '</b><span>Adjusted MMR</span></div><div><b>' + M(x.w != null ? x.w + FEE : null) + '</b><span>' + T('MMR + сбор ') + M(FEE) + '</span></div><div><b>' + M(x.r) + '</b><span>' + (x.est ? T('ретейл, оценка') : T('ретейл Manheim')) + '</span></div><div><b>' + M(x.sale) + '</b><span>' + T('цена продажи') + '</span></div><div><b class="' + profCls(x) + '">' + M(x.prof) + '</b><span>' + T('прибыль по MMR') + '</span></div><div><b>' + M(x.max) + '</b><span>' + T('макс. ставка') + (x.margin ? T(' (прибыль ') + M(x.margin) + ')' : '') + '</span></div>' + ((nf => nf && (nf.bid || nf.ws) ? (nf.bid ? '<div><b>' + M(nf.bid) + '</b><span>' + T('ставка по заметке') + '</span></div>' : '') + (nf.ws ? '<div><b>' + M(nf.ws) + '</b><span>' + T('WS по заметке') + '</span></div>' : '') : '')(noteFlags(noteOf(x)))) + '</div>'
     + (x.est ? '<p class="muted" style="margin-top:6px">' + T('Новый лот: Manheim ещё не смотрели. MMR и ретейл оценены по похожим машинам с прошлых торгов.') + ' ' + E(x.src || '') + '</p>' : '')
     + (x.demand ? '<p class="p"><b>' + T('Спрос ') + x.demand + '/10</b>' + (x.sell ? T(', продаётся за ') + E(weeks(x.sell)) : '') + '</p>' : '') + '</div>')
     + (x.sale != null && !isInop(x) ? '<div class="d-card"><h3>' + T('Калькулятор ставки') + '</h3><div class="calc"><input id="bid" type="number" inputmode="numeric" value="' + E(bid) + '" aria-label="' + T('Ваша ставка, $') + '"><div class="calc-out" id="calcOut"></div></div></div>' : '')
