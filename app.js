@@ -294,7 +294,7 @@ function wifeEval(x) {
   if (x.hist) { notes.push('пометка в истории: дисконт при продаже'); pen += 1; }
   if (/рам|frame/i.test(x.cr || '')) { notes.push('по отчёту повреждение рамы'); pen += 3; }
   const nf = noteFlags(noteOf(x)); if (nf && nf.stop) { notes.push('по заметке: не смотреть'); pen += 3; }
-  const ob = obdOf(x), ov = ob && window.OBD && OBD.verdict(ob.codes); if (ov) { notes.push('OBD: ' + OBD.SEV[ov.s][1]); pen += ov.s === 3 ? 3 : ov.s === 2 ? 1 : 0; }
+  const ob = obdOf(x), ov = ob && window.OBD && OBD.verdict(ob.codes, x.mk); if (ov) { notes.push('OBD: ' + OBD.SEV[ov.s][1]); pen += ov.s === 3 ? 3 : ov.s === 2 ? 1 : 0; }
   const res = (WIFE_RES[Object.keys(WIFE_RES).find(k => mk.startsWith(k))] || 600) + (o > 140000 ? 400 : 0);
   let max = null, sale3 = null, ok = null;
   if (x.sale != null) {
@@ -342,7 +342,7 @@ function statusLine(x) {
     if (nf.ws) add('ok', 'WS ' + M(nf.ws));
   }
   if (x.floor) add(x.max != null && x.floor > x.max ? 'warn' : '', T('Floor price ') + M(x.floor) + (x.max != null && x.floor > x.max ? T(', выше ставки') : '') + (x.cons ? ' · ' + E(x.cons) : ''));
-  const ob = obdOf(x), ov = ob && window.OBD && OBD.verdict(ob.codes);
+  const ob = obdOf(x), ov = ob && window.OBD && OBD.verdict(ob.codes, x.mk);
   if (ov) add(OBD.SEV[ov.s][0], 'OBD: ' + ob.codes.length + ' ' + T(ob.codes.length === 1 ? 'ошибка' : ob.codes.length < 5 ? 'ошибки' : 'ошибок') + ', ' + T(OBD.SEV[ov.s][1]));
   else if (ob && ob.shots.length) add('warn', T('OBD: скриншот без кодов'));
   return it.join('');
@@ -569,7 +569,7 @@ async function favListScreen() {
     h += '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + '</span></h2><div class="flist' + (man ? ' man' : '') + '">'
       + '<div class="fl-h"><span>' + T('Лот') + '</span><span>' + T('Машина') + '</span><span>MMR</span><span>' + T('Для покупки') + '</span><span></span><span></span></div>'
       + rows.map(([fid, f, x]) => {         return '<div class="fl-r' + (f.x ? ' gone' : '') + '" data-fid="' + E(fid) + '"><button class="fl-run" data-lot="' + E(x.k) + '"' + (id !== S.date ? ' data-fd="' + E(id) + '"' : '') + '>' + E(x.run) + '</button>'
-          + '<span class="fl-car">' + ((nf => nf ? (nf.stop ? ' <em class="fl-tag bad">' + T('не смотреть') + '</em>' : '') + (nf.bid ? ' <em class="fl-tag">' + T('до ') + M(nf.bid) + '</em>' : '') : '')(noteFlags(noteOf(x)))) + ((ov => ov ? ' <em class="fl-tag' + (ov.s === 3 ? ' bad' : ov.s === 1 ? ' ok' : '') + '">OBD</em>' : '')(obdOf(x) && window.OBD && OBD.verdict(obdOf(x).codes)))  + ' ' + E(carName(x))+ '</span><span class="fl-mmr">' + (x.est && x.w ? '≈' : '') + M(x.w) + '</span>'
+          + '<span class="fl-car">' + ((nf => nf ? (nf.stop ? ' <em class="fl-tag bad">' + T('не смотреть') + '</em>' : '') + (nf.bid ? ' <em class="fl-tag">' + T('до ') + M(nf.bid) + '</em>' : '') : '')(noteFlags(noteOf(x)))) + ((ov => ov ? ' <em class="fl-tag' + (ov.s === 3 ? ' bad' : ov.s === 1 ? ' ok' : '') + '">OBD</em>' : '')(obdOf(x) && window.OBD && OBD.verdict(obdOf(x).codes, x.mk)))  + ' ' + E(carName(x))+ '</span><span class="fl-mmr">' + (x.est && x.w ? '≈' : '') + M(x.w) + '</span>'
           + '<textarea class="fl-in buy" rows="1" data-bn="' + E(fid) + '" placeholder="' + T('Для покупки') + '">' + E(f.bn || '') + '</textarea><button class="fl-x" data-act="fl-x" data-fid="' + E(fid) + '" aria-pressed="' + !!f.x + '" title="' + (f.x ? T('Вернуть') : T('Ушла, не купили: зачеркнуть')) + '" aria-label="' + (f.x ? T('Вернуть') : T('Зачеркнуть')) + '">' + (f.x ? '↺' : '✕') + '</button><button class="fl-grip" aria-label="' + T('Перетащить') + '" title="' + T('Перетащить') + '"><i></i><i></i><i></i></button></div>'; }).join('') + '</div>';
   }
   return '<div class="hd"><h1>' + T('Список избранного') + '</h1><p>' + (n ? T('Заметка для покупки удаляется, когда машину убирают из избранного.') + ' ' + T('Порядок меняется перетаскиванием за ≡ справа.') : '') + '</p></div>'
@@ -766,10 +766,10 @@ function obdCard(x) {
   let h = '<h3>' + T('Ошибки OBD (ThinkDiag)') + '</h3>';
   if (!x.vin) return h + '<p class="muted">' + T('У лота нет VIN: скриншот не к чему привязать.') + '</p>';
   if (!window.OBD) return h + '<p class="muted">' + T('Загрузка…') + '</p>';
-  const o = obdOf(x), v = o && OBD.verdict(o.codes);
+  const o = obdOf(x), v = o && OBD.verdict(o.codes, x.mk);
   if (o && o.shots.length) h += '<div class="obd-shots">' + o.shots.map(s => '<button class="obd-th" data-act="obd-view" data-id="' + E(s.id) + '" aria-label="' + T('Открыть скриншот') + '"><img alt="" data-obd="' + E(s.id) + '"' + (OBD_IMG[x.vin + '/' + s.id] ? ' src="' + OBD_IMG[x.vin + '/' + s.id] + '"' : '') + '></button>').join('') + '</div>';
   if (v) h += '<p class="obd-v ' + OBD.SEV[v.s][0] + '"><b>' + E(T(v.t)) + '</b></p>';
-  if (o && o.codes.length) h += '<ul class="obd-list">' + o.codes.map((c, i) => { const f = OBD.info(c.c, c.d), sv = OBD.SEV[f.s]; return '<li class="' + sv[0] + '"><div class="obd-h"><b class="obd-c' + (c.c ? '' : ' nc') + '">' + E(c.c || T('без кода')) + '</b><span class="obd-sev">' + T(sv[1]) + '</span>' + (c.st ? '<span class="obd-st">' + T(OBD.ST[c.st]) + '</span>' : '') + '<button class="obd-rm" data-act="obd-rm" data-i="' + i + '" aria-label="' + T('Убрать код') + '">✕</button></div><p class="obd-t">' + E(f.t) + '</p><p class="obd-n">' + E(f.n) + '</p>' + (c.c && c.d && f.known ? '<p class="obd-en">ThinkDiag: ' + E(c.d) + '</p>' : '') + '</li>'; }).join('') + '</ul>';
+  if (o && o.codes.length) h += '<ul class="obd-list">' + o.codes.map((c, i) => { const f = OBD.info(c.c, c.d, x.mk), sv = OBD.SEV[f.s]; return '<li class="' + sv[0] + '"><div class="obd-h"><b class="obd-c' + (c.c ? '' : ' nc') + '">' + E(c.c || c.rc || T('без кода')) + '</b><span class="obd-sev">' + T(sv[1]) + '</span>' + (c.st ? '<span class="obd-st">' + T(OBD.ST[c.st]) + '</span>' : '') + '<button class="obd-rm" data-act="obd-rm" data-i="' + i + '" aria-label="' + T('Убрать код') + '">✕</button></div><p class="obd-t">' + E(f.t) + '</p><p class="obd-n">' + E(f.n) + '</p>' + (c.c && c.d && f.known ? '<p class="obd-en">ThinkDiag: ' + E(c.d) + '</p>' : '') + '</li>'; }).join('') + '</ul>';
   else if (o) h += '<p class="muted">' + T('Коды на скриншоте не распознались. Введите их ниже.') + '</p>';
   h += '<div class="obd-bar"><label class="btn pri obd-add">' + T('📷 Добавить скриншот') + '<input type="file" accept="image/*" multiple id="obdFile" hidden></label></div>'
     + '<div class="obd-man"><input id="obdIn" type="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="' + T('Код вручную: P0420, U0100') + '" aria-label="' + T('Код ошибки') + '"><button class="btn" data-act="obd-code">' + T('Добавить') + '</button></div>';
@@ -843,7 +843,7 @@ async function obdAdd(files) {
     say(T('Распознаю коды ошибок…'));
     let found = [];
     try { const w = await ocrText(); const r = await w.recognize(obdPrep(im)); found = OBD.parse(r.data.text); ocrIdle(); } catch (e) { console.warn('ocr', e); }
-    const add = found.filter(c => !o.codes.some(z => c.c ? z.c === c.c : !z.c && z.d === c.d));
+    const add = found.filter(c => !o.codes.some(z => c.c ? z.c === c.c : c.rc ? z.rc === c.rc : !z.c && z.d === c.d));
     o.codes.push(...add);
     if (add.length) obdSave(x, o);
     toast(found.length ? T('Найдено ошибок: ') + found.length : T('Коды не распознаны: введите вручную'));
