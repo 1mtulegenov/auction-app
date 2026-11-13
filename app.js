@@ -337,7 +337,7 @@ function statusLine(x) {
     else if (nf.cheap) add('warn', T('По заметке: только дёшево'));
     if (nf.ws) add('ok', 'WS ' + M(nf.ws));
   }
-  if (x.floor) add(x.max != null && x.floor > x.max ? 'warn' : '', T('Резерв ') + M(x.floor) + (x.max != null && x.floor > x.max ? T(', выше ставки') : ''));
+  if (x.floor) add(x.max != null && x.floor > x.max ? 'warn' : '', T('Резерв ') + M(x.floor) + (x.max != null && x.floor > x.max ? T(', выше ставки') : '') + (x.cons ? ' · ' + E(x.cons) : ''));
   const ob = obdOf(x), ov = ob && window.OBD && OBD.verdict(ob.codes);
   if (ov) add(OBD.SEV[ov.s][0], 'OBD: ' + ob.codes.length + ' ' + T(ob.codes.length === 1 ? 'ошибка' : ob.codes.length < 5 ? 'ошибки' : 'ошибок') + ', ' + T(OBD.SEV[ov.s][1]));
   else if (ob && ob.shots.length) add('warn', T('OBD: скриншот без кодов'));
