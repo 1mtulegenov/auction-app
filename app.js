@@ -38,7 +38,7 @@ const LS = {
 const S = {
   index: null, date: null, d: null, cache: {},
   tab: 'home', picks: 'core',
-  favs: loadFavs(), favDel: LS.get('fav-del-v1', {}), notes: LS.get('auction-notes-v1', {}),
+  favs: loadFavs(), favDel: LS.get('fav-del-v1', {}), notes: LS.get('auction-notes-v1', {}), obd: LS.get('auction-obd-v1', {}),
   f: { q: '', mk: [], md: [], au: '', cl: '', st: '', y: '', o: '', p: '', quick: '' , sort: 'stat' },
   rf: { q: '', st: '', sort: 'run' },
   favSort: LS.get('fav-sort', 'run'), flSort: LS.get('flist-sort', 'manual'),
@@ -278,6 +278,9 @@ function statusLine(x) {
     else if (nf.cheap) add('warn', T('По заметке: только дёшево'));
     if (nf.ws) add('ok', 'WS ' + M(nf.ws));
   }
+  const ob = obdOf(x), ov = ob && window.OBD && OBD.verdict(ob.codes);
+  if (ov) add(OBD.SEV[ov.s][0], 'OBD: ' + ob.codes.length + ' ' + T(ob.codes.length === 1 ? 'ошибка' : ob.codes.length < 5 ? 'ошибки' : 'ошибок') + ', ' + T(OBD.SEV[ov.s][1]));
+  else if (ob && ob.shots.length) add('warn', T('OBD: скриншот без кодов'));
   return it.join('');
 }
 /* прошлые появления машины на торгах: продана / ушла на оффер / не продана */
@@ -500,7 +503,7 @@ async function favListScreen() {
     h += '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + '</span></h2><div class="flist' + (man ? ' man' : '') + '">'
       + '<div class="fl-h"><span>' + T('Лот') + '</span><span>' + T('Машина') + '</span><span>MMR</span><span>' + T('Для покупки') + '</span><span></span><span></span></div>'
       + rows.map(([fid, f, x]) => {         return '<div class="fl-r' + (f.x ? ' gone' : '') + '" data-fid="' + E(fid) + '"><button class="fl-run" data-lot="' + E(x.k) + '"' + (id !== S.date ? ' data-fd="' + E(id) + '"' : '') + '>' + E(x.run) + '</button>'
-          + '<span class="fl-car">' + E(carName(x)) + ((nf => nf ? (nf.stop ? ' <em class="fl-tag bad">' + T('не смотреть') + '</em>' : '') + (nf.bid ? ' <em class="fl-tag">' + T('до ') + M(nf.bid) + '</em>' : '') : '')(noteFlags(noteOf(x)))) + '</span><span class="fl-mmr">' + (x.est && x.w ? '≈' : '') + M(x.w) + '</span>'
+          + '<span class="fl-car">' + ((nf => nf ? (nf.stop ? ' <em class="fl-tag bad">' + T('не смотреть') + '</em>' : '') + (nf.bid ? ' <em class="fl-tag">' + T('до ') + M(nf.bid) + '</em>' : '') : '')(noteFlags(noteOf(x)))) + ((ov => ov ? ' <em class="fl-tag' + (ov.s === 3 ? ' bad' : ov.s === 1 ? ' ok' : '') + '">OBD</em>' : '')(obdOf(x) && window.OBD && OBD.verdict(obdOf(x).codes)))  + ' ' + E(carName(x))+ '</span><span class="fl-mmr">' + (x.est && x.w ? '≈' : '') + M(x.w) + '</span>'
           + '<textarea class="fl-in buy" rows="1" data-bn="' + E(fid) + '" placeholder="' + T('Для покупки') + '">' + E(f.bn || '') + '</textarea><button class="fl-x" data-act="fl-x" data-fid="' + E(fid) + '" aria-pressed="' + !!f.x + '" title="' + (f.x ? T('Вернуть') : T('Ушла, не купили: зачеркнуть')) + '" aria-label="' + (f.x ? T('Вернуть') : T('Зачеркнуть')) + '">' + (f.x ? '↺' : '✕') + '</button><button class="fl-grip" aria-label="' + T('Перетащить') + '" title="' + T('Перетащить') + '"><i></i><i></i><i></i></button></div>'; }).join('') + '</div>';
   }
   return '<div class="hd"><h1>' + T('Список избранного') + '</h1><p>' + (n ? T('Заметка для покупки удаляется, когда машину убирают из избранного.') + ' ' + T('Порядок меняется перетаскиванием за ≡ справа.') : '') + '</p></div>'
@@ -678,6 +681,7 @@ function detail(k) {
     + (x.sale != null && !isInop(x) ? '<div class="d-card"><h3>' + T('Калькулятор ставки') + '</h3><div class="calc"><input id="bid" type="number" inputmode="numeric" value="' + E(bid) + '" aria-label="' + T('Ваша ставка, $') + '"><div class="calc-out" id="calcOut"></div></div></div>' : '')
     + (info ? '<div class="d-card">' + info + '</div>' : '')
     + '<div class="d-card"><h3><label for="note">' + T('Заметка после осмотра') + (n && n.date && n.date !== S.date ? T(' (от ') + fmtDate(n.date) + T(', лот ') + E(n.run) + ')' : '') + '</label></h3><textarea class="note' + (n ? ' has' : '') + '" id="note" data-k="' + E(k) + '" placeholder="' + T('Что увидели: кузов, мотор, салон, запах, ошибки') + '">' + E(n ? n.text : '') + '</textarea><div class="note-bar"><p class="muted" id="nstat" style="font-size:12.5px">' + E(noteStatus(n)) + '</p><button class="btn" data-act="note-done">' + T('Сохранить') + '</button></div></div>'
+    + '<div class="d-card obd" id="obdCard" data-k="' + E(k) + '">' + obdCard(x) + '</div>'
     + '<div class="d-card"><p class="vin">VIN ' + E(x.vin || T('нет')) + '</p><div class="btns">'
     + '<button class="btn" data-fav="' + E(k) + '">' + (isFav(x) ? T('★ В избранном') : T('☆ В избранное')) + '</button>'
     + (x.vin ? '<button class="btn" data-act="copy" data-v="' + E(x.vin) + '">' + T('Скопировать VIN') + '</button>' : '')
@@ -685,7 +689,104 @@ function detail(k) {
     + '<button class="btn" data-act="share-lot" data-k="' + E(k) + '">' + T('Поделиться') + '</button>'
     + '</div></div>';
   openSheet(T('Лот ') + E(x.run), html, true);
-  calc(x);
+  calc(x); obdThumbs(x);
+}
+/* ---------- ошибки OBD: скриншот ThinkDiag у машины, коды распознаются в приложении, пояснения из справочника obd.js ---------- */
+const OBD_IMG = {};
+function obdOf(x) { const o = x && x.vin && S.obd[x.vin]; return o && ((o.codes && o.codes.length) || (o.shots && o.shots.length)) ? o : null; }
+function obdCard(x) {
+  let h = '<h3>' + T('Ошибки OBD (ThinkDiag)') + '</h3>';
+  if (!x.vin) return h + '<p class="muted">' + T('У лота нет VIN: скриншот не к чему привязать.') + '</p>';
+  if (!window.OBD) return h + '<p class="muted">' + T('Загрузка…') + '</p>';
+  const o = obdOf(x), v = o && OBD.verdict(o.codes);
+  if (o && o.shots.length) h += '<div class="obd-shots">' + o.shots.map(s => '<button class="obd-th" data-act="obd-view" data-id="' + E(s.id) + '" aria-label="' + T('Открыть скриншот') + '"><img alt="" data-obd="' + E(s.id) + '"' + (OBD_IMG[x.vin + '/' + s.id] ? ' src="' + OBD_IMG[x.vin + '/' + s.id] + '"' : '') + '></button>').join('') + '</div>';
+  if (v) h += '<p class="obd-v ' + OBD.SEV[v.s][0] + '"><b>' + E(T(v.t)) + '</b></p>';
+  if (o && o.codes.length) h += '<ul class="obd-list">' + o.codes.map((c, i) => { const f = OBD.info(c.c, c.d), sv = OBD.SEV[f.s]; return '<li class="' + sv[0] + '"><div class="obd-h"><b class="obd-c">' + E(c.c) + '</b><span class="obd-sev">' + T(sv[1]) + '</span>' + (c.st ? '<span class="obd-st">' + T(OBD.ST[c.st]) + '</span>' : '') + '<button class="obd-rm" data-act="obd-rm" data-i="' + i + '" aria-label="' + T('Убрать код') + '">✕</button></div><p class="obd-t">' + E(f.t) + '</p><p class="obd-n">' + E(f.n) + '</p>' + (c.d && f.known ? '<p class="obd-en">ThinkDiag: ' + E(c.d) + '</p>' : '') + '</li>'; }).join('') + '</ul>';
+  else if (o) h += '<p class="muted">' + T('Коды на скриншоте не распознались. Введите их ниже.') + '</p>';
+  h += '<div class="obd-bar"><label class="btn pri obd-add">' + T('📷 Добавить скриншот') + '<input type="file" accept="image/*" multiple id="obdFile" hidden></label></div>'
+    + '<div class="obd-man"><input id="obdIn" type="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="' + T('Код вручную: P0420, U0100') + '" aria-label="' + T('Код ошибки') + '"><button class="btn" data-act="obd-code">' + T('Добавить') + '</button></div>';
+  const Y = window.Sync && Sync.st;
+  const err = Y && Y.obdErr === 'rules' ? T('Не сохраняется в базе: в Firebase нужно добавить правило для obd (см. сообщение в чате).') : Y && Y.obdErr ? Y.obdErr : '';
+  h += '<p class="muted obd-stat" id="obdSt">' + E(err || (o && o.by ? T('Добавил ') + o.by + (o.at ? ', ' + new Date(o.at).toLocaleString(LOCALE, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '') : T('Скриншот с ошибками увидят все. Коды распознаются автоматически.'))) + '</p>';
+  return h;
+}
+function obdRedraw() { const c = $('#obdCard'); if (!c) return; const x = S.d.map[c.dataset.k]; if (!x) return; const a = document.activeElement, keep = a && a.id === 'obdIn' ? a.value : null; c.innerHTML = obdCard(x); if (keep != null) { const i = $('#obdIn'); i.value = keep; i.focus(); } obdThumbs(x); }
+async function obdThumbs(x) {
+  const o = obdOf(x); if (!o) return;
+  for (const s of o.shots) {
+    const key = x.vin + '/' + s.id;
+    if (!OBD_IMG[key] && window.Sync && Sync.obdImg) { const d = await Sync.obdImg(x.vin, s.id); if (d) OBD_IMG[key] = d; }
+    const im = document.querySelector('img[data-obd="' + CSS.escape(s.id) + '"]'); if (im && OBD_IMG[key] && im.src !== OBD_IMG[key]) im.src = OBD_IMG[key];
+  }
+}
+function obdSave(x, o, img) {
+  o.car = carName(x); o.run = x.run; o.date = x._d || S.date;
+  const Y = window.Sync && Sync.st; o.by = (Y && Y.user && Y.user.name) || o.by || ''; o.at = new Date().toISOString();
+  if (!o.codes.length && !o.shots.length) delete S.obd[x.vin]; else S.obd[x.vin] = o;
+  LS.set('auction-obd-v1', S.obd);
+  obdRedraw();
+  if (window.Sync && Sync.pushObd) return Sync.pushObd(x.vin, o.codes.length || o.shots.length ? o : null, img).then(() => obdRedraw());
+}
+function obdCur() { const c = $('#obdCard'), x = c && S.d.map[c.dataset.k]; if (!x || !x.vin) return null; const o = S.obd[x.vin] ? JSON.parse(JSON.stringify(S.obd[x.vin])) : { codes: [], shots: [] }; o.codes = o.codes || []; o.shots = o.shots || []; return [x, o]; }
+function loadImg(f) { return new Promise((ok, bad) => { const u = URL.createObjectURL(f), im = new Image(); im.onload = () => { URL.revokeObjectURL(u); ok(im); }; im.onerror = e => { URL.revokeObjectURL(u); bad(e); }; im.src = u; }); }
+// сжатие для базы: длинная сторона до 1600px, JPEG ~150–300 КБ (лимит документа Firestore 1 МБ)
+function obdShrink(im) {
+  let q = .72, mx = 1600, out = '';
+  for (let t = 0; t < 4; t++) {
+    const r = Math.min(1, mx / Math.max(im.naturalWidth, im.naturalHeight)), c = document.createElement('canvas');
+    c.width = Math.round(im.naturalWidth * r); c.height = Math.round(im.naturalHeight * r);
+    c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+    out = c.toDataURL('image/jpeg', q);
+    if (out.length < 700000) break; q -= .12; mx -= 300;
+  }
+  return out;
+}
+// для распознавания: серый, тёмная тема переворачивается в светлую, мелкий скриншот увеличивается
+function obdPrep(im) {
+  const r = Math.max(1, 1400 / im.naturalWidth), c = document.createElement('canvas');
+  c.width = Math.round(im.naturalWidth * Math.min(r, 2.5)); c.height = Math.round(im.naturalHeight * Math.min(r, 2.5));
+  const g = c.getContext('2d'); g.drawImage(im, 0, 0, c.width, c.height);
+  const d = g.getImageData(0, 0, c.width, c.height), p = d.data; let sum = 0;
+  for (let i = 0; i < p.length; i += 4) { const l = .299 * p[i] + .587 * p[i + 1] + .114 * p[i + 2]; p[i] = p[i + 1] = p[i + 2] = l; sum += l; }
+  if (sum / (p.length / 4) < 110) for (let i = 0; i < p.length; i += 4) p[i] = p[i + 1] = p[i + 2] = 255 - p[i];
+  g.putImageData(d, 0, 0); return c;
+}
+let OCR2 = null, ocr2T = 0;
+function ocrText() {
+  if (!OCR2) OCR2 = (async () => {
+    if (!window.Tesseract) await new Promise((ok, bad) => { const s = document.createElement('script'); s.src = 'vendor/tess/tesseract.min.js'; s.onload = ok; s.onerror = bad; document.head.appendChild(s); });
+    const base = new URL('vendor/tess/', location.href).href;
+    return Tesseract.createWorker('eng', 1, { workerPath: base + 'worker.min.js', corePath: base, langPath: base, gzip: true, workerBlobURL: false });
+  })().catch(e => { OCR2 = null; throw e; });
+  clearTimeout(ocr2T);
+  return OCR2;
+}
+function ocrIdle() { clearTimeout(ocr2T); ocr2T = setTimeout(() => { if (OCR2) OCR2.then(w => w.terminate()).catch(() => {}); OCR2 = null; }, 90000); }
+async function obdAdd(files) {
+  const cur = obdCur(); if (!cur) return; const [x, o] = cur;
+  const say = t => { const el = $('#obdSt'); if (el) el.textContent = t; };
+  for (const f of files) {
+    let im; try { im = await loadImg(f); } catch (e) { toast(T('Не получилось открыть картинку')); continue; }
+    say(T('Сохраняю скриншот…'));
+    const data = obdShrink(im), id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    OBD_IMG[x.vin + '/' + id] = data;
+    o.shots.push({ id, at: new Date().toISOString(), by: (window.Sync && Sync.st.user && Sync.st.user.name) || '' });
+    obdSave(x, o, { id, data });
+    say(T('Распознаю коды ошибок…'));
+    let found = [];
+    try { const w = await ocrText(); const r = await w.recognize(obdPrep(im)); found = OBD.parse(r.data.text); ocrIdle(); } catch (e) { console.warn('ocr', e); }
+    const add = found.filter(c => !o.codes.some(z => z.c === c.c));
+    o.codes.push(...add);
+    if (add.length) obdSave(x, o);
+    toast(found.length ? T('Найдено кодов: ') + found.length : T('Коды не распознаны: введите вручную'));
+  }
+  obdRedraw();
+}
+function obdView(id) {
+  const cur = obdCur(); if (!cur) return; const [x] = cur, src = OBD_IMG[x.vin + '/' + id]; if (!src) return;
+  const v = document.createElement('div'); v.className = 'obd-view'; v.setAttribute('role', 'dialog'); v.setAttribute('aria-modal', 'true');
+  v.innerHTML = '<img alt="' + T('Скриншот OBD') + '" src="' + src + '"><div class="obd-vbar"><button class="btn" data-act="obd-del-img" data-id="' + E(id) + '">' + T('Удалить скриншот') + '</button><button class="btn pri" data-act="obd-close">' + T('Закрыть') + '</button></div>';
+  document.body.appendChild(v);
 }
 function calc(x) {
   const i = $('#bid'), o = $('#calcOut'); if (!i || !o) return;
@@ -833,6 +934,11 @@ document.addEventListener('click', async e => {
   if (t.id === 'btnTheme') { cycleTheme(); return; }
   switch (ds.act) {
     case 'close': closeSheet(); break;
+    case 'obd-view': obdView(ds.id); break;
+    case 'obd-close': { const v = document.querySelector('.obd-view'); if (v) v.remove(); break; }
+    case 'obd-del-img': { const v = document.querySelector('.obd-view'); if (v) v.remove(); const cur = obdCur(); if (!cur) break; const [x, o] = cur; o.shots = o.shots.filter(s => s.id !== ds.id); delete OBD_IMG[x.vin + '/' + ds.id]; if (window.Sync && Sync.delObdImg) Sync.delObdImg(x.vin, ds.id); obdSave(x, o); toast(T('Скриншот удалён')); break; }
+    case 'obd-rm': { const cur = obdCur(); if (!cur) break; const [x, o] = cur; o.codes.splice(+ds.i, 1); obdSave(x, o); break; }
+    case 'obd-code': { const i = $('#obdIn'), cur = obdCur(); if (!i || !cur) break; const [x, o] = cur; const cs = String(i.value).toUpperCase().split(/[\s,;]+/).map(OBD.norm).filter(c => /^[PCBU][0-3][0-9A-F]{3}$/.test(c)); if (!cs.length) { toast(T('Формат кода: буква P, C, B или U и 4 знака, например P0420')); break; } cs.forEach(c => { if (!o.codes.some(z => z.c === c)) o.codes.push({ c, d: '', st: '' }); }); i.value = ''; obdSave(x, o); break; }
     case 'note-done': { const ta = $('#note'); if (ta) { saveNote(ta); ta.blur(); } toast(T('Заметка сохранена')); break; }
     case 'more': S.shown += 24; drawLots('append'); break;
     case 'rmore': S.rshown += 80; drawResults(true); break;
@@ -871,7 +977,7 @@ document.addEventListener('click', async e => {
     case 'font': fontSheet(); break;
   }
 });
-document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.lot[data-lot]')) { e.preventDefault(); e.target.click(); } if (e.key === 'Escape' && sheetOpen) closeSheet(); if (e.key === '/' && !sheetOpen && !e.target.matches('input,textarea,select') && $('#q')) { e.preventDefault(); $('#q').focus(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.id === 'obdIn') { e.preventDefault(); const b = document.querySelector('[data-act="obd-code"]'); if (b) b.click(); return; } if (e.key === 'Escape' && document.querySelector('.obd-view')) { document.querySelector('.obd-view').remove(); return; } if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.lot[data-lot]')) { e.preventDefault(); e.target.click(); } if (e.key === 'Escape' && sheetOpen) closeSheet(); if (e.key === '/' && !sheetOpen && !e.target.matches('input,textarea,select') && $('#q')) { e.preventDefault(); $('#q').focus(); } });
 $('#sheetBg').addEventListener('click', () => closeSheet());
 let qT;
 document.addEventListener('input', e => {
@@ -889,6 +995,7 @@ document.addEventListener('focusout', e => {
   setTimeout(() => { if (document.activeElement && document.activeElement.matches('#sheet textarea, #sheet input')) return; window.scrollTo(0, S.sheetY || 0); const h = $('#sheet .sheet-h'); if (h && h.getBoundingClientRect().top < 0) $('#sheet').scrollTop = 0; }, 60);
 });
 document.addEventListener('change', e => {
+  if (e.target.id === 'obdFile') { const fs = [...e.target.files]; e.target.value = ''; if (fs.length) obdAdd(fs); return; }
   if (e.target.id === 'sort') { S.f.sort = e.target.value; drawLots(); }
   else if (e.target.id === 'rsort') { S.rf.sort = e.target.value; drawResults(); }
   else if (e.target.id === 'favsort') { S.favSort = e.target.value; LS.set('fav-sort', S.favSort); keepScroll(render); }
@@ -977,6 +1084,7 @@ window.addEventListener('notes-updated', () => {
   if (S.tab === 'flist' || S.tab === 'fav' || S.tab === 'home') keepScroll(render); else if (S.tab === 'lots') drawLots(true);
 });
 window.addEventListener('favs-updated', () => { const a = document.activeElement; if (S.dragging || sheetOpen || (a && a.matches && a.matches('textarea,input'))) return; if (S.tab === 'fav' || S.tab === 'flist' || S.tab === 'home') keepScroll(render); else if (S.tab === 'lots') drawLots(true); });
+window.addEventListener('obd-updated', () => { if (sheetOpen) { obdRedraw(); return; } const a = document.activeElement; if (S.dragging || (a && a.matches && a.matches('textarea,input'))) return; if (S.tab === 'fav' || S.tab === 'flist') keepScroll(render); else if (S.tab === 'lots') drawLots(true); });
 window.addEventListener('sync-state', () => { if (S.tab === 'more' && !sheetOpen) render(); });
 
 /* ---------- запоминаем экран: вкладка, фильтры, прокрутка, открытый лот ---------- */

@@ -335,3 +335,31 @@ html.gated body{overflow:hidden}
 .act-ax{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin:2px 0 4px}
 .fl-tag{font-style:normal;font-size:11.5px;font-weight:600;padding:1px 6px;border-radius:6px;background:var(--warnb);color:var(--warn);white-space:nowrap}
 .fl-tag.bad{background:var(--badb);color:var(--bad)}
+/* ошибки OBD */
+.fl-tag.ok{background:var(--goodb);color:var(--good)}
+.obd-shots{display:flex;gap:8px;overflow-x:auto;margin:6px 0 10px;padding-bottom:2px}
+.obd-th{flex:none;width:76px;height:136px;border:1px solid var(--line);border-radius:10px;padding:0;overflow:hidden;background:var(--well);cursor:zoom-in}
+.obd-th img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.obd-v{margin:4px 0 8px;padding:8px 10px;border-radius:10px;font-size:14px}
+.obd-v.bad{background:var(--badb);color:var(--bad)}.obd-v.warn{background:var(--warnb);color:var(--warn)}.obd-v.ok{background:var(--goodb);color:var(--good)}
+.obd-list{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:8px}
+.obd-list li{border:1px solid var(--line);border-left:4px solid var(--muted);border-radius:10px;padding:8px 10px}
+.obd-list li.bad{border-left-color:var(--bad)}.obd-list li.warn{border-left-color:#e0a800}.obd-list li.ok{border-left-color:var(--good)}
+.obd-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.obd-c{font-family:ui-monospace,Menlo,monospace;font-size:15px;letter-spacing:.02em}
+.obd-sev{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--chip)}
+li.bad .obd-sev{background:var(--badb);color:var(--bad)}li.warn .obd-sev{background:var(--warnb);color:var(--warn)}li.ok .obd-sev{background:var(--goodb);color:var(--good)}
+.obd-st{font-size:12px;color:var(--muted)}
+.obd-rm{margin-left:auto;border:0;background:none;color:var(--muted);font-size:15px;width:32px;height:32px;border-radius:8px;cursor:pointer}
+.obd-rm:hover{background:var(--well);color:var(--bad)}
+.obd-t{margin:4px 0 2px;font-weight:600;font-size:14px}
+.obd-n{margin:0;font-size:13.5px;color:var(--ink)}
+.obd-en{margin:3px 0 0;font-size:12px;color:var(--muted)}
+.obd-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.obd-add{cursor:pointer}
+.obd-man{display:flex;gap:8px}
+.obd-man input{flex:1;min-width:0;font:inherit;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);text-transform:uppercase}
+.obd-stat{font-size:12.5px;margin-top:8px}
+.obd-view{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(12px + var(--sat,0px)) 12px calc(12px + var(--sab,0px))}
+.obd-view img{max-width:100%;max-height:calc(100% - 64px);object-fit:contain;border-radius:8px}
+.obd-vbar{display:flex;gap:10px;margin-top:12px}

@@ -1,7 +1,7 @@
 /* Сервис-воркер: приложение открывается без интернета, данные обновляются при каждом запуске со связью. */
-const VERSION = 'db22fccb4e';
+const VERSION = 'ade8fb5955';
 const SHELL = 'shell-' + VERSION, DATA = 'data-v1';
-const FILES = ['./', 'index.html', 'app.css', 'fonts.css', 'i18n.js', 'app.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'vendor/zxing.min.js', 'scan-worker.js', 'vinline.js', 'firebase-config.js', 'sync.js'];
+const FILES = ['./', 'index.html', 'app.css', 'fonts.css', 'i18n.js', 'app.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'vendor/zxing.min.js', 'scan-worker.js', 'vinline.js', 'firebase-config.js', 'sync.js', 'obd.js'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(SHELL).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('message', e => { if (e.data === 'skip') self.skipWaiting(); });
 self.addEventListener('activate', e => {

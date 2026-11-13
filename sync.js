@@ -109,6 +109,7 @@ window.Sync = (() => {
       fail(e); if (okGet()) gate('hide');
     }
     startFavs();
+    startObd();
     track();
     unsub = onSnapshot(collection(db, 'notes'), { includeMetadataChanges: false }, qs => {
       let ch = false;
@@ -125,7 +126,7 @@ window.Sync = (() => {
       emit();
     }, fail);
   }
-  function stop() { if (unsub) { unsub(); unsub = null; } if (unsubF) { unsubF(); unsubF = null; } st.live = false; }
+  function stop() { if (unsubO) { unsubO(); unsubO = null; } if (unsub) { unsub(); unsub = null; } if (unsubF) { unsubF(); unsubF = null; } st.live = false; }
 
   // избранное и заметки «для покупки»: личные, в users/{uid}/data/favs, общие для всех устройств этого человека.
   // Удаления помним отдельно (favDel: id -> время), чтобы удалённое на одном телефоне не вернулось с другого.
@@ -185,6 +186,41 @@ window.Sync = (() => {
       return true;
     } catch (e) { fail(e); return false; }
   }
+
+  // скриншоты OBD (ThinkDiag): obd/{vin} = коды и список скриншотов, сами картинки в obd/{vin}/img/{id},
+  // чтобы при открытии приложения не грузить все картинки, а только при открытии карточки.
+  let unsubO = null;
+  st.obdErr = '';
+  const obdFail = e => { st.obdErr = (e && e.code) === 'permission-denied' ? 'rules' : humanErr(e); console.warn('obd', e); window.dispatchEvent(new CustomEvent('obd-updated')); };
+  function startObd() {
+    const { collection, onSnapshot } = F.fs;
+    unsubO = onSnapshot(collection(db, 'obd'), qs => {
+      qs.docChanges().forEach(c => {
+        const vin = c.doc.id;
+        if (c.type === 'removed') { delete S.obd[vin]; return; }
+        const r = c.doc.data();
+        S.obd[vin] = { codes: r.codes || [], shots: r.shots || [], car: r.car || '', by: r.by || '', at: r.at && r.at.toDate ? r.at.toDate().toISOString() : (r.atLocal || '') };
+      });
+      st.obdErr = '';
+      LS.set('auction-obd-v1', S.obd);
+      window.dispatchEvent(new CustomEvent('obd-updated'));
+    }, obdFail);
+  }
+  async function pushObd(vin, o, img) {
+    if (!db || !st.user || !vin) { obdFail({ message: 'Нужен вход через Google' }); return false; }
+    const { doc, setDoc, deleteDoc, serverTimestamp } = F.fs, u = st.user;
+    try {
+      if (img) await setDoc(doc(db, 'obd', vin, 'img', img.id), { data: img.data, by: u.name, at: serverTimestamp() });
+      if (!o || (!o.codes.length && !o.shots.length)) await deleteDoc(doc(db, 'obd', vin));
+      else await setDoc(doc(db, 'obd', vin), { codes: o.codes, shots: o.shots, car: o.car || '', run: o.run || '', date: o.date || '', by: u.name, uid: u.uid, at: serverTimestamp(), atLocal: new Date().toISOString() });
+      st.obdErr = ''; return true;
+    } catch (e) { obdFail(e); return false; }
+  }
+  async function obdImg(vin, id) {
+    if (!db) return null;
+    try { const d = await F.fs.getDoc(F.fs.doc(db, 'obd', vin, 'img', id)); return d.exists() ? d.data().data : null; } catch (e) { obdFail(e); return null; }
+  }
+  async function delObdImg(vin, id) { if (!db) return; try { await F.fs.deleteDoc(F.fs.doc(db, 'obd', vin, 'img', id)); } catch (e) { obdFail(e); } }
   // активность: сколько раз заходили и сколько минут приложение было открыто на экране.
   // Документ activity/{uid}_{день}: входы (sessions), секунды (sec), последний раз (last). Читать может только админ.
   const ADMIN = '1mtulegenov@gmail.com';
@@ -225,5 +261,5 @@ window.Sync = (() => {
     return out;
   }
   init();
-  return { st, signIn, signOut, pushNote, pushFavs, isAdmin, activity };
+  return { st, signIn, signOut, pushNote, pushFavs, isAdmin, activity, pushObd, obdImg, delObdImg };
 })();
