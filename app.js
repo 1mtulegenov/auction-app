@@ -24,6 +24,7 @@ const CLS = { salvage: ['bad', T('Salvage, rebuilt или без тайтла')]
 const STAT = { 'Основная': 's-main', 'Флип': 's-flip', 'Дорого': 's-exp' };
 const SS = { sold: T('Продана'), offer: T('На оффере'), none: T('Не продана'), gone: T('Снята'), rerun: T('Снова на торгах') };
 const HOT_R0 = /двигател|коробк|раздатк|дифференциал|не на ходу|engine|transmission|motor|trans\b|drivetrain/i, HOT_OK = /зелёный свет|гаранти|guarant|gty|green light|engine runs|eng starts|вернуть при проблеме/i;
+const ANN_MARK = /rental|fleet|repo\b|lemon|theft|canadian/i;
 const HOT_R = { test: t => HOT_R0.test(t) && !HOT_OK.test(t) };
 const HOT_Y = /град|рам|кузов|structural|frame|hail|крыш|подушк|airbag|утоплен|flood|salvage|rebuilt|тотал|odometer|tmu/i;
 
@@ -288,6 +289,8 @@ function wifeEval(x) {
   else if (x.l === 'Green') pen -= 1;
   if (x.g) { const g = parseFloat(x.g); if (g < 3) { notes.push('оценка ' + x.g + ': плохое состояние'); pen += 1; } }
   if (x.ttlbad || x.cls === 'salvage') { notes.push('проблемный тайтл: продать потом сложнее'); pen += 3; }
+  if (x.ar || x.a) notes.push('пометка аукциона: ' + annText(x));
+  if (/rental|прокат/i.test(x.a || '')) { notes.push('прокатная: пробег в основном городской, при перепродаже небольшой дисконт'); }
   if (x.hist) { notes.push('пометка в истории: дисконт при продаже'); pen += 1; }
   if (/рам|frame/i.test(x.cr || '')) { notes.push('по отчёту повреждение рамы'); pen += 3; }
   const nf = noteFlags(noteOf(x)); if (nf && nf.stop) { notes.push('по заметке: не смотреть'); pen += 3; }
@@ -326,6 +329,7 @@ function statusLine(x) {
   if (inopLane(x)) add('bad', T('Неходячая, линия') + ' ' + E(lane(x)));
   else if (x.cls === 'noinop') add('bad', T('Не на ходу / нет ключа'));
   if (x.hist) { const why = annText(x).split(/;\s*/).filter(t => HOT_Y.test(t) || HOT_R.test(t) || /угон|пробег|доработ|тотал|flood/i.test(t)); add('bad', why.length ? T('История: ') + E(why.slice(0, 2).join(', ')) : /серьёзн/.test(x.hx || '') ? T('Серьёзное ДТП в истории') : T('Пометка в истории')); }
+  else if (ANN_MARK.test(x.a || '')) add('warn', E(annText(x).split(/;\s*/).filter(t => !/свет|гаранти|тайтл на месте/i.test(t)).join(', ')));
   if (x.auc === 'CMX' && x.mech) add('bad', T('Дефект двигателя/КПП'));
   if (x.l === 'Green') add('ok', T('Зелёный свет')); else if (String(x.l || '').includes('Red')) add('bad', T('Красный свет')); else if (x.l === 'Yellow') add('warn', T('Жёлтый свет'));
   if (x.g) { const g = parseFloat(x.g); add(g >= 4 ? 'ok' : g < 3 ? 'bad' : 'warn', T('Оценка ') + E(x.g)); }
@@ -441,7 +445,7 @@ function applyFilters(list) {
       case 'fav': return isFav(x);
       case 'pick': return x.C || x.F;
       case 'seven': return !isMax() || (MAXB.test(x.mk || '') && !isInop(x));
-      case 'clean': return x.cls === 'clean' && !x.hist && !x.ttlbad;
+      case 'clean': return x.cls === 'clean' && !x.hist && !x.ttlbad && !ANN_MARK.test(x.a || '');
       case 'floor': return !!x.floor;
       case 'notes': return !!noteOf(x);
       case 'past': return !!(x.past && x.past.length);
@@ -718,7 +722,8 @@ function detail(k) {
   let chips = titleChip(x) + lightChip(x);
   if (x.g) chips += '<span class="chip">' + T('Оценка ') + E(x.g) + '</span>';
   if (x.t) chips += x.t === 'At Auction' ? '<span class="chip good">' + T('Тайтл на месте') + '</span>' : '<span class="chip warn">' + E(x.t) + '</span>';
-  if (x.cls) chips += '<span class="chip ' + (CLS[x.cls] || CLS.clean)[0] + '">' + (CLS[x.cls] || CLS.clean)[1] + '</span>';
+  if (x.cls && !(x.cls === 'clean' && ANN_MARK.test(x.a || ''))) chips += '<span class="chip ' + (CLS[x.cls] || CLS.clean)[0] + '">' + (CLS[x.cls] || CLS.clean)[1] + '</span>';
+  if (ANN_MARK.test(x.a || '') && !x.hist) chips += '<span class="chip warn">' + E(annText(x).split(/;\s*/).filter(t => /прокат|флот|изъят|rental|fleet|repo/i.test(t)).join(', ') || annText(x)) + '</span>';
   if (ch) chips += '<span class="chip ' + ch[0] + '">' + T('Шанс купить: ') + ch[1] + '</span>';
   if (x.bn) chips += '<span class="chip">Buy Now ' + M(x.bn) + '</span>';
   if (x.floor) chips += '<span class="chip' + (x.max != null && x.floor > x.max ? ' warn' : '') + '">' + T('Резерв продавца ') + M(x.floor) + (x.max != null && x.floor > x.max ? T(', выше нашей ставки') : '') + '</span>';

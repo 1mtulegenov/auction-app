@@ -6,7 +6,9 @@ MMR и ретейл без Manheim: по похожим лотам прошлы�
 Строка входа: run|год и описание|VIN|цвет|пробег|оценка|свет R/G|PMR|A=тайтл на месте|сток|фото|CR
     python3 tools/build_aah.py 2026-11-12
 """
-import glob, json, math, re, sys
+import glob, json, math, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from ann import load as ann_load, apply as ann_apply
 
 date = sys.argv[1]
 FEE, CAP = 700, 13500
@@ -91,6 +93,7 @@ def past(vin):
         out.append({'d': d, 'a': AN.get(l['auc'], l['auc']), 'run': l['run'], 'p': l.get('fact') or l.get('bnf'), 's': s})
     return out
 
+ANN = ann_load('tools/aah_ann_%s.txt' % date)
 DET = {}
 try:
     for line in open('tools/aah_detail_%s.txt' % date):
@@ -192,6 +195,13 @@ for line in open('tools/aah_presale_%s.txt' % date):
                 lot['sale'] = round(lot['sale'] * 0.85 / 50) * 50; lot['prof'] = lot['sale'] - lot['w'] - FEE
                 lot['max'] = max(0, min(lot['sale'] - FEE - lot['margin'], (CAP if lot['margin'] >= 1500 else 5000) - FEE))
         if sold_l: flag = flag or ('уже продана до торгов (' + sold_l + ')')
+    A = ANN.get(run)
+    if A:
+        aw = ann_apply(lot, A[0], A[1]); k = lot.pop('_annk', 1.0)
+        if k < 1 and 'sale' in lot:
+            lot['sale'] = round(lot['sale'] * k / 50) * 50; lot['prof'] = lot['sale'] - lot['w'] - FEE
+            lot['max'] = max(0, min(lot['sale'] - FEE - lot['margin'], (CAP if lot['margin'] >= 1500 else 5000) - FEE))
+        if aw: flag = flag or aw
     # отбор
     why = ''
     if run.split('-')[0] == 'T': lot['cls'] = 'noinop'; flag = flag or 'не на ходу (линия T)'

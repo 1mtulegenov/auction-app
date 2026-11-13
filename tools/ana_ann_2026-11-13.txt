@@ -1,0 +1,436 @@
+B-0006|Yellow Light 7 Day Ltd Gty|
+B-0007|Green Light 7 Day Gty; Prior Rental|Parkway Family Kia
+B-0008|Prior Rental; Green Light 7 Day Gty|Parkway Family Kia
+B-0001||
+B-0009|Prior Rental|Parkway Family Kia
+B-0005|(A)Total Loss; (A)Theft|
+B-0002||
+B-0004||
+B-0013||Mac Haik Chevrolet
+B-0014||Mac Haik Chevrolet
+B-0039||
+B-0040|Green Light 7day Gty|
+B-0038|(A)Total Loss|
+B-0041||
+B-0011|Green Light 7 Day Gty; Prior Rental|Parkway Family Kia
+B-0012|(A)Total Loss|Mac Haik Chevrolet
+B-0045||
+B-0043||
+B-0044|(A)Structural Damage|
+B-0042||
+B-0049|Title Present|
+B-0051|Title Present|Meridian Remarketing
+B-0046|Title Present|
+B-0047|Title Present|
+B-0057|Title Present|AutoNation Financial
+B-0054|Title Present|AutoNation Financial
+B-0059|Green Light 7 Day Gty; Title Present|AutoNation Financial
+B-0060|Green Light 7 Day Gty; Title Present|AutoNation Financial
+B-0052|Title Present|AutoNation Financial
+B-0058|Structural Damage; Title Present|AutoNation Financial
+B-0055|Title Present|AutoNation Financial
+B-0053|Title Present; Prior Rental|AutoNation Financial
+B-0063|Title Present|AutoNation Financial
+B-0065|Structural Damage; Title Present|AutoNation Financial
+B-0064|(A)Theft; Title Present|AutoNation Financial
+B-0067|Title Present|AutoNation Financial
+B-0068|Title Present|AutoNation Financial
+B-0062|Green Light 7 Day Gty; Title Present|AutoNation Financial
+B-0061|Title Present|AutoNation Financial
+B-0066|Title Present|AutoNation Financial
+B-0070|Green Light 7 Day Gty; Title Present|AutoNation Financial
+B-0069|Yellow Light 7 Day Ltd Gty; Title Present; Structural Damage|AutoNation Financial
+B-0072|Structural Damage; Title Present; Yellow Light 7 Day Ltd Gty|AutoNation Financial
+B-0073|Title Present|AutoNation Financial
+B-0075|Title Present; Green Light 7 Day Gty|AutoNation Financial
+B-0074|Structural Damage; Title Present; (A)Theft Recovery|AutoNation Financial
+B-0076||AutoNation
+B-0071|(A)Canadian Import; Title Present|AutoNation Financial
+B-0084||AutoNation
+B-0083||AutoNation
+B-0080||AutoNation
+B-0078|(A)Rebuilt; (A)Salvage|AutoNation
+B-0081||AutoNation
+B-0077||AutoNation
+B-0082||AutoNation
+B-0079|Green Light 7day Gty|AutoNation
+B-0092||AutoNation
+B-0085|(A)Structural Alter|AutoNation
+B-0086||AutoNation
+B-0087||AutoNation
+B-0091||AutoNation
+B-0088||
+B-0090||AutoNation
+B-0089|(A)Theft Recovery|AutoNation
+B-0096|(A)Total Loss|AutoNation
+B-0100||
+B-0094||AutoNation
+B-0098||AutoNation
+B-0099|(A)Theft Recovery|AutoNation
+B-0093||AutoNation
+B-0095||
+B-0097||AutoNation
+B-0102||AutoNation
+B-0106||
+B-0103||AutoNation
+B-0104|(A)Rebuilt; (A)Salvage|
+B-0105||
+B-0107||
+B-0101||
+B-0108||AutoNation
+B-0111||AutoNation
+B-0115||AutoNation
+B-0116||
+B-0114||AutoNation
+B-0110||
+B-0109||
+B-0112||
+B-0113|(A)Lemon|
+B-0118||AutoNation
+B-0120||AutoNation
+B-0124||
+B-0121|No Title; Bill Of Sale Only|AutoNation
+B-0122||
+B-0117||AutoNation
+B-0123||AutoNation
+B-0119|Airbags Deployed|AutoNation
+B-0128||AutoNation
+B-0125|(A)Bonded Title|
+B-0132||
+B-0126||
+B-0127||AutoNation
+B-0131||AutoNation
+B-0130||AutoNation
+B-0129||AutoNation
+B-0135||
+B-0136|Lemon|
+B-0140||
+B-0138||
+B-0137||
+B-0133||
+B-0134|Bonded Title|AutoNation
+B-0139||AutoNation
+B-0146||AutoNation
+B-0147||AutoNation
+B-0143||
+B-0144|(A)Rebuilt; (A)Salvage; (A)Total Loss|AutoNation
+B-0141||AutoNation
+B-0142||AutoNation
+B-0148||AutoNation
+B-0145||AutoNation
+B-0153||AutoNation
+B-0155||AutoNation
+B-0156||AutoNation
+B-0154||AutoNation
+B-0151||AutoNation
+B-0150||AutoNation
+B-0149||AutoNation
+B-0152||AutoNation
+B-0162||
+B-0161||AutoNation
+B-0158||
+B-0157|(A)Total Loss|AutoNation
+B-0164||AutoNation
+B-0160||AutoNation
+B-0163|(A)Rebuilt; (A)Salvage; (A)Total Loss|AutoNation
+B-0159|(A)Total Loss|AutoNation
+B-0171|(A)Lemon|AutoNation
+B-0167||
+B-0172||AutoNation
+B-0169|(A)Bonded Title|AutoNation
+B-0168||AutoNation
+B-0165||
+B-0170||AutoNation
+B-0166||AutoNation
+B-0178||AutoNation
+B-0177||AutoNation
+B-0180||AutoNation
+B-0174||AutoNation
+B-0173||AutoNation
+B-0176||AutoNation
+B-0179|(A)Rebuilt; (A)Salvage|AutoNation
+B-0175||AutoNation
+B-0185||AutoNation
+B-0184||AutoNation
+B-0186||AutoNation
+B-0183||AutoNation
+B-0188|(A)Rebuilt; (A)Salvage; (A)Total Loss|AutoNation
+B-0181||AutoNation
+B-0182||AutoNation
+B-0187||AutoNation
+B-0192||AutoNation
+B-0189||AutoNation
+B-0190||AutoNation
+B-0195||AutoNation
+B-0191||AutoNation
+B-0194||AutoNation
+B-0196||AutoNation
+B-0193||
+B-0198||AutoNation
+B-0197||AutoNation
+B-0199||AutoNation
+B-0200||
+B-0201||
+B-0204||AutoNation
+B-0203||AutoNation
+B-0202||AutoNation
+B-0205||AutoNation
+B-0206||AutoNation
+B-0209||
+B-0208||
+B-0212||AutoNation
+B-0211||AutoNation
+B-0210|(A)Structural Damage|AutoNation
+B-0207||AutoNation
+B-0217||AutoNation
+B-0218|(A)True Miles Unkn; (A)Rebuilt; (A)Salvage|AutoNation
+B-0220||AutoNation
+B-0215||
+B-0216||AutoNation
+B-0214||
+B-0213||AutoNation
+B-0219||AutoNation
+B-0226||AutoNation
+B-0221||AutoNation
+B-0228||AutoNation
+B-0224||AutoNation
+B-0222||AutoNation
+B-0223|Canadian Import; Yellow Light 7day Ltd Gty|AutoNation
+B-0225|Canadian Import; (A)Structural Damage|
+B-0227||AutoNation
+B-0229||AutoNation
+B-0232||AutoNation
+B-0233||AutoNation
+B-0235||AutoNation
+B-0236||AutoNation
+B-0231||AutoNation
+B-0234||AutoNation
+B-0230||AutoNation
+B-0243||AutoNation
+B-0237|(A)Theft Recovery|AutoNation
+B-0239||AutoNation
+B-0241||
+B-0238|Canadian Import|AutoNation
+B-0244||AutoNation
+B-0242||
+B-0240||
+B-0250||AutoNation
+B-0248||AutoNation
+B-0247||AutoNation
+B-0251||AutoNation
+B-0246||AutoNation
+B-0245||AutoNation
+B-0252||
+B-0249||AutoNation
+B-0254||AutoNation
+B-0253||AutoNation
+B-0257||
+B-0256||
+B-0258||AutoNation
+B-0255||
+B-0259||
+B-0260||AutoNation
+B-0262||AutoNation
+C-0004|(A)Structural Damage; Green Light|
+C-0003|(A)Theft|
+B-0261||AutoNation
+C-0002||
+B-0263||AutoNation
+C-0001||
+C-0005|(A)Theft|
+C-0035|Salvage; Total Loss|
+C-0009||
+C-0010||
+C-0007|Green Light|
+C-0033|No Title; Bill Of Sale Only; Green Light|
+C-0006||
+C-0034|Salvage; Total Loss|
+C-0008||
+C-0042||
+C-0037||
+C-0036|Structural Damage; (A)Total Loss|
+C-0038||
+C-0039||
+C-0041||
+C-0040||
+C-0043|(A)Rental|
+C-0044|(A)Total Loss; (A)Theft Recovery|
+C-0048||
+C-0046|(A)Total Loss|
+C-0045||
+C-0049||
+C-0051||
+C-0050||
+C-0047|(A)Theft Recovery|
+C-0057||
+C-0059|(A)Structural Damage|
+C-0052||
+C-0054||
+C-0056|Odometer In Kilometers|
+C-0053||
+C-0058||
+C-0055||
+C-0067||
+C-0061||
+C-0062|(A)Theft|
+C-0066||
+C-0065|Green Light|
+C-0060||
+C-0063||
+C-0064|Green Light|
+C-0076||AutoNation
+C-0069||
+C-0075||
+C-0073||
+C-0074||
+C-0070||
+C-0071||
+C-0068||
+C-0080||AutoNation
+C-0083||AutoNation
+C-0079||
+C-0081||AutoNation
+C-0082||AutoNation
+C-0077||AutoNation
+C-0078||AutoNation
+C-0084||AutoNation
+C-0089||AutoNation
+C-0087||AutoNation
+C-0085||AutoNation
+C-0090||AutoNation
+C-0088||
+C-0086||AutoNation
+C-0091||AutoNation
+C-0092||AutoNation
+C-0096||AutoNation
+C-0093||AutoNation
+C-0100|Prior Rental|AutoNation
+C-0094|Odometer Inoperable|AutoNation
+C-0097||AutoNation
+C-0095||AutoNation
+C-0099||AutoNation
+C-0098||AutoNation
+C-0104||
+C-0101||AutoNation
+C-0105||
+C-0103||AutoNation
+C-0102||AutoNation
+C-0108||AutoNation
+C-0106||
+C-0107||
+C-0110||
+C-0116||AutoNation
+C-0113|Structural Damage|AutoNation
+C-0115|Structural Damage|AutoNation
+C-0109||
+C-0114|Structural Damage|AutoNation
+C-0112|Structural Damage; Title Present|AutoNation
+C-0111||AutoNation
+C-0121||AutoNation
+C-0118||AutoNation
+C-0119||AutoNation
+C-0124||AutoNation
+C-0117||AutoNation
+C-0120||
+C-0123||AutoNation
+C-0122||AutoNation
+C-0127||AutoNation
+C-0128||AutoNation
+C-0132|(A)Theft Recovery|AutoNation
+C-0129||AutoNation
+C-0125||AutoNation
+C-0131||AutoNation
+C-0130|(A)Total Loss|AutoNation
+C-0126||AutoNation
+C-0140||AutoNation
+C-0134||AutoNation
+C-0138||AutoNation
+C-0137||AutoNation
+C-0136||AutoNation
+C-0133||AutoNation
+C-0135||AutoNation
+C-0139||AutoNation
+C-0141|(A)Rebuilt; (A)Salvage; (A)Total Loss|AutoNation
+C-0145||AutoNation
+C-0146||AutoNation
+C-0143||AutoNation
+C-0148||AutoNation
+C-0144||AutoNation
+C-0147||AutoNation
+C-0142||AutoNation
+C-0149||AutoNation
+C-0150|(A)Lemon|AutoNation
+C-0155||AutoNation
+C-0156||
+C-0154||AutoNation
+C-0151||
+C-0153||AutoNation
+C-0152||AutoNation
+C-0157||
+C-0161||AutoNation
+C-0164||AutoNation
+C-0158|Odometer Inoperable; Water Intrusion|
+C-0160||
+C-0159||AutoNation
+C-0162||AutoNation
+C-0163||AutoNation
+C-0172||AutoNation
+C-0167||AutoNation
+C-0170||AutoNation
+C-0168||AutoNation
+C-0166||AutoNation
+C-0165||AutoNation
+C-0171||AutoNation
+C-0169||AutoNation
+C-0176||AutoNation
+C-0179||AutoNation
+C-0174||AutoNation
+C-0177|Structural Damage; Title Present|AutoNation
+C-0175|(A)Rebuilt; (A)Salvage|AutoNation
+C-0178||AutoNation
+C-0180||AutoNation
+C-0173||AutoNation
+C-0187||
+C-0183||AutoNation
+C-0184||AutoNation
+C-0181||AutoNation
+C-0185||AutoNation
+C-0186||
+C-0188||AutoNation
+C-0182||AutoNation
+C-0192||AutoNation
+C-0194||AutoNation
+C-0191||AutoNation
+C-0195||AutoNation
+C-0196||AutoNation
+C-0190||AutoNation
+C-0189||
+C-0193||AutoNation
+C-0203|(A)Total Loss|
+C-0202||AutoNation
+C-0204||AutoNation
+C-0199||AutoNation
+C-0201||
+C-0198||AutoNation
+C-0200||AutoNation
+C-0197||AutoNation
+C-0207||AutoNation
+C-0205||AutoNation
+C-0209||AutoNation
+C-0212||AutoNation
+C-0210||AutoNation
+C-0208||AutoNation
+C-0206||AutoNation
+C-0211||AutoNation
+T-0003|Non-Runner|AutoNation
+C-0213||AutoNation
+T-0001|Non-Runner|AutoNation
+C-0214||AutoNation
+T-0006|Odometer Inoperable|
+T-0004|Non-Runner|AutoNation
+T-0002|Non-Runner|AutoNation
+T-0005|Non-Runner|AutoNation
+T-0011|Non-Runner; Structural Damage; Airbags Deployed; Title Present|
+T-0010|Non-Runner; Airbags Deployed; Title Present|
+T-0009|Parts Only (A)Total Loss; No Title; Bill Of Sale Only; Non-Runner|
+T-0008|Non-Runner; Title Present|
