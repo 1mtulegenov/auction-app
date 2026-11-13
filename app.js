@@ -278,6 +278,7 @@ function statusLine(x) {
     else if (nf.cheap) add('warn', T('По заметке: только дёшево'));
     if (nf.ws) add('ok', 'WS ' + M(nf.ws));
   }
+  if (x.floor) add(x.max != null && x.floor > x.max ? 'warn' : '', T('Резерв ') + M(x.floor) + (x.max != null && x.floor > x.max ? T(', выше ставки') : ''));
   const ob = obdOf(x), ov = ob && window.OBD && OBD.verdict(ob.codes);
   if (ov) add(OBD.SEV[ov.s][0], 'OBD: ' + ob.codes.length + ' ' + T(ob.codes.length === 1 ? 'ошибка' : ob.codes.length < 5 ? 'ошибки' : 'ошибок') + ', ' + T(OBD.SEV[ov.s][1]));
   else if (ob && ob.shots.length) add('warn', T('OBD: скриншот без кодов'));
@@ -335,7 +336,7 @@ function lotCard(x) {
 }
 
 /* ---------- фильтры ---------- */
-const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('7 марок')], ['inop', T('Неходячие')], ['clean', T('Без пометок')], ['title', T('Тайтл на месте')], ['profit', T('Прибыль ') + '> 0'], ['past', T('Были на торгах')], ['notes', T('С заметкой')]];
+const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('7 марок')], ['inop', T('Неходячие')], ['clean', T('Без пометок')], ['floor', T('С резервом')], ['past', T('Были на торгах')], ['notes', T('С заметкой')]];
 const SORTS = [['stat', T('Сначала подборка')], ['prof', T('Прибыль больше')], ['w', T('MMR меньше')], ['wd', T('MMR больше')], ['diff', T('Ретейл − MMR больше')], ['time', T('Аукцион и время')], ['mk', T('Марка, модель, год')], ['ymm', T('Год, марка, модель')], ['run', T('Run номер')], ['o', T('Пробег меньше')], ['new', T('Недавно выставленные')], ['y', T('Год новее')]];
 const STAT_ORDER = { 'Основная': 0, 'Флип': 1, 'Дорого': 2, 'Вне критериев': 3, 'Нет': 4 };
 const nnv = (v, d) => v == null ? d : v;
@@ -381,8 +382,7 @@ function applyFilters(list) {
       case 'pick': return x.C || x.F;
       case 'seven': return x.S || SEVEN.test(x.mk || '');
       case 'clean': return x.cls === 'clean' && !x.hist && !x.ttlbad;
-      case 'title': return x.t === 'At Auction';
-      case 'profit': return x.prof > 0;
+      case 'floor': return !!x.floor;
       case 'notes': return !!noteOf(x);
       case 'past': return !!(x.past && x.past.length);
       case 'inop': return isInop(x);
@@ -1135,7 +1135,7 @@ async function start() {
     const sv = LS.get('view-v1', null);
     const same = sv && !jump && sv.date === S.date;
     if (same) {
-      if (sv.f) S.f = { ...S.f, ...sv.f, mk: Array.isArray(sv.f.mk) ? sv.f.mk : [], md: Array.isArray(sv.f.md) ? sv.f.md : [] };
+      if (sv.f) S.f = { ...S.f, ...sv.f, mk: Array.isArray(sv.f.mk) ? sv.f.mk : [], md: Array.isArray(sv.f.md) ? sv.f.md : [] }; if (!QUICK.some(q => q[0] === S.f.quick)) S.f.quick = '';
       if (sv.picks) S.picks = sv.picks;
       if (sv.shown) S.shown = Math.min(+sv.shown || 24, 2000);
       S.keepShown = true;
