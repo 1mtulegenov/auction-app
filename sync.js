@@ -109,6 +109,7 @@ window.Sync = (() => {
       fail(e); if (okGet()) gate('hide');
     }
     startFavs();
+    track();
     unsub = onSnapshot(collection(db, 'notes'), { includeMetadataChanges: false }, qs => {
       let ch = false;
       qs.docChanges().forEach(c => {
@@ -184,6 +185,45 @@ window.Sync = (() => {
       return true;
     } catch (e) { fail(e); return false; }
   }
+  // активность: сколько раз заходили и сколько минут приложение было открыто на экране.
+  // Документ activity/{uid}_{день}: входы (sessions), секунды (sec), последний раз (last). Читать может только админ.
+  const ADMIN = '1mtulegenov@gmail.com';
+  const isAdmin = () => !!(st.user && (st.user.email || '').toLowerCase() === ADMIN);
+  let actOn = false, visSec = 0, hiddenAt = 0, tick = null, lastTick = 0;
+  const day = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+  function actWrite(sessions) {
+    if (!db || !st.user || st.denied) return;
+    const { doc, setDoc, serverTimestamp, increment } = F.fs, u = st.user, sec = Math.round(visSec);
+    if (!sessions && sec < 5) return;
+    visSec -= sec;
+    const dv = (standalone() ? 'app' : 'web') + '/' + (mobile() ? 'phone' : 'desktop');
+    setDoc(doc(db, 'activity', u.uid + '_' + day()), Object.assign({ uid: u.uid, email: u.email, name: u.name, date: day(), dev: dv, last: serverTimestamp(), sec: increment(sec) },
+      sessions ? { sessions: increment(1) } : {}), { merge: true }).catch(e => console.warn('activity', e));
+  }
+  function track() {
+    if (actOn) return; actOn = true;
+    lastTick = Date.now();
+    actWrite(true);
+    tick = setInterval(() => {
+      const now = Date.now();
+      if (document.visibilityState === 'visible') visSec += Math.min(30, (now - lastTick) / 1000);
+      lastTick = now;
+      if (visSec >= 60) actWrite(false);
+    }, 15000);
+    document.addEventListener('visibilitychange', () => {
+      const now = Date.now();
+      if (document.visibilityState === 'hidden') { visSec += Math.min(30, (now - lastTick) / 1000); lastTick = now; hiddenAt = now; actWrite(false); }
+      else { lastTick = now; if (hiddenAt && now - hiddenAt > 30 * 60000) actWrite(true); hiddenAt = 0; }
+    });
+    window.addEventListener('pagehide', () => { if (document.visibilityState === 'visible') { visSec += Math.min(30, (Date.now() - lastTick) / 1000); lastTick = Date.now(); actWrite(false); } });
+  }
+  async function activity(sinceDay) {
+    if (!db || !isAdmin()) throw new Error('Только для администратора');
+    const { collection, getDocs, query, where } = F.fs;
+    const snap = await getDocs(query(collection(db, 'activity'), where('date', '>=', sinceDay)));
+    const out = []; snap.forEach(d => { const r = d.data(); out.push({ uid: r.uid, email: r.email, name: r.name, date: r.date, dev: r.dev, sessions: r.sessions || 0, sec: r.sec || 0, last: r.last && r.last.toDate ? r.last.toDate() : null }); });
+    return out;
+  }
   init();
-  return { st, signIn, signOut, pushNote, pushFavs };
+  return { st, signIn, signOut, pushNote, pushFavs, isAdmin, activity };
 })();

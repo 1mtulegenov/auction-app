@@ -562,6 +562,7 @@ function more() {
   const Y = window.Sync && Sync.st;
   const acc = Y && Y.on ? '<button data-act="auth"><span class="ic">👤</span><span>' + (Y.user ? E(Y.user.name) + '<small>' + E(Y.user.email) + T(' · заметки общие. Нажмите, чтобы выйти') + '</small>' : T('Войти через Google') + '<small>' + (Y.err ? E(Y.err) : T('Чтобы заметки были видны всем и было видно, кто их оставил')) + '</small>') + '</span></button>' : '';
   return '<div class="menu">' + acc + '<button data-act="lang"><span class="ic flag">' + cur[1] + '</span><span>' + T('Язык') + '<small>' + cur[2] + '</small></span></button>'
+    + (window.Sync && Sync.isAdmin && Sync.isAdmin() ? '<button data-act="activity"><span class="ic">📊</span><span>' + T('Активность') + '<small>' + T('Кто сколько раз заходил и сколько минут был в приложении') + '</small></span></button>' : '')
     + '<button data-act="notes"><span class="ic">📝</span><span>' + T('Заметки') + '<small>' + (notes.length ? notes.length + T(' шт., привязаны к VIN') : T('Пока нет. Пишутся в карточке машины.')) + '</small></span></button>'
     + '<button data-act="how"><span class="ic">🧮</span><span>' + T('Как считается прибыль') + '<small>' + T('MMR, сбор, цена продажи, максимальная ставка') + '</small></span></button>'
     + '<button data-act="install"><span class="ic">📲</span><span>' + installTitle() + '<small>' + (isStandalone() ? T('Уже установлено') : platform() === 'desktop' ? T('Windows и Mac, без магазина приложений') : T('iPhone и Android, без App Store')) + '</small></span></button>'
@@ -570,6 +571,32 @@ function more() {
     + '<button data-act="font"><span class="ic">Aa</span><span>' + T('Шрифт') + '<small>' + fontLabel() + '</small></span></button>'
     + '<button data-act="theme"><span class="ic">◐</span><span>' + T('Тема оформления') + '<small>' + ({ light: T('Светлая'), dark: T('Тёмная') }[LS.get('theme', '')] || T('Как в системе')) + '</small></span></button>'
     + '</div><p class="foot">' + T('Аукционы Хьюстона · версия данных ') + E(S.index.version) + '<br>' + T('Цены ориентировочные: MMR и ретейл Manheim, без осмотра машины.') + '<br>© 2026 Maxat Tulegenov. ' + T('Все права защищены.') + '</p>';
+}
+
+/* ---------- активность (только админ) ---------- */
+async function activitySheet(days) {
+  S.actDays = days;
+  const since = new Date(Date.now() - (days - 1) * 864e5), sd = since.getFullYear() + '-' + String(since.getMonth() + 1).padStart(2, '0') + '-' + String(since.getDate()).padStart(2, '0');
+  const seg = '<div class="seg act-seg" role="group">' + [[1, T('Сегодня')], [7, T('7 дней')], [30, T('30 дней')]].map(([n, l]) => '<button data-act="act-days" data-n="' + n + '" aria-pressed="' + (days === n) + '">' + l + '</button>').join('') + '</div>';
+  openSheet(T('Активность'), seg + '<p class="empty">…</p>', true);
+  let rows;
+  try { rows = await Sync.activity(sd); }
+  catch (e) { const sh = $('#sheet'); if (sh && sheetOpen) sh.querySelector('.empty').textContent = (e && e.code === 'permission-denied') ? T('База пока не пускает: обновите правила Firestore (раздел activity).') : String(e.message || e); return; }
+  const fmtMin = s => { const m = Math.round(s / 60); return m < 60 ? m + T(' мин') : Math.floor(m / 60) + T(' ч ') + (m % 60) + T(' мин'); };
+  const by = {};
+  rows.forEach(r => { const u = by[r.uid] = by[r.uid] || { name: r.name || r.email, email: r.email, sessions: 0, sec: 0, days: {}, last: null, dev: {} }; u.sessions += r.sessions; u.sec += r.sec; u.days[r.date] = (u.days[r.date] || 0) + r.sec; if (r.last && (!u.last || r.last > u.last)) u.last = r.last; if (r.dev) u.dev[r.dev] = 1; });
+  const us = Object.values(by).sort((p, q) => q.sec - p.sec);
+  const dl = []; for (let i = days - 1; i >= 0; i--) { const d = new Date(Date.now() - i * 864e5); dl.push(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0')); }
+  const mx = Math.max(60, ...us.flatMap(u => dl.map(d => u.days[d] || 0)));
+  const DEV = { 'app/phone': T('приложение на телефоне'), 'web/phone': T('браузер на телефоне'), 'app/desktop': T('приложение на компьютере'), 'web/desktop': T('браузер на компьютере') };
+  const ago = d => { if (!d) return '—'; const m = Math.round((Date.now() - d) / 60000); return m < 2 ? T('сейчас') : m < 60 ? m + T(' мин назад') : m < 1440 ? Math.round(m / 60) + T(' ч назад') : d.toLocaleDateString(LANG === 'en' ? 'en-US' : 'ru-RU', { day: 'numeric', month: 'short' }) + ' ' + d.toLocaleTimeString(LANG === 'en' ? 'en-US' : 'ru-RU', { hour: '2-digit', minute: '2-digit' }); };
+  const h = us.length ? us.map(u => '<div class="act-u"><div class="act-h"><b>' + E(u.name) + '</b><small>' + E(u.email || '') + '</small></div>'
+      + '<div class="act-k"><div><span>' + T('Входов') + '</span><b>' + u.sessions + '</b></div><div><span>' + T('Время') + '</span><b>' + fmtMin(u.sec) + '</b></div><div><span>' + T('Дней') + '</span><b>' + Object.values(u.days).filter(s => s > 0).length + '</b></div><div><span>' + T('Последний раз') + '</span><b>' + ago(u.last) + '</b></div></div>'
+      + (days > 1 ? '<div class="act-bars" aria-hidden="true">' + dl.map(d => '<i title="' + d + ': ' + fmtMin(u.days[d] || 0) + '" style="height:' + Math.max(2, Math.round(40 * (u.days[d] || 0) / mx)) + 'px"></i>').join('') + '</div><div class="act-ax"><span>' + fmtDate(dl[0]) + '</span><span>' + fmtDate(dl[dl.length - 1]) + '</span></div>' : '')
+      + '<small class="muted">' + Object.keys(u.dev).map(k => DEV[k] || k).join(', ') + '</small></div>').join('')
+    : '<p class="empty">' + T('За этот период заходов нет. Учёт идёт с момента обновления приложения.') + '</p>';
+  const sh = $('#sheet'); if (!sh || !sheetOpen || S.actDays !== days) return;
+  sh.querySelector('.empty').outerHTML = h + '<p class="muted" style="font-size:12.5px;margin-top:10px">' + T('Вход считается, когда приложение открыли или вернулись в него после перерыва больше 30 минут. Время идёт, только пока приложение на экране.') + '</p>';
 }
 
 /* ---------- шторка ---------- */
@@ -795,6 +822,8 @@ document.addEventListener('click', async e => {
     }
     case 'freset': Object.assign(S.f, { mk: [], md: [], au: '', cl: '', st: '', y: '', o: '', p: '' }); closeSheet(); render(); break;
     case 'notes': notesSheet(); break;
+    case 'activity': activitySheet(S.actDays || 7); break;
+    case 'act-days': activitySheet(+t.dataset.n); break;
     case 'auth': { const Y = window.Sync && Sync.st; if (!Y) break; if (Y.user) await Sync.signOut(); else await Sync.signIn(); render(); break; }
     case 'how': howSheet(); break;
     case 'install': installSheet(); break;

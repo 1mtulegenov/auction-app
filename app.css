@@ -316,3 +316,12 @@ html.gated body{overflow:hidden}
 .gate-err{color:var(--bad)!important}
 .gate-muted{font-size:14px}
 .gate-box .btn{width:100%;min-height:48px;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px}
+.act-seg{margin-bottom:12px}
+.act-u{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.act-h{display:flex;flex-direction:column;gap:1px;margin-bottom:8px}.act-h small{color:var(--muted);font-size:12px}
+.act-k{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;margin-bottom:8px}
+@media (min-width:560px){.act-k{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.act-k div{display:flex;flex-direction:column;gap:2px;min-width:0}.act-k span{font-size:11.5px;color:var(--muted)}.act-k b{font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.act-bars{display:flex;align-items:flex-end;gap:2px;height:42px;padding-top:2px}
+.act-bars i{flex:1;min-width:2px;background:var(--accent);border-radius:2px 2px 0 0;opacity:.85}
+.act-ax{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin:2px 0 4px}
