@@ -181,7 +181,7 @@ for line in open('tools/aah_presale_%s.txt' % date):
         txt += ', отметок о повреждениях %s' % ncr
         if not drv and ncr == '0': txt = 'Отчёта о состоянии нет'
         if items: txt += '. Главное: ' + '; '.join(items)
-        if lot.get('floor'): txt += '. Резерв продавца $' + format(lot['floor'], ',')
+        if lot.get('floor'): txt += '. Floor price $' + format(lot['floor'], ',')
         if lot.get('book'): txt += ', book value $' + format(lot['book'], ',')
         if sold_l: txt += '. EDGE: ' + sold_l + (' $' + format(int(sold_p), ',') if sold_p else '')
         lot['cr'] = txt + '.'
@@ -237,9 +237,9 @@ how = ('<ul><li><b>Цена покупки.</b> Manheim в этот раз не�
        '<li><b>Сбор.</b> $700 на машину. Прибыль: продажа − MMR − $700.</li>'
        '<li><b>Максимальная ставка.</b> Прибыль $1 000 при покупке до $5 000 со сбором, $1 500 при более дорогой. Потолок $13 500 со сбором.</li>'
        '<li><b>Марки.</b> Toyota, Honda, Hyundai, BMW, Volkswagen, Kia, Mercedes, Jeep, Dodge, Chrysler, Nissan, Lexus NX и RX, Chevrolet Camaro, Ford Escape и Explorer, Audi Q5, Q7 и S.</li>'
-       '<li><b>Отчёты.</b> У машин подборки сняты отчёты EDGE (%d с отчётом): ход, рама, повреждения, резерв продавца и book value. '
+       '<li><b>Отчёты.</b> У машин подборки сняты отчёты EDGE (%d с отчётом): ход, рама, повреждения, floor price и book value. '
        'Убраны: не на ходу, шум двигателя, нет ключа, плохой ремонт кузова. Горящий Check Engine указан в карточке, но машина осталась.</li>'
-       '<li><b>Резерв продавца.</b> У %d машин подборки резерв (floor) выше нашей макс. ставки: дешевле резерва их, скорее всего, не отдадут.</li>'
+       '<li><b>Floor price.</b> У %d машин подборки floor price выше нашей макс. ставки: дешевле floor price их, скорее всего, не отдадут.</li>'
        '<li><b>Чего я не проверил.</b> Manheim, Carfax и AutoCheck не открывал. Объявлений аукциона в пре-сейле EDGE нет, свет и оценки утром могут измениться.</li></ul>') % (n_est, n_pmr, n_cr, n_fl)
 out = {'id': date, 'label': '12 ноября', 'title': 'AAA Houston, четверг 12 ноября, 13:00', 'lead': lead, 'how': how,
        'lots': lots, 'core': core, 'flip': flip}

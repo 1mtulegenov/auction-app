@@ -301,7 +301,7 @@ function wifeEval(x) {
     sale3 = Math.round(x.sale * .96 / 50) * 50;
     max = Math.max(0, Math.floor((sale3 - FEE - res) / 50) * 50);
     if (x.w) { ok = max >= x.w ? 'easy' : max >= .85 * x.w ? 'tight' : 'no'; if (ok === 'no') { notes.push('в ноль выйти можно только при ставке сильно ниже MMR, шанс купить низкий'); pen += 1; } else if (ok === 'easy') pen -= 1; }
-    if (x.floor && x.floor > max) notes.push('резерв продавца ' + M(x.floor) + ' выше ставки в ноль: дешевле, скорее всего, не отдадут');
+    if (x.floor && x.floor > max) notes.push('floor price ' + M(x.floor) + ' выше ставки в ноль: дешевле, скорее всего, не отдадут');
   } else notes.push('нет оценки цены продажи');
   const lv = pen >= 4 ? 'bad' : pen >= 2 ? 'warn' : 'ok';
   const score = -pen * 10 + (ok === 'easy' ? 8 : ok === 'tight' ? 3 : 0) + (x.sale ? Math.min(5, (max - (x.w || 0)) / 500) : -20);
@@ -341,7 +341,7 @@ function statusLine(x) {
     else if (nf.cheap) add('warn', T('По заметке: только дёшево'));
     if (nf.ws) add('ok', 'WS ' + M(nf.ws));
   }
-  if (x.floor) add(x.max != null && x.floor > x.max ? 'warn' : '', T('Резерв ') + M(x.floor) + (x.max != null && x.floor > x.max ? T(', выше ставки') : '') + (x.cons ? ' · ' + E(x.cons) : ''));
+  if (x.floor) add(x.max != null && x.floor > x.max ? 'warn' : '', T('Floor price ') + M(x.floor) + (x.max != null && x.floor > x.max ? T(', выше ставки') : '') + (x.cons ? ' · ' + E(x.cons) : ''));
   const ob = obdOf(x), ov = ob && window.OBD && OBD.verdict(ob.codes);
   if (ov) add(OBD.SEV[ov.s][0], 'OBD: ' + ob.codes.length + ' ' + T(ob.codes.length === 1 ? 'ошибка' : ob.codes.length < 5 ? 'ошибки' : 'ошибок') + ', ' + T(OBD.SEV[ov.s][1]));
   else if (ob && ob.shots.length) add('warn', T('OBD: скриншот без кодов'));
@@ -401,7 +401,7 @@ function lotCard(x) {
 }
 
 /* ---------- фильтры ---------- */
-const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('Подбор для Максата')], ['inop', T('Неходячие')], ['clean', T('Без пометок')], ['floor', T('С резервом')], ['past', T('Были на торгах')], ['notes', T('С заметкой')]];
+const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('Подбор для Максата')], ['inop', T('Неходячие')], ['clean', T('Без пометок')], ['floor', T('С floor price')], ['past', T('Были на торгах')], ['notes', T('С заметкой')]];
 const SORTS = [['stat', T('Сначала подборка')], ['prof', T('Прибыль больше')], ['w', T('MMR меньше')], ['wd', T('MMR больше')], ['diff', T('Ретейл − MMR больше')], ['time', T('Аукцион и время')], ['mk', T('Марка, модель, год')], ['ymm', T('Год, марка, модель')], ['run', T('Run номер')], ['o', T('Пробег меньше')], ['new', T('Недавно выставленные')], ['y', T('Год новее')]];
 const STAT_ORDER = { 'Основная': 0, 'Флип': 1, 'Дорого': 2, 'Вне критериев': 3, 'Нет': 4 };
 const nnv = (v, d) => v == null ? d : v;
@@ -727,7 +727,7 @@ function detail(k) {
   if (ANN_MARK.test(x.a || '') && !x.hist) chips += '<span class="chip warn">' + E(annText(x).split(/;\s*/).filter(t => /прокат|флот|изъят|rental|fleet|repo/i.test(t)).join(', ') || annText(x)) + '</span>';
   if (ch) chips += '<span class="chip ' + ch[0] + '">' + T('Шанс купить: ') + ch[1] + '</span>';
   if (x.bn) chips += '<span class="chip">Buy Now ' + M(x.bn) + '</span>';
-  if (x.floor) chips += '<span class="chip' + (x.max != null && x.floor > x.max ? ' warn' : '') + '">' + T('Резерв продавца ') + M(x.floor) + (x.max != null && x.floor > x.max ? T(', выше нашей ставки') : '') + '</span>';
+  if (x.floor) chips += '<span class="chip' + (x.max != null && x.floor > x.max ? ' warn' : '') + '">' + T('Floor price ') + M(x.floor) + (x.max != null && x.floor > x.max ? T(', выше нашей ставки') : '') + '</span>';
   let info = '';
   if (x.cr) info += '<p class="p acc">' + E(x.cr) + '</p>';
   if (hasAnn(x)) info += '<p class="p">' + T('Пометка аукциона: ') + hl(x) + '</p>';
