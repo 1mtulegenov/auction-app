@@ -18,6 +18,7 @@ function applyFees(d) {
 }
 const AUC = { AAH: 'AAA Houston', AAA: 'AAA Central', H1C: 'H1C', ANA: 'AutoNation', CMX: 'CarMax Conroe' };
 const SEVEN = /^(Toyota|Honda|Hyundai|BMW|Volkswagen|Kia|Mercedes)/i;
+const MAXB = /^(Toyota|Honda|Hyundai|BMW|Volkswagen|Kia|Mercedes|Audi)/i;
 const COLOR = { BLACK: T('чёрный'), WHITE: T('белый'), GRAY: T('серый'), GREY: T('серый'), SILVER: T('серебристый'), RED: T('красный'), BLUE: T('синий'), BROWN: T('коричневый'), TAN: T('бежевый'), BEIGE: T('бежевый'), GOLD: T('золотистый'), GREEN: T('зелёный'), PURPLE: T('фиолетовый'), BURGUNDY: T('бордовый'), MAROON: T('бордовый'), ORANGE: T('оранжевый'), YELLOW: T('жёлтый'), TEAL: T('бирюзовый') };
 const CLS = { salvage: ['bad', T('Salvage, rebuilt или без тайтла')], noinop: ['bad', T('Не на ходу или нет ключа')], hist: ['warn', T('Пометка на чистом тайтле')], clean: ['good', T('Без пометок')] };
 const STAT = { 'Основная': 's-main', 'Флип': 's-flip', 'Дорого': 's-exp' };
@@ -256,6 +257,63 @@ const INOP_LANES = { AAA: ['7'], AAH: ['T'], ANA: ['T'] };
 function lane(x) { return String(x.run || '').split('-')[0].trim(); }
 function inopLane(x) { return (INOP_LANES[x.auc] || []).includes(lane(x)); }
 function isInop(x) { return x.cls === 'noinop' || inopLane(x); }
+/* ---------- подбор для Максата: машина жене на 3–4 месяца, потом продать в ноль ----------
+   Ставка в ноль = цена продажи через 3–4 мес. (наша цена продажи −4% за время и пробег) − сбор − запас на обслуживание.
+   Надёжность по марке/мотору, возраст, пробег, свет, история, заметки и OBD дают комментарий и порядок в списке. */
+const WIFE_RISK = [
+  [/Hyundai|Kia/, /(Sonata|Optima|Santa Fe|Sorento|Sportage|Tucson|Forte|Elantra|Soul)/, y => y >= 2011 && y <= 2019, 'мотор Theta II/Nu GDI этих лет: известны задиры и отзывные клины. Проверить, делали ли отзыв (продлённая гарантия)', 2],
+  [/Hyundai|Kia/, /./, y => true, 'надёжные в целом, ремонт недорогой', 0],
+  [/Toyota/, /./, y => true, 'самая надёжная марка для такой задачи', -1],
+  [/Honda/, /(Odyssey|Pilot|Accord|Ridgeline)/, y => y >= 2008 && y <= 2017, 'V6 с отключением цилиндров (VCM): бывает расход масла; в остальном надёжная', 0],
+  [/Honda/, /(CR-V|Civic|HR-V|Fit)/, y => y >= 2014 && y <= 2020, 'вариатор CVT: менять жидкость; 1.5 турбо CR-V 2017–2019 — масло с бензином', 0],
+  [/Honda/, /./, y => true, 'надёжная марка', -1],
+  [/Volkswagen|Audi/, /./, y => y <= 2012, '2.0 турбо старых лет: цепь ГРМ и расход масла, ремонт $1500–3000', 2],
+  [/Volkswagen|Audi/, /./, y => true, 'немец: DSG, цепь/помпа, электрика. Мелкие поломки вероятны, ремонт дороже японцев', 1],
+  [/BMW/, /./, y => true, 'BMW: течи масла, охлаждение, цепь ГРМ на N20/N26. За 3–4 мес. вероятны вложения $500–1500', 2],
+  [/Mercedes/, /./, y => true, 'Mercedes: дорогой сервис, электроника, пневмоподвеска на старших. Вероятны вложения', 2],
+];
+const WIFE_RES = { Toyota: 300, Honda: 300, Hyundai: 500, Kia: 500, Volkswagen: 700, Audi: 900, BMW: 1000, Mercedes: 1000 };
+const _we = new Map();
+function wifeEval(x) {
+  if (_we.has(x)) return _we.get(x);
+  const mk = String(x.mk || ''), md = String(x.md || ''), y = +x.y || 0, age = 2026 - y, o = +x.o || 0;
+  const notes = []; let pen = 0;
+  const r = WIFE_RISK.find(r => r[0].test(mk) && r[1].test(md) && r[2](y));
+  if (r) { notes.push(r[3]); pen += r[4]; }
+  if (o > 180000) { notes.push('пробег ' + N(o) + ' mi: много, износ подвески и мотора'); pen += 2; }
+  else if (o > 140000) { notes.push('пробег ' + N(o) + ' mi: выше среднего'); pen += 1; }
+  else if (o > 500 && o < 90000) { notes.push('небольшой пробег'); pen -= 1; }
+  if (age >= 16) { notes.push(y + ' год: старая, резинки и пластик стареют'); pen += 1; }
+  if (String(x.l || '').includes('Red')) { notes.push('красный свет: продаётся как есть, без гарантии хода и КПП'); pen += 3; }
+  else if (x.l === 'Green') pen -= 1;
+  if (x.g) { const g = parseFloat(x.g); if (g < 3) { notes.push('оценка ' + x.g + ': плохое состояние'); pen += 1; } }
+  if (x.ttlbad || x.cls === 'salvage') { notes.push('проблемный тайтл: продать потом сложнее'); pen += 3; }
+  if (x.hist) { notes.push('пометка в истории: дисконт при продаже'); pen += 1; }
+  if (/рам|frame/i.test(x.cr || '')) { notes.push('по отчёту повреждение рамы'); pen += 3; }
+  const nf = noteFlags(noteOf(x)); if (nf && nf.stop) { notes.push('по заметке: не смотреть'); pen += 3; }
+  const ob = obdOf(x), ov = ob && window.OBD && OBD.verdict(ob.codes); if (ov) { notes.push('OBD: ' + OBD.SEV[ov.s][1]); pen += ov.s === 3 ? 3 : ov.s === 2 ? 1 : 0; }
+  const res = (WIFE_RES[Object.keys(WIFE_RES).find(k => mk.startsWith(k))] || 600) + (o > 140000 ? 400 : 0);
+  let max = null, sale3 = null, ok = null;
+  if (x.sale != null) {
+    sale3 = Math.round(x.sale * .96 / 50) * 50;
+    max = Math.max(0, Math.floor((sale3 - FEE - res) / 50) * 50);
+    if (x.w) { ok = max >= x.w ? 'easy' : max >= .85 * x.w ? 'tight' : 'no'; if (ok === 'no') { notes.push('в ноль выйти можно только при ставке сильно ниже MMR, шанс купить низкий'); pen += 1; } else if (ok === 'easy') pen -= 1; }
+    if (x.floor && x.floor > max) notes.push('резерв продавца ' + M(x.floor) + ' выше ставки в ноль: дешевле, скорее всего, не отдадут');
+  } else notes.push('нет оценки цены продажи');
+  const lv = pen >= 4 ? 'bad' : pen >= 2 ? 'warn' : 'ok';
+  const score = -pen * 10 + (ok === 'easy' ? 8 : ok === 'tight' ? 3 : 0) + (x.sale ? Math.min(5, (max - (x.w || 0)) / 500) : -20);
+  const out = { lv, max, sale3, res, ok, notes, score, word: lv === 'ok' ? 'подходит' : lv === 'warn' ? 'с оговорками' : 'рискованно' };
+  _we.set(x, out); return out;
+}
+function wifeOn() { return S.tab === 'lots' && S.f.quick === 'seven'; }
+function wifeHtml(x, full) {
+  const v = wifeEval(x);
+  const head = '<b>' + T('Жене на 3–4 мес.: ') + v.word + '</b>' + (v.max != null ? '. ' + T('Бить до ') + M(v.max) + T(' (с ') + T('сбором ') + M(v.max + FEE) + ')' : '');
+  if (!full) return '<div class="wife ' + v.lv + '">' + head + '<span>' + E(v.notes.join('; ')) + '</span></div>';
+  return '<div class="d-card wife-d ' + v.lv + '"><h3>' + T('Подбор для Максата') + '</h3><p>' + head + '</p>'
+    + (v.sale3 != null ? '<p class="muted">' + T('Продажа через 3–4 мес. ≈ ') + M(v.sale3) + ' − ' + T('сбор ') + M(FEE) + ' − ' + T('запас на обслуживание ') + M(v.res) + ' = ' + T('ставка в ноль ') + M(v.max) + (x.w ? '. MMR ' + M(x.w) : '') + '</p>' : '')
+    + '<ul>' + v.notes.map(n => '<li>' + E(n) + '</li>').join('') + '</ul></div>';
+}
 /* ---------- карточка лота ---------- */
 const VERDICT = { 'Основная': ['v-buy', T('Брать')], 'Флип': ['v-flip', T('Флип')], 'Дорого': ['v-exp', T('Дорого')] };
 function statusLine(x) {
@@ -328,6 +386,7 @@ function lotCard(x) {
     + '<p class="sub">' + [x.o > 500 ? N(x.o) + ' mi' : '', COLOR[x.c] || String(x.c || '').toLowerCase()].filter(Boolean).map(E).join(' · ') + '</p></div></div>'
     + (isInop(x) ? '<div class="money inop"><div class="m-main"><span>MMR</span><b>' + M(x.w) + '</b></div><div class="m-note">' + T('Неходячая: прибыль не считаем') + '</div></div>' : '<div class="money two"><div class="m-main"><span>' + (x.est ? T('MMR, оценка') : 'MMR') + '</span><b>' + (x.est && x.w != null ? '≈' : '') + M(x.w) + '</b></div><div class="m-main"><span>' + T('Ретейл') + '</span><b>' + (x.est && x.r != null ? '≈' : '') + M(x.r) + '</b></div></div>')
     + '<div class="status">' + statusLine(x) + '</div>'
+    + (wifeOn() && !isInop(x) ? wifeHtml(x) : '')
     + pastCard(x)
     + hotLine(x)
     + factText(x)
@@ -336,7 +395,7 @@ function lotCard(x) {
 }
 
 /* ---------- фильтры ---------- */
-const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('7 марок')], ['inop', T('Неходячие')], ['clean', T('Без пометок')], ['floor', T('С резервом')], ['past', T('Были на торгах')], ['notes', T('С заметкой')]];
+const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('Подбор для Максата')], ['inop', T('Неходячие')], ['clean', T('Без пометок')], ['floor', T('С резервом')], ['past', T('Были на торгах')], ['notes', T('С заметкой')]];
 const SORTS = [['stat', T('Сначала подборка')], ['prof', T('Прибыль больше')], ['w', T('MMR меньше')], ['wd', T('MMR больше')], ['diff', T('Ретейл − MMR больше')], ['time', T('Аукцион и время')], ['mk', T('Марка, модель, год')], ['ymm', T('Год, марка, модель')], ['run', T('Run номер')], ['o', T('Пробег меньше')], ['new', T('Недавно выставленные')], ['y', T('Год новее')]];
 const STAT_ORDER = { 'Основная': 0, 'Флип': 1, 'Дорого': 2, 'Вне критериев': 3, 'Нет': 4 };
 const nnv = (v, d) => v == null ? d : v;
@@ -380,7 +439,7 @@ function applyFilters(list) {
     switch (f.quick) {
       case 'fav': return isFav(x);
       case 'pick': return x.C || x.F;
-      case 'seven': return x.S || SEVEN.test(x.mk || '');
+      case 'seven': return MAXB.test(x.mk || '') && !isInop(x);
       case 'clean': return x.cls === 'clean' && !x.hist && !x.ttlbad;
       case 'floor': return !!x.floor;
       case 'notes': return !!noteOf(x);
@@ -389,6 +448,7 @@ function applyFilters(list) {
     }
     return true;
   });
+  if (f.quick === 'seven' && (!f.sort || f.sort === 'stat')) a.sort((p, q) => wifeEval(q).score - wifeEval(p).score); else
   a.sort(LOT_SORT[f.sort] || LOT_SORT.stat);
   return a;
 }
@@ -679,6 +739,7 @@ function detail(k) {
     + (x.est ? '<p class="muted" style="margin-top:6px">' + T('Новый лот: Manheim ещё не смотрели. MMR и ретейл оценены по похожим машинам с прошлых торгов.') + ' ' + E(x.src || '') + '</p>' : '')
     + (x.demand ? '<p class="p"><b>' + T('Спрос ') + x.demand + '/10</b>' + (x.sell ? T(', продаётся за ') + E(weeks(x.sell)) : '') + '</p>' : '') + '</div>')
     + (x.sale != null && !isInop(x) ? '<div class="d-card"><h3>' + T('Калькулятор ставки') + '</h3><div class="calc"><input id="bid" type="number" inputmode="numeric" value="' + E(bid) + '" aria-label="' + T('Ваша ставка, $') + '"><div class="calc-out" id="calcOut"></div></div></div>' : '')
+    + (wifeOn() && !isInop(x) ? wifeHtml(x, true) : '')
     + (info ? '<div class="d-card">' + info + '</div>' : '')
     + '<div class="d-card"><h3><label for="note">' + T('Заметка после осмотра') + (n && n.date && n.date !== S.date ? T(' (от ') + fmtDate(n.date) + T(', лот ') + E(n.run) + ')' : '') + '</label></h3><textarea class="note' + (n ? ' has' : '') + '" id="note" data-k="' + E(k) + '" placeholder="' + T('Что увидели: кузов, мотор, салон, запах, ошибки') + '">' + E(n ? n.text : '') + '</textarea><div class="note-bar"><p class="muted" id="nstat" style="font-size:12.5px">' + E(noteStatus(n)) + '</p><button class="btn" data-act="note-done">' + T('Сохранить') + '</button></div></div>'
     + '<div class="d-card obd" id="obdCard" data-k="' + E(k) + '">' + obdCard(x) + '</div>'

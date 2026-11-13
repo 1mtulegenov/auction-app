@@ -364,3 +364,10 @@ li.bad .obd-sev{background:var(--badb);color:var(--bad)}li.warn .obd-sev{backgro
 .obd-view img{max-width:100%;max-height:calc(100% - 64px);object-fit:contain;border-radius:8px}
 .obd-vbar{display:flex;gap:10px;margin-top:12px}
 .obd-c.nc{font-family:inherit;font-size:13px;letter-spacing:0;color:var(--muted);font-weight:600}
+/* подбор для Максата */
+.wife{margin-top:10px;padding:8px 10px;border-radius:10px;font-size:13.5px;line-height:1.4;background:var(--goodb);color:var(--ink)}
+.wife b{display:block;color:var(--good)}.wife span{color:var(--ink)}
+.wife.warn{background:var(--warnb)}.wife.warn b{color:var(--warn)}
+.wife.bad{background:var(--badb)}.wife.bad b{color:var(--bad)}
+.wife-d{border-left:4px solid var(--good)}.wife-d.warn{border-left-color:#e0a800}.wife-d.bad{border-left-color:var(--bad)}
+.wife-d ul{margin:6px 0 0;padding-left:18px;font-size:14px}.wife-d p{margin:4px 0}
