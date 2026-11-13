@@ -563,6 +563,7 @@ async function favListScreen() {
     let d; try { d = await getDate(id); } catch (e) { continue; }
     const rows = by[id].map(([fid, f]) => [fid, f, d.map[f.k]]).filter(r => r[2]);
     sortFavRows(rows, key);
+    rows.sort((a, b) => (a[1].x ? 1 : 0) - (b[1].x ? 1 : 0)); // вычеркнутые внизу
     if (!rows.length) continue;
     n += rows.length;
     const dd = S.index.dates.find(x => x.id === id);
@@ -775,7 +776,8 @@ function obdCard(x) {
     + '<div class="obd-man"><input id="obdIn" type="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="' + T('Код вручную: P0420, U0100') + '" aria-label="' + T('Код ошибки') + '"><button class="btn" data-act="obd-code">' + T('Добавить') + '</button></div>';
   const Y = window.Sync && Sync.st;
   const err = Y && Y.obdErr === 'rules' ? T('Не сохраняется в базе: в Firebase нужно добавить правило для obd (см. сообщение в чате).') : Y && Y.obdErr ? Y.obdErr : '';
-  h += '<p class="muted obd-stat" id="obdSt">' + E(err || (o && o.by ? T('Добавил ') + o.by + (o.at ? ', ' + new Date(o.at).toLocaleString(LOCALE, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '') : T('Скриншот с ошибками увидят все. Коды распознаются автоматически.'))) + '</p>';
+  const pendN = window.Sync && Sync.obdPending ? Sync.obdPending() : 0;
+  h += '<p class="muted obd-stat" id="obdSt">' + E(err ? err + (pendN ? T(' Неотправленных: ') + pendN + T(', отправятся сами.') : '') : pendN ? T('Ждёт отправки в базу, отправится само при подключении.') : (o && o.by ? T('Добавил ') + o.by + (o.at ? ', ' + new Date(o.at).toLocaleString(LOCALE, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '') : T('Скриншот с ошибками увидят все. Коды распознаются автоматически.'))) + '</p>';
   return h;
 }
 function obdRedraw() { const c = $('#obdCard'); if (!c) return; const x = S.d.map[c.dataset.k]; if (!x) return; const a = document.activeElement, keep = a && a.id === 'obdIn' ? a.value : null; c.innerHTML = obdCard(x); if (keep != null) { const i = $('#obdIn'); i.value = keep; i.focus(); } obdThumbs(x); }
@@ -1020,7 +1022,7 @@ document.addEventListener('click', async e => {
     case 'freset': Object.assign(S.f, { mk: [], md: [], au: '', cl: '', st: '', y: '', o: '', p: '' }); closeSheet(); render(); break;
     case 'notes': notesSheet(); break;
     case 'activity': activitySheet(S.actDays || 7); break;
-    case 'fl-x': { const f = S.favs[ds.fid]; if (!f) break; if (f.x) delete f.x; else f.x = 1; f.ts2 = Date.now(); saveFavs(); const r = t.closest('.fl-r'); if (r) { r.classList.toggle('gone', !!f.x); t.textContent = f.x ? '↺' : '✕'; t.setAttribute('aria-pressed', !!f.x); t.title = f.x ? T('Вернуть') : T('Ушла, не купили: зачеркнуть'); } break; }
+    case 'fl-x': { const f = S.favs[ds.fid]; if (!f) break; if (f.x) delete f.x; else f.x = 1; f.ts2 = Date.now(); saveFavs(); const r = t.closest('.fl-r'); if (r) { r.classList.toggle('gone', !!f.x); t.textContent = f.x ? '↺' : '✕'; t.setAttribute('aria-pressed', !!f.x); t.title = f.x ? T('Вернуть') : T('Ушла, не купили: зачеркнуть'); const L = r.parentNode; if (L) { if (f.x) L.appendChild(r); else { const g = L.querySelector('.fl-r.gone'); L.insertBefore(r, g || null); } } } break; }
     case 'fav-clear': {
       const keep = S.favs, now = Date.now(), n = Object.keys(keep).length; if (!n) break;
       S.favs = {}; Object.keys(keep).forEach(k => { S.favDel[k] = now; }); saveFavs(); keepScroll(render);
