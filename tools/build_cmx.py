@@ -129,3 +129,5 @@ how = ('<ul><li><b>Аукцион.</b> CarMax Auctions, площадка Conroe,
 out = {'id': date, 'label': '17 ноября', 'title': 'CarMax Conroe, вторник 17 ноября, 8:00', 'lead': lead, 'how': how, 'lots': lots, 'core': core, 'flip': flip}
 json.dump(out, open('data/%s.json' % date, 'w'), ensure_ascii=False, separators=(',', ':'))
 print(len(lots), 'core', len(core), 'flip', len(flip), 'manheim', n_m, collections.Counter(l['whyn'] for l in lots).most_common(8))
+
+import subprocess as _sp; _sp.run(['python3', 'tools/apply_pro.py', date])

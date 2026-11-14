@@ -308,6 +308,19 @@ function wifeEval(x) {
   const out = { lv, max, sale3, res, ok, notes, score, word: lv === 'ok' ? 'подходит' : lv === 'warn' ? 'с оговорками' : 'рискованно' };
   _we.set(x, out); return out;
 }
+/* заметка перекупа и мастера: база по поколениям (x.risk) + то, что видно по этой машине */
+function proCard(x) {
+  const add = [], age = Math.max(.5, new Date().getFullYear() - (x.y || 0) + .5), mpy = x.o > 500 ? x.o / age : 0;
+  if (mpy > 20000) add.push(T('Пробег большой для возраста, около ') + N(Math.round(mpy / 1000)) + T(' тыс. миль в год: трасса, доставка или такси. Смотри износ сидения водителя, руля и педалей, чтобы понять, не скручено ли.'));
+  else if (mpy && mpy < 6000 && age > 3) add.push(T('Ездила мало, около ') + N(Math.max(1, Math.floor(mpy / 1000))) + T(' тыс. миль в год. Проверь, не стояла ли: дата на шинах, ржавые диски тормозов, сухие сальники и течи после долгого простоя.'));
+  if (/rental|прокат/i.test(x.a || '')) add.push(T('Бывшая прокатная: ТО по регламенту, но езда жёсткая. Покупатели просят скидку, в объявлении лучше не скрывать.'));
+  if (/fleet|флит/i.test(x.a || '')) add.push(T('Флитовая: обычно обслужена, но салон и кузов уставшие.'));
+  if (x.ttlbad || x.cls === 'salvage') add.push(T('Тайтл с пометкой: продавать дольше и дешевле на 20–40%, кредит покупателю дадут не все банки.'));
+  if (x.arbx) add.push(T('ARBX PLUS: есть арбитраж на мотор и коробку, это страховка для тебя.'));
+  if (x.past && x.past.length > 1) add.push(T('Гуляет по аукционам уже ') + x.past.length + T(' раз: кто-то уже смотрел и не купил. Ищи, что их отпугнуло.'));
+  if (!x.risk && !add.length) return '';
+  return '<div class="d-card pro"><h3>' + T('Заметка перекупа и мастера') + '</h3>' + (x.risk ? '<p>' + E(x.risk) + '</p>' : '') + (add.length ? '<ul>' + add.map(t => '<li>' + E(t) + '</li>').join('') + '</ul>' : '') + '<p class="muted">' + T('По жалобам владельцев с форумов, отзывам NHTSA и практике перепродажи в Хьюстоне. Цены ремонта ориентировочные, в прибыль не входят.') + '</p></div>';
+}
 function isMax() { return !!(window.Sync && Sync.isAdmin && Sync.isAdmin()); }
 function wifeOn() { return S.tab === 'lots' && S.f.quick === 'seven' && isMax(); }
 function wifeHtml(x, full) {
@@ -858,7 +871,6 @@ function detail(k) {
   else if (x.prior) info += '<p class="p wrn">' + T('Уже была на торгах ') + fmtDate(x.prior.date) + T(' за ') + M(x.prior.price) + '.' + (x.w && x.prior.price < .7 * x.w ? T(' Это намного ниже MMR: возможен скрытый дефект.') : '') + '</p>';
   if (x.seen) info += '<p class="p wrn">' + T('Была в каталоге ') + E(x.seen) + T(': выставляется повторно.') + '</p>';
   if (x.hx) info += '<p class="p ' + (x.hxbad ? 'wrn' : '') + '"><b>' + T('История (AutoCheck):') + '</b> ' + E(x.hx) + '</p>';
-  if (x.risk) info += '<p class="p"><b>' + T('Слабые места модели') + '</b>' + T(' (в прибыль не входят): ') + E(x.risk) + '</p>';
   if (x.cons) info += '<p class="p muted">' + T('Продавец: ') + E(x.cons) + (x.drv && x.drv !== 'N/A' ? ' · ' + E(x.drv) : '') + (x.eng ? ' · ' + E(x.eng) : '') + '</p>';
   const html = '<div class="d-card">' + photo(x, 'd-photo', false) + '<div class="lot-top"><span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + dLabel(S.d) + ', ' + slot(x) + '</span></div>'
     + '<h3 class="d-name">' + E(carTitle(x)) + '</h3><p class="sub">' + (x.o > 500 ? N(x.o) + ' mi · ' : '') + E(COLOR[x.c] || String(x.c || '').toLowerCase()) + (x.tr ? (x.est ? ' · EDGE: ' : ' · Manheim: ') + E(x.tr) : '') + '</p>' + flResTag(x)
@@ -869,6 +881,7 @@ function detail(k) {
     + (x.demand ? '<p class="p"><b>' + T('Спрос ') + x.demand + '/10</b>' + (x.sell ? T(', продаётся за ') + E(weeks(x.sell)) : '') + '</p>' : '') + '</div>')
     + (x.sale != null && !isInop(x) ? '<div class="d-card"><h3>' + T('Калькулятор ставки') + '</h3><div class="calc"><input id="bid" type="number" inputmode="numeric" value="' + E(bid) + '" aria-label="' + T('Ваша ставка, $') + '"><div class="calc-out" id="calcOut"></div></div></div>' : '')
     + (wifeOn() && !isInop(x) ? wifeHtml(x, true) : '')
+    + proCard(x)
     + (info ? '<div class="d-card">' + info + '</div>' : '')
     + '<div class="d-card"><h3><label for="note">' + T('Заметка после осмотра') + (n && n.date && n.date !== S.date ? T(' (от ') + fmtDate(n.date) + T(', лот ') + E(n.run) + ')' : '') + '</label></h3><textarea class="note' + (n ? ' has' : '') + '" id="note" data-k="' + E(k) + '" placeholder="' + T('Что увидели: кузов, мотор, салон, запах, ошибки') + '">' + E(n ? n.text : '') + '</textarea><div class="note-bar"><p class="muted" id="nstat" style="font-size:12.5px">' + E(noteStatus(n)) + '</p><button class="btn" data-act="note-done">' + T('Сохранить') + '</button></div></div>'
     + '<div class="d-card obd" id="obdCard" data-k="' + E(k) + '">' + obdCard(x) + '</div>'

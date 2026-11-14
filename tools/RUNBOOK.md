@@ -23,3 +23,6 @@ CarMax цены продажи не публикует. В открытой вк
 - floor: GET /api/auction-event/v1/auction-events/{eventId}/run-list-items (eventId — из performance entries на странице vehicledetail любого лота) -> floorPrice.amount, runNumber, lane, StockNum.
 - продана или нет: GET /api/shopping/auctions/vehicle?stockNum=N -> isSold.
 Накануне торгов: tools/cmx_floor_<дата>.txt (run|stock|floor), после торгов: tools/cmx_status_<дата>.txt (run|stock|vin|floor|1/0), затем python3 tools/apply_cmx.py <дата>.
+
+## Заметки перекупа/мастера
+База по поколениям: tools/pro_notes.py. Сборщики (build_cmx/aah/ana) сами вызывают tools/apply_pro.py <дата>; для любой другой сборки запусти его вручную. Нет модели в базе — допиши запись E(...) в pro_notes.py.

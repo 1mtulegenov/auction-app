@@ -247,3 +247,5 @@ json.dump(out, open('data/%s.json' % date, 'w'), ensure_ascii=False, separators=
 import collections
 print(len(lots), 'core', len(core), 'flip', len(flip), collections.Counter(l['whyn'] for l in lots).most_common(),
       'с w', sum(1 for l in lots if l['w']), 'PMR', sum(1 for l in lots if 'PMR EDGE $' in l['src'] and l['src'].startswith('пох')), 'past', sum(1 for l in lots if l.get('past')))
+
+import subprocess as _sp; _sp.run(['python3', 'tools/apply_pro.py', date])
