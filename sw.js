@@ -1,5 +1,5 @@
 /* Сервис-воркер: приложение открывается без интернета, данные обновляются при каждом запуске со связью. */
-const VERSION = '5391056df0';
+const VERSION = '3659ed948e';
 const SHELL = 'shell-' + VERSION, DATA = 'data-v1';
 const FILES = ['./', 'index.html', 'app.css', 'fonts.css', 'i18n.js', 'app.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'vendor/zxing.min.js', 'scan-worker.js', 'vinline.js', 'firebase-config.js', 'sync.js', 'obd.js'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(SHELL).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
@@ -43,3 +43,14 @@ async function shellFirst(req) {
     throw 0;
   } catch (e) { return (await c.match(req, { ignoreSearch: true })) || fetch(req); }
 }
+
+// Пуш-уведомления: новый аукцион, пост-сейл и т. д. Текст приходит от GitHub Actions (tools/notify.mjs).
+self.addEventListener('push', e => {
+  let d = {}; try { d = e.data ? e.data.json() : {}; } catch (x) { d = { body: e.data && e.data.text() }; }
+  e.waitUntil(self.registration.showNotification(d.title || 'Аукционы', { body: d.body || '', icon: 'icons/icon-192.png', badge: 'icons/icon-192.png', tag: d.tag || 'auc', data: { url: d.url || './' } }));
+});
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = new URL((e.notification.data && e.notification.data.url) || './', self.registration.scope).href;
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(cs => { const c = cs.find(w => w.url.startsWith(self.registration.scope)); if (c) { c.focus(); return c.navigate ? c.navigate(url).catch(() => {}) : null; } return self.clients.openWindow(url); }));
+});

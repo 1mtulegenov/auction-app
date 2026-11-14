@@ -304,5 +304,13 @@ window.Sync = (() => {
     return out;
   }
   init();
-  return { st, signIn, signOut, pushNote, pushFavs, isAdmin, activity, pushObd, obdImg, delObdImg, obdPending };
+  // пуш-подписка устройства: push/{хэш endpoint}. Только endpoint и ключи шифрования, без почты.
+  async function pushSub(sub) {
+    if (!db || !st.user) throw new Error('Сначала войдите');
+    const h = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(sub.endpoint))), b => b.toString(16).padStart(2, '0')).join('').slice(0, 32);
+    const dv = /iPhone|iPad/.test(navigator.userAgent) ? 'ios' : /Android/.test(navigator.userAgent) ? 'android' : 'desktop';
+    await F.fs.setDoc(F.fs.doc(db, 'push', h), { endpoint: sub.endpoint, keys: sub.keys, dev: dv, at: F.fs.serverTimestamp() });
+    return h;
+  }
+  return { st, signIn, signOut, pushNote, pushFavs, isAdmin, activity, pushObd, obdImg, delObdImg, obdPending, pushSub };
 })();

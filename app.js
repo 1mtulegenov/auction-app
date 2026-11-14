@@ -680,6 +680,7 @@ function more() {
   return '<div class="menu">' + acc + '<button data-act="lang"><span class="ic flag">' + cur[1] + '</span><span>' + T('Язык') + '<small>' + cur[2] + '</small></span></button>'
     + (window.Sync && Sync.isAdmin && Sync.isAdmin() ? '<button data-act="activity"><span class="ic">📊</span><span>' + T('Активность') + '<small>' + T('Кто сколько раз заходил и сколько минут был в приложении') + '</small></span></button>' : '')
     + (isMax() ? '<button data-act="changelog"><span class="ic">🕘</span><span>' + T('История изменений') + '<small>' + T('Все запросы и что сделано, с датой и временем. Видно только вам') + '</small></span></button>' : '')
+    + '<button data-act="push"><span class="ic">🔔</span><span>' + T('Уведомления') + '<small>' + pushLabel() + '</small></span></button>'
     + '<button data-act="stats"><span class="ic">📈</span><span>' + T('Статистика продаж') + '<small>' + T('Продано сразу против MMR и floor price: даты, марка, аукцион') + '</small></span></button>'
     + '<button data-act="notes"><span class="ic">📝</span><span>' + T('Заметки') + '<small>' + (notes.length ? notes.length + T(' шт., привязаны к VIN') : T('Пока нет. Пишутся в карточке машины.')) + '</small></span></button>'
     + '<button data-act="how"><span class="ic">🧮</span><span>' + T('Как считается прибыль') + '<small>' + T('MMR, сбор, цена продажи, максимальная ставка') + '</small></span></button>'
@@ -717,6 +718,28 @@ async function activitySheet(days) {
   sh.querySelector('.empty').outerHTML = h + '<p class="muted" style="font-size:12.5px;margin-top:10px">' + T('Вход считается, когда приложение открыли или вернулись в него после перерыва больше 30 минут. Время идёт, только пока приложение на экране.') + '</p>';
 }
 
+/* ---------- пуш-уведомления: новый аукцион, пост-сейл ---------- */
+const VAPID_PUB = 'BDjW4mzPCyvLlkt6ptUxITcv7Z8Wt_YAyFBw7Ll-FE_FqH6CZlbQdPD65vhHZBW7Ttu1fxq0IdzSxgqHZsWu12A';
+function pushLabel() {
+  if (!('Notification' in window) || !('PushManager' in window)) return platform() === 'ios' && !isStandalone() ? T('На iPhone работают только в установленном приложении (на экране «Домой»)') : T('Этот браузер не поддерживает уведомления');
+  if (Notification.permission === 'granted' && LS.get('push-on', '')) return T('Включены: новый аукцион, пост-сейл');
+  if (Notification.permission === 'denied') return T('Запрещены в настройках телефона. Включите их для этого приложения');
+  return T('Нажмите, чтобы получать: новый аукцион, пост-сейл');
+}
+async function pushOn() {
+  try {
+    if (!('Notification' in window) || !('PushManager' in window)) { toast(pushLabel()); return; }
+    if (!(window.Sync && Sync.st.user)) { toast(T('Сначала войдите через Google')); return; }
+    const p = await Notification.requestPermission();
+    if (p !== 'granted') { toast(T('Уведомления не разрешены')); return; }
+    const reg = await navigator.serviceWorker.ready;
+    const key = Uint8Array.from(atob(VAPID_PUB.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key });
+    await Sync.pushSub(sub.toJSON());
+    LS.set('push-on', '1'); toast(T('Уведомления включены'));
+  } catch (e) { console.warn('push', e); toast(T('Не получилось включить уведомления: ') + (e.message || e)); }
+}
 /* ---------- статистика продаж: цена «продано сразу» против MMR и floor price ---------- */
 const SST = { from: '', to: '', mk: '', auc: '' };
 let SST_ALL = null, SST_V = '';
@@ -1157,6 +1180,7 @@ document.addEventListener('click', async e => {
     case 'notes': notesSheet(); break;
     case 'activity': activitySheet(S.actDays || 7); break;
     case 'stats': statsSheet(); break;
+    case 'push': pushOn(); break;
     case 'changelog': if (isMax()) changelogSheet(); break;
     case 'sst-mk': case 'sst-auc': { const f = ds.act === 'sst-mk' ? 'mk' : 'auc'; SST[f] = ds.v; const sel = $('#sst_' + f); if (sel) sel.value = ds.v; statsDraw(); $('#sheet').scrollTop = 0; break; }
     case 'fl-x': { const f = S.favs[ds.fid]; if (!f) break; if (f.x) delete f.x; else f.x = 1; f.ts2 = Date.now(); saveFavs(); const r = t.closest('.fl-r'); if (r) { r.classList.toggle('gone', !!f.x); t.textContent = f.x ? '↺' : '✕'; t.setAttribute('aria-pressed', !!f.x); t.title = f.x ? T('Вернуть') : T('Ушла, не купили: зачеркнуть'); const L = r.parentNode; if (L) { if (f.x) L.appendChild(r); else { const g = L.querySelector('.fl-r.gone'); L.insertBefore(r, g || null); } } } break; }
@@ -1564,4 +1588,13 @@ document.addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t) return;
   if (t.id === 'btnScan') openScan();
   else if (t.dataset.act === 'scan-close') closeScan();
+});
+
+// один раз предлагаем включить уведомления тем, у кого приложение установлено и кто вошёл
+window.addEventListener('sync-state', () => {
+  try {
+    if (!(window.Sync && Sync.st.user) || !isStandalone() || !('PushManager' in window) || Notification.permission !== 'default' || LS.get('push-ask', '')) return;
+    LS.set('push-ask', '1');
+    setTimeout(() => toast(T('Присылать уведомления о новых аукционах и пост-сейле?'), T('Включить'), pushOn), 1500);
+  } catch (e) {}
 });
