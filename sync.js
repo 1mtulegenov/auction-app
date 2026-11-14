@@ -322,5 +322,18 @@ window.Sync = (() => {
     if (!db || !st.user) return null;
     try { const d = await F.fs.getDoc(F.fs.doc(db, 'push', 'srch_' + st.user.uid)); return d.exists() ? (d.data().list || []) : []; } catch (e) { console.warn('searches', e); return null; }
   }
-  return { st, signIn, signOut, pushNote, pushFavs, isAdmin, activity, pushObd, obdImg, delObdImg, obdPending, pushSub, saveSearches, loadSearches };
+  // осмотр на площадке: obd/{vin}/insp/main {items, shots, by, at}, фото в obd/{vin}/img/{id} (как скриншоты OBD)
+  async function pushInsp(vin, data, img) {
+    if (!db || !st.user) return false;
+    try {
+      if (img) await F.fs.setDoc(F.fs.doc(db, 'obd', vin, 'img', img.id), { data: img.data, by: st.user.name, at: F.fs.serverTimestamp() });
+      await F.fs.setDoc(F.fs.doc(db, 'obd', vin, 'insp', 'main'), Object.assign({}, JSON.parse(JSON.stringify(data)), { by: st.user.name, uid: st.user.uid, at: F.fs.serverTimestamp() }));
+      return true;
+    } catch (e) { console.warn('insp', e); return false; }
+  }
+  async function getInsp(vin) {
+    if (!db || !st.user) return null;
+    try { const d = await F.fs.getDoc(F.fs.doc(db, 'obd', vin, 'insp', 'main')); return d.exists() ? d.data() : null; } catch (e) { return null; }
+  }
+  return { st, signIn, signOut, pushNote, pushFavs, isAdmin, activity, pushObd, obdImg, delObdImg, obdPending, pushSub, saveSearches, loadSearches, pushInsp, getInsp };
 })();

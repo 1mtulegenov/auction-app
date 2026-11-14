@@ -721,6 +721,94 @@ async function activitySheet(days) {
   sh.querySelector('.empty').outerHTML = h + '<p class="muted" style="font-size:12.5px;margin-top:10px">' + T('Вход считается, когда приложение открыли или вернулись в него после перерыва больше 30 минут. Время идёт, только пока приложение на экране.') + '</p>';
 }
 
+/* ---------- осмотр на площадке: чек-лист под модель, фото, итог в общую заметку и поправка ставки ---------- */
+S.insp = LS.get('insp-v1', {});
+const INSP_IMG = {};
+const INSP_GEN = [
+  ['cold', 'Холодный запуск: без стука, треска цепи, дыма', 1500],
+  ['smoke', 'После прогрева выхлоп чистый, нет сизого или белого дыма', 1500],
+  ['leak', 'Под мотором и коробкой сухо, нет течей масла и антифриза', 400],
+  ['fluid', 'Масло и антифриз: уровень в норме, масло без эмульсии, антифриз без масла', 300],
+  ['trans', 'Коробка: включения без удара, задний ход, нет пинков и пробуксовки', 2500],
+  ['ac', 'Кондиционер дует холодным за 1–2 минуты', 800],
+  ['tires', 'Шины: равномерный износ, свежая дата (4 цифры на боковине)', 600],
+  ['brakes', 'Тормоза: нет биения в руль и скрежета', 300],
+  ['susp', 'Подвеска и рулевое: нет стуков и люфтов', 500],
+  ['body', 'Кузов: нет перекраса, кривых зазоров, следов ДТП', 0],
+  ['flood', 'Салон: нет запаха сырости, ила и ржавчины под ковриками (утопленник)', 0],
+  ['elec', 'Электрика: окна, замки, экран, камера, все лампы на приборке гаснут', 200],
+  ['obd', 'Сканер OBD: нет серьёзных ошибок (скриншот в блоке OBD ниже)', 0],
+];
+const INSP_SKIP = /продаётся|продается|держит цену|улетает|спрос|покупател|перекуп|дешевеет|бери |только с|ликвидн|ходовой|дилер/i;
+function inspCost(t) {
+  const m = String(t).match(/\$\s?(\d[\d\s]*\d|\d)(?:\s*[–-]\s*\$?(\d[\d\s]*\d|\d))?/); if (!m) return 0;
+  const a = +m[1].replace(/\s/g, ''), b = m[2] ? +m[2].replace(/\s/g, '') : a; return Math.round((a + b) / 2 / 50) * 50;
+}
+function inspItems(x) {
+  const own = String(x.risk || '').split(/(?<=[.!])\s+(?=[A-ZА-ЯЁ0-9])/).map(s => s.trim()).filter(s => s.length > 25 && !INSP_SKIP.test(s) && /—|:|течь|жор|стук|треск|рывк|пинк|дрож|отзыв|провер|слушай|смотри|гул|вой|перегрев|цеп|помп/i.test(s)).slice(0, 7);
+  return own.map((s, i) => ({ id: 'm' + i, t: s, c: inspCost(s), own: 1 })).concat(INSP_GEN.map(([id, t, c]) => ({ id, t: T(t), c })));
+}
+function inspOf(x) { return x.vin ? (S.insp[x.vin] || (S.insp[x.vin] = { items: {}, shots: [] })) : null; }
+function inspCard(x) {
+  const o = inspOf(x); if (!o) return '';
+  const it = inspItems(x), st = o.items || {};
+  const bad = it.filter(i => st[i.id] === 'bad'), good = it.filter(i => st[i.id] === 'ok'), cost = bad.reduce((a, i) => a + i.c, 0);
+  const bid = x.max != null ? Math.max(0, Math.floor((x.max - cost) / 50) * 50) : null;
+  const row = i => '<div class="in-r ' + (st[i.id] || '') + '"><span class="in-t">' + (i.own ? '<em>' + T('по модели') + '</em> ' : '') + E(i.t) + (i.c ? ' <small>' + T('если плохо: −') + M(i.c) + '</small>' : '') + '</span>'
+    + '<span class="in-b"><button data-act="in-set" data-id="' + i.id + '" data-v="ok" aria-pressed="' + (st[i.id] === 'ok') + '" aria-label="' + T('Нормально') + '">✓</button><button data-act="in-set" data-id="' + i.id + '" data-v="bad" aria-pressed="' + (st[i.id] === 'bad') + '" aria-label="' + T('Проблема') + '">✗</button></span></div>';
+  return '<h3>' + T('Осмотр на площадке') + '</h3><p class="muted">' + T('Отмечайте ✓ нормально или ✗ проблема. Пункты «по модели» взяты из заметки мастера.') + (o.by ? ' ' + T('Последний осмотр: ') + E(o.by) : '') + '</p>'
+    + '<div class="in-list">' + it.map(row).join('') + '</div>'
+    + '<div class="in-ph">' + (o.shots || []).map(s => '<button class="in-th" data-act="in-view" data-id="' + E(s.id) + '">' + (INSP_IMG[s.id] ? '<img src="' + INSP_IMG[s.id] + '" alt="">' : '…') + '</button>').join('')
+    + '<label class="in-add">📷 ' + T('Фото') + '<input type="file" id="inFile" accept="image/*" capture="environment" multiple hidden></label></div>'
+    + '<div class="in-sum"><b>' + T('Проблем: ') + bad.length + T(', ок: ') + good.length + T(' из ') + it.length + '</b>' + (cost ? '<span>' + T('Заложить в ремонт ≈ ') + M(cost) + '</span>' : '') + (bid != null && (bad.length || good.length) ? '<span>' + T('Ставка с учётом осмотра: до ') + '<b>' + M(bid) + '</b>' + T(' (было ') + M(x.max) + ')</span>' : '') + (st.flood === 'bad' ? '<span class="wrn-t">' + T('Следы воды: не брать') + '</span>' : '') + '</div>'
+    + '<button class="btn pri" data-act="in-note">' + T('Записать итог в заметку') + '</button>';
+}
+function inspRedraw(x) { const c = $('#inspCard'); if (c) c.innerHTML = inspCard(x); }
+function inspCur() { const c = $('#inspCard'); return c ? S.d.map[c.dataset.k] : null; }
+function inspStore(x, img) { LS.set('insp-v1', S.insp); if (window.Sync && Sync.pushInsp) Sync.pushInsp(x.vin, { items: S.insp[x.vin].items, shots: S.insp[x.vin].shots, car: carName(x), run: x.run, date: x._d || S.date }, img); }
+function inspLabel(i) { let t = i.t.split(/ — |: /)[0].trim(); if (t.length > 70) t = t.slice(0, 67).replace(/\s+\S*$/, '') + '…'; return i.own ? t : t.toLowerCase(); }
+function inspSummary(x) {
+  const o = inspOf(x), it = inspItems(x), st = o.items || {};
+  const bad = it.filter(i => st[i.id] === 'bad'), good = it.filter(i => st[i.id] === 'ok'), cost = bad.reduce((a, i) => a + i.c, 0);
+  const who = (window.Sync && Sync.st.user && Sync.st.user.name) || '';
+  const when = new Date().toLocaleString(LOCALE, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  let s = '🔍 Осмотр' + (who ? ' (' + who + ', ' + when + ')' : ' (' + when + ')') + ': ';
+  s += bad.length ? T('проблемы: ') + bad.map(i => inspLabel(i) + (i.c ? ' −' + M(i.c) : '')).join('; ') + '. ' : T('проблем не нашли. ');
+  s += T('Ок ') + good.length + T(' из ') + it.length + '.';
+  if (st.flood === 'bad') s += ' ' + T('Следы воды: не брать.');
+  else if (x.max != null && (bad.length || good.length)) s += ' ' + T('бить до ') + Math.max(0, Math.floor((x.max - cost) / 50) * 50) + '.';
+  return s;
+}
+async function inspAct(act, ds) {
+  const x = inspCur(); if (!x) return;
+  const o = inspOf(x);
+  if (act === 'in-set') { o.items[ds.id] = o.items[ds.id] === ds.v ? '' : ds.v; inspStore(x); inspRedraw(x); return; }
+  if (act === 'in-note') {
+    const cur = (noteOf(x) || {}).text || '', line = inspSummary(x);
+    const txt = /^🔍 Осмотр.*$/m.test(cur) ? cur.replace(/^🔍 Осмотр.*$/m, line) : (cur ? cur + '\n' : '') + line;
+    setNote(x.vin, txt, x, x._d || S.date); const ta = $('#note'); if (ta) ta.value = txt;
+    toast(T('Итог осмотра записан в заметку')); return;
+  }
+  if (act === 'in-view') { const src = INSP_IMG[ds.id] || (window.Sync && Sync.obdImg ? await Sync.obdImg(x.vin, ds.id) : null); if (!src) return; const v = document.createElement('div'); v.className = 'obd-view'; v.innerHTML = '<img src="' + src + '" alt=""><div class="ov-b"><button data-act="obd-close">' + T('Закрыть') + '</button></div>'; document.body.appendChild(v); }
+}
+async function inspAdd(files) {
+  const x = inspCur(); if (!x) return; const o = inspOf(x);
+  for (const f of files) {
+    let im; try { im = await loadImg(f); } catch (e) { continue; }
+    const data = obdShrink(im), id = 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+    INSP_IMG[id] = data; o.shots.push({ id }); inspStore(x, { id, data }); inspRedraw(x);
+  }
+  toast(T('Фото добавлено к осмотру'));
+}
+async function inspLoad(x) {
+  if (!x.vin || !(window.Sync && Sync.getInsp)) return;
+  const r = await Sync.getInsp(x.vin); if (!r) return;
+  const o = inspOf(x); o.items = Object.assign({}, r.items || {}, o.items); o.shots = r.shots || o.shots; o.by = r.by; LS.set('insp-v1', S.insp);
+  for (const s of o.shots) if (!INSP_IMG[s.id] && Sync.obdImg) { const d = await Sync.obdImg(x.vin, s.id); if (d) INSP_IMG[s.id] = d; }
+  if (inspCur() === x) inspRedraw(x);
+}
+document.addEventListener('change', e => { if (e.target.id === 'inFile') { const fs = [...e.target.files]; e.target.value = ''; if (fs.length) inspAdd(fs); } });
+
 /* ---------- сохранённые поиски: свои у каждого аккаунта, пуш при новом аукционе с совпадениями ---------- */
 S.srch = LS.get('srch-v1', []);
 let ALL_LOTS = null, ALL_V = null;
@@ -1050,6 +1138,7 @@ function detail(k) {
     + (x.sale != null && !isInop(x) ? '<div class="d-card"><h3>' + T('Калькулятор ставки') + '</h3><div class="calc"><input id="bid" type="number" inputmode="numeric" value="' + E(bid) + '" aria-label="' + T('Ваша ставка, $') + '"><div class="calc-out" id="calcOut"></div></div></div>' : '')
     + (wifeOn() && !isInop(x) ? wifeHtml(x, true) : '')
     + proCard(x)
+    + (x.vin ? '<div class="d-card insp" id="inspCard" data-k="' + E(k) + '">' + inspCard(x) + '</div>' : '')
     + (info ? '<div class="d-card">' + info + '</div>' : '')
     + '<div class="d-card"><h3><label for="note">' + T('Заметка после осмотра') + (n && n.date && n.date !== S.date ? T(' (от ') + fmtDate(n.date) + T(', лот ') + E(n.run) + ')' : '') + '</label></h3><textarea class="note' + (n ? ' has' : '') + '" id="note" data-k="' + E(k) + '" placeholder="' + T('Что увидели: кузов, мотор, салон, запах, ошибки') + '">' + E(n ? n.text : '') + '</textarea><div class="note-bar"><p class="muted" id="nstat" style="font-size:12.5px">' + E(noteStatus(n)) + '</p><button class="btn" data-act="note-done">' + T('Сохранить') + '</button></div></div>'
     + '<div class="d-card obd" id="obdCard" data-k="' + E(k) + '">' + obdCard(x) + '</div>'
@@ -1060,7 +1149,7 @@ function detail(k) {
     + '<button class="btn" data-act="share-lot" data-k="' + E(k) + '">' + T('Поделиться') + '</button>'
     + '</div></div>';
   openSheet(T('Лот ') + E(x.run), html, true);
-  calc(x); obdThumbs(x);
+  calc(x); obdThumbs(x); inspLoad(x);
 }
 /* ---------- ошибки OBD: скриншот ThinkDiag у машины, коды распознаются в приложении, пояснения из справочника obd.js ---------- */
 const OBD_IMG = {};
@@ -1326,6 +1415,7 @@ document.addEventListener('click', async e => {
     case 'activity': activitySheet(S.actDays || 7); break;
     case 'stats': statsSheet(); break;
     case 'push': pushOn(); break;
+    case 'in-set': case 'in-note': case 'in-view': inspAct(ds.act, ds); break;
     case 'srch-list': if (sheetOpen) closeSheet(); S.tab = 'srch'; render(); window.scrollTo(0, 0); break;
     case 'srch-new': case 'srch-edit': case 'srch-open': case 'srch-back': case 'srch-past': case 'srch-alld': case 'srch-push': case 'srch-del': case 'srch-addcar': case 'srch-rmcar': case 'srch-save': srchAct(ds.act, ds.id, t); break;
     case 'changelog': if (isMax()) changelogSheet(); break;
