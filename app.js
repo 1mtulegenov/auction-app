@@ -666,6 +666,7 @@ function more() {
   const acc = Y && Y.on ? '<button data-act="auth"><span class="ic">👤</span><span>' + (Y.user ? E(Y.user.name) + '<small>' + E(Y.user.email) + T(' · заметки общие. Нажмите, чтобы выйти') + '</small>' : T('Войти через Google') + '<small>' + (Y.err ? E(Y.err) : T('Чтобы заметки были видны всем и было видно, кто их оставил')) + '</small>') + '</span></button>' : '';
   return '<div class="menu">' + acc + '<button data-act="lang"><span class="ic flag">' + cur[1] + '</span><span>' + T('Язык') + '<small>' + cur[2] + '</small></span></button>'
     + (window.Sync && Sync.isAdmin && Sync.isAdmin() ? '<button data-act="activity"><span class="ic">📊</span><span>' + T('Активность') + '<small>' + T('Кто сколько раз заходил и сколько минут был в приложении') + '</small></span></button>' : '')
+    + (isMax() ? '<button data-act="changelog"><span class="ic">🕘</span><span>' + T('История изменений') + '<small>' + T('Все запросы и что сделано, с датой и временем. Видно только вам') + '</small></span></button>' : '')
     + '<button data-act="stats"><span class="ic">📈</span><span>' + T('Статистика продаж') + '<small>' + T('Продано сразу против MMR и floor price: даты, марка, аукцион') + '</small></span></button>'
     + '<button data-act="notes"><span class="ic">📝</span><span>' + T('Заметки') + '<small>' + (notes.length ? notes.length + T(' шт., привязаны к VIN') : T('Пока нет. Пишутся в карточке машины.')) + '</small></span></button>'
     + '<button data-act="how"><span class="ic">🧮</span><span>' + T('Как считается прибыль') + '<small>' + T('MMR, сбор, цена продажи, максимальная ставка') + '</small></span></button>'
@@ -794,6 +795,23 @@ function statsDraw() {
   h += '<p class="sv-note">' + T('Считаются только машины, которые отдали сразу на аукционе. Офферы не входят.') + '</p>';
   box.innerHTML = h;
 }
+/* ---------- история изменений (только владелец) ---------- */
+async function changelogSheet() {
+  openSheet(T('История изменений'), '<p class="empty">…</p>', true);
+  let a = [];
+  try { a = await (await fetch('data/changelog.json?t=' + Date.now(), { cache: 'no-store' })).json(); } catch (e) { const sh = $('#sheet'); if (sh) sh.querySelector('.empty').textContent = T('Нет связи, попробуйте позже.'); return; }
+  const sh = $('#sheet'); if (!sh || !sheetOpen) return;
+  const tz = 'America/Chicago', loc = LANG === 'en' ? 'en-US' : 'ru-RU';
+  const day = d => d.toLocaleDateString(loc, { timeZone: tz, day: 'numeric', month: 'long', weekday: 'short' });
+  const tm = d => d.toLocaleTimeString(loc, { timeZone: tz, hour: '2-digit', minute: '2-digit' });
+  let h = '<p class="muted" style="margin:0 0 10px;font-size:13px">' + a.length + T(' изменений. Время по Хьюстону.') + '</p>', cur = '';
+  a.slice().reverse().forEach(x => { const d = new Date(x.at), k = day(d);
+    if (k !== cur) { if (cur) h += '</ol>'; h += '<h3 class="cl-d">' + E(k) + '</h3><ol class="cl">'; cur = k; }
+    h += '<li><time>' + tm(d) + '</time><div><b>' + E(x.q) + '</b><span>' + E(x.r) + '</span></div></li>'; });
+  if (cur) h += '</ol>';
+  sh.querySelector('.empty').outerHTML = h;
+}
+
 /* ---------- шторка ---------- */
 let sheetOpen = false;
 function openSheet(title, html, full, actions) {
@@ -1126,6 +1144,7 @@ document.addEventListener('click', async e => {
     case 'notes': notesSheet(); break;
     case 'activity': activitySheet(S.actDays || 7); break;
     case 'stats': statsSheet(); break;
+    case 'changelog': if (isMax()) changelogSheet(); break;
     case 'sst-mk': case 'sst-auc': { const f = ds.act === 'sst-mk' ? 'mk' : 'auc'; SST[f] = ds.v; const sel = $('#sst_' + f); if (sel) sel.value = ds.v; statsDraw(); $('#sheet').scrollTop = 0; break; }
     case 'fl-x': { const f = S.favs[ds.fid]; if (!f) break; if (f.x) delete f.x; else f.x = 1; f.ts2 = Date.now(); saveFavs(); const r = t.closest('.fl-r'); if (r) { r.classList.toggle('gone', !!f.x); t.textContent = f.x ? '↺' : '✕'; t.setAttribute('aria-pressed', !!f.x); t.title = f.x ? T('Вернуть') : T('Ушла, не купили: зачеркнуть'); const L = r.parentNode; if (L) { if (f.x) L.appendChild(r); else { const g = L.querySelector('.fl-r.gone'); L.insertBefore(r, g || null); } } } break; }
     case 'fav-clear': {

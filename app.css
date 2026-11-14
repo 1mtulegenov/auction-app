@@ -409,3 +409,9 @@ button.sv-row{cursor:pointer}button.sv-row:hover{background:var(--well)}
 .sv-bar .l,.sv-bar .r{position:absolute;top:0;bottom:0}.sv-bar .l{right:50%;border-radius:4px 0 0 4px}.sv-bar .r{left:50%;border-radius:0 4px 4px 0}
 .sv-row b{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 [data-theme="dark"] .c-y{background:#f2cb4c}
+
+.cl-d{font-size:13px;font-weight:600;color:var(--muted);margin:14px 0 6px}
+.cl{list-style:none;margin:0;padding:0;background:var(--card);border:1px solid var(--cardline);border-radius:14px;overflow:hidden}
+.cl li{display:grid;grid-template-columns:48px 1fr;gap:10px;padding:10px 14px;border-top:1px solid var(--line)}.cl li:first-child{border-top:0}
+.cl time{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:2px}
+.cl b{display:block;font-size:14px;font-weight:600;line-height:1.35}.cl span{display:block;font-size:13px;color:var(--muted);line-height:1.4;margin-top:2px}

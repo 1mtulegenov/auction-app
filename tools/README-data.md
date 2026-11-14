@@ -13,3 +13,4 @@
 - 11.11 вечером добавлены 183 новых лота H1C (tools/add_h1c_est.py): MMR оценён по похожим, без Manheim; помечены est=1.
 - Неходячие линии (правило Максата): AAA - Central Houston линия 7, AAA - Houston линия T, AutoNation (пятница) линия T. В app.js INOP_LANES, в tools/build_aah.py линия T помечается noinop.
 - Floor vs продано сразу: app.js flRes() считает на лету из floor + fact (ss='sold'). Для новых дат нужны floor (EDGE vdp_api_details) и пост-сейл (apply_postsale.py) — больше ничего. Зелёный ≤ floor, жёлтый до +max($500, 5%), красный выше.
+- История изменений: data/changelog.json (at UTC, q запрос, r результат). После каждого запроса дописывать строку. Экран только для isMax().
