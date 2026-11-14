@@ -5,7 +5,7 @@
 | Вечер (CT) | Пост-сейл за сегодня | Каталог на завтра |
 |---|---|---|
 | Пн | — | CarMax Conroe (вт 8:00): tools/build_cmx.py, API carmaxauctions.com, MMR оценка по похожим (Manheim не нужен); AAA North Houston (вт 12:15, Conroe): пре-сейл EDGE aaanorthhouston, код аукциона ANH, сборка по образцу build_ana.py |
-| Вт | AAA North Houston (EDGE postsale aaanorthhouston); CarMax: пост-сейла нет | AAA Central Houston (AAA, ср 11:45) + Houston's 1st Choice (H1C, ср 16:30): пре-сейл EDGE houstonaa, houstonsfcaa |
+| Вт | AAA North Houston (EDGE postsale aaanorthhouston); CarMax: итоги без цен (см. ниже) | AAA Central Houston (AAA, ср 11:45) + Houston's 1st Choice (H1C, ср 16:30): пре-сейл EDGE houstonaa, houstonsfcaa |
 | Ср | AAA + H1C (EDGE postsale houstonaa, houstonsfcaa). H1C идёт с 16:30: если к 19:00 пост-сейл неполный, догрузить в чт вечером | AAA Houston (AAH), чт: пре-сейл EDGE aaahouston, tools/build_aah.py |
 | Чт | AAH (EDGE postsale aaahouston) | AutoNation (ANA), пт: пре-сейл EDGE anaahouston, tools/build_ana.py |
 | Пт | ANA (EDGE postsale anaahouston) | — |
@@ -17,3 +17,9 @@
 Неходячие линии: AAA линия 7, AAH линия T, ANA линия T; CarMax — по пометке NO RUNNER.
 Нужен вход в EDGE в Chrome Максата. Если не вошёл — попросить войти.
 Время: CRON_TZ=America/Chicago, 18:47.
+
+## CarMax: итоги и floor price
+CarMax цены продажи не публикует. В открытой вкладке carmaxauctions.com:
+- floor: GET /api/auction-event/v1/auction-events/{eventId}/run-list-items (eventId — из performance entries на странице vehicledetail любого лота) -> floorPrice.amount, runNumber, lane, StockNum.
+- продана или нет: GET /api/shopping/auctions/vehicle?stockNum=N -> isSold.
+Накануне торгов: tools/cmx_floor_<дата>.txt (run|stock|floor), после торгов: tools/cmx_status_<дата>.txt (run|stock|vin|floor|1/0), затем python3 tools/apply_cmx.py <дата>.

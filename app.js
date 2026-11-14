@@ -742,7 +742,7 @@ function statsDraw() {
   const lo = SST.from <= SST.to ? SST.from : SST.to, hi = SST.from <= SST.to ? SST.to : SST.from;
   const set = SST_ALL.filter(x => x._d >= lo && x._d <= hi && (!SST.mk || x.mk === SST.mk) && (!SST.auc || x.auc === SST.auc));
   if (!set.length) { box.innerHTML = '<p class="empty">' + T('За эти даты итогов торгов нет.') + '</p>'; return; }
-  const sold = set.filter(x => x.ss === 'sold' && x.fact), offer = set.filter(x => x.ss === 'offer'), none = set.length - sold.length - offer.length;
+  const sold = set.filter(x => x.ss === 'sold' && x.fact), sAll = set.filter(x => x.ss === 'sold'), offer = set.filter(x => x.ss === 'offer'), none = set.length - sAll.length - offer.length;
   // MMR: только настоящий Manheim, явные ошибки данных (меньше 40% или больше 200%) не считаем
   const okM = x => x.w > 0 && !x.est && x.fact / x.w > .4 && x.fact / x.w < 2;
   const vm = sold.filter(okM), rm = vm.map(x => x.fact / x.w);
@@ -756,8 +756,8 @@ function statsDraw() {
   let h = '';
   // 1. что происходит с машинами
   h += '<section class="sv-card"><h3>' + T('Что стало с машинами') + '</h3>'
-    + hero(pc(sold.length, set.length) + '%', T('отдали сразу'), T('Из ') + set.length + T(' лотов с итогом. Средняя цена ') + (sold.length ? M(Math.round(sold.reduce((q, x) => q + x.fact, 0) / sold.length)) : '—') + '.')
-    + stack([[sold.length, 'c-a', T('Отдали сразу')], [offer.length, 'c-o', T('На оффер')], [none, 'c-n', T('Не продано')]]) + '</section>';
+    + hero(pc(sAll.length, set.length) + '%', T('отдали сразу'), T('Из ') + set.length + T(' лотов с итогом. Средняя цена ') + (sold.length ? M(Math.round(sold.reduce((q, x) => q + x.fact, 0) / sold.length)) : '—') + '.' + (sAll.length > sold.length ? T(' CarMax цены продажи не публикует: ') + (sAll.length - sold.length) + T(' проданных без цены.') : ''))
+    + stack([[sAll.length, 'c-a', T('Отдали сразу')], [offer.length, 'c-o', T('На оффер')], [none, 'c-n', T('Не продано')]]) + '</section>';
   // 2. против MMR
   if (vm.length) {
     const m = sMed(rm), cheap = rm.filter(v => v < .95).length, near = rm.filter(v => v >= .95 && v <= 1.05).length, dear = rm.length - cheap - near;
@@ -774,7 +774,7 @@ function statsDraw() {
     const fr = vf.map(flRes), G = fr.filter(r => r.c === 'ok').length, Yw = fr.filter(r => r.c === 'warn').length, R = fr.length - G - Yw;
     h += hero(pc(G, vf.length) + '%', T('по floor или дешевле'), T('Обычно отдают за ') + Math.round(sMed(rf) * 100) + T('% от floor. Машин с floor: ') + vf.length + '.')
       + stack([[G, 'c-g', T('По floor и ниже')], [Yw, 'c-y', T('Чуть выше')], [R, 'c-r', T('Намного выше')]]);
-  } else h += '<p class="sv-line">' + T('За эти даты floor price нет. Пока он есть только у AAA Houston 12.11 и AutoNation 13.11 (там ещё нет итогов).') + '</p>';
+  } else h += '<p class="sv-line">' + T('За эти даты нет проданных машин с floor price и ценой продажи.') + '</p>';
   h += '</section>';
   // 4. сравнение групп: полоса от центра, слева дешевле (зелёная), справа дороже (красная)
   const div = (title, sub, key, lab, base, min, act) => {
