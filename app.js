@@ -381,7 +381,7 @@ function hotLine(x) {
 /* главное фото лота с EDGE (CDN autolookout, превью 400×300) */
 // номер фото на CDN EDGE растёт со временем загрузки: чем больше, тем позже машину выставили
 function phId(x) { if (!x.ph) return -1; const p = x.ph.split('/'); return +(p[1] + p[2]) || -1; }
-function photoUrl(x) { if (!x.ph) return ''; const p = x.ph.split('/'); const sf = p.length > 3 ? p.pop() : '00'; return 'https://file3.autolookout.net/' + p.join('/') + '/O3Jlc29sdXRpb246NDAweDMwMDs=/' + sf; }
+function photoUrl(x) { if (x.img) return x.img; if (!x.ph) return ''; const p = x.ph.split('/'); const sf = p.length > 3 ? p.pop() : '00'; return 'https://file3.autolookout.net/' + p.join('/') + '/O3Jlc29sdXRpb246NDAweDMwMDs=/' + sf; }
 function photo(x, cls, lazy) { const u = photoUrl(x); return u ? '<img class="' + cls + '" src="' + u + '" alt="" referrerpolicy="no-referrer" decoding="async"' + (lazy ? ' loading="lazy"' : '') + ' onerror="if(/\\/00$/.test(this.src)&&!this.dataset.f){this.dataset.f=1;this.src=this.src.replace(/00$/,\'01\')}else this.remove()">' : ''; }
 /* сравнение floor price с ценой, за которую машину отдали сразу на аукционе (без оффера), по пост-сейлу */
 function flRes(x) {

@@ -39,6 +39,7 @@ for line in open('tools/cmx_%s.txt' % date):
     p = line.rstrip('\n').split('|')
     if len(p) < 17: continue
     run, vin, y, mk, md, trim, odo, drv, disp, col, ann, sel, brand, tstat, at, fuel, pid = p[:17]
+    stock, nimg = (p[17], int(p[18] or 0)) if len(p) > 18 else ('', 0)
     y, o = int(y), int(odo or 0)
     A = [t for t in ann.split(';') if t]
     lot = {'run': run, 'auc': 'CMX', 'y': y, 'mk': mk, 'md': md, 'st': trim, 'c': (col or '').upper(), 'o': o, 'l': '', 'g': '',
@@ -47,6 +48,7 @@ for line in open('tools/cmx_%s.txt' % date):
            'cls': 'clean', 'hist': False, 'w': None, 'r': None, 'stat': 'Нет', 'whyn': '', 'cons': 'CarMax',
            'sel': sel == '1', 'arbx': 'ARBX PLUS' in A, 'ttl': 'Clean title' if brand == 'NONE' else '', 'ttlbad': False,
            'u': 'https://www.carmaxauctions.com/public-landing/' + pid}
+    if stock and nimg: lot['img'] = 'https://img2.carmax.com/assets/%s/image/FP3Q.jpg?width=640' % stock
     if fuel and fuel != 'Gas': lot['eng'] = (disp + ' ' if disp and disp != '0.0L' else '') + {'Electric': 'электро', 'Diesel': 'дизель', 'Plug-in Hybrid': 'плагин-гибрид', 'Electric and Gas Hybrid': 'гибрид'}.get(fuel, fuel)
     pr = prof_by_model.get((nmk(mk), nmd(md)))
     if pr:
