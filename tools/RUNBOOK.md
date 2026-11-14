@@ -4,8 +4,8 @@
 
 | Вечер (CT) | Пост-сейл за сегодня | Каталог на завтра |
 |---|---|---|
-| Пн | — | CarMax Conroe (вт 8:00): tools/build_cmx.py, API carmaxauctions.com, MMR оценка по похожим (Manheim не нужен) |
-| Вт | CarMax: пост-сейла нет, пропустить | AAA Central Houston (AAA) + Houston's 1st Choice (H1C), ср: пре-сейл EDGE houstonaa, houstonsfcaa |
+| Пн | — | CarMax Conroe (вт 8:00): tools/build_cmx.py, API carmaxauctions.com, MMR оценка по похожим (Manheim не нужен); AAA North Houston (вт 12:15, Conroe): пре-сейл EDGE aaanorthhouston, код аукциона ANH, сборка по образцу build_ana.py |
+| Вт | AAA North Houston (EDGE postsale aaanorthhouston); CarMax: пост-сейла нет | AAA Central Houston (AAA) + Houston's 1st Choice (H1C), ср: пре-сейл EDGE houstonaa, houstonsfcaa |
 | Ср | AAA + H1C (EDGE postsale houstonaa, houstonsfcaa) | AAA Houston (AAH), чт: пре-сейл EDGE aaahouston, tools/build_aah.py |
 | Чт | AAH (EDGE postsale aaahouston) | AutoNation (ANA), пт: пре-сейл EDGE anaahouston, tools/build_ana.py |
 | Пт | ANA (EDGE postsale anaahouston) | — |
