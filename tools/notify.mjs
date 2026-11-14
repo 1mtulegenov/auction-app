@@ -3,17 +3,49 @@
 // Подписки: Firestore push/{id} (endpoint + ключи). Отправка подписана ключом VAPID из секрета VAPID_PRIVATE.
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
-import webpush from 'web-push';
 
 const PROJECT = 'auction-app-3bf47', API_KEY = 'AIzaSyD1H9pdpsd3EUsJchg7w0bZVoMpFQMa7yg';
 const URL_APP = 'https://1mtulegenov.github.io/auction-app/';
 const PUB = process.env.VAPID_PUBLIC, PRIV = process.env.VAPID_PRIVATE;
+
+// «Скоро начнётся»: недельное расписание (Хьюстон). wd: 0=вс … 6=сб.
+const SCHED = [
+  { wd: 2, t: '08:00', name: 'CarMax Conroe' },
+  { wd: 2, t: '12:15', name: 'AAA North Houston (Conroe)' },
+  { wd: 3, t: '11:45', name: 'AAA Central Houston' },
+  { wd: 3, t: '16:30', name: "Houston's 1st Choice" },
+  { wd: 4, t: '13:00', name: 'AAA Houston' },
+  { wd: 5, t: '09:15', name: 'AutoNation AA Houston' },
+];
+const LEAD = 45; // минут до начала: окно, в котором шлём «скоро начнётся»
+function chicagoNow() {
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date()).map(x => [x.type, x.value]));
+  return { wd: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(p.weekday), min: (+p.hour % 24) * 60 + +p.minute, day: `${p.year}-${p.month}-${p.day}` };
+}
+function upcoming() {
+  const n = chicagoNow();
+  for (const a of SCHED) {
+    if (a.wd !== n.wd) continue;
+    const [h, m] = a.t.split(':').map(Number), left = h * 60 + m - n.min;
+    if (left > 0 && left <= LEAD) return { ...a, left, key: n.day + '-' + a.t.replace(':', '') };
+  }
+  return null;
+}
+if (process.argv[2] === 'which') { const u = upcoming(); console.log(u ? u.key : ''); process.exit(0); }
+
 if (!PRIV) { console.log('::notice::VAPID_PRIVATE не задан в секретах репозитория, уведомления не отправлены'); process.exit(0); }
+const webpush = (await import('web-push')).default;
 webpush.setVapidDetails(URL_APP, PUB, PRIV);
 
 const read = rev => { try { return JSON.parse(execSync(`git show ${rev}:data/index.json`, { encoding: 'utf8' })); } catch { return { dates: [] }; } };
 const msgs = [];
-if (process.env.TITLE) msgs.push({ title: process.env.TITLE, body: process.env.BODY || '', tag: 'manual' });
+if (process.env.MODE === 'soon') {
+  const u = upcoming();
+  if (u) {
+    const ix = read('HEAD'), d = ix.dates.find(x => x.id === chicagoNow().day);
+    msgs.push({ title: 'Скоро аукцион: ' + u.name, body: 'Начало в ' + u.t + ', через ' + u.left + ' мин.' + (d ? ' В каталоге ' + d.n + ' машин' + (d.core ? ', в подборке ' + d.core : '') + '.' : ''), tag: 'soon-' + u.key });
+  }
+} else if (process.env.TITLE) msgs.push({ title: process.env.TITLE, body: process.env.BODY || '', tag: 'manual' });
 else {
   const now = read('HEAD'), old = read('HEAD~1');
   const om = new Map(old.dates.map(d => [d.id, d]));

@@ -280,7 +280,7 @@ function wifeEval(x) {
   const mk = String(x.mk || ''), md = String(x.md || ''), y = +x.y || 0, age = 2026 - y, o = +x.o || 0;
   const notes = []; let pen = 0;
   const r = WIFE_RISK.find(r => r[0].test(mk) && r[1].test(md) && r[2](y));
-  if (r) { notes.push(r[3]); pen += r[4]; }
+  if (r) { notes.push(x.risk ? x.risk.split(/(?<=[.!])\s+/).slice(0, 2).join(' ') : r[3]); pen += r[4]; }
   if (o > 180000) { notes.push('пробег ' + N(o) + ' mi: много, износ подвески и мотора'); pen += 2; }
   else if (o > 140000) { notes.push('пробег ' + N(o) + ' mi: выше среднего'); pen += 1; }
   else if (o > 500 && o < 90000) { notes.push('небольшой пробег'); pen -= 1; }
