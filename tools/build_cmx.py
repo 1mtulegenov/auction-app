@@ -26,7 +26,7 @@ TRA = [('MAJOR ENGINE DEFECT', 'серьёзный дефект двигател
        ('NOT ACTUAL MILES', 'пробег не настоящий'), ('PRIOR THEFT HISTORY', 'угон в истории'), ('THEFT RECOVERY', 'найдена после угона'),
        ('MISSING OR DEPLOYED AIRBAG PER EVDH', 'подушки раскрыты или нет'), ('TOTAL LOSS HISTORY', 'тотал в истории'),
        ('SALVAGE HISTORY', 'salvage в истории'), ('REBUILT HISTORY', 'rebuilt в истории'), ('MAJOR DAMAGE HISTORY', 'серьёзное ДТП в истории'),
-       ('PRIOR RENTAL', 'бывшая прокатная'), ('PRIOR FLEET', 'флотская'), ('REPO', 'изъята за долги'), ('TITLE ABSENT', 'тайтла нет на месте'),
+       ('PRIOR RENTAL', 'бывшая прокатная'), ('PRIOR FLEET', 'корпоративная (была в автопарке компании)'), ('REPO', 'изъята за долги'), ('TITLE ABSENT', 'тайтла нет на месте'),
        ('ARBX PLUS', 'ARBX Plus (расширенный арбитраж)'), ('AFTERMARKET MECHANICAL MODIFICATIONS', 'тюнинг механики'),
        ('ALTERED SUSPENSION', 'изменена подвеска'), ('MAJOR SUNROOF DEFECT', 'дефект люка'), ('MISSING CATALYTIC CONV', 'нет катализатора'),
        ("MAJOR MECH CONV'T TOP DEFECT", 'дефект крыши кабриолета'), ('LOGO / DECAL DISCREPANCY', 'шильдики не соответствуют'),
