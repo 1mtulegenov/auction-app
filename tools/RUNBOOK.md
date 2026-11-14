@@ -30,3 +30,13 @@ CarMax цены продажи не публикует. В открытой вк
 ## Пуши
 - Новый аукцион и пост-сейл: .github/workflows/notify.yml сам при пуше data/index.json.
 - «Скоро аукцион» за ~45 мин до начала: .github/workflows/soon.yml по расписанию SCHED в tools/notify.mjs. Поменялось время или аукцион — поправь SCHED.
+
+## Ретейл Хьюстона (cars.com) и дни на рынке
+После загрузки нового аукциона, во вкладке www.cars.com (javascript_tool, без await — иначе таймаут 45 с):
+```
+const B='https://1mtulegenov.github.io/auction-app/';eval(await (await fetch(B+'tools/retail_scrape.js',{cache:'no-store'})).text());const D=await (await fetch(B+'data/<дата>.json',{cache:'no-store'})).json();const g=[...new Map(D.lots.filter(l=>l.y&&l.mk&&l.md).map(l=>[l.y+'|'+l.mk+'|'+l.md,[l.y+'|'+l.mk+'|'+l.md,l.mk,l.md,l.y]])).values()];window.__rtOut=null;__rtRun(g,5);'started'
+```
+- `{cache:'no-store'}` обязателен: иначе браузер подставит старый скрипт.
+- Ждать `window.__rtOut` (~1.5 мин на 300 групп), затем `__rtShow(i)` + get_page_text по кускам (RT<i>…ENDRT), склеить в tools/retail_<дата>.txt.
+- `python3 tools/apply_retail.py <дата>` → lot.rt; tools/retail_hist.json копит id объявлений, исчезнувшие дают «дни на рынке» (dom появляется, когда по модели ≥3 ушедших).
+- В запросах только ZIP 77002 (центр Хьюстона), не домашний.

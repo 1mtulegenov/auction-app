@@ -405,6 +405,18 @@ function flRes(x) {
   return { c, t, d };
 }
 function flResTag(x) { const r = flRes(x); return r ? '<p class="fl-res ' + r.c + '">' + E(r.t) + '</p>' : ''; }
+/* ретейл Хьюстона (cars.com, 50 миль): цена такой же машины с этим пробегом, разброс, сколько объявлений и дней продаётся */
+function rtLine(x, full) {
+  const r = x.rt; if (!r) return '';
+  const dom = r.dom ? T(', продаётся ~') + r.dom + T(' дн.') : '';
+  if (!full) return '<p class="rt-l">' + T('Ретейл Хьюстон ≈ ') + '<b>' + M(r.est) + '</b> · ' + r.n + T(' объявл.') + dom + '</p>';
+  const gap = x.w ? r.est - x.w : null;
+  return '<div class="d-card rt-d"><h3>' + T('Ретейл в Хьюстоне') + '</h3>'
+    + '<div class="grid6"><div class="hl"><b>' + M(r.est) + '</b><span>' + T('такая же с пробегом ') + (x.o ? N(x.o) + ' mi' : '') + '</span></div><div><b>' + M(r.med) + '</b><span>' + T('медиана объявлений') + (r.mi ? ', ' + N(r.mi) + ' mi' : '') + '</span></div><div><b>' + M(r.lo) + '–' + M(r.hi) + '</b><span>' + T('половина объявлений в этом коридоре') + '</span></div>'
+    + '<div><b>' + r.n + '</b><span>' + T('объявлений в 50 милях') + '</span></div><div><b>' + (r.dom ? r.dom + T(' дн.') : '—') + '</b><span>' + (r.dom ? T('в среднем висит объявление (по ') + r.domn + ')' : T('срок продажи: копим данные, появится через 1–2 недели')) + '</span></div>'
+    + (gap != null ? '<div><b class="' + (gap > 0 ? 'pos' : 'neg') + '">' + (gap > 0 ? '+' : '') + M(gap) + '</b><span>' + T('ретейл минус MMR') + '</span></div>' : '') + '</div>'
+    + '<p class="muted">' + T('Подержанные машины этого года и модели на cars.com в 50 милях от центра Хьюстона, обновлено ') + E(fmtDate(r.at)) + '. ' + (r.n < 4 ? T('Объявлений мало: цифра приблизительная.') : '') + '</p></div>';
+}
 function lotCard(x) {
   const flOn = S.tab === 'lots' && S.f.quick === 'floor' && !!x.floor;
   const n = noteOf(x), v = VERDICT[x.stat], fav = isFav(x), fd = x._d && x._d !== S.date ? ' data-fd="' + E(x._d) + '"' : '';
@@ -414,6 +426,7 @@ function lotCard(x) {
     + '<div class="lot-id">' + photo(x, 'thumb', true) + '<div><h3>' + E(carTitle(x)) + '</h3>'
     + '<p class="sub">' + [x.o > 500 ? N(x.o) + ' mi' : '', COLOR[x.c] || String(x.c || '').toLowerCase()].filter(Boolean).map(E).join(' · ') + '</p>' + flResTag(x) + '</div></div>'
     + (isInop(x) ? '<div class="money inop"><div class="m-main"><span>MMR</span><b>' + M(x.w) + '</b></div><div class="m-note">' + T('Неходячая: прибыль не считаем') + '</div></div>' : '<div class="money ' + (flOn ? 'three' : 'two') + '"><div class="m-main"><span>' + (x.est ? T('MMR, оценка') : 'MMR') + '</span><b>' + (x.est && x.w != null ? '≈' : '') + M(x.w) + '</b></div>' + (flOn ? '<div class="m-main"><span>Floor price</span><b class="' + (x.max != null && x.floor > x.max ? 'fl-hi' : '') + '">' + M(x.floor) + '</b></div>' : '') + '<div class="m-main"><span>' + T('Ретейл') + '</span><b>' + (x.est && x.r != null ? '≈' : '') + M(x.r) + '</b></div></div>')
+    + rtLine(x)
     + '<div class="status">' + statusLine(x) + '</div>'
     + (wifeOn() && !isInop(x) ? wifeHtml(x) : '')
     + pastCard(x)
@@ -1137,6 +1150,7 @@ function detail(k) {
     + (x.demand ? '<p class="p"><b>' + T('Спрос ') + x.demand + '/10</b>' + (x.sell ? T(', продаётся за ') + E(weeks(x.sell)) : '') + '</p>' : '') + '</div>')
     + (x.sale != null && !isInop(x) ? '<div class="d-card"><h3>' + T('Калькулятор ставки') + '</h3><div class="calc"><input id="bid" type="number" inputmode="numeric" value="' + E(bid) + '" aria-label="' + T('Ваша ставка, $') + '"><div class="calc-out" id="calcOut"></div></div></div>' : '')
     + (wifeOn() && !isInop(x) ? wifeHtml(x, true) : '')
+    + rtLine(x, true)
     + proCard(x)
     + (x.vin ? '<div class="d-card insp" id="inspCard" data-k="' + E(k) + '">' + inspCard(x) + '</div>' : '')
     + (info ? '<div class="d-card">' + info + '</div>' : '')

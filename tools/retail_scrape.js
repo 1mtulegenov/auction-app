@@ -24,7 +24,7 @@
     if (!model) return key + '|0|||||nomodel|';
     const h = await (await fetch('/shopping/results/?makes[]=' + make + '&models[]=' + model + '&year_min=' + y + '&year_max=' + y + '&stock_type=used&zip=77002&maximum_distance=50&page_size=100')).text();
     const d = new DOMParser().parseFromString(h, 'text/html'), seen = new Map();
-    d.querySelectorAll('[data-vehicle-details]').forEach(e => { try { const j = JSON.parse(e.getAttribute('data-vehicle-details')); const p = +j.price, m = +j.mileage; if (p > 500 && j.listingId && +j.year === +y && n(j.model).replace(/[^a-z0-9]/g, '') && !seen.has(j.listingId) && (n(j.model) === n(model.slice(make.length + 1)) || n(j.model).startsWith(n(model.slice(make.length + 1))) || n(model.slice(make.length + 1)).startsWith(n(j.model)))) seen.set(j.listingId, [p, m]); } catch (x) {} });
+    d.querySelectorAll('[data-vehicle-details]').forEach(e => { try { const j = JSON.parse(e.getAttribute('data-vehicle-details')); const p = +j.price, m = +j.mileage; if (p > 500 && j.stockType !== 'New' && j.listingId && +j.year === +y && n(j.model).replace(/[^a-z0-9]/g, '') && !seen.has(j.listingId) && (n(j.model) === n(model.slice(make.length + 1)) || n(j.model).startsWith(n(model.slice(make.length + 1))) || n(model.slice(make.length + 1)).startsWith(n(j.model)))) seen.set(j.listingId, [p, m]); } catch (x) {} });
     const v = [...seen.values()], P = v.map(a => a[0]), Mi = v.filter(a => a[1] > 0);
     let slope = '';
     if (Mi.length >= 5) { const mx = Mi.reduce((s, a) => s + a[1], 0) / Mi.length, my = Mi.reduce((s, a) => s + a[0], 0) / Mi.length; let sxy = 0, sxx = 0; Mi.forEach(([p, m]) => { sxy += (m - mx) * (p - my); sxx += (m - mx) ** 2; }); if (sxx) slope = Math.round(sxy / sxx * 1000); }
