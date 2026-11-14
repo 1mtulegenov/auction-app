@@ -16,7 +16,7 @@ function applyFees(d) {
   // неходячие не попадают в подборку: она отбирается по прибыли
   if (d.map) ['core', 'flip'].forEach(g => { if (d[g]) d[g] = d[g].filter(k => d.map[k] && !isInop(d.map[k])); });
 }
-const AUC = { AAH: 'AAA Houston', AAA: 'AAA Central', H1C: 'H1C', ANA: 'AutoNation', CMX: 'CarMax Conroe' };
+const AUC = { AAH: 'AAA Houston', AAA: 'AAA Central', H1C: 'H1C', ANA: 'AutoNation', CMX: 'CarMax Conroe', ANH: 'AAA North Houston' };
 const SEVEN = /^(Toyota|Honda|Hyundai|BMW|Volkswagen|Kia|Mercedes)/i;
 const MAXB = /^(Toyota|Honda|Hyundai|BMW|Volkswagen|Kia|Mercedes|Audi)/i;
 const COLOR = { BLACK: T('чёрный'), WHITE: T('белый'), GRAY: T('серый'), GREY: T('серый'), SILVER: T('серебристый'), RED: T('красный'), BLUE: T('синий'), BROWN: T('коричневый'), TAN: T('бежевый'), BEIGE: T('бежевый'), GOLD: T('золотистый'), GREEN: T('зелёный'), PURPLE: T('фиолетовый'), BURGUNDY: T('бордовый'), MAROON: T('бордовый'), ORANGE: T('оранжевый'), YELLOW: T('жёлтый'), TEAL: T('бирюзовый') };
@@ -515,6 +515,8 @@ function render() {
   else if (S.tab === 'flist') { v.innerHTML = '<p class="empty">…</p>'; favListScreen().then(h => { if (S.tab === 'flist') v.innerHTML = h; }); }
   else if (S.tab === 'lots') { v.innerHTML = lotsScreen(); drawLots(S.keepShown ? true : undefined); }
   else if (S.tab === 'results') { v.innerHTML = resultsScreen(); drawResults(); }
+  else if (S.tab === 'srch') { v.innerHTML = '<p class="empty">…</p>'; srchScreen().then(h => { if (S.tab === 'srch') v.innerHTML = h; }); }
+  else if (S.tab === 'srchres') { v.innerHTML = '<p class="empty">…</p>'; srchResScreen().then(h => { if (S.tab === 'srchres') v.innerHTML = h; }); }
   else v.innerHTML = more();
 }
 function installTitle() { return platform() === 'desktop' ? T('Установить на компьютер') : T('Установить на телефон'); }
@@ -680,6 +682,7 @@ function more() {
   return '<div class="menu">' + acc + '<button data-act="lang"><span class="ic flag">' + cur[1] + '</span><span>' + T('Язык') + '<small>' + cur[2] + '</small></span></button>'
     + (window.Sync && Sync.isAdmin && Sync.isAdmin() ? '<button data-act="activity"><span class="ic">📊</span><span>' + T('Активность') + '<small>' + T('Кто сколько раз заходил и сколько минут был в приложении') + '</small></span></button>' : '')
     + (isMax() ? '<button data-act="changelog"><span class="ic">🕘</span><span>' + T('История изменений') + '<small>' + T('Все запросы и что сделано, с датой и временем. Видно только вам') + '</small></span></button>' : '')
+    + '<button data-act="srch-list"><span class="ic">🔎</span><span>' + T('Мои поиски') + '<small>' + (S.srch.length ? S.srch.length + T(' шт. Пуш, когда на новом аукционе есть совпадения') : T('Сохраните поиск, и придёт пуш, когда появятся такие машины')) + '</small></span></button>'
     + '<button data-act="push"><span class="ic">🔔</span><span>' + T('Уведомления') + '<small>' + pushLabel() + '</small></span></button>'
     + '<button data-act="stats"><span class="ic">📈</span><span>' + T('Статистика продаж') + '<small>' + T('Продано сразу против MMR и floor price: даты, марка, аукцион') + '</small></span></button>'
     + '<button data-act="notes"><span class="ic">📝</span><span>' + T('Заметки') + '<small>' + (notes.length ? notes.length + T(' шт., привязаны к VIN') : T('Пока нет. Пишутся в карточке машины.')) + '</small></span></button>'
@@ -717,6 +720,148 @@ async function activitySheet(days) {
   const sh = $('#sheet'); if (!sh || !sheetOpen || S.actDays !== days) return;
   sh.querySelector('.empty').outerHTML = h + '<p class="muted" style="font-size:12.5px;margin-top:10px">' + T('Вход считается, когда приложение открыли или вернулись в него после перерыва больше 30 минут. Время идёт, только пока приложение на экране.') + '</p>';
 }
+
+/* ---------- сохранённые поиски: свои у каждого аккаунта, пуш при новом аукционе с совпадениями ---------- */
+S.srch = LS.get('srch-v1', []);
+let ALL_LOTS = null, ALL_V = null;
+async function allLots() {
+  if (ALL_LOTS && ALL_V === S.index.version) return ALL_LOTS;
+  const out = [];
+  for (const dd of S.index.dates) { let d; try { d = await getDate(dd.id); } catch (e) { continue; } d.lots.forEach(x => out.push(x)); }
+  ALL_V = S.index.version; return (ALL_LOTS = out);
+}
+const todayCT = () => { try { return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Chicago' }); } catch (e) { return new Date().toISOString().slice(0, 10); } };
+function srchSave() {
+  LS.set('srch-v1', S.srch);
+  if (window.Sync && Sync.st.user && Sync.saveSearches) Sync.saveSearches(S.srch).catch(e => toast(T('Поиск сохранён только на телефоне: ') + (e.message || e)));
+}
+async function srchPull() {
+  if (!(window.Sync && Sync.loadSearches)) return;
+  const l = await Sync.loadSearches();
+  if (l == null) return;
+  if (!l.length && S.srch.length) { srchSave(); return; } // первый раз: отправляем то, что было на телефоне
+  S.srch = l; LS.set('srch-v1', l);
+  if ((S.tab === 'srch' || S.tab === 'srchres') && !sheetOpen) render();
+}
+function srchMatches(s, lots, from) { return lots.filter(x => (!from || x._d >= from) && SearchMatch.match(x, s.q)); }
+async function srchScreen() {
+  const lots = await allLots(), from = todayCT();
+  const rows = S.srch.map(s => {
+    const up = srchMatches(s, lots, from).length, all = srchMatches(s, lots).length;
+    return '<div class="srch-c"><button class="srch-open" data-act="srch-open" data-id="' + E(s.id) + '"><b>' + E(s.name || T('Поиск')) + '</b><small>' + E(SearchMatch.describe(s.q)) + '</small>'
+      + '<span class="srch-n' + (up ? ' on' : '') + '">' + (up ? T('Совпадений в ближайших торгах: ') + up : T('В ближайших торгах совпадений нет')) + (all > up ? ' · ' + T('за всё время ') + all : '') + '</span></button>'
+      + '<div class="srch-b"><button data-act="srch-push" data-id="' + E(s.id) + '" aria-pressed="' + (s.on !== false) + '">' + (s.on !== false ? '🔔 ' + T('Пуш вкл.') : '🔕 ' + T('Пуш выкл.')) + '</button><button data-act="srch-edit" data-id="' + E(s.id) + '">✎ ' + T('Изменить') + '</button><button data-act="srch-del" data-id="' + E(s.id) + '">🗑</button></div></div>';
+  }).join('');
+  const pushHint = !(window.Notification && Notification.permission === 'granted' && LS.get('push-on', '')) ? '<p class="srch-hint">' + T('Чтобы пуш о совпадениях приходил на телефон, включите «Ещё → Уведомления».') + '</p>' : '';
+  return '<div class="hd"><h1>' + T('Мои поиски') + '</h1><p>' + T('Свои у каждого аккаунта. Когда загружается новый аукцион и в нём есть машины по вашему поиску, приходит пуш, а по нажатию открывается список.') + '</p></div>'
+    + pushHint + '<button class="btn pri srch-new" data-act="srch-new">＋ ' + T('Новый поиск') + '</button>'
+    + (rows || '<p class="empty">' + T('Поисков пока нет. Например: Tacoma и 4Runner 2016–2020, до 120k миль, прибыль от $1 500.') + '</p>');
+}
+async function srchResScreen() {
+  const s = S.srch.find(z => z.id === S.srchId);
+  if (!s) return '<div class="hd"><button class="btn" data-act="srch-back">← ' + T('Мои поиски') + '</button></div><p class="empty">' + T('Загружаю поиск…') + '</p>';
+  const lots = await allLots(), from = S.srchAll ? '' : todayCT();
+  let m = srchMatches(s, lots, from);
+  if (S.srchD) m = m.filter(x => x._d === S.srchD);
+  const by = {}; m.forEach(x => (by[x._d] = by[x._d] || []).push(x));
+  const ids = Object.keys(by).sort();
+  const body = ids.map(id => { const dd = S.index.dates.find(d => d.id === id); return '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + ' · ' + by[id].length + '</span></h2><div class="lots">' + by[id].sort(LOT_SORT.stat).map(lotCard).join('') + '</div>'; }).join('');
+  return '<div class="hd"><button class="btn" data-act="srch-back">← ' + T('Мои поиски') + '</button><h1>' + E(s.name || T('Поиск')) + '</h1><p>' + E(SearchMatch.describe(s.q)) + '</p></div>'
+    + '<div class="chips">' + (S.srchD ? '<button class="chip" data-act="srch-alld">' + T('Показать все даты') + '</button>' : '') + '<button class="chip" data-act="srch-past" aria-pressed="' + !!S.srchAll + '">' + (S.srchAll ? T('Только ближайшие торги') : T('Показать и прошедшие торги')) + '</button><button class="chip" data-act="srch-edit" data-id="' + E(s.id) + '">✎ ' + T('Изменить поиск') + '</button></div>'
+    + (body || '<p class="empty">' + T('Совпадений нет. Как только загрузится аукцион с подходящими машинами, придёт пуш.') + '</p>');
+}
+async function srchEdit(id) {
+  const s = S.srch.find(z => z.id === id) || { id: 's' + Date.now().toString(36), name: '', on: true, q: { cars: [{}], noInop: true } };
+  const lots = await allLots();
+  const mks = [...new Set(lots.map(x => x.mk).filter(Boolean))].sort();
+  const mdBy = {}; lots.forEach(x => { if (x.mk && x.md) (mdBy[x.mk] = mdBy[x.mk] || new Set()).add(x.md); });
+  S.srchMd = Object.fromEntries(Object.entries(mdBy).map(([k, v]) => [k, [...v].sort()]));
+  const q = s.q, cars = (q.cars && q.cars.length ? q.cars : [{}]);
+  const aucs = [...new Set(lots.map(x => x.auc))].sort();
+  const num = (id, v, ph) => '<input id="' + id + '" type="number" inputmode="numeric" value="' + E(v == null ? '' : v) + '" placeholder="' + E(ph) + '">';
+  const chk = (id, v, l) => '<label class="srch-ck"><input type="checkbox" id="' + id + '"' + (v ? ' checked' : '') + '> ' + l + '</label>';
+  const html = '<div class="srch-f" data-id="' + E(s.id) + '">'
+    + '<label class="srch-l">' + T('Название') + '<input id="sq_name" value="' + E(s.name) + '" placeholder="' + T('Например: Тако и 4Runner') + '"></label>'
+    + '<h3>' + T('Машины') + '</h3><p class="muted">' + T('Можно несколько: подойдёт любая из них. Модель можно не выбирать: тогда вся марка.') + '</p><div id="sq_cars">' + cars.map((c, i) => srchCarRow(c, mks)).join('') + '</div>'
+    + '<button class="btn" data-act="srch-addcar">＋ ' + T('Ещё машина') + '</button>'
+    + '<h3>' + T('Годы для всех машин') + '</h3><div class="srch-2">' + num('sq_y1', q.y1, T('от')) + num('sq_y2', q.y2, T('до')) + '</div>'
+    + '<h3>' + T('Пробег до, миль') + '</h3>' + num('sq_o2', q.o2, '120000')
+    + '<h3>MMR, $</h3><div class="srch-2">' + num('sq_w1', q.w1, T('от')) + num('sq_w2', q.w2, T('до')) + '</div>'
+    + '<h3>' + T('Прибыль по MMR от, $') + '</h3>' + num('sq_prof1', q.prof1, '1500')
+    + '<h3>' + T('Аукционы') + '</h3><div class="srch-aucs">' + aucs.map(a => chk('sq_auc_' + a, (q.auc || []).includes(a), E(AUC[a] || a))).join('') + '</div><p class="muted">' + T('Ничего не отмечено: все аукционы.') + '</p>'
+    + '<h3>' + T('Ещё') + '</h3>' + chk('sq_clean', q.clean, T('Только чистый тайтл, без пометок о тотале, пробеге, воде')) + chk('sq_noInop', q.noInop, T('Без неходячих')) + chk('sq_green', q.green, T('Только зелёный свет')) + chk('sq_awd', q.awd, T('Только 4x4 / AWD'))
+    + '<label class="srch-l">' + T('Слова в названии, комплектации или моторе') + '<input id="sq_txt" value="' + E(q.txt || '') + '" placeholder="TRD, Limited, 5.7…"></label>'
+    + chk('sq_on', s.on !== false, T('Присылать пуш, когда появляются совпадения'))
+    + '<p class="srch-cnt" id="sq_cnt"></p><button class="btn pri" data-act="srch-save">' + T('Сохранить поиск') + '</button></div>';
+  openSheet(S.srch.some(z => z.id === s.id) ? T('Изменить поиск') : T('Новый поиск'), html, true);
+  srchCount();
+}
+function srchCarRow(c, mks) {
+  mks = mks || Object.keys(S.srchMd || {}).sort();
+  const md = (S.srchMd || {})[c.mk] || [];
+  return '<div class="srch-car"><select class="sc-mk"><option value="">' + T('Марка') + '</option>' + mks.map(m => '<option' + (m === c.mk ? ' selected' : '') + '>' + E(m) + '</option>').join('') + '</select>'
+    + '<select class="sc-md"><option value="">' + T('Любая модель') + '</option>' + md.map(m => '<option' + (m === c.md ? ' selected' : '') + '>' + E(m) + '</option>').join('') + '</select>'
+    + '<input class="sc-y1" type="number" inputmode="numeric" placeholder="' + T('год от') + '" value="' + E(c.y1 || '') + '"><input class="sc-y2" type="number" inputmode="numeric" placeholder="' + T('до') + '" value="' + E(c.y2 || '') + '">'
+    + '<button class="sc-rm" data-act="srch-rmcar" aria-label="' + T('Убрать') + '">✕</button></div>';
+}
+function srchRead() {
+  const v = id => { const el = $('#' + id); return el ? el.value.trim() : ''; }, c = id => { const el = $('#' + id); return !!(el && el.checked); };
+  const cars = [...document.querySelectorAll('#sq_cars .srch-car')].map(r => ({ mk: r.querySelector('.sc-mk').value, md: r.querySelector('.sc-md').value, y1: r.querySelector('.sc-y1').value, y2: r.querySelector('.sc-y2').value })).filter(x => x.mk || x.md);
+  const auc = [...document.querySelectorAll('.srch-aucs input:checked')].map(i => i.id.replace('sq_auc_', ''));
+  const q = { cars, y1: v('sq_y1'), y2: v('sq_y2'), o2: v('sq_o2'), w1: v('sq_w1'), w2: v('sq_w2'), prof1: v('sq_prof1'), auc, clean: c('sq_clean'), noInop: c('sq_noInop'), green: c('sq_green'), awd: c('sq_awd'), txt: v('sq_txt') };
+  Object.keys(q).forEach(k => { if (q[k] === '' || q[k] === false || (Array.isArray(q[k]) && !q[k].length)) delete q[k]; });
+  return { name: v('sq_name'), on: c('sq_on'), q };
+}
+async function srchCount() {
+  const el = $('#sq_cnt'); if (!el) return;
+  const r = srchRead(), lots = await allLots(), from = todayCT();
+  const up = srchMatches(r, lots, from).length, all = srchMatches(r, lots).length;
+  el.textContent = T('Сейчас подходит: ') + up + T(' в ближайших торгах') + (all > up ? ', ' + all + T(' за всё время') : '') + '.';
+}
+async function srchAct(act, id, t) {
+  switch (act) {
+    case 'srch-new': srchEdit(null); break;
+    case 'srch-edit': srchEdit(id); break;
+    case 'srch-open': S.srchId = id; S.srchD = ''; S.srchAll = false; S.tab = 'srchres'; render(); window.scrollTo(0, 0); break;
+    case 'srch-back': S.tab = 'srch'; render(); window.scrollTo(0, 0); break;
+    case 'srch-past': S.srchAll = !S.srchAll; render(); break;
+    case 'srch-alld': S.srchD = ''; render(); break;
+    case 'srch-push': { const s = S.srch.find(z => z.id === id); if (s) { s.on = s.on === false; srchSave(); render(); } break; }
+    case 'srch-del': { const s = S.srch.find(z => z.id === id); if (!s) break; S.srch = S.srch.filter(z => z.id !== id); srchSave(); render(); toast(T('Поиск удалён'), T('Вернуть'), () => { S.srch.push(s); srchSave(); render(); }); break; }
+    case 'srch-addcar': { const box = $('#sq_cars'); box.insertAdjacentHTML('beforeend', srchCarRow({})); break; }
+    case 'srch-rmcar': { const r = t.closest('.srch-car'); if (document.querySelectorAll('#sq_cars .srch-car').length > 1) r.remove(); else r.querySelectorAll('select,input').forEach(i => i.value = ''); srchCount(); break; }
+    case 'srch-save': {
+      const f = $('.srch-f'), r = srchRead(), sid = f.dataset.id;
+      if (!r.name) r.name = (r.q.cars || []).map(c => [c.mk, c.md].filter(Boolean).join(' ')).join(', ') || T('Мой поиск');
+      const i = S.srch.findIndex(z => z.id === sid), s = { id: sid, ...r, at: Date.now() };
+      if (i >= 0) S.srch[i] = s; else S.srch.push(s);
+      srchSave(); closeSheet(); S.srchId = sid; S.srchD = ''; S.tab = 'srchres'; render(); window.scrollTo(0, 0); toast(T('Поиск сохранён')); break;
+    }
+  }
+}
+// пуш открыт: ?s=<поиск>&d=<дата>
+function srchFromUrl() {
+  const sp = new URLSearchParams(location.search), sid = sp.get('s');
+  if (!sid) return false;
+  S.srchId = sid; S.srchD = sp.get('d') || ''; S.srchAll = !!S.srchD && S.srchD < todayCT(); S.tab = 'srchres';
+  try { history.replaceState(null, '', location.pathname); } catch (e) {}
+  return true;
+}
+document.addEventListener('change', e => {
+  if (!e.target.closest('.srch-f')) return;
+  if (e.target.matches('.sc-mk')) { const r = e.target.closest('.srch-car'), md = (S.srchMd || {})[e.target.value] || []; r.querySelector('.sc-md').innerHTML = '<option value="">' + T('Любая модель') + '</option>' + md.map(m => '<option>' + E(m) + '</option>').join(''); }
+  srchCount();
+});
+document.addEventListener('input', e => { if (e.target.closest('.srch-f') && e.target.matches('input[type=number],#sq_txt')) { clearTimeout(srchCount._t); srchCount._t = setTimeout(srchCount, 300); } });
+window.addEventListener('sync-state', () => {
+  if (!(window.Sync && Sync.st.user)) return;
+  if (!srchPull._done) { srchPull._done = true; srchPull(); }
+  // подписка устройства с uid аккаунта: нужна, чтобы пуш о совпадениях пришёл именно вам
+  if (!srchPull._sub && window.Notification && Notification.permission === 'granted' && LS.get('push-on', '') && navigator.serviceWorker) {
+    srchPull._sub = true;
+    navigator.serviceWorker.ready.then(r => r.pushManager.getSubscription()).then(sub => sub && Sync.pushSub(sub.toJSON())).catch(() => {});
+  }
+});
 
 /* ---------- пуш-уведомления: новый аукцион, пост-сейл ---------- */
 const VAPID_PUB = 'BDjW4mzPCyvLlkt6ptUxITcv7Z8Wt_YAyFBw7Ll-FE_FqH6CZlbQdPD65vhHZBW7Ttu1fxq0IdzSxgqHZsWu12A';
@@ -1181,6 +1326,8 @@ document.addEventListener('click', async e => {
     case 'activity': activitySheet(S.actDays || 7); break;
     case 'stats': statsSheet(); break;
     case 'push': pushOn(); break;
+    case 'srch-list': if (sheetOpen) closeSheet(); S.tab = 'srch'; render(); window.scrollTo(0, 0); break;
+    case 'srch-new': case 'srch-edit': case 'srch-open': case 'srch-back': case 'srch-past': case 'srch-alld': case 'srch-push': case 'srch-del': case 'srch-addcar': case 'srch-rmcar': case 'srch-save': srchAct(ds.act, ds.id, t); break;
     case 'changelog': if (isMax()) changelogSheet(); break;
     case 'sst-mk': case 'sst-auc': { const f = ds.act === 'sst-mk' ? 'mk' : 'auc'; SST[f] = ds.v; const sel = $('#sst_' + f); if (sel) sel.value = ds.v; statsDraw(); $('#sheet').scrollTop = 0; break; }
     case 'fl-x': { const f = S.favs[ds.fid]; if (!f) break; if (f.x) delete f.x; else f.x = 1; f.ts2 = Date.now(); saveFavs(); const r = t.closest('.fl-r'); if (r) { r.classList.toggle('gone', !!f.x); t.textContent = f.x ? '↺' : '✕'; t.setAttribute('aria-pressed', !!f.x); t.title = f.x ? T('Вернуть') : T('Ушла, не купили: зачеркнуть'); const L = r.parentNode; if (L) { if (f.x) L.appendChild(r); else { const g = L.querySelector('.fl-r.gone'); L.insertBefore(r, g || null); } } } break; }
@@ -1372,6 +1519,7 @@ async function start() {
       if (sv.shown) S.shown = Math.min(+sv.shown || 24, 2000);
       S.keepShown = true;
     }
+    srchFromUrl();
     render(); S.keepShown = false;
     if (same) { requestAnimationFrame(() => { window.scrollTo(0, sv.y || 0); topBtn(); }); if (sv.lot && S.d.map[sv.lot]) { S.replaceNext = false; detail(sv.lot); } }
     warmScanner();

@@ -38,7 +38,7 @@ const webpush = (await import('web-push')).default;
 webpush.setVapidDetails(URL_APP, PUB, PRIV);
 
 const read = rev => { try { return JSON.parse(execSync(`git show ${rev}:data/index.json`, { encoding: 'utf8' })); } catch { return { dates: [] }; } };
-const msgs = [];
+const msgs = [], newIds = [];
 if (process.env.MODE === 'soon') {
   const u = upcoming();
   if (u) {
@@ -51,6 +51,7 @@ else {
   const om = new Map(old.dates.map(d => [d.id, d]));
   for (const d of now.dates) {
     const o = om.get(d.id);
+    if (!o) newIds.push(d.id);
     if (!o) msgs.push({ title: 'Новый аукцион: ' + d.label, body: d.title + '. Машин: ' + d.n + (d.core ? ', в подборке ' + d.core : '') + '.', tag: 'new-' + d.id });
     else if (d.results && !o.results) {
       let st = {}; try { st = JSON.parse(fs.readFileSync('data/' + d.id + '.json', 'utf8')).stats || {}; } catch {}
@@ -62,24 +63,55 @@ else {
     }
   }
 }
-if (!msgs.length) { console.log('Новых аукционов и пост-сейлов нет'); process.exit(0); }
+if (!msgs.length && !newIds.length) { console.log('Новых аукционов и пост-сейлов нет'); process.exit(0); }
 
-let subs = [], tok = '';
+let subs = [], searches = [], tok = '';
+// Firestore REST -> обычные значения
+const val = v => v == null ? null : 'stringValue' in v ? v.stringValue : 'integerValue' in v ? +v.integerValue : 'doubleValue' in v ? v.doubleValue : 'booleanValue' in v ? v.booleanValue
+  : 'arrayValue' in v ? (v.arrayValue.values || []).map(val) : 'mapValue' in v ? Object.fromEntries(Object.entries(v.mapValue.fields || {}).map(([k, x]) => [k, val(x)])) : null;
 do {
   const r = await fetch(`https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents/push?pageSize=300&key=${API_KEY}` + (tok ? '&pageToken=' + tok : ''));
   const j = await r.json();
   if (!r.ok) { console.log('::warning::Firestore:', JSON.stringify(j).slice(0, 300)); break; }
   for (const d of j.documents || []) {
-    const f = d.fields || {}, k = (f.keys && f.keys.mapValue && f.keys.mapValue.fields) || {};
-    if (f.endpoint && k.p256dh && k.auth) subs.push({ endpoint: f.endpoint.stringValue, keys: { p256dh: k.p256dh.stringValue, auth: k.auth.stringValue } });
+    const f = Object.fromEntries(Object.entries(d.fields || {}).map(([k, x]) => [k, val(x)]));
+    if (f.type === 'searches') { searches.push(f); continue; }
+    if (f.endpoint && f.keys && f.keys.p256dh && f.keys.auth) subs.push({ endpoint: f.endpoint, keys: { p256dh: f.keys.p256dh, auth: f.keys.auth }, uid: f.uid || '' });
   }
   tok = j.nextPageToken || '';
 } while (tok);
-console.log('Подписок:', subs.length, 'сообщений:', msgs.length);
+console.log('Подписок:', subs.length, 'поисков:', searches.reduce((a, d) => a + (d.list || []).length, 0), 'сообщений:', msgs.length);
+
+let ok = 0, gone = 0, err = 0;
+const send = (list, msg) => Promise.all(list.map(s => webpush.sendNotification({ endpoint: s.endpoint, keys: s.keys }, JSON.stringify(msg), { TTL: 43200 }).then(() => ok++)
+  .catch(e => { if (e.statusCode === 404 || e.statusCode === 410) gone++; else { err++; console.log('ошибка', e.statusCode, (e.body || '').slice(0, 200)); } })));
 
 // несколько событий за раз — одно уведомление, чтобы не засыпать телефон
-const m = msgs.length === 1 ? msgs[0] : { title: msgs.map(x => x.title).join(' · '), body: msgs.map(x => x.body).join(' '), tag: 'multi' };
-const payload = JSON.stringify({ ...m, url: URL_APP });
-let ok = 0, gone = 0, err = 0;
-await Promise.all(subs.map(s => webpush.sendNotification(s, payload, { TTL: 43200 }).then(() => ok++).catch(e => { if (e.statusCode === 404 || e.statusCode === 410) gone++; else { err++; console.log('ошибка', e.statusCode, (e.body || '').slice(0, 200)); } })));
+if (msgs.length) {
+  const m = msgs.length === 1 ? msgs[0] : { title: msgs.map(x => x.title).join(' · '), body: msgs.map(x => x.body).join(' '), tag: 'multi' };
+  await send(subs, { ...m, url: URL_APP });
+}
+
+// сохранённые поиски: на новом аукционе есть совпадения — пуш владельцу поиска, по нажатию список карточек
+if (newIds.length && searches.length) {
+  const { createRequire } = await import('node:module');
+  const SM = createRequire(import.meta.url)('../search-match.js');
+  const ix = read('HEAD');
+  for (const id of newIds) {
+    let D; try { D = JSON.parse(fs.readFileSync('data/' + id + '.json', 'utf8')); } catch { continue; }
+    const dd = ix.dates.find(x => x.id === id) || { label: id, title: '' };
+    for (const doc of searches) {
+      const mine = subs.filter(s => s.uid && s.uid === doc.uid);
+      if (!mine.length) continue;
+      for (const sr of doc.list || []) {
+        if (!sr || sr.on === false || !sr.q) continue;
+        const hit = D.lots.filter(x => SM.match(x, sr.q));
+        if (!hit.length) continue;
+        const names = hit.slice(0, 3).map(x => [x.y, x.mk, x.md].filter(Boolean).join(' ')).join(', ');
+        console.log('Поиск', sr.name, '->', hit.length);
+        await send(mine, { title: 'По вашему поиску «' + (sr.name || 'Поиск') + '»: ' + hit.length, body: dd.label + ', ' + String(dd.title).split(',')[0] + '. ' + names + (hit.length > 3 ? ' и ещё ' + (hit.length - 3) : '') + '.', tag: 'srch-' + sr.id + '-' + id, url: URL_APP + '?s=' + encodeURIComponent(sr.id) + '&d=' + id });
+      }
+    }
+  }
+}
 console.log(`Отправлено: ${ok}, устаревших подписок: ${gone}, ошибок: ${err}`);

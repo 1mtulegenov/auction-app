@@ -309,8 +309,18 @@ window.Sync = (() => {
     if (!db || !st.user) throw new Error('Сначала войдите');
     const h = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(sub.endpoint))), b => b.toString(16).padStart(2, '0')).join('').slice(0, 32);
     const dv = /iPhone|iPad/.test(navigator.userAgent) ? 'ios' : /Android/.test(navigator.userAgent) ? 'android' : 'desktop';
-    await F.fs.setDoc(F.fs.doc(db, 'push', h), { endpoint: sub.endpoint, keys: sub.keys, dev: dv, at: F.fs.serverTimestamp() });
+    await F.fs.setDoc(F.fs.doc(db, 'push', h), { endpoint: sub.endpoint, keys: sub.keys, dev: dv, uid: st.user.uid, at: F.fs.serverTimestamp() });
     return h;
   }
-  return { st, signIn, signOut, pushNote, pushFavs, isAdmin, activity, pushObd, obdImg, delObdImg, obdPending, pushSub };
+  // сохранённые поиски аккаунта: push/srch_{uid} {type:'searches', uid, list}. Лежат рядом с подписками,
+  // чтобы рассылка (GitHub Actions) видела, кому какие совпадения слать.
+  async function saveSearches(list) {
+    if (!db || !st.user) throw new Error('Сначала войдите');
+    await F.fs.setDoc(F.fs.doc(db, 'push', 'srch_' + st.user.uid), { type: 'searches', uid: st.user.uid, list: JSON.parse(JSON.stringify(list)), at: F.fs.serverTimestamp() });
+  }
+  async function loadSearches() {
+    if (!db || !st.user) return null;
+    try { const d = await F.fs.getDoc(F.fs.doc(db, 'push', 'srch_' + st.user.uid)); return d.exists() ? (d.data().list || []) : []; } catch (e) { console.warn('searches', e); return null; }
+  }
+  return { st, signIn, signOut, pushNote, pushFavs, isAdmin, activity, pushObd, obdImg, delObdImg, obdPending, pushSub, saveSearches, loadSearches };
 })();
