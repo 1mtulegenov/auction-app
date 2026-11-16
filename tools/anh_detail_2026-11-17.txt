@@ -1,0 +1,328 @@
+A-0024|||Title Absent|6000|4400|||3300|0|
+A-0022|||Title Absent|23000|16150|||14750|0|
+A-0021|||Title Absent|0|11450|||10550|0|
+A-0007|||Title Absent|0|16925|||15000|0|
+A-0008|||Title Absent|0|13025|||14500|0|
+A-0006|||Title Absent|0|19825|||19150|0|
+A-0023|||Title Absent|6500|6025|||5750|0|
+A-0005|||Title Absent|0|32000|||24750|0|
+A-0031|||Title Absent|11000|10575|||10350|0|
+A-0025|||Title Absent|26500|23000|||21000|0|
+A-0046|||Title Absent|1750|0|||1450|0|
+A-0029|||Title Absent|0|2650|||2800|0|
+A-0026|||Title Absent|12000|10175|||8600|0|
+A-0030|||Title Absent|9000|9850|||6800|0|
+A-0027|||Title Absent|14000|11650|||8200|0|
+A-0028|||Title Absent|6000|6350|||4500|0|
+A-0053|||Title Absent|0|5425||||0|
+A-0057|||Title Absent|9500|5400|||5450|0|
+A-0050|||Title Absent|0|2675|||2050|0|
+A-0051|||Title Absent|0|3875|||4150|0|
+A-0056|||Title Absent|0|5175|||5450|0|
+A-0054|||Title Absent|0|9400|||5500|0|
+A-0055|||Title Absent|0|4000|||2950|0|
+A-0052|||Title Absent|0|6275|||6150|0|
+A-0061|||Title Absent|0|6275|||4000|0|
+A-0059|||Title Absent|0|2550|||1450|0|
+A-0065|||Title Absent|0|5525|||5800|0|
+A-0062|||Title Absent|0|0|||2950|0|
+A-0064|||Title Absent|0|7725|||7100|0|
+A-0063|||Title Absent|0|4900|||3700|0|
+A-0060|Yes|Good|Title Absent|0|6575|||4600|13|
+A-0058|Yes|Good|Title Absent|17500|17050|||11850|12|
+A-0068|||Title Absent|0|4425|||3650|0|
+A-0072|||Title Absent|0|5800|||4450|0|
+A-0069|||Title Absent|0|6125|||4000|0|
+A-0070|||Title Absent|0|1975|||1900|0|
+A-0073|||Title Absent|0|20450|||16800|0|
+A-0071|||Title Absent|0|3250|||1850|0|
+A-0066|Yes|Good|Title Absent|0|19000|||15850|9|
+A-0067|||Title Absent|0|7025|||6300|0|
+A-0099|||Title Absent|0|4450|||4000|0|
+A-0100|||Title Absent|0|12600|||7200|0|
+A-0102|||Title Absent|0|8725|||8700|0|
+A-0098|||Title Absent|0|3175|||3400|0|
+A-0103|||Title Absent|0|12800|||10550|0|
+A-0101|||Title Absent|0|15100|||15150|0|
+A-0097|||Title Absent|12000|12875|||10400|0|
+A-0096|||Title Absent|4500|3800|||3850|0|
+A-0106|||Title Absent|4500|6925|||5900|0|
+A-0107|||Title Absent|2500|4275|||3250|0|
+A-0111|||Title Absent|5000|5925|||5100|0|
+A-0109|||Title Absent|2500|3575|||2900|0|
+A-0115|||Title Absent|0|5250|||3600|0|
+A-0108|||Title Absent|1500|1725|||1850|0|
+A-0116|||Title Absent|0|11550|||11500|0|
+A-0104|||Title Absent|0|5400|||5200|0|
+A-0119|||Title Absent|0|10225|||9900|0|
+A-0126|||Title Absent|13000|11725|||13350|0|
+A-0122|||Title Absent|0|7600|||6850|0|
+A-0120|||Title Absent|0|7350|||5900|0|
+A-0118|||Title Absent|0|13425|||11850|0|
+A-0117|||Title Absent|0|12225|||10100|0|
+A-0121|||Title Absent|0|24550|||21700|0|
+A-0124|||Title Absent|5000|5775|||4100|0|
+A-0128|||Title Absent|0|6125|||4450|0|
+A-0129|||Title Absent|0|27675|||21650|0|
+A-0138|||Title Absent|8000|7675|||4950|0|
+A-0127|||Title Absent|0|17250|||10350|0|
+A-0130|||Title Absent|0|20950|||13850|0|
+A-0132|||Title Absent|4000|3225|||3900|0|
+A-0134|||Title Absent|2500|2900|||3100|0|
+A-0142|||Title Absent|8000|6950|||4800|0|
+A-0154|||Title Absent|16500|16825|||15600|0|
+A-0147|||At Auction|2000|0||||0|
+A-0148|||Title Absent|16000|19650|||14250|0|
+A-0152|||Title Absent|3300|8350|||4850|0|
+A-0153|Yes|Good|Title Absent|43000|45500|||41400|0|
+A-0151|||Title Absent|5400|4175|||5200|0|
+A-0149|||Title Absent|14000|17350|||15050|0|
+A-0150|||Title Absent|10000|16325|||10750|0|
+B-0001|||Title Absent|0|18025|||13400|0|
+B-0003|||Title Absent|27000|24150|||24550|0|
+B-0002|||Title Absent|0|7375|||5350|0|
+A-0159|||Title Absent|5200|4375|||3700|0|
+A-0158|||Title Absent|3000|5275|||3400|0|
+A-0157|||Title Absent|2800|4350|||2700|0|
+A-0155|||Title Absent|900|1800|||1400|0|
+A-0156|Yes|Good|Title Absent|25000|29450|||18900|9|
+B-0010|||Title Absent|0|6825|||5600|0|
+B-0006|||Title Absent|18000|20400|||16950|0|
+B-0004|||Title Absent|0|7375|||6350|0|
+B-0008|||Title Absent|0|2500|||2850|0|
+B-0007|||Title Absent|0|16925|||20150|0|
+B-0011|||Title Absent|0|13750|||12700|0|
+B-0009|||Title Absent|7000|10500|||6350|0|
+B-0005|||Title Absent|0|17750|||16400|0|
+B-0013|||Title Absent|0|3500|||1600|0|
+B-0014|||Title Absent|0|6050|||6050|0|
+B-0026|||Title Absent|0|23900|||22650|0|
+B-0028|||Title Absent|0|1475|||1600|0|
+B-0027|||Title Absent|44000|49000|||48300|0|
+B-0025|||Title Absent|0|9650|||9250|0|
+B-0012|||Title Absent|0|8425|||7700|0|
+B-0015|||Title Absent|0|9750|||11450|0|
+B-0032|||Title Absent|0|5375|||4650|0|
+B-0031|||Title Absent|0|25000|||21400|0|
+B-0043|||Title Absent|13500|13525|||8400|0|
+B-0029|||Title Absent|0|4075|||3800|0|
+B-0030|||Title Absent|0|4675|||4600|0|
+B-0034|||Title Absent|0|20125|||17300|0|
+B-0042|||Title Absent|10000|11550|||7900|0|
+B-0033|||Title Absent|0|20175|||15900|0|
+B-0045|||Title Absent|12500|0|||5750|0|
+B-0046|||Title Absent|20500|24350|||24150|0|
+B-0047|||Title Absent|19500|14725|||17650|0|
+B-0048|||Title Absent|9500|11750|||9000|0|
+B-0051|||Title Absent|0|11875|||12900|0|
+B-0044|||Title Absent|3500|2175|||1750|0|
+B-0049|||Title Absent|4800|1150||||0|
+B-0050|||Title Absent|0|32125||||0|
+B-0059|||Title Absent|16800|16525|||12600|0|
+B-0052|||Title Absent|0|700|||1450|0|
+B-0054|||Title Absent|0|2000|||2050|0|
+B-0057|||Title Absent|12500|13925|||12750|0|
+B-0058|||Title Absent|25000|20625|||21400|0|
+B-0053|||Title Absent|0|8400|||7450|0|
+B-0055|||Title Absent|0|8925|||6500|0|
+B-0056|||Title Absent|0|5725||||0|
+B-0066|||Title Absent|9000|7050|||6100|0|
+B-0060|||Title Absent|7500|5000|||4650|0|
+B-0064|||Title Absent|2000|0|||1400|0|
+B-0067|||Title Absent|22000|13625|||14350|0|
+B-0065|||Title Absent|9000|9850|||11900|0|
+B-0061|||Title Absent|11000|11975|||11350|0|
+B-0062|||Title Absent|1800|2400|||1950|0|
+B-0063|||Title Absent|5000|4250|||3500|0|
+B-0068|||Title Absent|7000|6675|||6900|0|
+B-0072|||Title Absent|3200|2950|||1700|0|
+B-0070|||Title Absent|7000|9425|||5750|0|
+B-0073|||Title Absent|4800|6000|||5200|0|
+B-0075|||Title Absent|18000|15475|||16000|0|
+B-0071|||Title Absent|14000|13825|||16350|0|
+B-0074|||Title Absent|4500|3150|||3300|0|
+B-0069|||Title Absent|1200|600|||1250|0|
+B-0102|||Title Absent|0|3075|||1350|0|
+B-0101|||Title Absent|0|20450|||17250|0|
+B-0100|||Title Absent|0|1700|||1800|0|
+B-0092|||Title Absent|0|8975||||0|
+B-0105|||Title Absent|0|4650|||4350|0|
+B-0104|||Title Absent|0|4950|||1950|0|
+B-0103|||Title Absent|0|17400|||17150|0|
+B-0076|||Title Absent|0|2100||||0|
+C-0005|||Title Absent|0|2975|||3050|0|
+C-0003|||Title Absent|0|12475|||10050|0|
+C-0001|||Title Absent|0|3350|||3350|0|
+B-0107|||Title Absent|0|19875|||17700|0|
+C-0002|||Title Absent|0|6200|||5250|0|
+C-0004|||Title Absent|0|11300|||10500|0|
+B-0106|||Title Absent|0|0|||6350|0|
+B-0108|||Title Absent|0|600|||1550|0|
+C-0011|||Title Absent|0|750|||1400|0|
+C-0007|||Title Absent|0|4925|||6400|0|
+C-0012|||Title Absent|0|4475|||3500|0|
+C-0006|||Title Absent|0|9025||||0|
+C-0013|||Title Absent|0|3175|||2750|0|
+C-0009|||Title Absent|3000|4800|||3350|0|
+C-0010|||Title Absent|0|9600|||8550|0|
+C-0008|||Title Absent|8000|6325|||4900|0|
+C-0021|||Title Absent|9800|8025|||8200|0|
+C-0014|||Title Absent|7500|6975|||7300|0|
+C-0020|||Title Absent|34000|41150|||35600|0|
+D-0001|No|Damaged|At Auction|1099|350|||1650|29|Front Bumper / Cover: Torn (> 12 Inches); Keys: Missing (Replacement Required); Left Brake Light: Cracked (Replacement Required); Left Fog Lamp: Water Damage (Replacement Required)
+D-0003|No||At Auction|1999|4675|||3400|19|Console Cover: Worn (Replacement Required); Keys: Missing (Replacement Required); Left Front Seat Cushion: Torn (> 12 Inches); Rear Bumper / Cover: Cracked Paint (8 To 9 Inches)
+C-0058|Yes|Good|Title Absent|4500|4025|||3900|40|Air Conditioner: Inoperable (Repair Required); Front Bumper Cen. Grille-Scrn: Cracked (> 12 Inches); Front Differential: Noise (Repair Required); Front Spoiler: Broken (Replacement Required)
+D-0002|No|Good|At Auction|3299|6825|||7350|21|Left Tail Light: Cracked (Replacement Required)
+C-0059|Yes|Damaged|At Auction|0|9850|||5400|44|Front Bumper Cen. Molding: Broken (Replacement Required); Front Bumper Right Molding: Cracked (> 12 Inches); Front Bumper: Severe Damage (Replacement Required); Front Emblem: Missing (Replacement Required)
+D-0005|No|Damaged|At Auction|2199|7375|||5400|36|Climate Control Panel: Broken (Replacement Required); Front Bumper / Cover: Severe Damage (Replacement Required); Keys: Missing (Replacement Required); Right Front Door: Severe Damage (Replacement Required)
+D-0011|No||At Auction|1199|2525|||2350|13|Left Front Door Handle: Missing (Replacement Required); Left Front Seat Cushion: Torn (> 12 Inches); Left Front Tire: Worn (Replacement Required); Left Rear Tire: Worn (Replacement Required)
+D-0004|No||At Auction|1300|900|||1650|17|Left Front Tire: Worn (Replacement Required); Rear Bumper / Cover: Cracked (1 To 2 Inches); Transmission: Inoperable (Repair Required); Warning: Tire Pressure - On (Unacceptable)
+D-0007|No|Damaged|At Auction|10199|15775|||12150|29|Keys: Missing (Replacement Required); Left Front Mirror Signal Lamp: Cracked (Replacement Required); Left Front Tire: Worn (Replacement Required); Ls Panel Molding: Bent (Replacement Required)
+D-0009|No|Good|At Auction|3099|6300|||6950|22|Console Cover: Missing (Replacement Required); Right Rear Seat Cushion: Torn (> 12 Inches)
+D-0006|No|Good|At Auction|2199|2150|||4450|30|Front Bumper / Cover: Cracked (> 12 Inches); Keys: Missing (Replacement Required); Left Front Seat: Torn (> 12 Inches); Sunroof Shade: Torn (> 12 Inches)
+D-0008|No|Damaged|At Auction|7200|11225|||8400|29|Center Brake Light: Aftermarket (Replacement Required); Engine: Missing (Replacement Required); Front Bumper Cen. Molding: Bent (Replacement Required); Front Bumper Molding: Bent (Replacement Required)
+D-0010|No||At Auction|3099|3150|||2750|9|Front Valance: Broken (Replacement Required); Keys: Missing (Replacement Required); Right Head Lamp: Broken (Replacement Required)
+D-0019|||Title Absent|0|1925||||0|
+D-0015|||Title Absent|1000|2175|||1500|0|
+D-0016|||Title Absent|1500|3350|||1700|0|
+D-0018|||Title Absent|0|14575|||8800|0|
+D-0017|No||Title Absent|1000|0|||1750|0|
+D-0014|Yes||Title Absent|0|1425||||0|
+D-0013|No|Good|At Auction|4599|3125|||3700|25|Keys: Missing (Replacement Required); Left Front Seat: Torn (> 12 Inches)
+D-0012|Yes|Damaged|At Auction|3999|7525|||6900|21|Airbag: Front Left - Deployed (Replacement Required); Airbag: Front Right - Deployed (Replacement Required); Alternator / Generator: Inoperable (Repair Required); Battery: Missing (Replacement Required)
+EA-0004|||Title Absent|0|5700|||6350|0|
+EA-0001|||Title Absent|0|2625|||2500|0|
+EA-0005|||Title Absent|0|8825|||7050|0|
+EA-0003|||Title Absent|0|4275|||2850|0|
+EA-0002|||Title Absent|0|9825|||6950|0|
+FL-0001|Yes||At Auction|13700|12525|||13300|20|Grille Molding: Broken (Replacement Required); Warning Light: Maintenance - On (Unacceptable); Warning: Tire Pressure - On (Unacceptable)
+FL-0003|Yes||At Auction|8000|12200|||8650|13|Left Rear Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required); Warning Light: Engine - On (Unacceptable); Warning: Tire Pressure - On (Unacceptable)
+FL-0002|Yes||At Auction|13999|9850|||10450|22|Battery: Missing (Replacement Required); Engine: Leak (Repair Required); Left Front Tire: Worn (Replacement Required); Radio: Broken (Replacement Required)
+FL-0006|Yes||At Auction|8799|4925|||6250|19|Right Rear Tire: Worn (Replacement Required); Tailgate Protective Cap: Missing (Replacement Required); Warning Light: Engine - On (Unacceptable); Warning: Traction Control - On (Unacceptable)
+FL-0005|Yes|Good|At Auction|5000|5725|||3450|24|Warning: Tire Pressure - On (Unacceptable)
+FL-0007|Yes|Good|At Auction|9200|10350|||8050|30|Suspension: Noise (Repair Required); Warning Light: Maintenance - On (Unacceptable)
+FL-0004|Yes||At Auction|13899|18675|||15750|9|Warning Light: Engine - On (Unacceptable)
+FL-0009|Yes||At Auction|9500|5325|||5650|22|Climate Display / Touch Screen: Inoperable (Repair Required); Console Cover: Worn (Replacement Required); Rear Bumper / Cover: Cracked Paint (7 To 8 Inches); Warning Light: Engine - On (Unacceptable)
+FL-0008|Yes|Good|At Auction|5399|3575|||4050|25|Suspension: Noise (Repair Required); Warning Light: Engine - On (Unacceptable); Warning Light: Maintenance - On (Unacceptable); Warning: Tire Pressure - On (Unacceptable)
+FL-0011|Yes|Damaged|At Auction|18900|17775|||15550|11|Grille: Cracked (> 12 Inches); Right Cover Lower: Broken (Replacement Required); Warning Light: Engine - On (Unacceptable)
+FL-0010|Yes|Damaged|At Auction|6999|8950|||5950|44|Battery: Missing (Replacement Required); Console Cover: Torn (> 12 Inches); Front Bumper Right Molding: Missing (Replacement Required); Front Underbody Cover: Missing (Replacement Required)
+FL-0021|Yes||At Auction|3500|4175|||3100|8|Keys: Missing (Replacement Required); Warning: Tire Pressure - On (Unacceptable)
+FL-0013|Yes|Good|At Auction|6300|4950|||8250|23|Exhaust: Leak (Repair Required); Front Bumper Cover Upper: Cracked (2 To 3 Inches); Keys: Missing (Replacement Required); Left Front Seat Cushion: Torn (2 To 3 Inches)
+FL-0017|Yes|Damaged|At Auction|3500|3150|||2650|35|Left Front Seat: Torn (> 12 Inches); Left Pillar Trim Cover: Missing (Replacement Required); Right Pillar Trim Cover: Missing (Replacement Required); Suspension: Noise (Repair Required)
+FL-0019|Yes|Good|At Auction|5400|5800|||4450|10|Air Conditioner: Inoperable (Repair Required); Keys: Missing (Replacement Required); Right Front Tire: Worn (Replacement Required); Warning Light: Engine - On (Unacceptable)
+FL-0015|Yes|Damaged|At Auction|6300|2625|||3350|25|Front Bumper / Cover: Torn (> 12 Inches); Left Brake Light: Cracked (Replacement Required)
+FL-0018|Yes|Good|At Auction|1299|825|||1150|36|Suspension: Noise (Repair Required); Warning Light: Engine - On (Unacceptable); Warning: Tire Pressure - On (Unacceptable)
+FL-0012|Yes|Good|At Auction|5299|4900|||4800|25|Engine: Noise (Repair Required); Front Bumper Cen. Molding: Multiple Scratches Heavy (Replacement Required); Left Front Mirror Housing: Missing (Replacement Required); Right Front Seat Cushion: Torn (> 12 Inches)
+FL-0014|Yes|Damaged|At Auction|7399|7725|||7350|36|Left Tail Light: Missing (Replacement Required); Lift Gate: Severe Damage (Replacement Required); Rear Bumper / Cover: Missing (Replacement Required); Right Tail Light: Missing (Replacement Required)
+FL-0025|Yes||At Auction|11400|6225|||6600|10|Battery: Inoperable (Repair Required); Front Center Armrest: Torn (3 To 4 Inches); Warning Light: Engine - On (Unacceptable)
+FL-0024|Yes|Good|At Auction|2900|4200|||2950|27|3rd Row Seat: Missing (Replacement Required); Front Emblem: Faded (Replacement Required); Hood: Cracked Paint (> 12 Inches); Keys: Missing (Replacement Required)
+FL-0023|Yes|Good|At Auction|2699|1800|||2100|30|Console Cover: Torn (> 12 Inches); Grille Molding: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required); Right Front Door Molding: Bent (Replacement Required)
+FL-0028|Yes||At Auction|11900|9375|||11250|24|Warning Light: Maintenance - On (Unacceptable); Warning: Tire Pressure - On (Unacceptable)
+FL-0022|No|Good|At Auction|1200|2725|||2150|38|Battery: Missing (Replacement Required); Left Front Tire: Worn (Replacement Required); Radio: Inoperable (Repair Required); Warning Light: Engine - On (Unacceptable)
+FL-0026|Yes|Good|At Auction|12699|9725|||7500|20|Console Cover: Torn (> 12 Inches); Front Bumper / Cover: Cracked Paint (> 12 Inches); Keys: Missing (Replacement Required); Rear Bumper Tow Hook Cover: Missing (Replacement Required)
+FL-0030|Yes|Damaged|At Auction|3900|2850|||3600|42|Airbag: Front Left - Deployed (Replacement Required); Dash: Cracked (Replacement Required); Engine: Noise (Repair Required); Front Bumper Cen. Grille-Scrn: Broken (Replacement Required)
+FL-0027|Yes|Good|At Auction|5800|3875|||5350|39|Air Conditioner: Inoperable (Repair Required); Engine: Leak (Repair Required); Engine: Noise (Repair Required); Right Bed Side: Cracked (> 12 Inches)
+FL-0037|Yes|Good|At Auction|5300|7775|||4550|24|Engine: Noise (Repair Required); Front Emblem: Missing (Replacement Required); Warning Light: Engine - On (Unacceptable)
+FL-0035|Yes|Good|At Auction|8299|6225|||5600|28|Suspension: Noise (Repair Required)
+FL-0032|Yes|Good|At Auction|5099|4900|||4650|13|Keys: Missing (Replacement Required); Suspension: Noise (Repair Required)
+FL-0033|Yes||At Auction|6300|7800|||5250|33|Alternator / Generator: Inoperable (Repair Required); Front Emblem: Missing (Replacement Required); Left Tail Light: Broken (Replacement Required); Rear Glass: Broken (Replacement Required)
+FL-0034|Yes||At Auction|2700|2800|||2750|25|Dash: Broken (Replacement Required); Dash Trim Panel: Worn (Replacement Required); Left Front Armrest: Broken (Replacement Required); Left Front Door Panel: Broken (Replacement Required)
+FL-0031|Yes|Good|At Auction|4100|4275|||2850|26|Audio: Worn (Replacement Required); Hood: Cracked Paint (> 12 Inches); Keys: Missing (Replacement Required); Left Front Armrest: Worn (Replacement Required)
+FL-0039|Yes|Good|At Auction|12800|17175|||10950|35|Antenna Base: Broken (Replacement Required); Liftgate Emblem: Missing (Replacement Required); Rear Bumper Center Molding: Broken (Replacement Required); Rear Bumper / Cover: Cracked Paint (> 12 Inches)
+FL-0038|Yes||At Auction|7399|7750|||4700|12|Keys: Missing (Replacement Required)
+FL-0045|Yes||At Auction|8199|10200|||7250|2|
+FL-0047|Yes||Title Absent|44000|0|||42750|22|Left Rear Inner Tire: Worn (Replacement Required); Left Rear Tire: Worn (Replacement Required); Right Rear Inner Tire: Worn (Replacement Required)
+FL-0043|Yes||At Auction|15499|20050|||14850|8|Left Front Fender: Replaced (Substandard Repair)
+FL-0046|Yes|Good|Title Absent|0|19200|||16150|14|Front Bumper / Cover: Broken (Replacement Required); Left Tail Light: Broken (Replacement Required); Rear Bumper / Cover: Broken (Replacement Required); Right Rear Wheel: Bent (Replacement Required)
+FL-0041|Yes||At Auction|4199|5325|||3850|13|Rear Bumper / Cover: Cracked Paint (8 To 9 Inches)
+FL-0042|Yes|Damaged|At Auction|7100|8125|||5450|17|Front Bumper / Cover: Broken (Replacement Required); Warning Light: Air Bag - On (Unacceptable); Warning: Tire Pressure - On (Unacceptable)
+FL-0044|Yes|Good|At Auction|25800|17175|||16600|28|Power Roof: Inoperable (Repair Required); Warning Light: Maintenance - On (Unacceptable); Windshield: Cracked (> 12 Inches)
+FL-0040|Yes|Good|At Auction|10800|8225|||9000|36|Left Front Seat: Torn (5 To 6 Inches); Power Roof: Inoperable (Repair Required); Right Tail Light: Cracked (Replacement Required)
+N-0001|||Title Absent|0|2325|||2450|0|
+N-0002|||Title Absent|0|2500|||2550|0|
+N-0003|||Title Absent|0|4525|||4400|0|
+FL-0050|Yes|Good|Title Absent|52200|53675|||48300|17|A / C Condensor: Bent (Replacement Required); Front Bumper Cen. Grille-Scrn: Broken (Replacement Required); Front Bumper Molding: Bent (Replacement Required); Front Bumper Sensors: Broken (Replacement Required)
+FL-0048|Yes|Good|Title Absent|42000|0|||35850|33|Center Brake Light: Missing (Replacement Required); Engine: Noise (Repair Required); Front License Bracket: Bent (Replacement Required); Left Rear Inner Tire: Worn (Replacement Required)
+N-0004|||Title Absent|11000|0|||9900|0|
+FL-0051|Yes|Good|Title Absent|67300|67900|||67050|18|Left Front Seat Molding: Worn (Replacement Required)
+FL-0049|Yes|Good|Title Absent|40900|39775|||39400|28|Front Tow Hook: Bent (Replacement Required)
+N-0010|||Title Absent|0|10850|||12900|0|
+N-0006|||Title Absent|0|6625|||5150|0|
+N-0008|||Title Absent|0|24750|||25800|0|
+N-0005|||Title Absent|0|7600|||4500|0|
+N-0007|||Title Absent|0|0|||1700|0|
+N-0011|||Title Absent|0|4850|||3200|0|
+N-0012|||Title Absent|0|0|||26600|0|
+N-0009|||Title Absent|0|4400|||4300|0|
+N-0013|||Title Absent|0|6425|||4900|0|
+N-0024|||Title Absent|24000|23700|||23650|0|
+N-0026|||Title Absent|17000|20750|||15100|0|
+N-0025|||Title Absent|7500|8825|||7200|0|
+N-0021|||Title Absent|0|13625|||8650|0|
+N-0020|||Title Absent|7000|9525|||4700|0|
+N-0022|||Title Absent|0|7775|||5950|0|
+N-0023|||Title Absent|6500|12250|||6750|0|
+N-0028|||Title Absent|0|750|||1350|0|
+N-0032|||Title Absent|0|2650|||3850|0|
+N-0027|||Title Absent|7000|9600|||6400|0|
+N-0031|||Title Absent|7500|10250|||8400|0|
+N-0030|||Title Absent|0|7825|||6300|0|
+N-0034|||Title Absent|24000|16175|||15150|0|
+N-0033|||Title Absent|0|1700|||1400|0|
+N-0029|||Title Absent|8000|8800|||8250|0|
+N-0036|||Title Absent|0|19700|||20100|0|
+N-0037|||Title Absent|0|4825|||3700|0|
+N-0035|||Title Absent|0|8375|||8850|0|
+N-0040|||Title Absent|0|800|||1150|0|
+N-0041|||Title Absent|0|17725|||16900|0|
+N-0042|||Title Absent|0|9425|||5600|0|
+N-0043|||Title Absent|0|13000|||10550|0|
+N-0039|||Title Absent|0|59325|||58400|0|
+N-0046|||Title Absent|0|1100|||2050|0|
+N-0052|||Title Absent|0|18550|||15700|0|
+N-0051|||Title Absent|1500|2275|||1900|0|
+N-0049|||Title Absent|0|4575|||4050|0|
+N-0045|||Title Absent|0|2000|||1850|0|
+N-0044|||Title Absent|0|9425|||6500|0|
+N-0048|||Title Absent|0|12800|||11200|0|
+N-0047|||Title Absent|0|9500|||8200|0|
+N-0059|||Title Absent|0|14150|||12900|0|
+N-0055|||Title Absent|0|31750|||22550|0|
+N-0056|||Title Absent|0|18875|||17400|0|
+N-0060|||Title Absent|0|29400|||37850|0|
+N-0057|||Title Absent|0|10475|||10100|0|
+N-0054|||Title Absent|17000|14250|||14800|0|
+N-0061|||Title Absent|0|37950|||26750|0|
+N-0053|||Title Absent|0|7825|||8400|0|
+N-0063|||Title Absent|0|9675|||9050|0|
+N-0075|||Title Absent|19500|0|||17250|0|
+N-0072|||Title Absent|4500|0|||2250|0|
+N-0074|||Title Absent|11500|12350|||11250|0|
+N-0076|||Title Absent|12500|0|||12500|0|
+N-0065|||Title Absent|0|2300|||1500|0|
+N-0073|||Title Absent|6500|6725|||5500|0|
+N-0062|||Title Absent|0|55375|||60000|0|
+N-0077|||Title Absent|38000|32025|||33000|0|
+N-0078|||Title Absent|11500|8000|||8600|0|
+N-0081|||Title Absent|4500|5775|||4500|0|
+N-0080|||Title Absent|34000|0|||28550|0|
+N-0079|||Title Absent|15000|0|||11000|0|
+N-0082|||Title Absent|10500|9200|||7850|0|
+N-0085|||Title Absent|8500|13975|||8100|0|
+N-0083|||Title Absent|20500|0|||16250|0|
+N-0088|||Title Absent|22000|30300|||18750|0|
+N-0086|||Title Absent|6000|0|||3600|0|
+N-0091|||Title Absent|3500|4625|||2700|0|
+N-0103|||Title Absent|500|900|||1400|0|
+N-0092|||Title Absent|13000|15325|||12400|0|
+N-0090|||Title Absent|0|6300|||4700|0|
+N-0087|||Title Absent|23000|18925|||19100|0|
+N-0089|||Title Absent|40000|57000|||41450|0|
+N-0113|||Title Absent|17000|17650|||16550|0|
+N-0115|||Title Absent|15500|13300|||12450|0|
+N-0121|||Title Absent|25000|22075|||23500|0|
+N-0118|||Title Absent|24000|19600|||18250|0|
+N-0122|||Title Absent|14000|16500|||13150|0|
+N-0120|||Title Absent|0|0|||31550|0|
+N-0123|||Title Absent|3000|1500|||2150|0|
+N-0119|||Title Absent|11000|10775|||8750|0|

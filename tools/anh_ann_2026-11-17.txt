@@ -1,0 +1,328 @@
+A-0024||Keating Chevrolet
+A-0022|Gooseneck|Keating Chevrolet
+A-0021||Keating Chevrolet
+A-0007||Keating Honda
+A-0008||Keating Honda
+A-0006||Keating Honda
+A-0023||Keating Chevrolet
+A-0005||Keating Honda
+A-0031||Keating Chevrolet
+A-0025||Keating Chevrolet
+A-0046||Texan Hyundai
+A-0029||Keating Chevrolet
+A-0026||Keating Chevrolet
+A-0030||Keating Chevrolet
+A-0027||Keating Chevrolet
+A-0028||Keating Chevrolet
+A-0053||Team Gillman
+A-0057||Team Gillman
+A-0050||Team Gillman
+A-0051||Team Gillman
+A-0056||Team Gillman
+A-0054||Team Gillman
+A-0055||Team Gillman
+A-0052||Team Gillman
+A-0061||Team Gillman
+A-0059||Team Gillman
+A-0065||Team Gillman
+A-0062||Team Gillman
+A-0064||Team Gillman
+A-0063||Team Gillman
+A-0060||Team Gillman
+A-0058|Green Light|Team Gillman
+A-0068||Team Gillman
+A-0072||Team Gillman
+A-0069||Team Gillman
+A-0070|Total Loss; As Is No Arb|Team Gillman
+A-0073||Team Gillman
+A-0071||Team Gillman
+A-0066||Team Gillman
+A-0067||Team Gillman
+A-0099||Classic Chevrolet
+A-0100||Classic Chevrolet
+A-0102||Classic Chevrolet
+A-0098||Classic Chevrolet
+A-0103||Classic Chevrolet
+A-0101||Classic Chevrolet
+A-0097||Tom Peacock Nissan
+A-0096||Tom Peacock Nissan
+A-0106||
+A-0107|History Of Theft|
+A-0111||Cook Chrysler Jeep Dodge Ram
+A-0109||Cook Chrysler Jeep Dodge Ram
+A-0115||Friendly Ford
+A-0108|Rebuilt Slvg Title; As Is No Arb|
+A-0116||Friendly Ford
+A-0104||Classic Chevrolet
+A-0119||Friendly Ford
+A-0126||Robbins Nissan
+A-0122||Friendly Chrysler Dodge Jeep Ram
+A-0120||Friendly Chrysler Dodge Jeep Ram
+A-0118||Friendly Ford
+A-0117||Friendly Ford
+A-0121||Friendly Chrysler Dodge Jeep Ram
+A-0124||Robbins Nissan
+A-0128||Group 1 Automotive
+A-0129||Group 1 Automotive
+A-0138||Group 1 Automotive
+A-0127||Group 1 Automotive
+A-0130||Group 1 Automotive
+A-0132||Group 1 Automotive
+A-0134||Group 1 Automotive
+A-0142||Group 1 Automotive
+A-0154||Don McGill Toyota
+A-0147||
+A-0148||Don McGill Toyota
+A-0152||Don McGill Toyota
+A-0153||Don McGill Toyota
+A-0151||Don McGill Toyota
+A-0149||Don McGill Toyota
+A-0150||Don McGill Toyota
+B-0001||Westside Chevrolet
+B-0003||Westside Chevrolet
+B-0002||Westside Chevrolet
+A-0159||Don McGill Toyota
+A-0158||Don McGill Toyota
+A-0157|Rebuilt Slvg Title; As Is No Arb|Don McGill Toyota
+A-0155|Not Actual Miles; Rebuilt Slvg Title; As Is No Arb|Don McGill Toyota
+A-0156||Don McGill Toyota
+B-0010||Westside Chevrolet
+B-0006||Westside Chevrolet
+B-0004||Westside Chevrolet
+B-0008||Westside Chevrolet
+B-0007||Westside Chevrolet
+B-0011||Westside Chevrolet
+B-0009||Westside Chevrolet
+B-0005||Westside Chevrolet
+B-0013||Westside Chevrolet
+B-0014||Westside Chevrolet
+B-0026||Gullo Ford
+B-0028||Gullo Ford
+B-0027|Gooseneck|Gullo Ford
+B-0025||Gullo Ford
+B-0012||Westside Chevrolet
+B-0015||Westside Chevrolet
+B-0032||Gullo Ford
+B-0031||Gullo Ford
+B-0043|Canadian Import|Fred Haas Toyota World
+B-0029||Gullo Ford
+B-0030||Gullo Ford
+B-0034||Gullo Ford
+B-0042||Fred Haas Toyota World
+B-0033||Gullo Ford
+B-0045|Gooseneck|Fred Haas Toyota World
+B-0046|Rebuilt Slvg Title; As Is No Arb|Fred Haas Toyota World
+B-0047||Fred Haas Toyota World
+B-0048||Fred Haas Toyota World
+B-0051||Fred Haas Toyota World
+B-0044|Canadian Import|Fred Haas Toyota World
+B-0049||Fred Haas Toyota World
+B-0050||Fred Haas Toyota World
+B-0059||Fred Haas Toyota World
+B-0052|Mileage Discrepency|Fred Haas Toyota World
+B-0054||Fred Haas Toyota World
+B-0057||Fred Haas Toyota World
+B-0058|Altered For Lift; Gooseneck|Fred Haas Toyota World
+B-0053||Fred Haas Toyota World
+B-0055||Fred Haas Toyota World
+B-0056||Fred Haas Toyota World
+B-0066||Fred Haas Toyota World
+B-0060||Fred Haas Toyota World
+B-0064||Fred Haas Toyota World
+B-0067||Fred Haas Toyota World
+B-0065|Rebuilt Slvg Title; As Is No Arb; Not Actual Miles|Fred Haas Toyota World
+B-0061||Fred Haas Toyota World
+B-0062|Insurance Title; As Is No Arb; History Of Theft|Fred Haas Toyota World
+B-0063|Mileage Discrepency|Fred Haas Toyota World
+B-0068||Fred Haas Toyota World
+B-0072||Fred Haas Toyota World
+B-0070||Fred Haas Toyota World
+B-0073||Fred Haas Toyota World
+B-0075||Fred Haas Toyota World
+B-0071|Mileage Discrepency|Fred Haas Toyota World
+B-0074||Fred Haas Toyota World
+B-0069||Fred Haas Toyota World
+B-0102||Wiesner Buick GMC
+B-0101||Wiesner Buick GMC
+B-0100||Wiesner Buick GMC
+B-0092||Wiesner Buick GMC
+B-0105||Wiesner Buick GMC
+B-0104||Wiesner Buick GMC
+B-0103||Wiesner Buick GMC
+B-0076||Fred Haas Toyota World
+C-0005|Mileage Discrepency|DeMontrond Auto Group
+C-0003||DeMontrond Auto Group
+C-0001||DeMontrond Auto Group
+B-0107||Wiesner Buick GMC
+C-0002||DeMontrond Auto Group
+C-0004||DeMontrond Auto Group
+B-0106||Wiesner Buick GMC
+B-0108||Wiesner Buick GMC
+C-0011||DeMontrond Auto Group
+C-0007||DeMontrond Auto Group
+C-0012||DeMontrond Auto Group
+C-0006||DeMontrond Auto Group
+C-0013|Total Loss; As Is No Arb|DeMontrond Auto Group
+C-0009||DeMontrond Auto Group
+C-0010||DeMontrond Auto Group
+C-0008||DeMontrond Auto Group
+C-0021||Planet Ford
+C-0014||DeMontrond Auto Group
+C-0020||Planet Ford
+D-0001|Structural Damage; Engine Issue|Credit Acceptance
+D-0003|No Key|Credit Acceptance
+C-0058||
+D-0002|Electrical Issue|Credit Acceptance
+C-0059|Structural Damage|
+D-0005|Structural Damage; No Key|Credit Acceptance
+D-0011|Transmission Issue|Credit Acceptance
+D-0004|Transmission Issue|Credit Acceptance
+D-0007|Altered Frame; Utility Bed; Engine Issue|Credit Acceptance
+D-0009|Electrical Issue|Credit Acceptance
+D-0006|No Key|Credit Acceptance
+D-0008|Canadian Import; Total Loss; As Is No Arb|Credit Acceptance
+D-0010|Engine Issue|Credit Acceptance
+D-0019||Wiesner Buick GMC
+D-0015||Fred Haas Toyota World
+D-0016|True Miles Unknown|
+D-0018||Fred Haas Toyota World
+D-0017||
+D-0014||Team Gillman
+D-0013|Engine Issue|Credit Acceptance
+D-0012|Structural Damage; Airbags Deployed; Does Run And Drive|Credit Acceptance
+EA-0004||Keating Honda
+EA-0001||Keating Honda
+EA-0005||Keating Honda
+EA-0003||Keating Honda
+EA-0002||Keating Honda
+FL-0001|Green Light|Credit Acceptance
+FL-0003|Engine Light Is On - Misfire Cylinders #3 & #6; Green Light; Structural Damage|Credit Acceptance
+FL-0002||Credit Acceptance
+FL-0006||Credit Acceptance
+FL-0005|Has Active Wheel Speed Sensor Codes; Has Brake Noise; Green Light|Credit Acceptance
+FL-0007|A/C Blows Warm; Has Suspension Noise; Green Light|Credit Acceptance
+FL-0004||Credit Acceptance
+FL-0009|Engine Light Is On - Driver''S Cat; A/C Blows Warm; Back Up Camera Inop; Green Light|Credit Acceptance
+FL-0008||Credit Acceptance
+FL-0011|Structural Damage; Engine Light Is On; A/C Blows Warm; Green Light|Credit Acceptance
+FL-0010|Structural Damage|Credit Acceptance
+FL-0021||Credit Acceptance
+FL-0013|Caution Trans; Has Active Wheel Speed Sensor And Tcm Codes; Green Light|Credit Acceptance
+FL-0017|Structural Damage; Bad Cat & Airbag Light Is On; A/C Blows Warm; Green Light|Credit Acceptance
+FL-0019||Credit Acceptance
+FL-0015|Structural Damage; Green Light|Credit Acceptance
+FL-0018||Credit Acceptance
+FL-0012|Mileage Discrepency|Credit Acceptance
+FL-0014|Structural Damage|Credit Acceptance
+FL-0025||Credit Acceptance
+FL-0024||Credit Acceptance
+FL-0023|Caution Trans; Has Active Abs Control Module; Green Light|Credit Acceptance
+FL-0028||Credit Acceptance
+FL-0022||Credit Acceptance
+FL-0026|Caution Trans; Collision Avoidance Lights Are On; Green Light|Credit Acceptance
+FL-0030|Structural Damage|Credit Acceptance
+FL-0027|Welders Bed|Credit Acceptance
+FL-0037||Credit Acceptance
+FL-0035|Caution Trans; Green Light|Credit Acceptance
+FL-0032|Navigation Fault Message; Caution Trans; Green Light|Credit Acceptance
+FL-0033||Credit Acceptance
+FL-0034||Credit Acceptance
+FL-0031||Credit Acceptance
+FL-0039||Credit Acceptance
+FL-0038|Structural Damage; Has Active Codes For Charging, Abs/Tcs, Adas, Ecu, & Srs; Green Light|Credit Acceptance
+FL-0045|Start/Stop Unavailable; Green Light|Credit Acceptance
+FL-0047|Flat Bed; Green Light|Barco Rent-A-Truck
+FL-0043|Green Light|Credit Acceptance
+FL-0046||
+FL-0041|Back Up Camera Inop; Has Hub Assembly Noise; Green Light|Credit Acceptance
+FL-0042|Structural Damage|Credit Acceptance
+FL-0044|Not Actual Miles; Caution Trans; Green Light|Credit Acceptance
+FL-0040||Credit Acceptance
+N-0001||Cowboy KIA
+N-0002||Cowboy KIA
+N-0003||Cowboy KIA
+FL-0050|Green Light|Barco Rent-A-Truck
+FL-0048|Flat Bed; Green Light|Barco Rent-A-Truck
+N-0004||Cowboy KIA
+FL-0051|Green Light|Barco Rent-A-Truck
+FL-0049|Hail Damage; Green Light|Barco Rent-A-Truck
+N-0010||Cowboy KIA
+N-0006||Cowboy KIA
+N-0008||Cowboy KIA
+N-0005||Cowboy KIA
+N-0007||Cowboy KIA
+N-0011||Cowboy KIA
+N-0012||Cowboy KIA
+N-0009||Cowboy KIA
+N-0013||Cowboy KIA
+N-0024||Aggieland Chevrolet
+N-0026||Aggieland Chevrolet
+N-0025||Aggieland Chevrolet
+N-0021||College Station Ford
+N-0020||College Station Ford
+N-0022||College Station Ford
+N-0023||College Station Hyundai
+N-0028||Kramer Autoplex
+N-0032||Kramer Autoplex
+N-0027||Aggieland Chevrolet
+N-0031|Altered For Lift|Kramer Autoplex
+N-0030||Kramer Autoplex
+N-0034||Kramer Autoplex
+N-0033||Kramer Autoplex
+N-0029||Kramer Autoplex
+N-0036||Kramer Autoplex
+N-0037||Kramer Autoplex
+N-0035|History Of Theft|Kramer Autoplex
+N-0040||Huntsville Toyota
+N-0041||Huntsville Toyota
+N-0042||Huntsville Toyota
+N-0043||Huntsville Toyota
+N-0039||Tomball Ford
+N-0046||Huntsville Toyota
+N-0052||Appel Ford
+N-0051||Hyundai of Lufkin
+N-0049||Huntsville Toyota
+N-0045|Rebuilt Slvg Title; As Is No Arb; Bonded Title; History Of Theft|Huntsville Toyota
+N-0044||Huntsville Toyota
+N-0048|Mileage Discrepency|Huntsville Toyota
+N-0047||Huntsville Toyota
+N-0059||
+N-0055||Appel Ford
+N-0056||Appel Ford
+N-0060||
+N-0057||Appel Ford
+N-0054||Appel Ford
+N-0061|Gooseneck; Flatbed|
+N-0053||Appel Ford
+N-0063||
+N-0075||Gabriel Jordan Ford
+N-0072||
+N-0074||
+N-0076||Gabriel Jordan Ford
+N-0065||North Houston Mitsubishi
+N-0073||
+N-0062||
+N-0077|Gooseneck|Gabriel Jordan Ford
+N-0078||Gabriel Jordan Ford
+N-0081||Gabriel Jordan Ford
+N-0080|Gooseneck|Gabriel Jordan Ford
+N-0079||Gabriel Jordan Ford
+N-0082||Gabriel Jordan Ford
+N-0085||EAG Automotive
+N-0083||Gabriel Jordan Ford
+N-0088||Wright Buick GMC
+N-0086||EAG Automotive
+N-0091||Cavender Auto Family
+N-0103||Parkway Automotive
+N-0092||Cavender Auto Family
+N-0090||Cavender Auto Family
+N-0087||Wright Buick GMC
+N-0089||Wright Buick GMC
+N-0113||West Point Lincol
+N-0115||West Point Lincol
+N-0121||West Point Lincol
+N-0118||West Point Lincol
+N-0122||West Point Lincol
+N-0120||West Point Lincol
+N-0123||West Point Lincol
+N-0119||West Point Lincol
