@@ -40,3 +40,8 @@ const B='https://1mtulegenov.github.io/auction-app/';eval(await (await fetch(B+'
 - Ждать `window.__rtOut` (~1.5 мин на 300 групп), затем `__rtShow(i)` + get_page_text по кускам (RT<i>…ENDRT), склеить в tools/retail_<дата>.txt.
 - `python3 tools/apply_retail.py <дата>` → lot.rt; tools/retail_hist.json копит id объявлений, исчезнувшие дают «дни на рынке» (dom появляется, когда по модели ≥3 ушедших).
 - В запросах только ZIP 77002 (центр Хьюстона), не домашний.
+
+## AAA North Houston (ANH, Conroe, вт 12:15)
+EDGE slug aaanorthhouston (пре-сейл aaanorthhouston-all). Пре-сейл + vdp_api_details/condition_report/announcements тем же JS, что для ANA → tools/anh_raw|detail|ann_<дата>.txt.
+`python3 tools/build_anh.py <дата> && python3 tools/merge_day.py <дата> tools/anh_out_<дата>.json "CarMax Conroe и AAA North Houston, вторник …" && python3 tools/apply_pro.py <дата>`, потом ретейл.
+MMR на EDGE у ANH нет (оценка по похожим и PMR). Неходячие: Non-Runner или drivable=No в отчёте (линия D у Credit Acceptance почти вся такая).
