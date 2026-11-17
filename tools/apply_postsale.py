@@ -12,7 +12,7 @@ date = sys.argv[1]
 path = 'data/%s.json' % date
 D = json.load(open(path))
 PFX = {'H': 'H1C', 'A': 'AAA'}
-LOC = {'H1C': "Houston's 1st Choice", 'AAA': 'AAA - Central Houston', 'AAH': 'AAA - Houston'}
+LOC = {'ANH': 'AAA - North Houston', 'CMX': 'CarMax Conroe', 'H1C': "Houston's 1st Choice", 'AAA': 'AAA - Central Houston', 'AAH': 'AAA - Houston'}
 
 ps = {}
 for line in open('tools/postsale_%s.txt' % date):
@@ -36,8 +36,13 @@ def ratio(rs):
 
 res, rows = [], []
 core = set(D.get('core') or [])
+PSA = {a for a, _ in ps}  # аукционы из пост-сейла; итоги остальных (CarMax) оставляем как есть
+keep = {(r['auc'], r['run']): r for r in (D.get('results') or []) if r['auc'] not in PSA}
 for l in D['lots']:
     k = (l['auc'], l['run'])
+    if l['auc'] not in PSA:
+        if k in keep: res.append(keep[k])
+        continue
     l.pop('fact', None); l.pop('bnf', None)
     if k in ps:
         price, s = ps[k]

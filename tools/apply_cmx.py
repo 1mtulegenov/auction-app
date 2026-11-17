@@ -25,9 +25,13 @@ try:
         res.append({'run': l['run'], 'auc': 'CMX', 'd': d, 'o': l.get('o'), 'g': '', 'fact': None, 'mmr': None, 'w': l.get('w'),
                     'r': l.get('r'), 't': l.get('t') or '', 'c': l.get('c') or '', 'vin10': (l.get('vin') or '')[:10], 'ss': l['ss'],
                     **({'est': 1} if l.get('est') else {})})
-    D['results'] = res
-    D['stats'] = {'n': sum(r['ss'] == 'sold' for r in res), 'u': sum(r['ss'] == 'none' for r in res), 'off': 0, 'w': None, 'wn': 0,
-                  'noprice': 1}
+    other = [r for r in (D.get('results') or []) if r.get('auc') != 'CMX']
+    D['results'] = other + res
+    if not other:
+        D['stats'] = {'n': sum(r['ss'] == 'sold' for r in res), 'u': sum(r['ss'] == 'none' for r in res), 'off': 0, 'w': None, 'wn': 0,
+                      'noprice': 1}
+    else:
+        print('другие аукционы в results сохранены; stats пересчитает apply_postsale.py')
     print('status: matched', m, 'of', len(lots), D['stats'])
 except FileNotFoundError:
     fl = {}
