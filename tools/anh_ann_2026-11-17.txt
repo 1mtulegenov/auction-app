@@ -88,7 +88,7 @@ A-0155|Not Actual Miles; Rebuilt Slvg Title; As Is No Arb|Don McGill Toyota
 A-0156||Don McGill Toyota
 B-0010||Westside Chevrolet
 B-0006||Westside Chevrolet
-B-0004||Westside Chevrolet
+B-0004|Mileage Discrepency|Westside Chevrolet
 B-0008||Westside Chevrolet
 B-0007||Westside Chevrolet
 B-0011||Westside Chevrolet
@@ -188,8 +188,8 @@ D-0016|True Miles Unknown|
 D-0018||Fred Haas Toyota World
 D-0017||
 D-0014||Team Gillman
-D-0013|Engine Issue|Credit Acceptance
-D-0012|Structural Damage; Airbags Deployed; Does Run And Drive|Credit Acceptance
+D-0013|Structural Damage|
+D-0012|Engine Issue|Credit Acceptance
 EA-0004||Keating Honda
 EA-0001||Keating Honda
 EA-0005||Keating Honda
@@ -326,3 +326,143 @@ N-0122||West Point Lincol
 N-0120||West Point Lincol
 N-0123||West Point Lincol
 N-0119||West Point Lincol
+A-0003||Tom Peacock Cadillac
+A-0004||Tom Peacock Cadillac
+A-0001||Tom Peacock Cadillac
+A-0002||Tom Peacock Cadillac
+A-0010||Keating Nissan
+A-0020||Keating Chevrolet
+A-0009||Keating Honda
+A-0038||Joe Meyers Ford
+A-0044||Texan Hyundai
+A-0049||Texan Hyundai
+A-0045||Texan Hyundai
+A-0047||Texan Hyundai
+A-0048||Texan Hyundai
+A-0093||Tom Peacock Nissan
+A-0095|Rebuilt Slvg Title; As Is No Arb|Tom Peacock Nissan
+A-0094||Tom Peacock Nissan
+A-0105||Classic Chevrolet
+A-0110||Cook Chrysler Jeep Dodge Ram
+A-0112||Cook Chrysler Jeep Dodge Ram
+A-0113||Cook Chrysler Jeep Dodge Ram
+A-0137||Group 1 Automotive
+A-0139||Group 1 Automotive
+A-0140||Group 1 Automotive
+A-0141|Rebuilt Slvg Title; As Is No Arb|Group 1 Automotive
+A-0143||Group 1 Automotive
+B-0020||Gullo Mazda
+B-0019||Gullo Mazda
+B-0018|Green Light|Gullo Mazda
+B-0023||Gullo Mazda
+B-0024||Gullo Ford
+B-0021||Gullo Mazda
+B-0022||Gullo Mazda
+B-0035||Gullo Ford
+B-0036||Gullo Ford
+B-0038||Gullo Ford
+B-0040||Gullo Ford
+B-0041||Gullo Ford
+B-0039||Gullo Ford
+B-0037||Gullo Ford
+B-0079||Fred Haas Toyota World
+B-0078||Fred Haas Toyota World
+B-0094|Canadian Import|Wiesner Buick GMC
+B-0080||Fred Haas Toyota World
+B-0091||
+B-0093||Wiesner Buick GMC
+B-0077||Fred Haas Toyota World
+B-0096||Wiesner Buick GMC
+B-0098||Wiesner Buick GMC
+B-0097||Wiesner Buick GMC
+B-0095||Wiesner Buick GMC
+B-0110||
+B-0112||
+B-0111||
+B-0113||
+B-0116||
+B-0117||
+B-0115||
+B-0114||
+B-0120|Rebuilt Slvg Title; As Is No Arb|
+B-0119||
+B-0118||
+C-0015||DeMontrond Auto Group
+C-0016||DeMontrond Auto Group
+C-0023||Planet Ford
+C-0024||Planet Ford
+C-0027||Planet Ford
+C-0026||Planet Ford
+C-0022||Planet Ford
+C-0025||Planet Ford
+C-0029||Planet Ford
+C-0032||Planet Ford
+C-0031||Planet Ford
+C-0028||Planet Ford
+C-0033||Planet Ford
+C-0030||Planet Ford
+C-0037|Performance Tuner; Green Light|
+D-0020|Mileage Discrepency|Wiesner Buick GMC
+EA-0008||Keating Nissan
+EA-0007||Keating Honda
+EA-0006||Keating Honda
+EA-0009||Keating Nissan
+EA-0010||Keating Nissan
+EA-0011||Keating Nissan
+EA-0014||College Station Hyundai
+EA-0015||College Station Ford
+EA-0017||College Station Ford
+EA-0018||College Station Ford
+EA-0019||College Station Ford
+EA-0013||College Station Nissan
+EA-0016||College Station Ford
+EA-0012||College Station Nissan
+EA-0022||College Station Ford
+EA-0026||Keating Chevrolet
+EA-0023||College Station Ford
+EA-0020||College Station Ford
+EA-0025|Rebuilt Slvg Title; As Is No Arb|Keating Chevrolet
+EA-0021||College Station Ford
+EA-0027||Keating Chevrolet
+EA-0024||College Station Ford
+EA-0029||Keating Chevrolet
+EA-0028||Keating Chevrolet
+N-0050||Lithia Motors
+N-0067||North Houston Mitsubishi
+N-0068||North Houston Mitsubishi
+N-0066||North Houston Mitsubishi
+N-0070||North Houston Mitsubishi
+N-0069||North Houston Mitsubishi
+N-0097||ThisCar
+N-0096||ThisCar
+N-0095||ThisCar
+N-0098||ThisCar
+N-0093||ThisCar
+N-0094||ThisCar
+N-0114||West Point Lincol
+N-0102||ThisCar
+N-0100||ThisCar
+N-0099||ThisCar
+N-0110||Woodlake Motors
+N-0116||West Point Lincol
+N-0136||Woodlake Motors
+N-0142||
+N-0145||
+N-0138||Woodlake Motors
+N-0146|Structural Damage|
+N-0139||San Augustine Motor Company
+N-0141|(A)Structural Damage|
+N-0143||
+N-0137||Woodlake Motors
+N-0151||
+N-0148|Tmu|
+N-0152||
+N-0149||
+N-0150|Structural Damage; Mileage Discrepency|
+N-0154||
+N-0147|Not Actual Miles|
+N-0153||
+N-0158||
+N-0157||
+N-0155||
+XX-0006||Woodlake Motors
