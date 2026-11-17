@@ -141,6 +141,24 @@ const I18N = {
 "Salvage, rebuilt o sin título",
 "Salvage, rebuilt немесе тайтлсыз"
 ],
+"Не на ходу": [
+"Not running",
+"Не на ходу",
+"No arranca",
+"Жүрмейді"
+],
+"Нет ключа": [
+"No key",
+"Немає ключа",
+"Sin llave",
+"Кілт жоқ"
+],
+"Не на ходу, нет ключа": [
+"Not running, no key",
+"Не на ходу, немає ключа",
+"No arranca, sin llave",
+"Жүрмейді, кілт жоқ"
+],
 "Не на ходу или нет ключа": [
 "Not running or no key",
 "Не на ходу або немає ключа",

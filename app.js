@@ -20,6 +20,12 @@ const AUC = { AAH: 'AAA Houston', AAA: 'AAA Central', H1C: 'H1C', ANA: 'AutoNati
 const SEVEN = /^(Toyota|Honda|Hyundai|BMW|Volkswagen|Kia|Mercedes)/i;
 const MAXB = /^(Toyota|Honda|Hyundai|BMW|Volkswagen|Kia|Mercedes|Audi)/i;
 const COLOR = { BLACK: T('чёрный'), WHITE: T('белый'), GRAY: T('серый'), GREY: T('серый'), SILVER: T('серебристый'), RED: T('красный'), BLUE: T('синий'), BROWN: T('коричневый'), TAN: T('бежевый'), BEIGE: T('бежевый'), GOLD: T('золотистый'), GREEN: T('зелёный'), PURPLE: T('фиолетовый'), BURGUNDY: T('бордовый'), MAROON: T('бордовый'), ORANGE: T('оранжевый'), YELLOW: T('жёлтый'), TEAL: T('бирюзовый') };
+function noinopLabel(x) {
+  const t = ((x.whyn || '') + ' ' + (x.flag || '') + ' ' + (x.ar || '') + ' ' + (x.a || '')).toLowerCase();
+  if (/или (нет|без) ключа/.test(t)) return T('Не на ходу или нет ключа');
+  const key = /(нет|без) ключа|no key|keys: missing/.test(t), run = /не на ходу|no runner|non-runner|inop/.test(t);
+  return key && run ? T('Не на ходу, нет ключа') : key ? T('Нет ключа') : T('Не на ходу');
+}
 const CLS = { salvage: ['bad', T('Salvage, rebuilt или без тайтла')], noinop: ['bad', T('Не на ходу или нет ключа')], hist: ['warn', T('Пометка на чистом тайтле')], clean: ['good', T('Без пометок')] };
 const STAT = { 'Основная': 's-main', 'Флип': 's-flip', 'Дорого': 's-exp' };
 const SS = { sold: T('Продана'), offer: T('На оффере'), none: T('Не продана'), gone: T('Снята'), rerun: T('Снова на торгах') };
@@ -1126,7 +1132,7 @@ function detail(k) {
   let chips = titleChip(x) + lightChip(x);
   if (x.g) chips += '<span class="chip">' + T('Оценка ') + E(x.g) + '</span>';
   if (x.t) chips += x.t === 'At Auction' ? '<span class="chip good">' + T('Тайтл на месте') + '</span>' : '<span class="chip warn">' + E(x.t) + '</span>';
-  if (x.cls && !(x.cls === 'clean' && ANN_MARK.test(x.a || ''))) chips += '<span class="chip ' + (CLS[x.cls] || CLS.clean)[0] + '">' + (CLS[x.cls] || CLS.clean)[1] + '</span>';
+  if (x.cls && !(x.cls === 'clean' && ANN_MARK.test(x.a || ''))) chips += '<span class="chip ' + (CLS[x.cls] || CLS.clean)[0] + '">' + (x.cls === 'noinop' ? noinopLabel(x) : (CLS[x.cls] || CLS.clean)[1]) + '</span>';
   if (ANN_MARK.test(x.a || '') && !x.hist) chips += '<span class="chip warn">' + E(annText(x).split(/;\s*/).filter(t => /прокат|флот|изъят|rental|fleet|repo/i.test(t)).join(', ') || annText(x)) + '</span>';
   if (ch) chips += '<span class="chip ' + ch[0] + '">' + T('Шанс купить: ') + ch[1] + '</span>';
   if (x.bn) chips += '<span class="chip">Buy Now ' + M(x.bn) + '</span>';
