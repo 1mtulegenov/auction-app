@@ -264,7 +264,7 @@ const INOP_LANES = { AAA: ['7'], AAH: ['T'], ANA: ['T'] };
 function lane(x) { return String(x.run || '').split('-')[0].trim(); }
 function inopLane(x) { return (INOP_LANES[x.auc] || []).includes(lane(x)); }
 function isInop(x) { return x.cls === 'noinop' || inopLane(x); }
-/* ---------- подбор для Максата: машина жене на 3–4 месяца, потом продать в ноль ----------
+/* ---------- подбор для Максата: фильтр и порядок (комментарии «жене на 3–4 мес.» в карточках убраны 17.11 по просьбе Максата, машину уже купили) ----------
    Ставка в ноль = цена продажи через 3–4 мес. (наша цена продажи −4% за время и пробег) − сбор − запас на обслуживание.
    Надёжность по марке/мотору, возраст, пробег, свет, история, заметки и OBD дают комментарий и порядок в списке. */
 const WIFE_RISK = [
@@ -434,7 +434,6 @@ function lotCard(x) {
     + (isInop(x) ? '<div class="money inop"><div class="m-main"><span>MMR</span><b>' + M(x.w) + '</b></div><div class="m-note">' + T('Неходячая: прибыль не считаем') + '</div></div>' : '<div class="money ' + (flOn ? 'three' : 'two') + '"><div class="m-main"><span>' + (x.est ? T('MMR, оценка') : 'MMR') + '</span><b>' + (x.est && x.w != null ? '≈' : '') + M(x.w) + '</b></div>' + (flOn ? '<div class="m-main"><span>Floor price</span><b class="' + (x.max != null && x.floor > x.max ? 'fl-hi' : '') + '">' + M(x.floor) + '</b></div>' : '') + '<div class="m-main"><span>' + T('Ретейл') + '</span><b>' + (x.est && x.r != null ? '≈' : '') + M(x.r) + '</b></div></div>')
     + rtLine(x)
     + '<div class="status">' + statusLine(x) + '</div>'
-    + (wifeOn() && !isInop(x) ? wifeHtml(x) : '')
     + pastCard(x)
     + hotLine(x)
     + factText(x)
@@ -1155,7 +1154,6 @@ function detail(k) {
     + (x.est ? '<p class="muted" style="margin-top:6px">' + T('Новый лот: Manheim ещё не смотрели. MMR и ретейл оценены по похожим машинам с прошлых торгов.') + ' ' + E(x.src || '') + '</p>' : '')
     + (x.demand ? '<p class="p"><b>' + T('Спрос ') + x.demand + '/10</b>' + (x.sell ? T(', продаётся за ') + E(weeks(x.sell)) : '') + '</p>' : '') + '</div>')
     + (x.sale != null && !isInop(x) ? '<div class="d-card"><h3>' + T('Калькулятор ставки') + '</h3><div class="calc"><input id="bid" type="number" inputmode="numeric" value="' + E(bid) + '" aria-label="' + T('Ваша ставка, $') + '"><div class="calc-out" id="calcOut"></div></div></div>' : '')
-    + (wifeOn() && !isInop(x) ? wifeHtml(x, true) : '')
     + rtLine(x, true)
     + proCard(x)
     + (x.vin ? '<div class="d-card insp" id="inspCard" data-k="' + E(k) + '">' + inspCard(x) + '</div>' : '')
