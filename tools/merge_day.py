@@ -4,7 +4,15 @@ import json, sys
 date, src = sys.argv[1], sys.argv[2]
 title = sys.argv[3] if len(sys.argv) > 3 else None
 p = 'data/%s.json' % date
-D, N = json.load(open(p)), json.load(open(src))
+import os
+N = json.load(open(src))
+if not os.path.exists(p):  # первый аукцион дня
+    D = {k: N[k] for k in ('id', 'label', 'title', 'lead')}
+    D.update(how='<!--' + N['lots'][0]['auc'] + '-->' + '<p><b>' + N['title'] + '</b></p>' + N['how'], lots=N['lots'], core=N['core'], flip=N['flip'])
+    if title: D['title'] = title
+    json.dump(D, open(p, 'w'), ensure_ascii=False, separators=(',', ':'))
+    print(p, 'новый', len(D['lots'])); sys.exit()
+D = json.load(open(p))
 auc = N['lots'][0]['auc']
 D['lots'] = [l for l in D['lots'] if l['auc'] != auc] + N['lots']
 for k in ('core', 'flip'):
