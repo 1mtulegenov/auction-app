@@ -1,0 +1,315 @@
+D-0007||
+D-0008||
+D-0005||
+D-0003||
+D-0001|Structural Damage|
+D-0006||
+D-0002||
+D-0009||
+D-0015|Bad Brakes|
+D-0010||
+D-0012||
+D-0011||
+D-0014||
+D-0016|Not Actual Miles|
+D-0017||
+D-0018||
+D-0025||
+D-0026||
+D-0028||
+D-0024||
+D-0027||
+D-0023||Automotive Remarketing Inc.
+D-0022||Automotive Remarketing Inc.
+D-0021||Automotive Remarketing Inc.
+D-0039||
+D-0030||
+D-0040|Rebuilt Title; Ins Loss|
+D-0041|As Is|
+D-0036||
+D-0038||
+D-0029||
+D-0037||
+D-0048|(A)Bonded|
+D-0044||
+D-0043|(A)Rebuilt; (A)Rebuilt|
+D-0046||
+D-0049||
+D-0045||
+D-0042|(A)Bonded; As Is|
+D-0050||
+D-0052||
+D-0058||
+D-0056||
+D-0059|(A)Insurance Title|
+D-0061||
+D-0060||
+D-0051||
+D-0057||
+D-0067||
+D-0066|(A)Structural Damage|
+D-0068||
+D-0062||
+D-0063|(A)Structural Damage|
+D-0064|(A)Insurance Title|
+D-0065||
+D-0086||
+D-0100|Ins Total Loss; Hail Damage|
+D-0101||
+D-0114||
+D-0099||
+D-0111||
+D-0113||
+D-0087||
+D-0112|(A)Structural Damage|
+D-0133||
+D-0136||
+D-0122|No Arb; Rust|
+D-0137||
+D-0138|(A)Structural Damage|
+D-0131||
+D-0121||
+D-0132||
+D-0147|(A)Insurance Title|
+D-0153||
+D-0146||
+D-0152||
+D-0149||
+D-0156||
+D-0151||
+D-0148||
+D-0176||
+D-0193||
+D-0196||
+D-0157||
+D-0191||
+D-0194||
+D-0195|Rebuilt Title; (A)Insurance Title|
+D-0192||
+E-0003||
+E-0004||
+D-0401|Structural Damage|
+E-0002||
+D-0198||
+E-0008|Air Bag|
+E-0001||
+D-0197||
+E-0014||
+E-0011||
+E-0010||
+E-0016|(A)Frame Damage|
+E-0013||
+E-0012||
+E-0015||
+E-0017||
+E-0022||
+E-0027||
+E-0026||
+E-0023||
+E-0021||
+E-0028||
+E-0025||
+E-0024||
+E-0030||
+E-0032|Structural Dmg|
+E-0029|(A)Structural Damage; Prev Police Vehicle|
+E-0037|No Arb For Rust|
+E-0036||
+E-0033||
+E-0031||
+E-0044||
+E-0052||
+E-0051||
+E-0046||
+E-0048||
+E-0049||
+E-0045||
+E-0047||
+E-0050||
+E-0066||
+E-0064||
+E-0070||
+E-0067||
+E-0065|(A)Hail Damage|
+E-0068||
+E-0053||
+E-0069||
+E-0073||
+E-0074||
+E-0071||
+E-0078||
+E-0086||
+E-0085||
+E-0075||
+E-0076||
+E-0094||
+E-0097||
+E-0092||
+E-0095||
+E-0096||
+E-0087||
+E-0089||
+E-0093||
+E-0113||
+E-0099||
+E-0116||
+E-0098||
+E-0101||
+E-0115||
+E-0114||
+E-0100||
+E-0125||
+E-0117||
+E-0122||
+E-0120||
+E-0124||
+E-0119||
+E-0121||
+E-0123|(A)Hail Damage|
+E-0127|No Arb|
+E-0129||
+E-0128||
+E-0130||
+E-0132||
+E-0131||
+E-0126||
+E-0133||
+E-0142||
+E-0148||
+E-0141||
+E-0147||
+E-0136||
+E-0134||
+E-0137||
+E-0135||
+E-0157||
+E-0165|Structural Damage|
+E-0150||
+E-0158|(A)Mfgr. Buyback|
+E-0155||
+E-0164||
+E-0149|Bust Head Light|
+E-0156||
+E-0171||
+E-0169||
+E-0167||
+E-0173||
+E-0170||
+E-0174||
+E-0168||
+E-0172||
+E-0185||
+E-0184||
+E-0179||
+E-0180||
+E-0175||
+E-0176||
+E-0177||
+E-0178||
+E-0186|Canadian Vehicle|
+E-0196||
+E-0188||
+E-0192||
+E-0189||
+E-0187||
+E-0190||
+E-0191|Rebuilt Title; Ins Loss|
+F-0005||
+F-0006||
+F-0001||
+F-0003|Rebuilt Title|
+E-0197|No Arb For Rust|
+F-0004||
+F-0012||
+F-0002||
+F-0019||
+F-0017||
+F-0018||
+F-0015||
+F-0016||
+F-0022||
+F-0023||
+F-0027|(A)Structural Damage|
+F-0028|(A)Structural Damage|
+F-0034||
+F-0041||
+F-0030||
+F-0032||
+F-0031||
+F-0033||
+F-0029||
+F-0057||
+F-0046||
+F-0048||
+F-0047||
+F-0045||
+F-0043||
+F-0053||
+F-0044||
+F-0080|Green Light Oil Leaks|
+F-0071||
+F-0079||
+F-0064||
+F-0078||
+F-0059||
+F-0073||
+F-0058||
+F-0092||
+F-0088|Not Actual Miles; Theft|
+F-0091||
+F-0094||
+F-0086|(A)Frame Damage|
+F-0093||
+F-0096||
+F-0085||
+F-0106||
+F-0097||
+F-0111||
+F-0110||
+F-0098|(A)Bonded|
+F-0099||
+F-0100||
+F-0109||
+F-0114||
+F-0116||
+F-0118||
+F-0115||
+F-0117||
+F-0119||
+F-0113||
+F-0112||
+F-0138||
+F-0122||
+F-0124||
+F-0120||
+F-0139||
+F-0123||
+F-0121||
+F-0137|Rebuilt Title; Theft; (A)Insurance Title|
+F-0189||
+F-0143||
+F-0190||
+F-0149||
+F-0142|Drive Per Seller|
+F-0140||
+F-0148||
+F-0141|(A)Structural Damage/Green Light|
+F-0200||
+F-0196||
+F-0191||
+F-0194||
+F-0195||
+F-0198||
+F-0197||
+F-0193||
+F-0202||
+F-0203||
+F-0204|(A)Not Actual Miles; Ins Loss|
+F-0205|Not Actual Miles|
+F-0208|(A)Total Loss; (A)Insurance Title; Ins Loss|
+F-0206|As Is|
+F-0207|As Is; (A)Flood Damage; Rebuilt Title; Ins Loss|
+F-0201|(A)Not Actual Miles; (A)Structural Damage; (A)True Miles Uknown|
+F-0210|(A)Not Actual Miles; (A)Not Actual Miles|
+F-0401||
+F-0209||

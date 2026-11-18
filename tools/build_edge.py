@@ -23,7 +23,7 @@ date = sys.argv[1]
 AUC = sys.argv[2] if len(sys.argv) > 2 else 'ANH'
 CFG = {  # slug, название, время, неходячие линии (префикс лота)
     'ANH': ('aaanorthhouston', 'AAA North Houston (Conroe)', '12:15', ()),
-    'AAA': ('houstonaa', 'AAA Central Houston', '11:45', ('7-',)),
+    'AAA': ('houstonaa', 'AAA Central Houston', '11:45', ('7-', '77-')),
     'H1C': ('houstonsfcaa', "Houston's 1st Choice", '16:30', ()),
     'AAH': ('aaahouston', 'AAA Houston', '', ('T-',)),
     'ANA': ('anaahouston', 'AutoNation AA Houston', '9:15', ('T-',)),
@@ -279,10 +279,11 @@ n_est = sum(1 for l in lots if l['src'].startswith('оценка')); n_pmr = sum
 n_cr = sum(1 for l in lots if (l.get('cr') or '').startswith('Отчёт:') and l['stat'] in ('Основная', 'Флип'))
 n_fl = sum(1 for l in lots if l.get('floor') and l.get('max') is not None and l['floor'] > l['max'] and l['stat'] in ('Основная', 'Флип'))
 n_mmr = sum(1 for l in lots if l['src'].startswith('MMR из'))
-lead = ('%s. Каталог EDGE снят %s: %d машин. ' % (DAYT, PREV, len(lots))
-        + ('MMR взят со страницы EDGE (%d машин), остальные оценены по похожим лотам прошлых торгов и PMR EDGE. ' % n_mmr if n_mmr else
+def _pl(n): return 'машина' if n % 10 == 1 and n % 100 != 11 else 'машины' if 2 <= n % 10 <= 4 and not 12 <= n % 100 <= 14 else 'машин'
+lead = ('%s. Каталог EDGE снят %s: %d %s. ' % (DAYT, PREV, len(lots), _pl(len(lots)))
+        + ('MMR взят со страницы EDGE (%d %s), остальные оценены по похожим лотам прошлых торгов и PMR EDGE. ' % (n_mmr, _pl(n_mmr)) if n_mmr else
            'MMR на EDGE для этого аукциона нет: оценён по похожим лотам прошлых торгов и PMR EDGE. ')
-        + 'В подборке %d машин.' % (len(core) + len(flip)))
+        + 'В подборке %d %s.' % (len(core) + len(flip), _pl(len(core) + len(flip))))
 how = ('<ul><li><b>Цена покупки.</b> MMR из пре-сейла EDGE (там показан Manheim MMR): %d машин. '
        'Где MMR нет, он оценён по похожим лотам прошлых торгов (та же модель, год ±3, пробег, комплектация) или взят PMR EDGE: %d машин, они помечены «≈».</li>'
        '<li><b>Ретейл и продажа.</b> Ретейл = MMR × отношение ретейла к MMR у похожих машин с прошлых торгов. Продажа = ретейл × 0,64, дороже $5 000 со сбором ещё −3%%, рама повреждена по отчёту ещё −15%%.</li>'

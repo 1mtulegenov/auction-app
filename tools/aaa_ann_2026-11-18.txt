@@ -1,0 +1,244 @@
+1-0002|Green Light|Center Point Energy
+1-0006|Green Light - Caution Engine|Center Point Energy
+1-0001|Green Light - Caution Engine; Diesel|Center Point Energy
+1-0004|Green Light|Center Point Energy
+1-0003|Green Light|Center Point Energy
+1-0008|As Is; Mobileye|Center Point Energy
+1-0005|As-Is|Center Point Energy
+1-0007|Green Light - Caution Engine|Center Point Energy
+1-0009|As-Is; Structural; X-Police|
+1-0016||
+1-0015||
+1-0010|As Is; Structural|
+1-0013|Structural; Xpolice|
+1-0014||
+1-0012||
+1-0011||
+11-0004|As-Is|Coast to Coast Motors
+11-0003|As-Is|Coast to Coast Motors
+1-0017|As-Is; Structural, Ex Police|
+11-0002|As-Is|Coast to Coast Motors
+1-0018||
+11-0005|As-Is|Coast to Coast Motors
+11-0001|As-Is|Coast to Coast Motors
+1-0019|Ghosting|
+11-0012|As-Is|Coast to Coast Motors
+11-0010|As-Is|Coast to Coast Motors
+11-0006|As-Is|Coast to Coast Motors
+11-0009|As-Is|Coast to Coast Motors
+11-0013|As-Is|Coast to Coast Motors
+11-0011|As-Is|Coast to Coast Motors
+11-0008|As-Is|Coast to Coast Motors
+11-0007|As-Is|Coast to Coast Motors
+11-0019|As-Is|Coast to Coast Motors
+11-0016|As-Is|Coast to Coast Motors
+11-0018|As-Is; Structural|Coast to Coast Motors
+11-0020|As-Is|Coast to Coast Motors
+11-0017|As-Is|Coast to Coast Motors
+11-0014|As-Is; Framer Damage Per Autocheck|Coast to Coast Motors
+11-0021|As-Is|Coast to Coast Motors
+11-0015|As-Is|Coast to Coast Motors
+11-0025|As-Is; Vehicle Reported As Theft Recovery|Coast to Coast Motors
+11-0031|As-Is|Durrett Motor Company
+11-0026|As-Is|Coast to Coast Motors
+11-0033|As-Is|Durrett Motor Company
+11-0023|As-Is|Coast to Coast Motors
+11-0024|As-Is|Coast to Coast Motors
+11-0032|As-Is|Durrett Motor Company
+11-0022|As-Is|Coast to Coast Motors
+11-0036|As-Is; Structural|Durrett Motor Company
+11-0045|As-Is; Structural|Mainland Investment
+11-0047|As-Is|Mainland Investment
+11-0049|As-Is; Nam Per Autocheck; Structural Alteration Per Autocheck|Mainland Investment
+11-0035|As-Is; Structural|Durrett Motor Company
+11-0050|As-Is|Mainland Investment
+11-0048|As-Is|Mainland Investment
+11-0034|As-Is; Structural|Durrett Motor Company
+11-0057|As-Is|Mainland Investment
+11-0056|As-Is|Mainland Investment
+11-0061|As-Is|
+11-0053|As-Is; Tmu Per Autocheck|Mainland Investment
+11-0054|As-Is; Prev Reported As Insurance Loss No Arb|Mainland Investment
+11-0051|As-Is; Structural|Mainland Investment
+11-0052|As-Is; Structural|Mainland Investment
+11-0059|As-Is|Mainland Investment
+11-0063|As-Is|
+11-0062|As-Is; Structural|
+11-0067|As-Is|
+11-0066|As-Is|
+11-0069|As-Is|
+11-0065|As-Is|
+11-0064|As-Is; Frame Damage Per Autocheck,Structural|
+11-0068|As-Is|
+11-0070|As-Is; Rebuilt Salvage No Arb|
+11-0074|As-Is|
+11-0073|As-Is; Exempt|
+11-0072|As-Is; Exempt|
+11-0077|As-Is|
+11-0071|As-Is|
+11-0078|As-Is; Structural; Rebuilt Salvage Title No Arb|
+11-0076|As-Is|
+11-0091|As Is Exempt; Prev Theft Reported On History Report|
+11-0081|As-Is; Rebuilt Salvage No Arb|
+11-0090|As-Is; Structural; Exempt|
+22-0002|America's Certified; Structural|Holman Remarketing
+11-0092|As-Is; Structural; Prev Titled/Registered To An Insurance Company No Arb|
+22-0003|Green Light|Holman
+22-0001|Green Light|Holman Remarketing
+22-0004|Green Light|Holman
+22-0010|Green Light; Rear Differential Issue|Holman
+22-0011|Green Light|Holman
+22-0005|Green Light Drive|Holman
+22-0012|Green Light Drive|Holman
+22-0008|Green Light Drivetrain Guarantee|Holman Remarketing
+22-0007|Green Light Drive|Holman Remarketing
+22-0009|Green Light Drive, Caution Trans; Structural Per Autocheck|Holman Remarketing
+22-0006|Green Light Drive|Holman
+22-0015|Structural|Holman Remarketing
+22-0013|Green Light Drivetrain Guarantee|Holman Remarketing
+22-0019|As-Is|Holman
+22-0018|As Is|Holman
+22-0014|As-Is|Holman Remarketing
+22-0020|Green Light Drive|Holman Remarketing
+22-0016|Green Light|Holman
+22-0017|As Is|Holman
+22-0022|As-Is|Holman Remarketing
+22-0026|As-Is, Structural Damage|Holman Remarketing
+22-0027|As-Is; Structural Per Autocheck|Holman Remarketing
+22-0028|As-Is|Holman
+22-0024|As Is|Holman
+22-0025|As-Is|Holman
+22-0023|As-Is|Holman
+22-0021|Green Light Drive|Holman Remarketing
+22-0036|As-Is|Holman Remarketing
+22-0031|As-Is|Holman
+22-0033|As-Is; Frame Damage Per Autocheck|Holman Remarketing
+22-0030|As Is|Holman
+22-0035|As-Is|Holman Remarketing
+22-0034|As-Is|Holman Remarketing
+22-0032|As-Is|Holman
+22-0029|As-Is|Holman
+22-0042|As-Is; Frame Damage Per Autocheck|Holman Remarketing
+22-0039|As-Is|Holman Remarketing
+22-0040|As-Is|Holman Remarketing
+22-0041|As-Is|Holman Remarketing
+22-0043|As-Is|Holman
+22-0044|Greenlight|Holman Remarketing
+22-0038|As-Is, Deployed Airbag Passenger And Wheel; Structural; Salvage Title|Holman Remarketing
+22-0037|As-Is; Structural|Holman
+22-0047|As-Is; Structural; Exempt|Holman Remarketing
+22-0046|Green Light; Caution Engine|Holman Remarketing
+22-0052|As-Is; Structural, Rebuilt Salvage No Arb|Holman Remarketing
+22-0045|Green Light; Structural|Holman Remarketing
+22-0049|Green Light|Holman Remarketing
+22-0050|Green Light|Holman Remarketing
+22-0051|Green Light Drive|Holman Remarketing
+22-0048|Green Light; Caution Engine|Holman Remarketing
+22-0060|As-Is; 5.2l-210 Diesel. 14500# Gvwr. Kidron 18ft Refrigerated Van,; Anthony Liftgate.; Hde.|Holman Remarketing
+22-0057|As-Is|Holman Remarketing
+22-0061|As-Is; 3.0l Diesel. 15995# Gvwr. 20ft Dry Van.; Hde.|Holman Remarketing
+22-0054|Green Light Drive; Caution Engine|Holman Remarketing
+22-0055|Green Light Drive|Holman Remarketing
+22-0058|As Is|Holman Remarketing
+22-0059|As Is; Nam Per Autocheck|Holman Remarketing
+22-0056|Green Light|Holman Remarketing
+22-0071|As-Is; Structural|Holman Remarketing
+22-0063|As-Is|Holman Remarketing
+22-0070|As-Is|Holman Remarketing
+22-0065|As-Is|Holman Remarketing
+22-0072|As Is; Diesel|Holman
+22-0064|As-Is|Holman Remarketing
+22-0062|As Is|Holman Remarketing
+22-0069|As-Is|Holman Remarketing
+3-0002|Green Light|Texas Bay Credit Union
+22-0073|As-Is|Holman Remarketing
+3-0003|As-Is|Texas Bay Credit Union
+3-0013|As-Is|One Main Financial
+3-0012|As-Is; Suspension Lowered|One Main Financial
+22-0074|As-Is; Structural|Holman
+3-0001|Green Light; Caution Trans|Texas Bay Credit Union
+3-0010|Pending Mech Check|One Main Financial
+3-0015|As-Is|One Main Financial
+3-0017|As-Is; Exempt; Prev Reported As Insurance Loss No Arb|One Main Financial
+3-0019|As-Is|One Main Financial
+3-0018|As-Is; Structural; Rebuilt Salvage No Arb|One Main Financial
+3-0016|As-Is|One Main Financial
+3-0020|As-Is|One Main Financial
+3-0014|As-Is|One Main Financial
+3-0021|As-Is|One Main Financial
+3-0035|Green Light|
+3-0031|As-Is|
+3-0032|Green Light|
+3-0033|Green Light|
+3-0040|As-Is|InvesTex Credit Union
+3-0034|Green Light|
+3-0036|Green Light|
+3-0039|As-Is|
+3-0043|As-Is|Flexco Fleet Lease Exchange Company
+3-0044|As-Is|Flexco Fleet Lease Exchange Company
+3-0041|As-Is|
+3-0051||
+3-0046|As-Is; Structural|Flexco Fleet Lease Exchange Company
+3-0049|Green Light - Caution Engine|Tidewater Finance
+3-0045|Green Light|Flexco Fleet Lease Exchange Company
+3-0053|Green Light|U-Haul Fleet Sales
+3-0055|Naaa Silver Certified|Security First
+3-0058|Pending Mech Check; Greenlight|Security First
+3-0054||
+3-0061|Green Light; Structural|Security First
+3-0060|Green Light|Security First
+3-0057|Naaa Silver Certified|Security First
+3-0059|Green Light|Security First
+3-0056|Naaa Silver Certified|Security First
+3-0064|As-Is; Exempt|Advanced Remarketing Services
+7-0014|As-Is, No Start|Coast to Coast Motors
+7-0013|As-Is|Coast to Coast Motors
+7-0002|As-Is (Inop); Structural; Salvage Title No Arb|Texas Bay Credit Union
+7-0001|As-Is, Not Drivable (Transmission Won'T Engage)|Texas Bay Credit Union
+3-0063|As-Is Exempt; Structural|Advanced Remarketing Services
+7-0005|As-Is.Inop|One Main Financial
+3-0062|As-Is|Security First
+7-0042|As-Is, Starts & Runs|Tony T CDJR of Gulfgate
+7-0044|As Is Starts Won'T Stay Running|Mainland Investment
+7-0017|As-Is; No Battery|Coast to Coast Motors
+7-0045|As-Is No Key|
+7-0016|As-Is Cranks Wont Start; Structural|Coast to Coast Motors
+7-0015|As-Is, No Start|Coast to Coast Motors
+7-0019|As-Is Starts And Runs|Coast to Coast Motors
+7-0018|As-Is Starts Wont Stay Running; Structural|Coast to Coast Motors
+7-0053|As-Is, No Start|
+7-0048|As-Is No Start; Prev Theft Reported On History Report|
+7-0050|As-Is, No Start; Airbags Deployed|
+7-0052|As-Is, No Key|
+7-0047|As-Is|Durrett Motor Company
+7-0049|As-Is No Key, Odo No Show; Structural; Exempt|
+7-0046|As-Is, No Key|
+7-0051|As-Is; Exempt|
+7-0058|As-Is,No Start Drive-Shaft Disconnected; Major Rust On Undercarriage|
+7-0062|As-Is, No Start; Exempt|Kars-R-Us
+7-0054|As-Is, No Start (No Battery)|
+7-0057|As-Is, No Key|
+7-0056|As-Is, Drivable (Missing 3 Studs Fr); Structural; Nam; Salvage No Arb|
+7-0060|As-Is, Decals; Aftermarket Rims|InvesTex Credit Union
+7-0061|As-Is. Inop.; Structural|First Service Credit Union
+7-0055|As-Is, Not Drivable (Excessive Smoke)|Bj's Autohaus
+7-0063|As-Is No Start|
+7-0068|As-Is, No Key; Odo No Show|
+7-0065|As-Is, Not Drivable (Little To No Brakes); Won'T Stay Running. Structural; Exempt|
+7-0066|As-Is, No Key, Mold, Front Window Broken; Odo No Show. Structural. Airbags Deployed|
+7-0070|As-Is, Not Drivable (Transmission Won'T Engage); Structural; Prev Titled/Registered To An Insurance Company No Arb|
+7-0067|As-Is|
+7-0069|As-Is; Structural; Prev Reported As Insurance Loss|
+7-0064|As-Is No Key|
+7-0089|As-Is, Not Drivable (Transmission Heats Up Won'T Go In Gear)|Advanced Remarketing Services
+7-0094|As-Is, No Start; X-Police|
+7-0092|As-Is, No Key; X-Police|
+7-0091|As-Is, Inop; Not Drivable; Structural, Ex Police; No Key|
+7-0093|As-Is Inop|
+7-0090|As-Is, Inop; No Start; Ex Police, Structural|
+7-0071|As-Is, Wont Stay Running; Structural; Rebuilt Salvage No Arb|
+7-0072|As-Is No Power Steering. Starts; Structural; Rebuilt Salvage No Arb|
+7-0095|As-Is, Not Drivable (Rr Side Damage); X-Police, Structural|
+77-0003|As-Is Inop|Holman
+77-0002|As-Is (Inop)|Holman
+77-0001|As-Is, Not Drivable (Potential Electrical Issues)|Holman
