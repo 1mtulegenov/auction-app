@@ -774,13 +774,16 @@ function inspCard(x) {
   const bid = x.max != null ? Math.max(0, Math.floor((x.max - cost) / 50) * 50) : null;
   const row = i => '<div class="in-r ' + (st[i.id] || '') + '"><span class="in-t">' + (i.own ? '<em>' + T('по модели') + '</em> ' : '') + E(i.t) + (i.c ? ' <small>' + T('если плохо: −') + M(i.c) + '</small>' : '') + '</span>'
     + '<span class="in-b"><button data-act="in-set" data-id="' + i.id + '" data-v="ok" aria-pressed="' + (st[i.id] === 'ok') + '" aria-label="' + T('Нормально') + '">✓</button><button data-act="in-set" data-id="' + i.id + '" data-v="bad" aria-pressed="' + (st[i.id] === 'bad') + '" aria-label="' + T('Проблема') + '">✗</button></span></div>';
-  return '<h3>' + T('Осмотр на площадке') + '</h3><p class="muted">' + T('Отмечайте ✓ нормально или ✗ проблема. Пункты «по модели» взяты из заметки мастера.') + (o.by ? ' ' + T('Последний осмотр: ') + E(o.by) : '') + '</p>'
+  const open = INSP_OPEN.has(x.vin);
+  return '<details class="in-det" data-vin="' + E(x.vin) + '"' + (open ? ' open' : '') + '><summary><h3>' + T('Осмотр на площадке') + '</h3><span class="muted">' + (bad.length || good.length ? T('Проблем: ') + bad.length + T(', ок: ') + good.length : T('нажмите, чтобы открыть')) + '</span></summary><p class="muted">' + T('Отмечайте ✓ нормально или ✗ проблема. Пункты «по модели» взяты из заметки мастера.') + (o.by ? ' ' + T('Последний осмотр: ') + E(o.by) : '') + '</p>'
     + '<div class="in-list">' + it.map(row).join('') + '</div>'
     + '<div class="in-ph">' + (o.shots || []).map(s => '<button class="in-th" data-act="in-view" data-id="' + E(s.id) + '">' + (INSP_IMG[s.id] ? '<img src="' + INSP_IMG[s.id] + '" alt="">' : '…') + '</button>').join('')
     + '<label class="in-add">📷 ' + T('Фото') + '<input type="file" id="inFile" accept="image/*" capture="environment" multiple hidden></label></div>'
     + '<div class="in-sum"><b>' + T('Проблем: ') + bad.length + T(', ок: ') + good.length + T(' из ') + it.length + '</b>' + (cost ? '<span>' + T('Заложить в ремонт ≈ ') + M(cost) + '</span>' : '') + (bid != null && (bad.length || good.length) ? '<span>' + T('Ставка с учётом осмотра: до ') + '<b>' + M(bid) + '</b>' + T(' (было ') + M(x.max) + ')</span>' : '') + (st.flood === 'bad' ? '<span class="wrn-t">' + T('Следы воды: не брать') + '</span>' : '') + '</div>'
-    + '<button class="btn pri" data-act="in-note">' + T('Записать итог в заметку') + '</button>';
+    + '<button class="btn pri" data-act="in-note">' + T('Записать итог в заметку') + '</button></details>';
 }
+const INSP_OPEN = new Set();
+document.addEventListener('toggle', e => { const d = e.target; if (d.classList && d.classList.contains('in-det')) d.open ? INSP_OPEN.add(d.dataset.vin) : INSP_OPEN.delete(d.dataset.vin); }, true);
 function inspRedraw(x) { const c = $('#inspCard'); if (c) c.innerHTML = inspCard(x); }
 function inspCur() { const c = $('#inspCard'); return c ? S.d.map[c.dataset.k] : null; }
 function inspStore(x, img) { LS.set('insp-v1', S.insp); if (window.Sync && Sync.pushInsp) Sync.pushInsp(x.vin, { items: S.insp[x.vin].items, shots: S.insp[x.vin].shots, car: carName(x), run: x.run, date: x._d || S.date }, img); }

@@ -445,6 +445,12 @@ button.sv-row{cursor:pointer}button.sv-row:hover{background:var(--well)}
 .srch-f .btn.pri{width:100%}
 /* осмотр на площадке */
 .insp{border-left:4px solid #1f9d55}
+.in-det>summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.in-det>summary::-webkit-details-marker{display:none}
+.in-det>summary h3{margin:0}
+.in-det>summary::after{content:'▾';margin-left:auto;color:var(--mut,#888)}
+.in-det[open]>summary::after{content:'▴'}
+.in-det[open]>summary{margin-bottom:8px}
 .in-list{margin:6px 0}
 .in-r{display:flex;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line,#e3e5ea)}
 .in-r:first-child{border-top:0}
