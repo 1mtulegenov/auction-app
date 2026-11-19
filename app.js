@@ -372,7 +372,7 @@ function pastRes(p) {
   if (p.s === 'offer') return '<b class="offer">' + (p.p ? T('ушла на оффер за') + ' ' + M(p.p) : T('ушла на оффер')) + '. ' + T('Не отдали') + '</b>' + (p.p ? '' : ' · ' + T('сумма неизвестна'));
   if (p.s === 'nosale') return T('не продана');
   if (p.s === 'gone') return T('снята');
-  if (p.p) return T('продана за') + ' ' + M(p.p);
+  if (p.p) return T('продана за') + ' ' + M(p.p) + ' · <span class="muted">' + T('снова выставлена: сделка сорвалась или машину перепродают') + '</span>';
   return T('итога нет в базе');
 }
 function pastHead(x) {
