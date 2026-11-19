@@ -25,7 +25,7 @@ CFG = {  # slug, название, время, неходячие линии (п
     'ANH': ('aaanorthhouston', 'AAA North Houston (Conroe)', '12:15', ()),
     'AAA': ('houstonaa', 'AAA Central Houston', '11:45', ('7-', '77-')),
     'H1C': ('houstonsfcaa', "Houston's 1st Choice", '16:30', ()),
-    'AAH': ('aaahouston', 'AAA Houston', '', ('T-',)),
+    'AAH': ('aaahouston', 'AAA Houston', '13:00', ('T-',)),
     'ANA': ('anaahouston', 'AutoNation AA Houston', '9:15', ('T-',)),
 }
 SLUG, NAME, TIME, NRL = CFG[AUC]
