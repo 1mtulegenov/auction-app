@@ -1,11 +1,11 @@
 // Правила для приложения покупателя. Вставить в Firebase console → Firestore → Rules ВНУТРЬ блока
-// match /databases/{database}/documents { ... } рядом с остальными match (старый вариант этого блока заменить целиком).
+// match /databases/{db}/documents { ... } рядом с остальными match (старый вариант этого блока заменить целиком).
 // Покупатель видит только своё, дилер пишет только своим покупателям, пары и заявки решает администратор.
 
     function bEmail() { return request.auth.token.email != null ? request.auth.token.email.lower() : ''; }
     function bAdmin() { return request.auth != null && bEmail() == '1mtulegenov@gmail.com'; }
-    function bClient(cid) { return get(/databases/$(database)/documents/clients/$(cid)).data; }
-    function bIsBuyer(c) { return (c.email != '' && c.email == bEmail()) || c.get('uid', '') == request.auth.uid; }
+    function bClient(cid) { return get(/databases/$(db)/documents/clients/$(cid)).data; }
+    function bIsBuyer(c) { return (c.get('email', '') != '' && c.get('email', '') == bEmail()) || c.get('uid', '') == request.auth.uid; }
 
     match /clients/{cid} {
       allow read: if request.auth != null && (bAdmin() || bIsBuyer(resource.data) || resource.data.dealerEmail == bEmail());
