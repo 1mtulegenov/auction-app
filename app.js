@@ -1305,7 +1305,7 @@ function setFees() {
   const best = $('#bestList'); if (best) best.innerHTML = bestLots().map(lotCard).join('');
 }
 /* ---------- шрифт и размер текста ---------- */
-const FONTS = [['sys', 'Системный'], ['nunito', 'Nunito, округлый'], ['serif', 'PT Serif, с засечками'], ['mono', 'IBM Plex Mono, моноширинный']];
+const FONTS = [['sys', 'Onest, по умолчанию'], ['system', 'Системный'], ['nunito', 'Nunito, округлый'], ['serif', 'PT Serif, с засечками'], ['mono', 'IBM Plex Mono, моноширинный']];
 const SIZES = [[0.9, 'Мелкий'], [1, 'Обычный'], [1.1, 'Крупный'], [1.25, 'Очень крупный']];
 function fontPref() { const p = LS.get('font-v1', {}) || {}; return { f: FONTS.some(x => x[0] === p.f) ? p.f : 'sys', z: SIZES.some(x => x[0] === p.z) ? p.z : 1 }; }
 function applyFont() { const p = fontPref(); document.documentElement.dataset.font = p.f; document.body.style.zoom = p.z === 1 ? '' : p.z; }

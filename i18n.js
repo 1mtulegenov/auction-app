@@ -1182,6 +1182,12 @@ const I18N = {
 "Tamaño del texto",
 "Мәтін өлшемі"
 ],
+"Onest, по умолчанию": [
+"Onest, default",
+"Onest, за замовчуванням",
+"Onest, predeterminada",
+"Onest, әдепкі"
+],
 "Системный": [
 "System",
 "Системний",
