@@ -725,6 +725,7 @@ function more() {
     + (isMax() ? '<button data-act="changelog"><span class="ic">🕘</span><span>' + T('История изменений') + '<small>' + T('Все запросы и что сделано, с датой и временем. Видно только вам') + '</small></span></button>' : '')
     + '<button data-act="srch-list"><span class="ic">🔎</span><span>' + T('Мои поиски') + '<small>' + (S.srch.length ? S.srch.length + T(' шт. Пуш, когда на новом аукционе есть совпадения') : T('Сохраните поиск, и придёт пуш, когда появятся такие машины')) + '</small></span></button>'
     + '<button data-act="push"><span class="ic">🔔</span><span>' + T('Уведомления') + '<small>' + pushLabel() + '</small></span></button>'
+    + (canSend() ? '<button data-act="clients"><span class="ic">🤝</span><span>' + T('Покупатели') + '<small>' + (isMax() ? T('Пары «дилер → покупатель», комиссия, отправленные лоты') : T('Ваши покупатели и отправленные им лоты')) + '</small></span></button>' : '')
     + '<button data-act="stats"><span class="ic">📈</span><span>' + T('Статистика продаж') + '<small>' + T('Продано сразу против MMR и floor price: даты, марка, аукцион') + '</small></span></button>'
     + '<button data-act="notes"><span class="ic">📝</span><span>' + T('Заметки') + '<small>' + (notes.length ? notes.length + T(' шт., привязаны к VIN') : T('Пока нет. Пишутся в карточке машины.')) + '</small></span></button>'
     + '<button data-act="how"><span class="ic">🧮</span><span>' + T('Как считается прибыль') + '<small>' + T('MMR, сбор, цена продажи, максимальная ставка') + '</small></span></button>'
@@ -1193,6 +1194,7 @@ function detail(k) {
     + (x.vin ? '<button class="btn" data-act="copy" data-v="' + E(x.vin) + '">' + T('Скопировать VIN') + '</button>' : '')
     + (link ? '<a class="btn pri" href="' + E(link) + '" target="_blank" rel="noopener">' + T('Открыть лот') + '</a>' : '')
     + '<button class="btn" data-act="share-lot" data-k="' + E(k) + '">' + T('Поделиться') + '</button>'
+    + (canSend() ? '<button class="btn" data-act="snd" data-k="' + E(k) + '">' + T('→ Покупателю') + '</button>' : '')
     + '<button class="btn" data-act="cmp" data-k="' + E(k) + '">' + (inCmp(x) ? T('✓ В сравнении') : T('⇄ Сравнить')) + '</button>'
     + '</div></div>';
   const pos = S.tab === 'lots' ? LOTS_CUR.indexOf(x) : -1;
@@ -1459,6 +1461,10 @@ document.addEventListener('click', async e => {
     case 'gal-go': galGo(+ds.gi); break;
     case 'cmp': { const x = S.d.map[ds.k]; if (x) cmpToggle(x); break; }
     case 'cmp-open': cmpSheet(); break;
+    case 'clients': clientsSheet(); break;
+    case 'snd': sendSheet(ds.k); break;
+    case 'snd-go': sendGo(ds.k, t); break;
+    case 'cl-edit': case 'cl-save': case 'cl-del': case 'cl-unsend': case 'fee-add': case 'fee-save': clientAct(ds.act, ds, t); break;
     case 'cmp-clear': S.cmp = []; LS.set('cmp-v1', S.cmp); cmpBar(); if (sheetOpen && $('#sheetTitle') && $('#sheetTitle').textContent === T('Сравнение')) closeSheet(); toast(T('Сравнение очищено')); break;
     case 'cmp-rm': S.cmp = S.cmp.filter(c => !(c.d === ds.d && c.k === ds.k)); LS.set('cmp-v1', S.cmp); cmpBar(); if (S.cmp.length) cmpSheet(); else closeSheet(); break;
     case 'lot-prev': case 'lot-next': { const i = LOTS_CUR.findIndex(l => l.k === S.openLot), j = i + (ds.act === 'lot-next' ? 1 : -1); if (i < 0 || !LOTS_CUR[j]) break; const ta = $('#sheet textarea.note'); if (ta) saveNote(ta); detail(LOTS_CUR[j].k); break; }
@@ -2062,3 +2068,71 @@ function skel(n) { let h = '<div class="list skel" aria-busy="true" aria-label="
   document.addEventListener('pointercancel', e => { if (el && e.pointerId === pid) reset(); });
   document.addEventListener('click', e => { if (S.swiped && Date.now() - S.swiped < 450) { e.stopImmediatePropagation(); e.preventDefault(); } }, true);
 })();
+
+/* ---------- покупатели: отправка подобранных лотов во второе приложение (buyer/) ----------
+   Администратор назначает пары «дилер → покупатель». Дилер отправляет лот своему покупателю:
+   фото, описание, примерная цена и заметка для покупателя. MMR, пометки аукциона и проблемы не уходят. */
+S.clients = null;
+const BUYER_URL = () => location.origin + location.pathname.replace(/[^/]*$/, '') + 'buyer/';
+async function loadClients(force) { if (!(window.Sync && Sync.st.user && Sync.myClients)) return []; if (S.clients && S.clients.length && !force) return S.clients; S.clients = await Sync.myClients(); return S.clients; }
+function canSend() { return isMax() || !!(S.clients && S.clients.length); }
+function buyerLotId(x) { const t = (x._d || S.date) + '|' + x.auc + '|' + x.run + '|' + (x.vin || ''); let h1 = 0x811c9dc5, h2 = 0; for (let i = 0; i < t.length; i++) { h1 = Math.imul(h1 ^ t.charCodeAt(i), 16777619) >>> 0; h2 = (Math.imul(h2, 31) + t.charCodeAt(i)) >>> 0; } return 'l' + h1.toString(36) + h2.toString(36); }
+function buyerPayload(x, price, note) {
+  // аукцион, номер лота и VIN не отправляем: покупатель видит машину, но не может пойти на торги в обход дилера
+  return { d: x._d || S.date, y: x.y || null, mk: x.mk || '', md: x.md || '', st: x.st || '', eng: engineTag(x) || '', o: x.o > 500 ? x.o : null,
+    color: COLOR[x.c] || String(x.c || '').toLowerCase(), photos: photoList(x).map(p => phUrl(p, true)).slice(0, 40), price: +price || null, rt: x.rt && x.rt.est ? x.rt.est : null, note: String(note || '').trim() };
+}
+async function sendSheet(k) {
+  const x = S.d.map[k]; if (!x) return;
+  const r = $('#rangeCard .pr-big b'); const mid = r ? +(r.textContent.split('–')[0].replace(/\D/g, '')) : 0;
+  const cl = await loadClients(true);
+  if (!cl.length) { openSheet(T('Отправить покупателю'), '<div class="d-card"><p class="p">' + T('У вас пока нет покупателей. Их назначает администратор в разделе «Ещё → Покупатели».') + '</p></div>', true); return; }
+  const guess = Math.round((x.max > 0 ? x.max : mid || x.w || 0) / 100) * 100;
+  const html = '<div class="d-card snd"><div class="snd-car">' + (photoList(x).length ? '<img src="' + phUrl(photoList(x)[0], false) + '" alt="" referrerpolicy="no-referrer">' : '') + '<div><b>' + E(carTitle(x)) + '</b><small>' + (x.o > 500 ? N(x.o) + ' mi · ' : '') + E(AUC[x.auc] || x.auc) + ', ' + fmtDate(x._d || S.date) + '</small></div></div>'
+    + '<p class="lbl">' + T('Кому') + '</p><div class="snd-to">' + cl.map(c => '<label><input type="checkbox" name="sndTo" value="' + E(c.id) + '"' + (cl.length === 1 ? ' checked' : '') + '><span><b>' + E(c.name) + '</b>' + (isMax() && c.dealerName ? '<small>' + T('дилер ') + E(c.dealerName) + '</small>' : '') + '</span></label>').join('') + '</div>'
+    + '<label class="lbl" for="sndPrice">' + T('Примерная цена машины для покупателя, $') + '</label><input id="sndPrice" type="number" inputmode="numeric" value="' + (guess || '') + '">'
+    + '<p class="muted">' + T('Покупатель не видит MMR. Он увидит эту цену и сколько выйдет вместе с комиссией.') + '</p>'
+    + '<label class="lbl" for="sndNote">' + T('Заметка для покупателя') + '</label><textarea id="sndNote" rows="4" placeholder="' + T('Например: чистая, один владелец, хороший вариант под ваш бюджет') + '"></textarea>'
+    + '<p class="muted">' + T('Уйдут фото, год, пробег, цвет, ретейл Хьюстона и ваша заметка. Аукцион, номер лота, VIN, MMR, пометки, осмотр и заметки команды покупатель не видит.') + '</p>'
+    + '<button class="btn pri" data-act="snd-go" data-k="' + E(k) + '">' + T('Отправить') + '</button></div>';
+  openSheet(T('Отправить покупателю'), html, true);
+}
+async function sendGo(k, btn) {
+  const x = S.d.map[k]; if (!x) return;
+  const to = [...document.querySelectorAll('input[name="sndTo"]:checked')].map(i => i.value);
+  if (!to.length) { toast(T('Выберите покупателя')); return; }
+  btn.disabled = true;
+  try { const data = buyerPayload(x, $('#sndPrice').value, $('#sndNote').value); for (const cid of to) await Sync.sendLot(cid, buyerLotId(x), data); toast(T('Отправлено покупателю: ') + to.map(id => (S.clients.find(c => c.id === id) || {}).name).join(', ')); detail(k); }
+  catch (e) { btn.disabled = false; toast(T('Не отправилось: ') + (e.message || e)); }
+}
+async function clientsSheet() {
+  openSheet(T('Покупатели'), skel(2), true);
+  const cl = await loadClients(true), adm = isMax();
+  const lots = await Promise.all(cl.map(c => Sync.clientLots(c.id)));
+  let h = '<div class="d-card"><p class="p">' + T('Ссылка на приложение покупателя: ') + '<b>' + E(BUYER_URL()) + '</b></p><div class="btns"><button class="btn" data-act="copy" data-v="' + E(BUYER_URL()) + '">' + T('Скопировать ссылку') + '</button></div><p class="muted">' + T('Покупатель входит через Google с той почтой, которую вы указали. Видит только лоты, отправленные ему.') + '</p></div>';
+  h += cl.length ? cl.map((c, i) => '<div class="d-card cl"><div class="cl-h"><div><b>' + E(c.name) + '</b><small>' + E(c.email) + (adm ? ' · ' + T('дилер ') + E(c.dealerName || c.dealerEmail) : '') + '</small></div>' + (adm ? '<button class="btn" data-act="cl-edit" data-id="' + E(c.id) + '">' + T('Изменить') + '</button>' : '') + '</div>'
+    + (lots[i].length ? '<div class="cl-lots">' + lots[i].sort((a, b) => String(b.d).localeCompare(String(a.d))).map(l => '<div class="cl-l"><span>' + fmtDate(l.d) + ' · ' + E([l.y, l.mk, l.md].filter(Boolean).join(' ')) + (l.price ? ' · ≈' + M(l.price) : '') + (l.reaction === 'like' ? ' <em class="good">' + T('интересно') + '</em>' : l.reaction === 'no' ? ' <em class="muted">' + T('не подходит') + '</em>' : '') + (l.reply ? '<br><small>💬 ' + E(l.reply) + '</small>' : '') + '</span><button data-act="cl-unsend" data-c="' + E(c.id) + '" data-l="' + E(l.id) + '" aria-label="' + T('Убрать') + '">✕</button></div>').join('') + '</div>' : '<p class="muted">' + T('Пока ничего не отправлено.') + '</p>') + '</div>').join('')
+    : '<p class="empty">' + T('Покупателей пока нет.') + '</p>';
+  if (adm) h += '<div class="d-card"><h3>' + T('Добавить покупателя') + '</h3>' + clientForm({}) + '</div><div class="d-card"><h3>' + T('Комиссия дилера (сетка)') + '</h3><div id="feeEd">…</div></div>';
+  openSheet(T('Покупатели'), h, true);
+  if (adm) feeEditor();
+}
+function clientForm(c) {
+  return '<div class="cl-f" data-id="' + E(c.id || '') + '"><label>' + T('Имя покупателя') + '<input name="name" value="' + E(c.name || '') + '"></label><label>' + T('Почта покупателя (Google)') + '<input name="email" type="email" value="' + E(c.email || '') + '"></label>'
+    + '<label>' + T('Имя дилера') + '<input name="dealerName" value="' + E(c.dealerName || '') + '"></label><label>' + T('Почта дилера (Google)') + '<input name="dealerEmail" type="email" value="' + E(c.dealerEmail || '') + '"></label>'
+    + '<div class="btns"><button class="btn pri" data-act="cl-save">' + T('Сохранить') + '</button>' + (c.id ? '<button class="btn" data-act="cl-del" data-id="' + E(c.id) + '">' + T('Удалить покупателя') + '</button>' : '') + '</div></div>';
+}
+async function feeEditor() {
+  const g = feeGrid(await Sync.getFees()), el = $('#feeEd'); if (!el) return;
+  el.innerHTML = '<p class="muted">' + T('Процент от цены машины. Последняя строка: всё, что дороже.') + '</p>' + g.map(r => '<div class="fee-r"><span>' + T('до $') + '</span><input type="number" inputmode="numeric" class="fe-to" value="' + (r.to == null ? '' : r.to) + '" placeholder="' + T('и дороже') + '"><input type="number" inputmode="decimal" class="fe-pct" value="' + r.pct + '"><span>%</span></div>').join('')
+    + '<div class="btns"><button class="btn" data-act="fee-add">' + T('+ строка') + '</button><button class="btn pri" data-act="fee-save">' + T('Сохранить сетку') + '</button></div>';
+}
+async function clientAct(act, ds, t) {
+  if (act === 'cl-edit') { const c = (S.clients || []).find(c => c.id === ds.id); if (c) openSheet(T('Покупатель'), '<div class="d-card">' + clientForm(c) + '</div>', true); return; }
+  if (act === 'cl-save') { const f = t.closest('.cl-f'), v = n => f.querySelector('[name="' + n + '"]').value.trim(); const c = { id: f.dataset.id || null, name: v('name'), email: v('email'), dealerName: v('dealerName'), dealerEmail: v('dealerEmail') }; if (!c.name || !/@/.test(c.email) || !/@/.test(c.dealerEmail)) { toast(T('Заполните имя и обе почты')); return; } try { await Sync.saveClient(c); toast(T('Сохранено')); clientsSheet(); } catch (e) { toast(e.message || String(e)); } return; }
+  if (act === 'cl-del') { try { await Sync.delClient(ds.id); toast(T('Покупатель удалён')); clientsSheet(); } catch (e) { toast(e.message || String(e)); } return; }
+  if (act === 'cl-unsend') { try { await Sync.unsendLot(ds.c, ds.l); const r = t.closest('.cl-l'); if (r) r.remove(); toast(T('Лот убран у покупателя')); } catch (e) { toast(e.message || String(e)); } return; }
+  if (act === 'fee-add') { const el = $('#feeEd'); const rows = el.querySelectorAll('.fee-r'); rows[rows.length - 1].insertAdjacentHTML('beforebegin', '<div class="fee-r"><span>' + T('до $') + '</span><input type="number" inputmode="numeric" class="fe-to"><input type="number" inputmode="decimal" class="fe-pct"><span>%</span></div>'); return; }
+  if (act === 'fee-save') { const g = [...document.querySelectorAll('#feeEd .fee-r')].map(r => ({ to: r.querySelector('.fe-to').value === '' ? null : +r.querySelector('.fe-to').value, pct: +r.querySelector('.fe-pct').value })).filter(r => r.pct >= 0 && r.pct < 100); try { await Sync.saveFees(feeGrid(g)); toast(T('Сетка сохранена')); feeEditor(); } catch (e) { toast(e.message || String(e)); } }
+}
+window.addEventListener('sync-state', () => { if (window.Sync && Sync.st.user && S.clients == null) { S.clients = []; loadClients(true).then(() => { if (S.tab === 'more' && !sheetOpen) render(); }); } });

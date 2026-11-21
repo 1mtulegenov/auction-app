@@ -1,7 +1,7 @@
 /* Сервис-воркер: приложение открывается без интернета, данные обновляются при каждом запуске со связью. */
-const VERSION = '50dc04e24d';
+const VERSION = 'd253d76f9e';
 const SHELL = 'shell-' + VERSION, DATA = 'data-v1';
-const FILES = ['./', 'index.html', 'app.css', 'fonts.css', 'i18n.js', 'app.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'vendor/zxing.min.js', 'scan-worker.js', 'vinline.js', 'firebase-config.js', 'sync.js', 'obd.js', 'search-match.js'];
+const FILES = ['./', 'index.html', 'app.css', 'fonts.css', 'i18n.js', 'app.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'vendor/zxing.min.js', 'scan-worker.js', 'vinline.js', 'firebase-config.js', 'sync.js', 'obd.js', 'search-match.js', 'fees.js'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(SHELL).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('message', e => { if (e.data === 'skip') self.skipWaiting(); });
 self.addEventListener('activate', e => {
@@ -10,6 +10,7 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const u = new URL(e.request.url);
   if (e.request.method !== 'GET' || u.origin !== location.origin) return;
+  if (u.pathname.includes('/buyer/')) return; // приложение покупателя — своё, без оболочки основного
   if (u.pathname.endsWith('/data/index.json')) { e.respondWith(netFirst(e.request)); return; }
   if (u.pathname.includes('/data/')) { e.respondWith(dataFile(e.request)); return; }
   if (e.request.mode === 'navigate') { e.respondWith(shellFirst(new Request('index.html'))); return; }

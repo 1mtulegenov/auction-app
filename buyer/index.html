@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Подбор авто</title>
+<meta name="description" content="Машины, которые подобрал для вас дилер: фото, описание, примерная цена и калькулятор бюджета.">
+<meta name="theme-color" content="#f6f4f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b0c0e" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Подбор авто">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="../icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../app.css">
+<link rel="stylesheet" href="buyer.css">
+</head>
+<body class="buyer">
+<header class="b-top">
+  <div class="b-row"><div class="b-brand"><img src="../icons/icon-192.png" alt="" width="28" height="28"><span>Подбор авто</span></div><button class="b-user" id="bUser" hidden></button></div>
+  <nav class="b-tabs" id="bTabs" hidden><button data-tab="cars" aria-current="page">Машины</button><button data-tab="calc">Калькулятор</button></nav>
+</header>
+<main id="view" class="b-main">
+  <div class="list skel" aria-busy="true"><div class="sk-card"><div class="sk-row"><span class="sk sk-img"></span><span class="sk-col"><span class="sk sk-h"></span><span class="sk sk-txt"></span></span></div><div class="sk-row"><span class="sk sk-box"></span><span class="sk sk-box"></span></div></div></div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script src="../firebase-config.js"></script>
+<script src="../fees.js"></script>
+<script src="buyer.js" type="module"></script>
+</body>
+</html>

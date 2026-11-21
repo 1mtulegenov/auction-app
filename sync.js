@@ -335,5 +335,32 @@ window.Sync = (() => {
     if (!db || !st.user) return null;
     try { const d = await F.fs.getDoc(F.fs.doc(db, 'obd', vin, 'insp', 'main')); return d.exists() ? d.data() : null; } catch (e) { return null; }
   }
-  return { st, signIn, signOut, pushNote, pushFavs, isAdmin, activity, pushObd, obdImg, delObdImg, obdPending, pushSub, saveSearches, loadSearches, pushInsp, getInsp };
+  // покупатели: clients/{id} {name, email, dealerEmail, dealerName}; отправленные лоты clients/{id}/lots/{lotId}.
+  // Назначает пары «дилер → покупатель» только администратор. Дилер видит и пишет только своим покупателям.
+  const em = () => ((st.user && st.user.email) || '').toLowerCase();
+  async function myClients() {
+    if (!db || !st.user) return [];
+    const { collection, getDocs, query, where } = F.fs;
+    const q = isAdmin() ? collection(db, 'clients') : query(collection(db, 'clients'), where('dealerEmail', '==', em()));
+    try { const s = await getDocs(q); const out = []; s.forEach(d => out.push(Object.assign({ id: d.id }, d.data()))); return out.sort((a, b) => String(a.name).localeCompare(String(b.name))); } catch (e) { console.warn('clients', e); return []; }
+  }
+  async function saveClient(c) {
+    if (!db || !isAdmin()) throw new Error('Только для администратора');
+    const id = c.id || ('c' + Date.now().toString(36));
+    await F.fs.setDoc(F.fs.doc(db, 'clients', id), { name: c.name, email: String(c.email).trim().toLowerCase(), dealerEmail: String(c.dealerEmail).trim().toLowerCase(), dealerName: c.dealerName || '', at: F.fs.serverTimestamp() }, { merge: true });
+    return id;
+  }
+  async function delClient(id) { if (!db || !isAdmin()) throw new Error('Только для администратора'); await F.fs.deleteDoc(F.fs.doc(db, 'clients', id)); }
+  async function sendLot(cid, lid, data) {
+    if (!db || !st.user) throw new Error('Сначала войдите');
+    await F.fs.setDoc(F.fs.doc(db, 'clients', cid, 'lots', lid), Object.assign(JSON.parse(JSON.stringify(data)), { by: st.user.name, byEmail: em(), at: F.fs.serverTimestamp() }), { merge: true });
+  }
+  async function clientLots(cid) {
+    if (!db || !st.user) return [];
+    try { const s = await F.fs.getDocs(F.fs.collection(db, 'clients', cid, 'lots')); const out = []; s.forEach(d => out.push(Object.assign({ id: d.id }, d.data()))); return out; } catch (e) { console.warn('client lots', e); return []; }
+  }
+  async function unsendLot(cid, lid) { if (!db || !st.user) return; await F.fs.deleteDoc(F.fs.doc(db, 'clients', cid, 'lots', lid)); }
+  async function getFees() { if (!db) return null; try { const d = await F.fs.getDoc(F.fs.doc(db, 'config', 'fees')); return d.exists() ? d.data().grid : null; } catch (e) { return null; } }
+  async function saveFees(grid) { if (!db || !isAdmin()) throw new Error('Только для администратора'); await F.fs.setDoc(F.fs.doc(db, 'config', 'fees'), { grid, at: F.fs.serverTimestamp() }); }
+  return { st, signIn, signOut, pushNote, pushFavs, isAdmin, activity, pushObd, obdImg, delObdImg, obdPending, pushSub, saveSearches, loadSearches, pushInsp, getInsp, myClients, saveClient, delClient, sendLot, clientLots, unsendLot, getFees, saveFees };
 })();
