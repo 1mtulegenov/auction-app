@@ -118,15 +118,36 @@ async function init() {
     const [app, au, fs] = await Promise.all([import(FB + 'firebase-app.js'), import(FB + 'firebase-auth.js'), import(FB + 'firebase-firestore.js')]);
     B.F = { au, fs }; const a = app.initializeApp(cfg, 'buyer'); B.auth = au.getAuth(a); B.db = fs.getFirestore(a);
     await au.setPersistence(B.auth, au.browserLocalPersistence).catch(() => {});
-    au.getRedirectResult(B.auth).catch(e => { $('#view').innerHTML = login(errText(e)); });
+    await finishGoogle();
     au.onAuthStateChanged(B.auth, u => { B.user = u ? { uid: u.uid, name: u.displayName || u.email, email: (u.email || '').toLowerCase() } : null; if (u) start(); else { stop(); render(); } });
   } catch (e) { $('#view').innerHTML = login('Нет связи. Для входа нужен интернет.'); }
 }
 function errText(e) { const c = (e && e.code) || ''; if (/popup-closed|cancelled/.test(c)) return 'Окно входа закрылось. Попробуйте ещё раз.'; if (/network/.test(c)) return 'Нет связи.'; return (e && e.message) || String(e); }
+// На iPhone (иконка на экране) и в мобильных браузерах вход Firebase через окно/redirect теряет состояние.
+// Как в основном приложении: уводим окно на страницу Google и возвращаемся с id_token. Адрес возврата — основное
+// приложение (он уже разрешён в Google), оно по state «b…» сразу пересылает токен сюда.
+const RET_URL = () => location.origin + location.pathname.replace(/buyer\/(index\.html)?$/, '');
+function googleRedirect() {
+  const rnd = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, '0')).join('');
+  const state = 'b' + rnd(), nonce = rnd();
+  LSs('b-oauth', { state, nonce, ts: Date.now() });
+  const q = new URLSearchParams({ client_id: window.FIREBASE_CONFIG.googleClientId, redirect_uri: RET_URL(), response_type: 'id_token', scope: 'openid email profile', nonce, state, prompt: 'select_account' });
+  location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + q;
+}
+async function finishGoogle() {
+  if (!/id_token=|error=/.test(location.hash)) return;
+  const h = new URLSearchParams(location.hash.slice(1)), saved = LSg('b-oauth', null);
+  try { localStorage.removeItem('b-oauth'); } catch (e) {}
+  history.replaceState(null, '', location.pathname);
+  if (h.get('error')) { $('#view').innerHTML = login('Google: ' + h.get('error')); return; }
+  if (!saved || saved.state !== h.get('state')) { $('#view').innerHTML = login('Вход прерван, попробуйте ещё раз.'); return; }
+  try { await B.F.au.signInWithCredential(B.auth, B.F.au.GoogleAuthProvider.credential(h.get('id_token'))); } catch (e) { $('#view').innerHTML = login(errText(e)); }
+}
 async function signIn() {
   const p = new B.F.au.GoogleAuthProvider(); p.setCustomParameters({ prompt: 'select_account' });
-  const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-  try { if (standalone) await B.F.au.signInWithRedirect(B.auth, p); else await B.F.au.signInWithPopup(B.auth, p); }
+  const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone, mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (window.FIREBASE_CONFIG.googleClientId && (standalone || mobile)) { googleRedirect(); return; }
+  try { await B.F.au.signInWithPopup(B.auth, p); }
   catch (e) { if (/popup-blocked|operation-not-supported/.test(e.code || '')) { try { await B.F.au.signInWithRedirect(B.auth, p); } catch (e2) { $('#view').innerHTML = login(errText(e2)); } } else $('#view').innerHTML = login(errText(e)); }
 }
 function stop() { B.unsub.forEach(f => { try { f(); } catch (e) {} }); B.unsub = []; B.clients = []; B.lots = {}; }

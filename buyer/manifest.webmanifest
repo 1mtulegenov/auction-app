@@ -3,7 +3,7 @@
   "short_name": "Подбор авто",
   "description": "Машины, которые подобрал для вас дилер, и калькулятор бюджета.",
   "start_url": "./",
-  "scope": "./",
+  "scope": "../",
   "display": "standalone",
   "background_color": "#f6f4f0",
   "theme_color": "#f6f4f0",

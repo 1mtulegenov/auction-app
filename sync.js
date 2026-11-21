@@ -71,6 +71,7 @@ window.Sync = (() => {
   async function finishGoogle() {
     if (!/id_token=|error=/.test(location.hash)) return false;
     const h = new URLSearchParams(location.hash.slice(1));
+    if (/^b[0-9a-f]/.test(h.get('state') || '')) return true; // вход приложения покупателя: index.html пересылает его в buyer/
     let saved = null; try { saved = JSON.parse(localStorage.getItem('g-oauth') || 'null'); localStorage.removeItem('g-oauth'); } catch (e) {}
     history.replaceState(null, '', location.pathname + location.search);
     if (h.get('error')) { st.err = 'Google: ' + h.get('error'); emit(); return true; }
