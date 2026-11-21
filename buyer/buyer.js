@@ -43,7 +43,7 @@ function car(l) {
     + (ph.length ? '<div class="b-ph"><div class="b-ph-s">' + ph.map((u, i) => '<button data-gal="' + E(l.cid + '/' + l.id) + '" data-gi="' + i + '"><img src="' + E(u) + '" alt="" referrerpolicy="no-referrer"' + (i > 1 ? ' loading="lazy"' : '') + ' onerror="this.parentNode.remove()"></button>').join('') + '</div>' + (ph.length > 1 ? '<span class="b-ph-n">' + ph.length + ' фото</span>' : '') + '</div>' : '')
     + '<div class="b-body"><h2>' + E(title) + '</h2><p class="b-meta">' + [l.st, l.eng, l.o ? N(l.o) + ' mi' : '', l.color].filter(Boolean).map(E).join(' · ') + '</p>'
     + (l.d ? '<p class="b-date">Торги ' + dLong(l.d) + '</p>' : '')
-    + (f ? '<div class="b-price"><div><span>Примерная цена машины</span><b>≈ ' + M(f.price) + '</b></div><div><span>С комиссией подборщика</span><b>≈ ' + M(f.total) + '</b><small>комиссия ' + f.pct + '%, ' + M(f.fee) + '</small></div></div>' : '')
+    + (f ? '<div class="b-price"><div><span>Примерная цена машины</span><b>≈ ' + M(f.price) + '</b></div><div><span>Под ключ, всё включено</span><b>≈ ' + M(f.total) + '</b><small>сборы и комиссия ' + M(f.fee) + ' (' + f.pct + '%)</small></div></div>' : '')
     + (l.rt ? '<p class="b-rt">В автосалонах Хьюстона такая стоит около <b>' + M(l.rt) + '</b></p>' : '')
     + (l.note ? '<blockquote class="b-note">' + E(l.note) + (l.by ? '<cite>' + E(l.by) + '</cite>' : '') + '</blockquote>' : '')
     + '<div class="b-act"><button class="btn' + (l.reaction === 'like' ? ' on' : '') + '" data-act="like">' + (l.reaction === 'like' ? '♥ Интересно' : '♡ Интересно') + '</button><button class="btn' + (l.reaction === 'no' ? ' on-no' : '') + '" data-act="no">Не подходит</button><button class="btn" data-act="ask">Вопрос</button></div>'
@@ -51,19 +51,19 @@ function car(l) {
     + '</div></article>';
 }
 function calcScreen() {
-  const c = B.calc, g = feeGrid(B.grid);
+  const c = B.calc, cf = feeCfg(B.grid);
   return '<section class="b-calc"><div class="seg b-seg"><button data-mode="budget" aria-pressed="' + (c.mode === 'budget') + '">У меня есть бюджет</button><button data-mode="price" aria-pressed="' + (c.mode === 'price') + '">Знаю цену машины</button></div>'
     + '<label class="b-in"><span>' + (c.mode === 'budget' ? 'Сколько всего готовы потратить' : 'Цена машины') + '</span><span class="b-inw">$<input id="calcIn" type="number" inputmode="numeric" value="' + E(c.mode === 'budget' ? c.budget : c.price) + '"></span></label>'
     + '<div class="b-res" id="calcRes"></div>'
-    + '<details class="b-grid"><summary>Как считается комиссия</summary><table>' + g.map((r, i) => '<tr><td>' + (r.to == null ? 'от ' + M(i ? g[i - 1].to : 0) : (i ? M(g[i - 1].to) + ' – ' : 'до ') + M(r.to - 1)) + '</td><td>' + r.pct + '% от цены машины</td></tr>').join('') + '</table><p class="muted">Комиссия подборщика берётся от цены машины. Налоги, регистрация и доставка считаются отдельно.</p></details></section>';
+    + '<details class="b-grid"><summary>Что входит и как считается</summary><p class="muted" style="margin-top:10px">Один процент от цены машины, в который входит всё: сбор аукциона, оформление и документы, работа подборщика. Чем дороже машина, тем меньше процент. Между точками он меняется плавно, без скачков.</p><table>' + cf.grid.map(r => '<tr><td>Машина ' + M(r.at) + '</td><td>' + r.pct + '%, ' + M(Math.max(cf.min, r.at * r.pct / 100)) + '</td></tr>').join('') + '</table><p class="muted">' + (cf.min ? 'Минимум ' + M(cf.min) + '. ' : '') + 'Налог с продажи, регистрация и доставка считаются отдельно.</p></details></section>';
 }
 function calcDraw() {
   const c = B.calc, v = +($('#calcIn') || {}).value || 0, el = $('#calcRes'); if (!el) return;
   if (c.mode === 'budget') { c.budget = v; const r = carFromBudget(v, B.grid);
-    el.innerHTML = '<div class="b-big"><span>На машину остаётся</span><b>' + M(r.price) + '</b></div><div class="b-rows"><div><span>Комиссия подборщика (' + r.pct + '%)</span><b>' + M(r.fee) + '</b></div><div class="tot"><span>Всего</span><b>' + M(r.total) + '</b></div></div>'
+    el.innerHTML = '<div class="b-big"><span>На машину остаётся</span><b>' + M(r.price) + '</b></div><div class="b-rows"><div><span>Сборы и комиссия (' + r.pct + '%)</span><b>' + M(r.fee) + '</b></div><div class="tot"><span>Всего под ключ</span><b>' + M(r.total) + '</b></div></div>'
       + (allLots().length ? '<p class="b-fit">' + fitText(r.price) + '</p>' : '');
   } else { c.price = v; const r = feeFor(v, B.grid);
-    el.innerHTML = '<div class="b-big"><span>Всего с комиссией</span><b>' + M(r.total) + '</b></div><div class="b-rows"><div><span>Машина</span><b>' + M(r.price) + '</b></div><div><span>Комиссия подборщика (' + r.pct + '%)</span><b>' + M(r.fee) + '</b></div></div>';
+    el.innerHTML = '<div class="b-big"><span>Всего под ключ</span><b>' + M(r.total) + '</b></div><div class="b-rows"><div><span>Машина</span><b>' + M(r.price) + '</b></div><div><span>Сборы и комиссия (' + r.pct + '%)</span><b>' + M(r.fee) + '</b></div></div>';
   }
   LSs('b-calc', c);
 }
@@ -132,7 +132,7 @@ async function signIn() {
 function stop() { B.unsub.forEach(f => { try { f(); } catch (e) {} }); B.unsub = []; B.clients = []; B.lots = {}; }
 async function start() {
   stop(); const { collection, query, where, getDocs, onSnapshot, getDoc, doc } = B.F.fs;
-  try { const d = await getDoc(doc(B.db, 'config', 'fees')); if (d.exists()) B.grid = d.data().grid; } catch (e) {}
+  try { const d = await getDoc(doc(B.db, 'config', 'fees')); if (d.exists()) B.grid = d.data(); } catch (e) {}
   try { const s = await getDocs(query(collection(B.db, 'clients'), where('email', '==', B.user.email))); s.forEach(d => B.clients.push(Object.assign({ id: d.id }, d.data()))); }
   catch (e) { console.warn(e); }
   render();
