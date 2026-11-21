@@ -21,6 +21,7 @@
 ## Каталог EDGE (любой аукцион): edge_fetch.js + build_edge.py
 Во вкладке edgepipeline.com (без await): `const B='https://1mtulegenov.github.io/auction-app/';eval(await (await fetch(B+'tools/edge_fetch.js',{cache:'no-store'})).text());__edgeFetch('<slug>','<y>/<m>/<d>')`.
 Ждать `window._done` (число), затем `__edgeShow('raw'|'detail'|'ann', i)` + get_page_text по кускам (E<k><i> … ENDE) → tools/<pfx>_raw|detail|ann_<дата>.txt (pfx = код аукциона маленькими: aaa, h1c, anh, aah, ana).
+Галерея: `__edgeShow('ph', i)` (маркер Eph<i>) → tools/<pfx>_ph_<дата>.txt; после merge_day запусти `python3 tools/apply_gallery.py <дата> tools/<pfx>_ph_<дата>.txt` (все фото лота, поле pp).
 `python3 tools/build_edge.py <дата> <AUC>` → tools/<pfx>_out_<дата>.json; `python3 tools/merge_day.py <дата> tools/<pfx>_out_<дата>.json "Заголовок дня"` (первый вызов создаёт data/<дата>.json); `python3 tools/apply_pro.py <дата>`; новую дату вставить в начало data/index.json; потом ретейл.
 Неходячие линии и слаги заданы в CFG в build_edge.py (AAA: линии 7 и 77). H1C на EDGE без MMR и отчётов: оценка только по похожим лотам.
 

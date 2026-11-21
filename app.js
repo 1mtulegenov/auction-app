@@ -401,6 +401,13 @@ function hotLine(x) {
 // номер фото на CDN EDGE растёт со временем загрузки: чем больше, тем позже машину выставили
 function phId(x) { if (!x.ph) return -1; const p = x.ph.split('/'); return +(p[1] + p[2]) || -1; }
 function photoUrl(x) { if (x.img) return x.img; if (!x.ph) return ''; const p = x.ph.split('/'); const sf = p.length > 3 ? p.pop() : '00'; return 'https://file3.autolookout.net/' + p.join('/') + '/O3Jlc29sdXRpb246NDAweDMwMDs=/' + sf; }
+const PH_S = 'O3Jlc29sdXRpb246NDAweDMwMDs=', PH_L = 'O3Jlc29sdXRpb246MTAyNHg3Njg7';
+function photoList(x) {
+  if (x.img) return [x.img]; if (!x.ph) return [];
+  const p = x.ph.split('/'), pre = p[0] + '/' + p[1];
+  return [p.slice(0, 3).join('/') + '/' + (p[3] || '00')].concat((x.pp || []).map(s => { const q = s.split('/'); return q.length > 2 ? s : pre + '/' + s; }));
+}
+function phUrl(path, big) { if (/^https?:/.test(path)) return path; const p = path.split('/'); return 'https://file3.autolookout.net/' + p.slice(0, 3).join('/') + '/' + (big ? PH_L : PH_S) + '/' + (p[3] || '00'); }
 function photo(x, cls, lazy) { const u = photoUrl(x); return u ? '<img class="' + cls + '" src="' + u + '" alt="" referrerpolicy="no-referrer" decoding="async"' + (lazy ? ' loading="lazy"' : '') + ' onerror="if(/\\/00$/.test(this.src)&&!this.dataset.f){this.dataset.f=1;this.src=this.src.replace(/00$/,\'01\')}else this.remove()">' : ''; }
 /* сравнение floor price с ценой, за которую машину отдали сразу на аукционе (без оффера), по пост-сейлу */
 function flRes(x) {
@@ -423,13 +430,23 @@ function rtLine(x, full) {
     + (gap != null ? '<div><b class="' + (gap > 0 ? 'pos' : 'neg') + '">' + (gap > 0 ? '+' : '') + M(gap) + '</b><span>' + T('ретейл минус MMR') + '</span></div>' : '') + '</div>'
     + '<p class="muted">' + T('Подержанные машины этого года и модели на cars.com в 50 милях от центра Хьюстона, обновлено ') + E(fmtDate(r.at)) + '. ' + (r.n < 4 ? T('Объявлений мало: цифра приблизительная.') : '') + '</p></div>';
 }
+function thumbBox(x, fd) {
+  const n = photoList(x).length; if (!n) return '';
+  return '<button class="thumb-w" data-gal="' + E(x.k) + '"' + (fd || '') + ' aria-label="' + T('Фото') + ' (' + n + ')">' + photo(x, 'thumb', true) + (n > 1 ? '<i>' + n + '</i>' : '') + '</button>';
+}
+const LIGHT = { Green: ['g', 'Зелёный свет'], Yellow: ['y', 'Жёлтый свет'], Red: ['r', 'Красный свет'], Blue: ['b', 'Синий свет: продаётся как есть'] };
+function lightDot(x) {
+  if (x.auc === 'CMX') return x.mech ? '<span class="ldot r" title="' + T('Дефект двигателя/КПП') + '" aria-label="' + T('Дефект двигателя/КПП') + '"></span>' : '';
+  const k = String(x.l || '').includes('Red') ? 'Red' : String(x.l || '').includes('Blue') ? 'Blue' : x.l; const v = LIGHT[k]; if (!v) return '';
+  return '<span class="ldot ' + v[0] + '" title="' + T(v[1]) + '" aria-label="' + T(v[1]) + '"></span>';
+}
 function lotCard(x) {
   const flOn = S.tab === 'lots' && S.f.quick === 'floor' && !!x.floor;
   const n = noteOf(x), v = VERDICT[x.stat], fav = isFav(x), fd = x._d && x._d !== S.date ? ' data-fd="' + E(x._d) + '"' : '';
   return '<article class="lot' + (x.past && x.past.length ? ' seen ' + seenLv(x) : '') + '" role="button" tabindex="0" data-lot="' + E(x.k) + '"' + fd + '>'
-    + '<div class="lot-top"><span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + slot(x) + '</span>' + (v ? '<span class="verdict ' + v[0] + '">' + v[1] + '</span>' : '') + '</div>'
+    + '<div class="lot-top">' + lightDot(x) + '<span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + slot(x) + '</span>' + (v ? '<span class="verdict ' + v[0] + '">' + v[1] + '</span>' : '') + '</div>'
     + '<button class="star' + (fav ? ' on' : '') + '" data-fav="' + E(x.k) + '"' + fd + ' aria-label="' + T('В избранное') + '" aria-pressed="' + fav + '">' + (fav ? '★' : '☆') + '</button>'
-    + '<div class="lot-id">' + photo(x, 'thumb', true) + '<div><h3>' + E(carTitle(x)) + '</h3>'
+    + '<div class="lot-id">' + thumbBox(x, fd) + '<div><h3>' + E(carTitle(x)) + '</h3>'
     + '<p class="sub">' + [x.o > 500 ? N(x.o) + ' mi' : '', COLOR[x.c] || String(x.c || '').toLowerCase()].filter(Boolean).map(E).join(' · ') + '</p>' + flResTag(x) + '</div></div>'
     + (isInop(x) ? '<div class="money inop"><div class="m-main"><span>MMR</span><b>' + M(x.w) + '</b></div><div class="m-note">' + T('Неходячая: прибыль не считаем') + '</div></div>' : '<div class="money ' + (flOn ? 'three' : 'two') + '"><div class="m-main"><span>' + (x.est ? T('MMR, оценка') : 'MMR') + '</span><b>' + (x.est && x.w != null ? '≈' : '') + M(x.w) + '</b></div>' + (flOn ? '<div class="m-main"><span>Floor price</span><b class="' + (x.max != null && x.floor > x.max ? 'fl-hi' : '') + '">' + M(x.floor) + '</b></div>' : '') + '<div class="m-main"><span>' + T('Ретейл') + '</span><b>' + (x.est && x.r != null ? '≈' : '') + M(x.r) + '</b></div></div>')
     + rtLine(x)
@@ -442,7 +459,7 @@ function lotCard(x) {
 }
 
 /* ---------- фильтры ---------- */
-const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('Подбор для Максата')], ['inop', T('Неходячие')], ['clean', T('Без пометок')], ['floor', T('С floor price')], ['past', T('Были на торгах')], ['notes', T('С заметкой')]];
+const QUICK = [['', T('Все')], ['fav', T('★ Избранное')], ['pick', T('Подборка')], ['seven', T('Подбор для Максата')], ['inop', T('Неходячие')], ['clean', T('Без пометок')], ['floor', T('С floor price')], ['past', T('Были на торгах')], ['notes', T('С заметкой')], ['hid', T('Скрытые')]];
 const SORTS = [['stat', T('Сначала подборка')], ['prof', T('Прибыль больше')], ['w', T('MMR меньше')], ['wd', T('MMR больше')], ['diff', T('Ретейл − MMR больше')], ['time', T('Аукцион и время')], ['mk', T('Марка, модель, год')], ['ymm', T('Год, марка, модель')], ['run', T('Run номер')], ['o', T('Пробег меньше')], ['new', T('Недавно выставленные')], ['y', T('Год новее')]];
 const STAT_ORDER = { 'Основная': 0, 'Флип': 1, 'Дорого': 2, 'Вне критериев': 3, 'Нет': 4 };
 const nnv = (v, d) => v == null ? d : v;
@@ -483,6 +500,7 @@ function applyFilters(list) {
     if (y && !(x.y >= y)) return false;
     if (o && !(x.o <= o)) return false;
     if (p && !(x.w != null && x.w <= p)) return false;
+    if (f.quick === 'hid' ? !isHidden(x) : isHidden(x)) return false;
     switch (f.quick) {
       case 'fav': return isFav(x);
       case 'pick': return x.C || x.F;
@@ -529,13 +547,14 @@ function render() {
   const v = $('#view');
   if (S.tab === 'home') v.innerHTML = home();
   else if (S.tab === 'picks') v.innerHTML = picks();
-  else if (S.tab === 'fav') { v.innerHTML = '<p class="empty">…</p>'; favScreen().then(h => { if (S.tab === 'fav') v.innerHTML = h; }); }
-  else if (S.tab === 'flist') { v.innerHTML = '<p class="empty">…</p>'; favListScreen().then(h => { if (S.tab === 'flist') v.innerHTML = h; }); }
+  else if (S.tab === 'fav') { v.innerHTML = skel(3); favScreen().then(h => { if (S.tab === 'fav') v.innerHTML = h; }); }
+  else if (S.tab === 'flist') { v.innerHTML = skel(3); favListScreen().then(h => { if (S.tab === 'flist') v.innerHTML = h; }); }
   else if (S.tab === 'lots') { v.innerHTML = lotsScreen(); drawLots(S.keepShown ? true : undefined); }
   else if (S.tab === 'results') { v.innerHTML = resultsScreen(); drawResults(); }
-  else if (S.tab === 'srch') { v.innerHTML = '<p class="empty">…</p>'; srchScreen().then(h => { if (S.tab === 'srch') v.innerHTML = h; }); }
-  else if (S.tab === 'srchres') { v.innerHTML = '<p class="empty">…</p>'; srchResScreen().then(h => { if (S.tab === 'srchres') v.innerHTML = h; }); }
+  else if (S.tab === 'srch') { v.innerHTML = skel(2); srchScreen().then(h => { if (S.tab === 'srch') v.innerHTML = h; }); }
+  else if (S.tab === 'srchres') { v.innerHTML = skel(3); srchResScreen().then(h => { if (S.tab === 'srchres') v.innerHTML = h; }); }
   else v.innerHTML = more();
+  cmpBar();
 }
 function installTitle() { return platform() === 'desktop' ? T('Установить на компьютер') : T('Установить на телефон'); }
 function installBanner() {
@@ -635,10 +654,12 @@ function saveListInput(t) {
 function lotsScreen() {
   const fc = activeFilterCount();
   return '<div class="searchbar"><input type="search" id="q" placeholder="' + T('Модель, лот или VIN') + '" value="' + E(S.f.q) + '" autocomplete="off" enterkeyhint="search" aria-label="' + T('Поиск') + '"><button id="btnFilters" class="' + (fc ? 'on' : '') + '">' + T('Фильтры') + (fc ? ' · ' + fc : '') + '</button></div>'
-    + '<div class="qf">' + QUICK.filter(q => q[0] !== 'seven' || isMax()).map(([k, l]) => '<button data-quick="' + k + '" aria-pressed="' + (S.f.quick === k) + '">' + l + '</button>').join('') + '</div>'
-    + '<div class="count"><span id="cnt"></span><select id="sort" aria-label="' + T('Сортировка') + '">' + SORTS.map(([k, l]) => '<option value="' + k + '"' + (S.f.sort === k ? ' selected' : '') + '>' + l + '</option>').join('') + '</select></div>'
+    + qfHtml()
+    + '<div class="count"><span id="cnt"></span><button id="viewMode" class="vm" aria-label="' + (S.view === 'table' ? T('Показать карточками') : T('Показать таблицей')) + '" title="' + (S.view === 'table' ? T('Карточки') : T('Таблица')) + '">' + (S.view === 'table' ? VM_CARDS : VM_TABLE) + '</button><select id="sort" aria-label="' + T('Сортировка') + '">' + SORTS.map(([k, l]) => '<option value="' + k + '"' + (S.f.sort === k ? ' selected' : '') + '>' + l + '</option>').join('') + '</select></div>'
     + '<div class="list" id="lotlist"></div><div id="lotmore"></div>';
 }
+const VM_TABLE = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>', VM_CARDS = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/></svg>';
+function qfHtml() { const hc = hiddenCount(); if (S.f.quick === 'hid' && !hc) S.f.quick = ''; return '<div class="qf">' + QUICK.filter(q => (q[0] !== 'seven' || isMax()) && (q[0] !== 'hid' || hc)).map(([k, l]) => '<button data-quick="' + k + '" aria-pressed="' + (S.f.quick === k) + '">' + l + (k === 'hid' ? ' · ' + hc : '') + '</button>').join('') + '</div>'; }
 let LOTS_CUR = [];
 function drawLots(keep) {
   const append = keep === 'append';
@@ -646,8 +667,10 @@ function drawLots(keep) {
   const from = append ? S.shown - 24 : 0;
   if (!keep) S.shown = 24;
   $('#cnt').textContent = T('Найдено ') + a.length + (a.length !== S.d.lots.length ? T(' из ') + S.d.lots.length : '');
-  if (append) $('#lotlist').insertAdjacentHTML('beforeend', a.slice(from, S.shown).map(lotCard).join(''));
-  else $('#lotlist').innerHTML = a.length ? a.slice(0, S.shown).map(lotCard).join('') : '<p class="empty">' + T('Ничего не нашлось. Попробуйте убрать фильтры.') + '</p>';
+  const tbl = S.view === 'table', row = tbl ? lotRow : lotCard, ll = $('#lotlist');
+  ll.classList.toggle('tbl', tbl);
+  if (append) ll.insertAdjacentHTML('beforeend', a.slice(from, S.shown).map(row).join(''));
+  else ll.innerHTML = a.length ? (tbl ? lotHead() : '') + a.slice(0, S.shown).map(row).join('') : '<p class="empty">' + (S.f.quick === 'hid' ? T('Скрытых лотов нет.') : T('Ничего не нашлось. Попробуйте убрать фильтры.')) + '</p>';
   $('#lotmore').innerHTML = a.length > S.shown ? '<button class="more" data-act="more">' + T('Показать ещё') + '</button>' : '';
   const mb = $('#lotmore .more'); if (mb && 'IntersectionObserver' in window) { const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { io.disconnect(); S.shown += 24; drawLots('append'); } }, { rootMargin: '800px' }); io.observe(mb); }
 }
@@ -803,7 +826,7 @@ function inspSummary(x) {
 async function inspAct(act, ds) {
   const x = inspCur(); if (!x) return;
   const o = inspOf(x);
-  if (act === 'in-set') { o.items[ds.id] = o.items[ds.id] === ds.v ? '' : ds.v; inspStore(x); inspRedraw(x); return; }
+  if (act === 'in-set') { o.items[ds.id] = o.items[ds.id] === ds.v ? '' : ds.v; inspStore(x); inspRedraw(x); calc(x); return; }
   if (act === 'in-note') {
     const cur = (noteOf(x) || {}).text || '', line = inspSummary(x);
     const txt = /^🔍 Осмотр.*$/m.test(cur) ? cur.replace(/^🔍 Осмотр.*$/m, line) : (cur ? cur + '\n' : '') + line;
@@ -1124,7 +1147,7 @@ function closeSheet(fromPop) {
   if (S.tab === 'lots') drawLots(true); else if (S.tab !== 'results') keepScroll(render);
   saveView();
 }
-window.addEventListener('popstate', () => { if (sheetOpen) closeSheet(true); });
+window.addEventListener('popstate', () => { if (closeGal(true)) return; if (sheetOpen) closeSheet(true); });
 
 function detail(k) {
   const x = S.d.map[k]; if (!x) return;
@@ -1149,14 +1172,16 @@ function detail(k) {
   if (x.seen) info += '<p class="p wrn">' + T('Была в каталоге ') + E(x.seen) + T(': выставляется повторно.') + '</p>';
   if (x.hx) info += '<p class="p ' + (x.hxbad ? 'wrn' : '') + '"><b>' + T('История (AutoCheck):') + '</b> ' + E(x.hx) + '</p>';
   if (x.cons) info += '<p class="p muted">' + T('Продавец: ') + E(x.cons) + (x.drv && x.drv !== 'N/A' ? ' · ' + E(x.drv) : '') + (x.eng ? ' · ' + E(x.eng) : '') + '</p>';
-  const html = '<div class="d-card">' + photo(x, 'd-photo', false) + '<div class="lot-top"><span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + dLabel(S.d) + ', ' + slot(x) + '</span></div>'
+  const html = '<div class="d-card">' + galStrip(x) + '<div class="lot-top">' + lightDot(x) + '<span class="run">' + E(x.run) + '</span><span class="where">' + E(AUC[x.auc] || x.auc) + ' · ' + dLabel(S.d) + ', ' + slot(x) + '</span></div>'
     + '<h3 class="d-name">' + E(carTitle(x)) + '</h3><p class="sub">' + (x.o > 500 ? N(x.o) + ' mi · ' : '') + E(COLOR[x.c] || String(x.c || '').toLowerCase()) + (x.tr ? (x.est ? ' · EDGE: ' : ' · Manheim: ') + E(x.tr) : '') + '</p>' + flResTag(x)
     + (chips ? '<div class="chips">' + chips + '</div>' : '') + factText(x) + '</div>'
     + (isInop(x) ? '<div class="d-card"><div class="grid6"><div class="hl"><b>' + M(x.w) + '</b><span>Adjusted MMR</span></div></div><p class="muted" style="margin-top:6px">' + T('Неходячая машина: прибыль, цену продажи и макс. ставку не считаем, только MMR.') + '</p></div>' : '')
     + (isInop(x) ? '' : '<div class="d-card"><div class="grid6"><div class="hl"><b>' + M(x.w) + '</b><span>Adjusted MMR</span></div><div><b>' + M(x.w != null ? x.w + FEE : null) + '</b><span>' + T('MMR + сбор ') + M(FEE) + '</span></div><div><b>' + M(x.r) + '</b><span>' + (x.est ? T('ретейл, оценка') : T('ретейл Manheim')) + '</span></div><div><b>' + M(x.sale) + '</b><span>' + T('цена продажи') + '</span></div><div><b class="' + profCls(x) + '">' + M(x.prof) + '</b><span>' + T('прибыль по MMR') + '</span></div><div><b>' + M(x.max) + '</b><span>' + T('макс. ставка') + (x.margin ? T(' (прибыль ') + M(x.margin) + ')' : '') + '</span></div>' + ((nf => nf && (nf.bid || nf.ws) ? (nf.bid ? '<div><b>' + M(nf.bid) + '</b><span>' + T('ставка по заметке') + '</span></div>' : '') + (nf.ws ? '<div><b>' + M(nf.ws) + '</b><span>' + T('WS по заметке') + '</span></div>' : '') : '')(noteFlags(noteOf(x)))) + '</div>'
     + (x.est ? '<p class="muted" style="margin-top:6px">' + T('Новый лот: Manheim ещё не смотрели. MMR и ретейл оценены по похожим машинам с прошлых торгов.') + ' ' + E(x.src || '') + '</p>' : '')
     + (x.demand ? '<p class="p"><b>' + T('Спрос ') + x.demand + '/10</b>' + (x.sell ? T(', продаётся за ') + E(weeks(x.sell)) : '') + '</p>' : '') + '</div>')
-    + (x.sale != null && !isInop(x) ? '<div class="d-card"><h3>' + T('Калькулятор ставки') + '</h3><div class="calc"><input id="bid" type="number" inputmode="numeric" value="' + E(bid) + '" aria-label="' + T('Ваша ставка, $') + '"><div class="calc-out" id="calcOut"></div></div></div>' : '')
+    + (x.sale != null && !isInop(x) ? '<div class="d-card"><h3>' + T('Калькулятор ставки') + '</h3><div class="calc"><input id="bid" type="number" inputmode="numeric" value="' + E(bid) + '" aria-label="' + T('Ваша ставка, $') + '"><div class="calc-out" id="calcOut"></div></div>'
+      + '<div class="calc2"><label>' + T('Доп. расходы: детали, покраска, перегон, $') + '<input id="extra" type="number" inputmode="numeric" placeholder="0" value="' + E((LS.get('extra-v1', {})[x.vin || k]) || '') + '"></label><div id="calcFull"></div></div></div>' : '')
+    + (isInop(x) || !x.w ? '' : '<div class="d-card" id="rangeCard" data-k="' + E(k) + '"><h3>' + T('Вероятная цена на торгах') + '</h3><div class="sk-line"></div><div class="sk-line short"></div></div>')
     + rtLine(x, true)
     + proCard(x)
     + (x.vin ? '<div class="d-card insp" id="inspCard" data-k="' + E(k) + '">' + inspCard(x) + '</div>' : '')
@@ -1168,9 +1193,12 @@ function detail(k) {
     + (x.vin ? '<button class="btn" data-act="copy" data-v="' + E(x.vin) + '">' + T('Скопировать VIN') + '</button>' : '')
     + (link ? '<a class="btn pri" href="' + E(link) + '" target="_blank" rel="noopener">' + T('Открыть лот') + '</a>' : '')
     + '<button class="btn" data-act="share-lot" data-k="' + E(k) + '">' + T('Поделиться') + '</button>'
+    + '<button class="btn" data-act="cmp" data-k="' + E(k) + '">' + (inCmp(x) ? T('✓ В сравнении') : T('⇄ Сравнить')) + '</button>'
     + '</div></div>';
-  openSheet(T('Лот ') + E(x.run), html, true);
-  calc(x); obdThumbs(x); inspLoad(x);
+  const pos = S.tab === 'lots' ? LOTS_CUR.indexOf(x) : -1;
+  const nav = pos < 0 ? '' : '<span class="d-nav"><button data-act="lot-prev" aria-label="' + T('Предыдущий лот') + '"' + (pos ? '' : ' disabled') + '>‹</button><span>' + (pos + 1) + '/' + LOTS_CUR.length + '</span><button data-act="lot-next" aria-label="' + T('Следующий лот') + '"' + (pos < LOTS_CUR.length - 1 ? '' : ' disabled') + '>›</button></span>';
+  openSheet(T('Лот ') + E(x.run), html, true, nav);
+  calc(x); obdThumbs(x); inspLoad(x); priceRange(x);
 }
 /* ---------- ошибки OBD: скриншот ThinkDiag у машины, коды распознаются в приложении, пояснения из справочника obd.js ---------- */
 const OBD_IMG = {};
@@ -1270,10 +1298,17 @@ function obdView(id) {
   v.innerHTML = '<img alt="' + T('Скриншот OBD') + '" src="' + src + '"><div class="obd-vbar"><button class="btn" data-act="obd-del-img" data-id="' + E(id) + '">' + T('Удалить скриншот') + '</button><button class="btn pri" data-act="obd-close">' + T('Закрыть') + '</button></div>';
   document.body.appendChild(v);
 }
+function inspRepair(x) { const o = x.vin && S.insp[x.vin]; if (!o) return 0; const st = o.items || {}; return inspItems(x).filter(i => st[i.id] === 'bad').reduce((a, i) => a + i.c, 0); }
 function calc(x) {
   const i = $('#bid'), o = $('#calcOut'); if (!i || !o) return;
   const b = +i.value || 0, tot = b + FEE, pr = x.sale - tot;
   o.innerHTML = T('С учётом сбора: ') + '<b>' + M(tot) + '</b><br>' + T('Прибыль: ') + '<b class="' + (pr >= (x.margin || 1000) ? 'pos' : pr > 0 ? 'mid' : 'neg') + '">' + M(pr) + '</b>' + (x.w ? ' · ' + Math.round(100 * b / x.w) + T('% от MMR') : '');
+  const f = $('#calcFull'); if (!f) return;
+  const rep = inspRepair(x), ex = +(($('#extra') || {}).value) || 0, all = tot + rep + ex, pr2 = x.sale - all;
+  f.innerHTML = '<div class="fc-r"><span>' + T('Ставка') + '</span><b>' + M(b) + '</b></div><div class="fc-r"><span>' + T('Сбор аукциона') + '</span><b>' + M(FEE) + '</b></div>'
+    + '<div class="fc-r"><span>' + T('Ремонт по осмотру') + '</span><b>' + (rep ? M(rep) : '—') + '</b></div>' + (ex ? '<div class="fc-r"><span>' + T('Доп. расходы') + '</span><b>' + M(ex) + '</b></div>' : '')
+    + '<div class="fc-r tot"><span>' + T('Полная стоимость') + '</span><b>' + M(all) + '</b></div><div class="fc-r tot"><span>' + T('Прибыль после ремонта') + '</span><b class="' + (pr2 >= (x.margin || 1000) ? 'pos' : pr2 > 0 ? 'mid' : 'neg') + '">' + M(pr2) + '</b></div>'
+    + (rep ? '' : '<p class="muted">' + T('Отметьте ✗ в «Осмотре на площадке», и ремонт добавится сам.') + '</p>');
 }
 function saveNote(ta) {
   const x = S.d.map[ta.dataset.k]; if (!x || !x.vin) return;
@@ -1400,11 +1435,13 @@ document.addEventListener('click', async e => {
   if (e.target === $('#sheetBg')) return;
   const ds = t.dataset;
   if (ds.fav) { e.stopPropagation(); toggleFav(ds.fav, ds.fd); return; }
+  if (ds.gal) { e.stopPropagation(); const d = ds.fd && S.cache[ds.fd] ? S.cache[ds.fd] : S.d; openGal(d.map[ds.gal], +ds.gi || 0); return; }
+  if (t.id === 'viewMode') { S.view = S.view === 'table' ? 'cards' : 'table'; LS.set('lots-view', S.view); t.innerHTML = S.view === 'table' ? VM_CARDS : VM_TABLE; t.setAttribute('aria-label', S.view === 'table' ? T('Показать карточками') : T('Показать таблицей')); drawLots(true); return; }
   if (ds.lang) { LS.set('lang', ds.lang); location.reload(); return; }
   if (ds.ff) { setFont('f', ds.ff); return; }
   if (ds.fz) { setFont('z', +ds.fz); return; }
   if (ds.tab) { if (sheetOpen) closeSheet(); go(ds.tab); return; }
-  if (ds.date) { await loadDate(ds.date); S.f.quick = S.f.quick === 'fav' ? 'fav' : S.f.quick; render(); window.scrollTo(0, 0); return; }
+  if (ds.date) { if (!S.cache[ds.date] && ['home', 'picks', 'lots', 'results'].includes(S.tab)) $('#view').innerHTML = skel(4); await loadDate(ds.date); S.f.quick = S.f.quick === 'fav' ? 'fav' : S.f.quick; render(); window.scrollTo(0, 0); return; }
   if (ds.go) { if (ds.pick) S.picks = ds.pick; if (ds.au != null) { S.f.au = ds.au; } if (ds.quick != null) S.f.quick = ds.quick; go(ds.go); return; }
   if (ds.pick) { S.picks = ds.pick; render(); return; }
   if (ds.pauc != null) { S.pickAuc = ds.pauc; render(); return; }
@@ -1416,6 +1453,15 @@ document.addEventListener('click', async e => {
   if (t.id === 'btnTheme') { cycleTheme(); return; }
   switch (ds.act) {
     case 'close': closeSheet(); break;
+    case 'gal-close': closeGal(); break;
+    case 'gal-prev': galGo(galCur() - 1); break;
+    case 'gal-next': galGo(galCur() + 1); break;
+    case 'gal-go': galGo(+ds.gi); break;
+    case 'cmp': { const x = S.d.map[ds.k]; if (x) cmpToggle(x); break; }
+    case 'cmp-open': cmpSheet(); break;
+    case 'cmp-clear': S.cmp = []; LS.set('cmp-v1', S.cmp); cmpBar(); if (sheetOpen && $('#sheetTitle') && $('#sheetTitle').textContent === T('Сравнение')) closeSheet(); toast(T('Сравнение очищено')); break;
+    case 'cmp-rm': S.cmp = S.cmp.filter(c => !(c.d === ds.d && c.k === ds.k)); LS.set('cmp-v1', S.cmp); cmpBar(); if (S.cmp.length) cmpSheet(); else closeSheet(); break;
+    case 'lot-prev': case 'lot-next': { const i = LOTS_CUR.findIndex(l => l.k === S.openLot), j = i + (ds.act === 'lot-next' ? 1 : -1); if (i < 0 || !LOTS_CUR[j]) break; const ta = $('#sheet textarea.note'); if (ta) saveNote(ta); detail(LOTS_CUR[j].k); break; }
     case 'obd-view': obdView(ds.id); break;
     case 'obd-close': { const v = document.querySelector('.obd-view'); if (v) v.remove(); break; }
     case 'obd-del-img': { const v = document.querySelector('.obd-view'); if (v) v.remove(); const cur = obdCur(); if (!cur) break; const [x, o] = cur; o.shots = o.shots.filter(s => s.id !== ds.id); delete OBD_IMG[x.vin + '/' + ds.id]; if (window.Sync && Sync.delObdImg) Sync.delObdImg(x.vin, ds.id); obdSave(x, o); toast(T('Скриншот удалён')); break; }
@@ -1475,6 +1521,7 @@ document.addEventListener('input', e => {
   else if (id === 'rq') { clearTimeout(qT); qT = setTimeout(() => { S.rf.q = e.target.value; drawResults(); }, 150); }
   else if (id === 'fee_auc' || id === 'fee_dealer') { clearTimeout(qT); qT = setTimeout(setFees, 250); }
   else if (id === 'bid') { const x = S.d.map[$('#note').dataset.k]; calc(x); }
+  else if (id === 'extra') { const x = S.d.map[$('#note').dataset.k]; calc(x); const m = LS.get('extra-v1', {}), key = x.vin || x.k; if (+e.target.value) m[key] = +e.target.value; else delete m[key]; LS.set('extra-v1', m); }
   else if (e.target.matches('.fl-in')) { e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; clearTimeout(e.target._t); e.target._t = setTimeout(() => saveListInput(e.target), 700); }
   else if (id === 'note') { const st = $('#nstat'); if (st) st.textContent = T('Сохранится, когда закончите'); clearTimeout(qT); qT = setTimeout(() => saveNote(e.target), 800); }
 });
@@ -1857,3 +1904,161 @@ window.addEventListener('sync-state', () => {
     setTimeout(() => toast(T('Присылать уведомления о новых аукционах и пост-сейле?'), T('Включить'), pushOn), 1500);
   } catch (e) {}
 });
+
+/* ---------- галерея фото: все кадры EDGE на весь экран, свайп между кадрами, тап — приблизить ---------- */
+function galStrip(x) {
+  const L = photoList(x); if (!L.length) return '';
+  return '<div class="d-gal"><div class="d-gal-s">' + L.map((p, j) => '<button data-gal="' + E(x.k) + '" data-gi="' + j + '"' + (x._d && x._d !== S.date ? ' data-fd="' + E(x._d) + '"' : '') + ' aria-label="' + T('Фото') + ' ' + (j + 1) + '"><img src="' + phUrl(p, true) + '" alt="" referrerpolicy="no-referrer" decoding="async"' + (j > 1 ? ' loading="lazy"' : '') + ' onerror="this.parentNode.remove()"></button>').join('') + '</div>'
+    + (L.length > 1 ? '<span class="d-gal-n">' + L.length + ' ' + T('фото') + '</span>' : '') + '</div>';
+}
+function openGal(x, i) {
+  const L = photoList(x); if (!x || !L.length) return;
+  closeGal(true);
+  const g = document.createElement('div'); g.className = 'gal'; g.id = 'gal'; g.setAttribute('role', 'dialog'); g.setAttribute('aria-label', T('Фото'));
+  g.innerHTML = '<div class="gal-h"><span class="gal-n" id="galN">' + (i + 1) + ' / ' + L.length + '</span><span class="gal-t">' + E(x.run) + ' · ' + E(carTitle(x)) + '</span><button data-act="gal-close" aria-label="' + T('Закрыть') + '">✕</button></div>'
+    + '<div class="gal-s" id="galS">' + L.map((p, j) => '<figure><img src="' + phUrl(p, true) + '" alt="" referrerpolicy="no-referrer" decoding="async"' + (Math.abs(j - i) > 1 ? ' loading="lazy"' : '') + ' onerror="this.closest(\'figure\').classList.add(\'bad\')"></figure>').join('') + '</div>'
+    + (L.length > 1 ? '<button class="gal-a prev" data-act="gal-prev" aria-label="' + T('Назад') + '">‹</button><button class="gal-a next" data-act="gal-next" aria-label="' + T('Дальше') + '">›</button>'
+    + '<div class="gal-th" id="galTh">' + L.map((p, j) => '<button data-act="gal-go" data-gi="' + j + '"' + (j === i ? ' class="on"' : '') + '><img src="' + phUrl(p, false) + '" alt="" referrerpolicy="no-referrer" loading="lazy"></button>').join('') + '</div>' : '');
+  document.body.appendChild(g); document.body.classList.add('gal-on');
+  const s = $('#galS'); s.scrollLeft = i * s.clientWidth;
+  let raf = 0;
+  s.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { const n = Math.round(s.scrollLeft / s.clientWidth); $('#galN').textContent = (n + 1) + ' / ' + L.length; const th = $('#galTh'); if (th) { th.querySelectorAll('button').forEach((b, j) => b.classList.toggle('on', j === n)); const b = th.children[n]; if (b) th.scrollTo({ left: b.offsetLeft - th.clientWidth / 2 + b.offsetWidth / 2, behavior: 'smooth' }); } s.querySelectorAll('figure.z').forEach(f => f.classList.remove('z')); }); }, { passive: true });
+  s.addEventListener('click', e => { const f = e.target.closest('figure'); if (!f) return; const im = f.querySelector('img'), r = im.getBoundingClientRect(); im.style.transformOrigin = ((e.clientX - r.left) / r.width * 100) + '% ' + ((e.clientY - r.top) / r.height * 100) + '%'; f.classList.toggle('z'); });
+  try { history.pushState({ gal: 1 }, ''); } catch (e) {}
+}
+function galGo(n) { const s = $('#galS'); if (!s) return; n = Math.max(0, Math.min(s.children.length - 1, n)); s.scrollTo({ left: n * s.clientWidth, behavior: 'smooth' }); }
+function galCur() { const s = $('#galS'); return s ? Math.round(s.scrollLeft / s.clientWidth) : 0; }
+function closeGal(fromPop) { const g = $('#gal'); if (!g) return false; g.remove(); document.body.classList.remove('gal-on'); if (!fromPop) { try { history.back(); } catch (e) {} } return true; }
+document.addEventListener('keydown', e => { if (!$('#gal')) return; if (e.key === 'Escape') { e.stopImmediatePropagation(); closeGal(); } else if (e.key === 'ArrowRight') galGo(galCur() + 1); else if (e.key === 'ArrowLeft') galGo(galCur() - 1); }, true);
+
+/* ---------- вероятная цена на торгах: коридор по реальным продажам похожих машин ---------- */
+async function priceRange(x) {
+  const c = $('#rangeCard'); if (!c) return;
+  let all; try { all = await allLots(); } catch (e) { all = []; }
+  const ok = l => l.fact > 0 && l.w > 0 && !isInop(l) && l.vin !== x.vin && l.fact / l.w > .3 && l.fact / l.w < 2;
+  let base = all.filter(l => ok(l) && l.mk === x.mk && l.md === x.md && Math.abs((l.y || 0) - (x.y || 0)) <= 2), lab;
+  if (base.length >= 3) lab = T('по ') + base.length + T(' продажам похожих: ') + E(x.mk + ' ' + x.md) + ', ' + ((x.y || 0) - 2) + '–' + ((x.y || 0) + 2);
+  else { base = all.filter(l => ok(l) && l.auc === x.auc); lab = T('по ') + base.length + T(' продажам на ') + E(AUC[x.auc] || x.auc) + T(': похожих машин пока мало'); }
+  const cur = $('#rangeCard'); if (!cur || cur.dataset.k !== x.k) return;
+  if (base.length < 3) { cur.innerHTML = '<h3>' + T('Вероятная цена на торгах') + '</h3><p class="muted">' + T('Пока мало продаж, чтобы посчитать коридор.') + '</p>'; return; }
+  const r = base.map(l => l.fact / l.w).sort((a, b) => a - b), q = p => r[Math.min(r.length - 1, Math.max(0, Math.round(p * (r.length - 1))))];
+  const R = v => Math.round(x.w * v / 100) * 100, lo = R(q(.25)), mid = R(q(.5)), hi = R(q(.75));
+  const mx = x.max != null && x.max > 0 ? x.max : null;
+  const a = Math.min(lo, mx || lo, x.w) * .92, b = Math.max(hi, mx || hi, x.w) * 1.06, pc = v => Math.max(0, Math.min(100, (v - a) / (b - a) * 100)).toFixed(1);
+  const verdict = mx == null ? '' : mx < lo ? T('Наша макс. ставка ниже коридора: купить шанс небольшой.') : mx > hi ? T('Наша макс. ставка выше коридора: шанс купить хороший.') : T('Наша макс. ставка внутри коридора: шанс примерно пополам.');
+  cur.innerHTML = '<h3>' + T('Вероятная цена на торгах') + '</h3><p class="pr-big"><b>' + M(lo) + ' – ' + M(hi) + '</b></p><p class="muted">' + T('чаще всего около ') + M(mid) + ' (' + Math.round(q(.5) * 100) + T('% от MMR') + ')</p>'
+    + '<div class="pr-bar"><span class="pr-band" style="left:' + pc(lo) + '%;width:' + (pc(hi) - pc(lo)).toFixed(1) + '%"></span><span class="pr-mk mmr" style="left:' + pc(x.w) + '%" title="MMR"><i>MMR</i></span>' + (mx ? '<span class="pr-mk max" style="left:' + pc(mx) + '%"><i>' + T('макс.') + '</i></span>' : '') + '</div>'
+    + (verdict ? '<p class="p">' + verdict + '</p>' : '') + '<p class="muted">' + lab + '. ' + T('Учитываются только состоявшиеся продажи.') + '</p>';
+}
+
+/* ---------- сравнение машин бок о бок (до 4) ---------- */
+S.cmp = LS.get('cmp-v1', []);
+function inCmp(x) { const d = x._d || S.date; return S.cmp.some(c => c.d === d && c.k === x.k); }
+function cmpToggle(x) {
+  const d = x._d || S.date;
+  if (inCmp(x)) S.cmp = S.cmp.filter(c => !(c.d === d && c.k === x.k));
+  else { if (S.cmp.length >= 4) { toast(T('В сравнении уже 4 машины. Уберите одну.')); return; } S.cmp.push({ d, k: x.k }); }
+  LS.set('cmp-v1', S.cmp); cmpBar();
+  toast(inCmp(x) ? T('Добавлено в сравнение: ') + S.cmp.length : T('Убрано из сравнения'));
+  document.querySelectorAll('[data-act="cmp"][data-k="' + CSS.escape(x.k) + '"]').forEach(b => { b.textContent = inCmp(x) ? T('✓ В сравнении') : T('⇄ Сравнить'); });
+}
+function cmpBar() {
+  let b = $('#cmpBar'); if (!b) { b = document.createElement('div'); b.id = 'cmpBar'; b.className = 'cmp-bar'; document.body.appendChild(b); }
+  b.hidden = !S.cmp.length;
+  b.innerHTML = S.cmp.length ? '<button data-act="cmp-open">⇄ ' + T('Сравнить') + ' · ' + S.cmp.length + '</button><button data-act="cmp-clear" aria-label="' + T('Очистить сравнение') + '">✕</button>' : '';
+}
+async function cmpSheet() {
+  const L = [];
+  for (const c of S.cmp) { try { const d = await getDate(c.d), x = d.map[c.k]; if (x) L.push(x); } catch (e) {} }
+  if (!L.length) { S.cmp = []; LS.set('cmp-v1', S.cmp); cmpBar(); return; }
+  const best = (f, hi) => { const v = L.map(f).filter(n => typeof n === 'number'); if (v.length < 2) return null; return hi ? Math.max(...v) : Math.min(...v); };
+  const rows = [
+    ['', x => '<button class="cmp-ph" data-lot="' + E(x.k) + '" data-fd="' + E(x._d) + '">' + (photoList(x).length ? '<img src="' + phUrl(photoList(x)[0], false) + '" alt="" referrerpolicy="no-referrer">' : '') + '<b>' + E(carTitle(x)) + '</b></button>'],
+    [T('Лот'), x => lightDot(x) + E(x.run) + '<br><small>' + E(AUC[x.auc] || x.auc) + ', ' + fmtDate(x._d) + ' ' + slot(x) + '</small>'],
+    [T('Пробег'), x => x.o > 500 ? N(x.o) + ' mi' : '—', x => x.o > 500 ? x.o : null, false],
+    [T('Цвет'), x => E(COLOR[x.c] || String(x.c || '').toLowerCase() || '—')],
+    [T('Оценка'), x => E(x.g || '—'), x => x.g ? +x.g : null, true],
+    [T('Тайтл'), x => titleChip(x) || (x.cls ? '<span class="chip ' + (CLS[x.cls] || CLS.clean)[0] + '">' + (CLS[x.cls] || CLS.clean)[1] + '</span>' : '—')],
+    ['MMR', x => M(x.w), x => x.w, false],
+    [T('Ретейл Manheim'), x => M(x.r)],
+    [T('Ретейл Хьюстон'), x => x.rt ? M(x.rt.est) + '<br><small>' + x.rt.n + T(' объявл.') + '</small>' : '—'],
+    [T('Макс. ставка'), x => isInop(x) ? '—' : M(x.max)],
+    [T('Прибыль'), x => isInop(x) ? T('неходячая') : '<span class="' + profCls(x) + '">' + M(x.prof) + '</span>', x => isInop(x) ? null : x.prof, true],
+    [T('Спрос'), x => x.demand ? x.demand + '/10' + (x.sell ? '<br><small>' + E(weeks(x.sell)) + '</small>' : '') : '—', x => x.demand || null, true],
+    ['Floor', x => x.floor ? M(x.floor) : '—'],
+    [T('Пометки'), x => hasAnn(x) ? '<small>' + hl(x) + '</small>' : '—'],
+    [T('Заметка'), x => { const n = noteOf(x); return n ? '<small>' + E(n.text.slice(0, 160)) + '</small>' : '—'; }],
+    [T('Итог'), x => x.fact ? T('продана за ') + M(x.fact) : x.ss ? E(SS[x.ss] || x.ss) : '—'],
+    ['', x => '<button class="btn" data-act="cmp-rm" data-d="' + E(x._d) + '" data-k="' + E(x.k) + '">' + T('Убрать') + '</button>']
+  ];
+  const html = '<div class="cmp-w"><table class="cmp" style="--n:' + L.length + '"><tbody>' + rows.map(([lab, f, num, hi]) => { const bv = num ? best(num, hi) : null; return '<tr><th>' + lab + '</th>' + L.map(x => '<td' + (bv != null && num(x) === bv ? ' class="best"' : '') + '>' + f(x) + '</td>').join('') + '</tr>'; }).join('') + '</tbody></table></div>'
+    + (L.length < 2 ? '<p class="muted" style="margin-top:10px">' + T('Добавьте ещё машину кнопкой «⇄ Сравнить» в карточке лота.') + '</p>' : '<p class="muted" style="margin-top:10px">' + T('Лучшее значение в строке подсвечено.') + '</p>');
+  openSheet(T('Сравнение'), html, true);
+}
+
+/* ---------- скрытые лоты (свайп влево) ---------- */
+S.hide = LS.get('hide-v1', {});
+{ const lim = Date.now() - 60 * 864e5; let ch = false; for (const k in S.hide) if (S.hide[k] < lim) { delete S.hide[k]; ch = true; } if (ch) LS.set('hide-v1', S.hide); }
+function isHidden(x) { return !!S.hide[favKey(x)]; }
+function hideToggle(x) {
+  const k = favKey(x), was = !!S.hide[k];
+  if (was) delete S.hide[k]; else S.hide[k] = Date.now();
+  LS.set('hide-v1', S.hide);
+  const redraw = () => { if (S.tab === 'lots' && !sheetOpen) { const qf = $('.qf'); if (qf) qf.outerHTML = qfHtml(); drawLots(true); } };
+  redraw();
+  toast(was ? T('Лот снова в списке') : T('Лот скрыт'), T('Вернуть'), () => { if (was) S.hide[k] = Date.now(); else delete S.hide[k]; LS.set('hide-v1', S.hide); redraw(); });
+}
+function hiddenCount() { return S.d ? S.d.lots.filter(isHidden).length : 0; }
+
+/* ---------- компактный вид списка: таблица ---------- */
+S.view = LS.get('lots-view', 'cards');
+function lotHead() { return '<div class="thead" aria-hidden="true"><span>' + T('Лот') + '</span><span>' + T('Машина') + '</span><span>MMR</span><span class="t-max">' + T('Макс.') + '</span><span>' + T('Прибыль') + '</span></div>'; }
+function lotRow(x) {
+  const fd = x._d && x._d !== S.date ? ' data-fd="' + E(x._d) + '"' : '', inop = isInop(x), v = VERDICT[x.stat];
+  const sub = [x.o > 500 ? N(x.o) + ' mi' : '', x.st || '', slot(x)].filter(Boolean).map(E).join(' · ') + (S.d.results && x.fact ? ' · <b>' + T('продана ') + M(x.fact) + '</b>' : '');
+  return '<div class="trow' + (v ? ' r-' + v[0].slice(2) : '') + (isFav(x) ? ' fav' : '') + '" role="button" tabindex="0" data-lot="' + E(x.k) + '"' + fd + '>'
+    + '<span class="t-run">' + lightDot(x) + '<span>' + E(x.run) + '</span></span>'
+    + '<span class="t-car"><b>' + E([x.y, x.mk, x.md].filter(Boolean).join(' ')) + '</b><small>' + sub + '</small></span>'
+    + '<span class="t-n">' + (x.est && x.w != null ? '≈' : '') + M(x.w) + '</span>'
+    + '<span class="t-n t-max">' + (inop ? '—' : M(x.max)) + '</span>'
+    + '<span class="t-n ' + (inop ? 'muted' : profCls(x)) + '">' + (inop ? T('неход.') : M(x.prof)) + '</span></div>';
+}
+
+/* ---------- скелетоны вместо «…» при загрузке ---------- */
+function skel(n) { let h = '<div class="list skel" aria-busy="true" aria-label="' + T('Загрузка') + '">'; for (let i = 0; i < (n || 4); i++) h += '<div class="sk-card"><div class="sk-row"><span class="sk sk-pill"></span><span class="sk sk-txt"></span></div><div class="sk-row"><span class="sk sk-img"></span><span class="sk-col"><span class="sk sk-h"></span><span class="sk sk-txt"></span></span></div><div class="sk-row"><span class="sk sk-box"></span><span class="sk sk-box"></span></div></div>'; return h + '</div>'; }
+
+/* ---------- свайпы по карточкам в списке: вправо — в избранное, влево — скрыть ---------- */
+(function () {
+  let el = null, x0 = 0, y0 = 0, dx = 0, mode = 0, pid = null;
+  const reset = () => { if (el) { el.style.transition = ''; el.style.transform = ''; el.classList.remove('sw-r', 'sw-l', 'sw-on'); el.removeAttribute('data-sw'); } el = null; mode = 0; };
+  document.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' || el || sheetOpen) return;
+    const c = e.target.closest && e.target.closest('#lotlist .lot, #lotlist .trow'); if (!c || e.target.closest('.star,a,input,select,textarea')) return;
+    el = c; pid = e.pointerId; x0 = e.clientX; y0 = e.clientY; dx = 0; mode = 0;
+  }, { passive: true });
+  document.addEventListener('pointermove', e => {
+    if (!el || e.pointerId !== pid) return;
+    const ddx = e.clientX - x0, ddy = e.clientY - y0;
+    if (mode === 0) { if (Math.abs(ddx) > 12 && Math.abs(ddx) > Math.abs(ddy) * 1.4) { mode = 1; el.classList.add('sw-on'); try { el.setPointerCapture(pid); } catch (er) {} } else if (Math.abs(ddy) > 10) { el = null; return; } else return; }
+    dx = ddx; const x = S.d.map[el.dataset.lot];
+    el.style.transform = 'translateX(' + (dx > 0 ? Math.min(dx, 160) : Math.max(dx, -160)) * .9 + 'px)';
+    const r = dx > 80, l = dx < -80;
+    if (r !== el.classList.contains('sw-r') || l !== el.classList.contains('sw-l')) { if ((r || l) && navigator.vibrate) navigator.vibrate(8); }
+    el.classList.toggle('sw-r', r); el.classList.toggle('sw-l', l);
+    el.setAttribute('data-sw', dx > 0 ? (x && isFav(x) ? T('Убрать из избранного') : '★ ' + T('В избранное')) : (x && isHidden(x) ? T('Вернуть в список') : T('Скрыть')));
+  }, { passive: true });
+  const end = e => {
+    if (!el || e.pointerId !== pid) return;
+    if (mode !== 1) { el = null; return; }
+    S.swiped = Date.now();
+    const c = el, x = S.d.map[c.dataset.lot], d = dx;
+    c.style.transition = 'transform .25s cubic-bezier(.23,1,.32,1)';
+    if (d < -80 && x) { c.style.transform = 'translateX(-110%)'; setTimeout(() => hideToggle(x), 180); el = null; mode = 0; return; }
+    if (d > 80 && x) toggleFav(x.k, c.dataset.fd);
+    c.style.transform = ''; c.classList.remove('sw-r', 'sw-l'); c.removeAttribute('data-sw'); setTimeout(() => { c.style.transition = ''; c.classList.remove('sw-on'); if (S.view === 'table' && x) c.classList.toggle('fav', isFav(x)); }, 260);
+    el = null; mode = 0;
+  };
+  document.addEventListener('pointerup', end);
+  document.addEventListener('pointercancel', e => { if (el && e.pointerId === pid) reset(); });
+  document.addEventListener('click', e => { if (S.swiped && Date.now() - S.swiped < 450) { e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+})();
