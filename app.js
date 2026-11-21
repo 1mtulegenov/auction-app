@@ -725,7 +725,7 @@ function more() {
     + (isMax() ? '<button data-act="changelog"><span class="ic">🕘</span><span>' + T('История изменений') + '<small>' + T('Все запросы и что сделано, с датой и временем. Видно только вам') + '</small></span></button>' : '')
     + '<button data-act="srch-list"><span class="ic">🔎</span><span>' + T('Мои поиски') + '<small>' + (S.srch.length ? S.srch.length + T(' шт. Пуш, когда на новом аукционе есть совпадения') : T('Сохраните поиск, и придёт пуш, когда появятся такие машины')) + '</small></span></button>'
     + '<button data-act="push"><span class="ic">🔔</span><span>' + T('Уведомления') + '<small>' + pushLabel() + '</small></span></button>'
-    + (canSend() ? '<button data-act="clients"><span class="ic">🤝</span><span>' + T('Покупатели') + '<small>' + (isMax() ? T('Пары «дилер → покупатель», комиссия, отправленные лоты') : T('Ваши покупатели и отправленные им лоты')) + '</small></span></button>' : '')
+    + (canSend() ? '<button data-act="clients"><span class="ic">🤝</span><span>' + T('Покупатели') + (S.reqN ? ' · ' + T('заявок: ') + S.reqN : '') + '<small>' + (isMax() ? T('Пары «дилер → покупатель», комиссия, отправленные лоты') : T('Ваши покупатели и отправленные им лоты')) + '</small></span></button>' : '')
     + '<button data-act="stats"><span class="ic">📈</span><span>' + T('Статистика продаж') + '<small>' + T('Продано сразу против MMR и floor price: даты, марка, аукцион') + '</small></span></button>'
     + '<button data-act="notes"><span class="ic">📝</span><span>' + T('Заметки') + '<small>' + (notes.length ? notes.length + T(' шт., привязаны к VIN') : T('Пока нет. Пишутся в карточке машины.')) + '</small></span></button>'
     + '<button data-act="how"><span class="ic">🧮</span><span>' + T('Как считается прибыль') + '<small>' + T('MMR, сбор, цена продажи, максимальная ставка') + '</small></span></button>'
@@ -1464,7 +1464,7 @@ document.addEventListener('click', async e => {
     case 'clients': clientsSheet(); break;
     case 'snd': sendSheet(ds.k); break;
     case 'snd-go': sendGo(ds.k, t); break;
-    case 'cl-edit': case 'cl-save': case 'cl-del': case 'cl-unsend': case 'fee-add': case 'fee-save': clientAct(ds.act, ds, t); break;
+    case 'rq-ok': case 'rq-no': case 'cl-edit': case 'cl-save': case 'cl-del': case 'cl-unsend': case 'fee-add': case 'fee-save': clientAct(ds.act, ds, t); break;
     case 'cmp-clear': S.cmp = []; LS.set('cmp-v1', S.cmp); cmpBar(); if (sheetOpen && $('#sheetTitle') && $('#sheetTitle').textContent === T('Сравнение')) closeSheet(); toast(T('Сравнение очищено')); break;
     case 'cmp-rm': S.cmp = S.cmp.filter(c => !(c.d === ds.d && c.k === ds.k)); LS.set('cmp-v1', S.cmp); cmpBar(); if (S.cmp.length) cmpSheet(); else closeSheet(); break;
     case 'lot-prev': case 'lot-next': { const i = LOTS_CUR.findIndex(l => l.k === S.openLot), j = i + (ds.act === 'lot-next' ? 1 : -1); if (i < 0 || !LOTS_CUR[j]) break; const ta = $('#sheet textarea.note'); if (ta) saveNote(ta); detail(LOTS_CUR[j].k); break; }
@@ -2109,7 +2109,13 @@ async function clientsSheet() {
   openSheet(T('Покупатели'), skel(2), true);
   const cl = await loadClients(true), adm = isMax();
   const lots = await Promise.all(cl.map(c => Sync.clientLots(c.id)));
-  let h = '<div class="d-card"><p class="p">' + T('Ссылка на приложение покупателя: ') + '<b>' + E(BUYER_URL()) + '</b></p><div class="btns"><button class="btn" data-act="copy" data-v="' + E(BUYER_URL()) + '">' + T('Скопировать ссылку') + '</button></div><p class="muted">' + T('Покупатель входит через Google с той почтой, которую вы указали. Видит только лоты, отправленные ему.') + '</p></div>';
+  const rq = adm ? await Sync.requests() : []; S.reqN = rq.length; S.reqs = rq;
+  const dealers = [...new Map(cl.map(c => [c.dealerEmail, c.dealerName])).entries()].filter(([e]) => e);
+  let h = rq.length ? '<div class="d-card rq"><h3>' + T('Заявки на вход') + ' · ' + rq.length + '</h3>' + rq.map(r => '<div class="rq-r" data-id="' + E(r.id) + '"><b>' + E(r.name || T('Без имени')) + '</b><small>' + E([r.phone, r.email].filter(Boolean).join(' · ')) + (r.note ? ' · ' + E(r.note) : '') + '</small>'
+    + '<div class="rq-f"><input list="dlrList" class="rq-dn" placeholder="' + T('Имя дилера') + '"><input list="dlrMail" class="rq-de" type="email" placeholder="' + T('Почта дилера (Google)') + '"></div>'
+    + '<div class="btns"><button class="btn pri" data-act="rq-ok" data-id="' + E(r.id) + '">' + T('Разрешить') + '</button><button class="btn" data-act="rq-no" data-id="' + E(r.id) + '">' + T('Отклонить') + '</button></div></div>').join('')
+    + '<datalist id="dlrList">' + dealers.map(([e, n]) => '<option value="' + E(n || e) + '">').join('') + '</datalist><datalist id="dlrMail">' + dealers.map(([e]) => '<option value="' + E(e) + '">').join('') + '</datalist></div>' : '';
+  h += '<div class="d-card"><p class="p">' + T('Ссылка на приложение покупателя: ') + '<b>' + E(BUYER_URL()) + '</b></p><div class="btns"><button class="btn" data-act="copy" data-v="' + E(BUYER_URL()) + '">' + T('Скопировать ссылку') + '</button></div><p class="muted">' + T('Покупатель входит через Google с той почтой, которую вы указали. Видит только лоты, отправленные ему.') + '</p></div>';
   h += cl.length ? cl.map((c, i) => '<div class="d-card cl"><div class="cl-h"><div><b>' + E(c.name) + '</b><small>' + E(c.email) + (adm ? ' · ' + T('дилер ') + E(c.dealerName || c.dealerEmail) : '') + '</small></div>' + (adm ? '<button class="btn" data-act="cl-edit" data-id="' + E(c.id) + '">' + T('Изменить') + '</button>' : '') + '</div>'
     + (lots[i].length ? '<div class="cl-lots">' + lots[i].sort((a, b) => String(b.d).localeCompare(String(a.d))).map(l => '<div class="cl-l"><span>' + fmtDate(l.d) + ' · ' + E([l.y, l.mk, l.md].filter(Boolean).join(' ')) + (l.price ? ' · ≈' + M(l.price) : '') + (l.reaction === 'like' ? ' <em class="good">' + T('интересно') + '</em>' : l.reaction === 'no' ? ' <em class="muted">' + T('не подходит') + '</em>' : '') + (l.reply ? '<br><small>💬 ' + E(l.reply) + '</small>' : '') + '</span><button data-act="cl-unsend" data-c="' + E(c.id) + '" data-l="' + E(l.id) + '" aria-label="' + T('Убрать') + '">✕</button></div>').join('') + '</div>' : '<p class="muted">' + T('Пока ничего не отправлено.') + '</p>') + '</div>').join('')
     : '<p class="empty">' + T('Покупателей пока нет.') + '</p>';
@@ -2129,6 +2135,18 @@ async function feeEditor() {
     + '<div class="btns"><button class="btn" data-act="fee-add">' + T('+ точка') + '</button><button class="btn pri" data-act="fee-save">' + T('Сохранить') + '</button></div>';
 }
 async function clientAct(act, ds, t) {
+  if (act === 'rq-ok' || act === 'rq-no') {
+    const r = (S.reqs || []).find(x => x.id === ds.id), row = t.closest('.rq-r'); if (!r) return;
+    let dealer = null;
+    if (act === 'rq-ok') {
+      const dn = row.querySelector('.rq-dn').value.trim(); let de = row.querySelector('.rq-de').value.trim();
+      if (!de) { const c = (S.clients || []).find(c => c.dealerName === dn); if (c) de = c.dealerEmail; }
+      if (!/@/.test(de)) { toast(T('Укажите дилера: имя и почту')); return; }
+      dealer = { name: dn || de, email: de };
+    }
+    try { await Sync.decideRequest(r, act === 'rq-ok', dealer); toast(act === 'rq-ok' ? T('Покупатель добавлен') : T('Заявка отклонена')); clientsSheet(); } catch (e) { toast(e.message || String(e)); }
+    return;
+  }
   if (act === 'cl-edit') { const c = (S.clients || []).find(c => c.id === ds.id); if (c) openSheet(T('Покупатель'), '<div class="d-card">' + clientForm(c) + '</div>', true); return; }
   if (act === 'cl-save') { const f = t.closest('.cl-f'), v = n => f.querySelector('[name="' + n + '"]').value.trim(); const c = { id: f.dataset.id || null, name: v('name'), email: v('email'), dealerName: v('dealerName'), dealerEmail: v('dealerEmail') }; if (!c.name || !/@/.test(c.email) || !/@/.test(c.dealerEmail)) { toast(T('Заполните имя и обе почты')); return; } try { await Sync.saveClient(c); toast(T('Сохранено')); clientsSheet(); } catch (e) { toast(e.message || String(e)); } return; }
   if (act === 'cl-del') { try { await Sync.delClient(ds.id); toast(T('Покупатель удалён')); clientsSheet(); } catch (e) { toast(e.message || String(e)); } return; }
@@ -2136,4 +2154,12 @@ async function clientAct(act, ds, t) {
   if (act === 'fee-add') { const el = $('#feeEd'); const rows = el.querySelectorAll('.fee-r'); rows[rows.length - 1].insertAdjacentHTML('beforebegin', '<div class="fee-r"><span>' + T('машина $') + '</span><input type="number" inputmode="numeric" class="fe-to"><input type="number" inputmode="decimal" class="fe-pct"><span>%</span></div>'); return; }
   if (act === 'fee-save') { const g = [...document.querySelectorAll('#feeEd .fee-r')].filter(r => r.querySelector('.fe-to')).map(r => ({ at: +r.querySelector('.fe-to').value || 0, pct: +r.querySelector('.fe-pct').value })).filter(r => r.at > 0 && r.pct >= 0 && r.pct < 100); try { await Sync.saveFees({ grid: g, min: +$('#feeMin').value || 0 }); toast(T('Сохранено')); feeEditor(); } catch (e) { toast(e.message || String(e)); } }
 }
-window.addEventListener('sync-state', () => { if (window.Sync && Sync.st.user && S.clients == null) { S.clients = []; loadClients(true).then(() => { if (S.tab === 'more' && !sheetOpen) render(); }); } });
+window.addEventListener('sync-state', () => {
+  if (!(window.Sync && Sync.st.user) || S.clients != null) return;
+  S.clients = []; loadClients(true).then(() => { if (S.tab === 'more' && !sheetOpen) render(); });
+  if (isMax()) {
+    Sync.requests().then(r => { S.reqN = r.length; if (r.length) { if (S.tab === 'more' && !sheetOpen) render(); toast(T('Новые заявки покупателей: ') + r.length, T('Открыть'), clientsSheet); } });
+    // подписку администратора помечаем, чтобы пуш о новых заявках приходил только ему
+    try { if (Notification.permission === 'granted' && navigator.serviceWorker) navigator.serviceWorker.ready.then(reg => reg.pushManager.getSubscription()).then(sub => { if (sub) Sync.pushSub(sub.toJSON()); }).catch(() => {}); } catch (e) {}
+  }
+});

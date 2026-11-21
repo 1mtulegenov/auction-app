@@ -310,7 +310,7 @@ window.Sync = (() => {
     if (!db || !st.user) throw new Error('Сначала войдите');
     const h = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(sub.endpoint))), b => b.toString(16).padStart(2, '0')).join('').slice(0, 32);
     const dv = /iPhone|iPad/.test(navigator.userAgent) ? 'ios' : /Android/.test(navigator.userAgent) ? 'android' : 'desktop';
-    await F.fs.setDoc(F.fs.doc(db, 'push', h), { endpoint: sub.endpoint, keys: sub.keys, dev: dv, uid: st.user.uid, at: F.fs.serverTimestamp() });
+    await F.fs.setDoc(F.fs.doc(db, 'push', h), Object.assign({ endpoint: sub.endpoint, keys: sub.keys, dev: dv, uid: st.user.uid, at: F.fs.serverTimestamp() }, isAdmin() ? { admin: true } : {}));
     return h;
   }
   // сохранённые поиски аккаунта: push/srch_{uid} {type:'searches', uid, list}. Лежат рядом с подписками,
@@ -348,7 +348,7 @@ window.Sync = (() => {
   async function saveClient(c) {
     if (!db || !isAdmin()) throw new Error('Только для администратора');
     const id = c.id || ('c' + Date.now().toString(36));
-    await F.fs.setDoc(F.fs.doc(db, 'clients', id), { name: c.name, email: String(c.email).trim().toLowerCase(), dealerEmail: String(c.dealerEmail).trim().toLowerCase(), dealerName: c.dealerName || '', at: F.fs.serverTimestamp() }, { merge: true });
+    await F.fs.setDoc(F.fs.doc(db, 'clients', id), Object.assign({ name: c.name, email: String(c.email || '').trim().toLowerCase(), dealerEmail: String(c.dealerEmail).trim().toLowerCase(), dealerName: c.dealerName || '', at: F.fs.serverTimestamp() }, c.uid ? { uid: c.uid } : {}, c.phone ? { phone: c.phone } : {}), { merge: true });
     return id;
   }
   async function delClient(id) { if (!db || !isAdmin()) throw new Error('Только для администратора'); await F.fs.deleteDoc(F.fs.doc(db, 'clients', id)); }
@@ -361,7 +361,17 @@ window.Sync = (() => {
     try { const s = await F.fs.getDocs(F.fs.collection(db, 'clients', cid, 'lots')); const out = []; s.forEach(d => out.push(Object.assign({ id: d.id }, d.data()))); return out; } catch (e) { console.warn('client lots', e); return []; }
   }
   async function unsendLot(cid, lid) { if (!db || !st.user) return; await F.fs.deleteDoc(F.fs.doc(db, 'clients', cid, 'lots', lid)); }
+  // заявки покупателей: requests/{uid} {name, phone, email, status: pending|approved|rejected}
+  async function requests() {
+    if (!db || !isAdmin()) return [];
+    try { const s = await F.fs.getDocs(F.fs.query(F.fs.collection(db, 'requests'), F.fs.where('status', '==', 'pending'))); const out = []; s.forEach(d => out.push(Object.assign({ id: d.id }, d.data()))); return out; } catch (e) { console.warn('requests', e); return []; }
+  }
+  async function decideRequest(r, ok, dealer) {
+    if (!db || !isAdmin()) throw new Error('Только для администратора');
+    if (ok) await saveClient({ id: 'u' + r.id, uid: r.id, name: r.name || r.phone || r.email, email: r.email || '', phone: r.phone || '', dealerName: dealer.name, dealerEmail: dealer.email });
+    await F.fs.updateDoc(F.fs.doc(db, 'requests', r.id), { status: ok ? 'approved' : 'rejected', decidedAt: F.fs.serverTimestamp() });
+  }
   async function getFees() { if (!db) return null; try { const d = await F.fs.getDoc(F.fs.doc(db, 'config', 'fees')); return d.exists() ? d.data() : null; } catch (e) { return null; } }
   async function saveFees(cfg) { if (!db || !isAdmin()) throw new Error('Только для администратора'); await F.fs.setDoc(F.fs.doc(db, 'config', 'fees'), { grid: cfg.grid, min: cfg.min || 0, at: F.fs.serverTimestamp() }); }
-  return { st, signIn, signOut, pushNote, pushFavs, isAdmin, activity, pushObd, obdImg, delObdImg, obdPending, pushSub, saveSearches, loadSearches, pushInsp, getInsp, myClients, saveClient, delClient, sendLot, clientLots, unsendLot, getFees, saveFees };
+  return { st, signIn, signOut, pushNote, pushFavs, isAdmin, activity, pushObd, obdImg, delObdImg, obdPending, pushSub, saveSearches, loadSearches, pushInsp, getInsp, myClients, saveClient, delClient, sendLot, clientLots, unsendLot, getFees, saveFees, requests, decideRequest };
 })();

@@ -29,7 +29,12 @@ function login(err) {
     + '<button class="btn pri b-login" data-act="login">Войти через Google</button>' + (err ? '<p class="b-err">' + E(err) + '</p>' : '') + '<p class="muted">Войдите той почтой, которую вы дали подборщику.</p></section>';
 }
 function carsScreen() {
-  if (!B.demo && !B.clients.length) return '<section class="b-hero"><h1>Подбор пока не открыт</h1><p>Для почты <b>' + E(B.user.email) + '</b> подборщик ещё не добавил вас. Напишите ему, чтобы он открыл доступ, и обновите страницу.</p></section>';
+  if (!B.demo && !B.clients.length) {
+    const r = B.req || {};
+    if (r.status === 'rejected') return '<section class="b-hero"><h1>Доступ не открыт</h1><p>Заявку для <b>' + E(B.user.email) + '</b> не одобрили. Если это ошибка, свяжитесь с подборщиком.</p></section>';
+    return '<section class="b-hero"><h1>Заявка отправлена</h1><p>Мы получили запрос на доступ и скоро подтвердим его. После этого здесь появятся машины, подобранные для вас.</p>'
+      + '<div class="b-form"><label>Как вас зовут<input id="rqName" value="' + E(r.name || B.user.name || '') + '"></label><label>Телефон для связи<input id="rqPhone" type="tel" inputmode="tel" value="' + E(r.phone || '') + '" placeholder="+1 ..."></label><label>Что ищете (необязательно)<input id="rqNote" value="' + E(r.note || '') + '" placeholder="Например: Camry или RAV4, до $12 000"></label><button class="btn pri" data-act="rq-save">Сохранить</button></div></section>';
+  }
   const L = allLots(), dealers = [...new Set(B.clients.map(c => c.dealerName).filter(Boolean))];
   const head = '<p class="b-sub">' + (dealers.length ? 'Ваш подборщик: <b>' + E(dealers.join(', ')) + '</b>' : '') + (L.length ? ' · ' + L.length + ' ' + plural(L.length, 'машина', 'машины', 'машин') : '') + '</p>';
   if (!L.length) return head + '<section class="b-empty"><p>Пока машин нет. Подборщик ищет варианты накануне торгов и пришлёт их сюда.</p></section>';
@@ -93,6 +98,7 @@ document.addEventListener('click', async e => {
   const card = t.closest('.b-car'), key = card && card.dataset.id;
   switch (ds.act) {
     case 'login': signIn(); break;
+    case 'rq-save': { const patch = { name: $('#rqName').value.trim(), phone: $('#rqPhone').value.trim(), note: $('#rqNote').value.trim() }; try { await B.F.fs.updateDoc(B.F.fs.doc(B.db, 'requests', B.user.uid), patch); Object.assign(B.req, patch); toast('Сохранено, спасибо'); } catch (e) { toast('Не сохранилось, попробуйте ещё раз'); } break; }
     case 'gal-close': closeGal(); break;
     case 'like': case 'no': { const l = find(key); if (!l) break; await react(l, { reaction: l.reaction === ds.act ? '' : ds.act }); break; }
     case 'ask': { const l = find(key); if (!l) break; const box = card.querySelector('.b-ask'); if (box) { box.remove(); break; } card.querySelector('.b-act').insertAdjacentHTML('afterend', '<div class="b-ask"><textarea rows="3" placeholder="Например: можно посмотреть вживую? какой расход?">' + E(l.reply || '') + '</textarea><button class="btn pri" data-act="ask-send">Отправить подборщику</button></div>'); card.querySelector('.b-ask textarea').focus(); break; }
@@ -154,8 +160,18 @@ function stop() { B.unsub.forEach(f => { try { f(); } catch (e) {} }); B.unsub =
 async function start() {
   stop(); const { collection, query, where, getDocs, onSnapshot, getDoc, doc } = B.F.fs;
   try { const d = await getDoc(doc(B.db, 'config', 'fees')); if (d.exists()) B.grid = d.data(); } catch (e) {}
-  try { const s = await getDocs(query(collection(B.db, 'clients'), where('email', '==', B.user.email))); s.forEach(d => B.clients.push(Object.assign({ id: d.id }, d.data()))); }
-  catch (e) { console.warn(e); }
+  const seen = new Set();
+  for (const q of [where('email', '==', B.user.email), where('uid', '==', B.user.uid)]) {
+    try { const s = await getDocs(query(collection(B.db, 'clients'), q)); s.forEach(d => { if (!seen.has(d.id)) { seen.add(d.id); B.clients.push(Object.assign({ id: d.id }, d.data())); } }); } catch (e) { console.warn(e); }
+  }
+  // нет доступа — заявка администратору (requests/{uid}) и сигнал для пуша без личных данных (reqping)
+  if (!B.clients.length) {
+    try {
+      const rr = doc(B.db, 'requests', B.user.uid), ex = await getDoc(rr);
+      if (ex.exists()) B.req = ex.data();
+      else { B.req = { uid: B.user.uid, name: B.user.name || '', email: B.user.email || '', phone: '', note: '', status: 'pending' }; await B.F.fs.setDoc(rr, Object.assign({}, B.req, { at: B.F.fs.serverTimestamp() })); await B.F.fs.addDoc(collection(B.db, 'reqping'), { at: B.F.fs.serverTimestamp() }); }
+    } catch (e) { console.warn('request', e); B.req = B.req || { status: 'pending' }; }
+  }
   render();
   for (const c of B.clients) B.unsub.push(onSnapshot(collection(B.db, 'clients', c.id, 'lots'), qs => {
     B.lots[c.id] = []; qs.forEach(d => { const x = d.data(); B.lots[c.id].push(Object.assign({}, x, { id: d.id, cid: c.id, atMs: x.at && x.at.toMillis ? x.at.toMillis() : 0 })); });

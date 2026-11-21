@@ -1,21 +1,34 @@
-// Добавить в правила Firestore (Firebase console → Firestore → Rules) ВНУТРЬ блока
-// match /databases/{database}/documents { ... } — рядом с остальными match. Остальное не трогать.
-// Приложение покупателя: покупатель видит только своё, дилер пишет только своим покупателям, пары назначает администратор.
+// Правила для приложения покупателя. Вставить в Firebase console → Firestore → Rules ВНУТРЬ блока
+// match /databases/{database}/documents { ... } рядом с остальными match (старый вариант этого блока заменить целиком).
+// Покупатель видит только своё, дилер пишет только своим покупателям, пары и заявки решает администратор.
 
-    function bEmail() { return request.auth.token.email.lower(); }
+    function bEmail() { return request.auth.token.email != null ? request.auth.token.email.lower() : ''; }
     function bAdmin() { return request.auth != null && bEmail() == '1mtulegenov@gmail.com'; }
     function bClient(cid) { return get(/databases/$(database)/documents/clients/$(cid)).data; }
+    function bIsBuyer(c) { return (c.email != '' && c.email == bEmail()) || c.get('uid', '') == request.auth.uid; }
 
     match /clients/{cid} {
-      allow read: if request.auth != null && (bAdmin() || resource.data.email == bEmail() || resource.data.dealerEmail == bEmail());
+      allow read: if request.auth != null && (bAdmin() || bIsBuyer(resource.data) || resource.data.dealerEmail == bEmail());
       allow write: if bAdmin();
       match /lots/{lid} {
-        allow read: if request.auth != null && (bAdmin() || bClient(cid).email == bEmail() || bClient(cid).dealerEmail == bEmail());
+        allow read: if request.auth != null && (bAdmin() || bIsBuyer(bClient(cid)) || bClient(cid).dealerEmail == bEmail());
         allow create, update, delete: if request.auth != null && (bAdmin() || bClient(cid).dealerEmail == bEmail());
         // покупатель может только отметить «интересно / не подходит» и задать вопрос
-        allow update: if request.auth != null && bClient(cid).email == bEmail()
+        allow update: if request.auth != null && bIsBuyer(bClient(cid))
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reaction', 'reply', 'replyAt']);
       }
+    }
+    // заявка на доступ: создаёт сам покупатель (статус pending), решает администратор
+    match /requests/{uid} {
+      allow read: if request.auth != null && (request.auth.uid == uid || bAdmin());
+      allow create: if request.auth != null && request.auth.uid == uid && request.resource.data.status == 'pending';
+      allow update: if bAdmin() || (request.auth != null && request.auth.uid == uid && resource.data.status == 'pending'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'phone', 'note']));
+    }
+    // сигнал «есть новая заявка» для пуша администратору: только время, без личных данных
+    match /reqping/{id} {
+      allow read: if true;
+      allow create: if request.auth != null && request.resource.data.keys().hasOnly(['at']);
     }
     match /config/fees {
       allow read: if request.auth != null;
