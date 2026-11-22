@@ -116,17 +116,20 @@ for line in open('tools/cmx_%s.txt' % date):
     if SEVEN.match(mk): lot['S'] = 1
     lots.append(lot)
 
+import datetime as _dt
+_D = _dt.date.fromisoformat(date); _MON = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря']
+DL = '%d %s' % (_D.day, _MON[_D.month-1]); TODAY = _dt.date.today(); SNAP = '%d %s' % (TODAY.day, _MON[TODAY.month-1])
 n_m = sum(1 for l in lots if not l.get('est') and l['w'])
-lead = ('CarMax Auctions Conroe, вторник 17 ноября, 8:00 CT. Каталог снят 13 ноября: %d машин. '
+lead = ('CarMax Auctions Conroe, вторник ' + DL + ', 8:00 CT. Каталог снят ' + SNAP + ': %d машин. '
         + ('MMR и ретейл Manheim по VIN у %d машин.' % n_m if n_m else 'MMR пока оценён по похожим лотам прошлых торгов (помечен «≈»), Manheim подтяну после входа.')
         + ' В подборке %d машин.') % (len(lots), len(core) + len(flip))
-how = ('<ul><li><b>Аукцион.</b> CarMax Auctions, площадка Conroe, дорожки A и B, старт во вторник 17 ноября в 8:00 CT. Ставить можно заранее на сайте.</li>'
+how = ('<ul><li><b>Аукцион.</b> CarMax Auctions, площадка Conroe, дорожки A и B, старт во вторник ' + DL + ' в 8:00 CT. Ставить можно заранее на сайте.</li>'
        '<li><b>Цена покупки.</b> ' + ('Adjusted MMR Manheim по VIN с поправкой на пробег.' if n_m else 'Оценка MMR по похожим лотам прошлых торгов (та же модель, год ±3, пробег); Manheim будет добавлен позже.') + '</li>'
        '<li><b>Продажа.</b> Ретейл × 0,64, дороже $5 000 со сбором ещё −3%. Structural, град, серьёзное ДТП −15%, угон −8%, прокат −3%. Сбор $700.</li>'
        '<li><b>Максимальная ставка.</b> Прибыль $1 000 при покупке до $5 000 со сбором, $1 500 при более дорогой. Потолок $13 500.</li>'
        '<li><b>Пометки CarMax.</b> Света и оценок нет, CarMax сам объявляет дефекты. Не в подборке: дефект двигателя, коробки, раздатки или дифференциала; не на ходу; salvage, rebuilt, тотал; ненастоящий пробег; раскрытые подушки. «Title absent» значит, что продать можно только после получения тайтла.</li>'
        '<li><b>Чего я не проверил.</b> AutoCheck и отзывы NHTSA по лотам не открывал, фото не разбирал.</li></ul>')
-out = {'id': date, 'label': '17 ноября', 'title': 'CarMax Conroe, вторник 17 ноября, 8:00', 'lead': lead, 'how': how, 'lots': lots, 'core': core, 'flip': flip}
+out = {'id': date, 'label': DL, 'title': 'CarMax Conroe, вторник ' + DL + ', 8:00', 'lead': lead, 'how': how, 'lots': lots, 'core': core, 'flip': flip}
 json.dump(out, open('data/%s.json' % date, 'w'), ensure_ascii=False, separators=(',', ':'))
 print(len(lots), 'core', len(core), 'flip', len(flip), 'manheim', n_m, collections.Counter(l['whyn'] for l in lots).most_common(8))
 
