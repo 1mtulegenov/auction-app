@@ -182,10 +182,11 @@ async function start() {
 async function demo() {
   B.clients = [{ id: 'demo', dealerName: 'Михаил' }];
   try {
-    const idx = await (await fetch('../data/index.json')).json(), d = await (await fetch('../data/' + idx.dates[0].id + '.json?v=' + idx.version)).json();
+    const idx = await (await fetch('../data/index.json')).json(); let d = { lots: [] }, did = '';
+    for (const e of idx.dates.slice(0, 4)) { const j = await (await fetch('../data/' + e.id + '.json?v=' + idx.version)).json(); if (j.lots.some(x => x.max > 0 && x.ph && (x.C || x.F))) { d = j; did = e.id; break; } }
     const COL = { BLACK: 'чёрный', WHITE: 'белый', GRAY: 'серый', SILVER: 'серебристый', RED: 'красный', BLUE: 'синий' };
     const ph = x => { if (!x.ph) return []; const p = x.ph.split('/'), pre = p[0] + '/' + p[1]; return [p.slice(0, 3).join('/') + '/' + (p[3] || '00')].concat((x.pp || []).map(s => s.split('/').length > 2 ? s : pre + '/' + s)).map(s => { const q = s.split('/'); return 'https://file3.autolookout.net/' + q.slice(0, 3).join('/') + '/O3Jlc29sdXRpb246MTAyNHg3Njg7/' + (q[3] || '00'); }); };
-    B.lots.demo = d.lots.filter(x => x.max > 0 && x.ph && (x.C || x.F)).slice(0, 4).map((x, i) => ({ id: 'd' + i, cid: 'demo', d: idx.dates[0].id, y: x.y, mk: x.mk, md: x.md, st: x.st, o: x.o, color: COL[x.c] || String(x.c || '').toLowerCase(), photos: ph(x), price: Math.round(x.max / 100) * 100, rt: x.rt && x.rt.est, note: ['Чистая, по истории без ДТП. Хороший вариант под ваш бюджет.', 'Ухоженная, свежая резина. Посмотрю вживую утром перед торгами.', '', 'Экономичная, недорогая в обслуживании.'][i % 4], by: 'Михаил', atMs: Date.now() - i }));
+    B.lots.demo = d.lots.filter(x => x.max > 0 && x.ph && (x.C || x.F)).slice(0, 4).map((x, i) => ({ id: 'd' + i, cid: 'demo', d: did, y: x.y, mk: x.mk, md: x.md, st: x.st, o: x.o, color: COL[x.c] || String(x.c || '').toLowerCase(), photos: ph(x), price: Math.round(x.max / 100) * 100, rt: x.rt && x.rt.est, note: ['Чистая, по истории без ДТП. Хороший вариант под ваш бюджет.', 'Ухоженная, свежая резина. Посмотрю вживую утром перед торгами.', '', 'Экономичная, недорогая в обслуживании.'][i % 4], by: 'Михаил', atMs: Date.now() - i }));
   } catch (e) { B.lots.demo = []; }
 }
 init();

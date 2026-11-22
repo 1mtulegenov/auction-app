@@ -16,7 +16,8 @@ service cloud.firestore {
     match /obd/{rest=**} { allow read, write: if ok(); }
 
     // приложение покупателя: покупатель видит только своё, дилер пишет только своим, пары и заявки решает администратор
-    function bEmail() { return request.auth.token.email != null ? request.auth.token.email.lower() : ''; }
+    // почта считается только подтверждённой (Google всегда подтверждает)
+    function bEmail() { return request.auth != null && request.auth.token.email != null && request.auth.token.email_verified == true ? request.auth.token.email.lower() : ''; }
     function bAdmin() { return request.auth != null && bEmail() == '1mtulegenov@gmail.com'; }
     function bClient(cid) { return get(/databases/$(db)/documents/clients/$(cid)).data; }
     function bIsBuyer(c) { return (c.get('email', '') != '' && c.get('email', '') == bEmail()) || c.get('uid', '') == request.auth.uid; }
@@ -29,15 +30,20 @@ service cloud.firestore {
         allow create, update, delete: if request.auth != null && (bAdmin() || bClient(cid).dealerEmail == bEmail());
         // покупатель может только отметить «интересно / не подходит» и задать вопрос
         allow update: if request.auth != null && bIsBuyer(bClient(cid))
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reaction', 'reply', 'replyAt']);
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reaction', 'reply', 'replyAt'])
+          && request.resource.data.get('reaction', '') in ['', 'like', 'no']
+          && (!('reply' in request.resource.data) || (request.resource.data.reply is string && request.resource.data.reply.size() <= 1000));
       }
     }
     // заявка на доступ: создаёт сам покупатель (статус pending), решает администратор
+    function rqOk(d) { return d.keys().hasOnly(['uid', 'name', 'email', 'phone', 'note', 'status', 'at'])
+      && d.get('name', '').size() <= 100 && d.get('phone', '').size() <= 40 && d.get('note', '').size() <= 500; }
     match /requests/{uid} {
       allow read: if request.auth != null && (request.auth.uid == uid || bAdmin());
-      allow create: if request.auth != null && request.auth.uid == uid && request.resource.data.status == 'pending';
+      allow create: if request.auth != null && request.auth.uid == uid && request.resource.data.status == 'pending'
+        && request.resource.data.get('email', '') == request.auth.token.get('email', '') && rqOk(request.resource.data);
       allow update: if bAdmin() || (request.auth != null && request.auth.uid == uid && resource.data.status == 'pending'
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'phone', 'note']));
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'phone', 'note']) && rqOk(request.resource.data));
     }
     // сигнал «есть новая заявка» для пуша администратору: только время, без личных данных
     match /reqping/{id} {
