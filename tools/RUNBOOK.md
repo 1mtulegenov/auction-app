@@ -35,7 +35,7 @@ CarMax цены продажи не публикует. В открытой вк
 База по поколениям: tools/pro_notes.py. Сборщики (build_cmx/aah/ana) сами вызывают tools/apply_pro.py <дата>; для любой другой сборки запусти его вручную. Нет модели в базе — допиши запись E(...) в pro_notes.py.
 
 ## Пуши
-- Новый аукцион и пост-сейл: .github/workflows/notify.yml сам при пуше data/index.json.
+- Новый аукцион, новые машины в той же дате, пост-сейл (первый и обновления) и сохранённые поиски по новым машинам: .github/workflows/notify.yml сам при пуше data/index.json. Проверка без отправки: DRY=1 node tools/notify.mjs.
 - «Скоро аукцион» за ~45 мин до начала: .github/workflows/soon.yml по расписанию SCHED в tools/notify.mjs. Поменялось время или аукцион — поправь SCHED.
 
 ## Ретейл Хьюстона (cars.com) и дни на рынке

@@ -1,5 +1,6 @@
 // Пуш-уведомления всем установившим приложение. Запускается GitHub Actions (.github/workflows/notify.yml)
-// после пуша с изменённым data/index.json: новый день аукциона, загружен пост-сейл. Или вручную (TITLE/BODY).
+// после пуша с изменённым data/index.json: новый день аукциона, новые машины в дне, пост-сейл (первый и обновления),
+// сохранённые поиски по новым машинам. Или вручную (TITLE/BODY).
 // Подписки: Firestore push/{id} (endpoint + ключи). Отправка подписана ключом VAPID из секрета VAPID_PRIVATE.
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -33,12 +34,10 @@ function upcoming() {
 }
 if (process.argv[2] === 'which') { const u = upcoming(); console.log(u ? u.key : ''); process.exit(0); }
 
-if (!PRIV) { console.log('::notice::VAPID_PRIVATE не задан в секретах репозитория, уведомления не отправлены'); process.exit(0); }
-const webpush = (await import('web-push')).default;
-webpush.setVapidDetails(URL_APP, PUB, PRIV);
 
 const read = rev => { try { return JSON.parse(execSync(`git show ${rev}:data/index.json`, { encoding: 'utf8' })); } catch { return { dates: [] }; } };
-const msgs = [], newIds = [];
+const msgs = [], scan = new Map(); // scan: дата -> машины, по которым прогнать сохранённые поиски
+const readData = (rev, id) => { try { return JSON.parse(execSync(`git show ${rev}:data/${id}.json`, { encoding: 'utf8', maxBuffer: 1 << 28 })); } catch { return null; } };
 if (process.env.MODE === 'soon') {
   const u = upcoming();
   if (u) {
@@ -49,21 +48,55 @@ if (process.env.MODE === 'soon') {
 else {
   const now = read('HEAD'), old = read('HEAD~1');
   const om = new Map(old.dates.map(d => [d.id, d]));
+  const lk = x => (x.auc || '') + '|' + (x.run || x.vin || '');
   for (const d of now.dates) {
     const o = om.get(d.id);
-    if (!o) newIds.push(d.id);
-    if (!o) msgs.push({ title: 'Новый аукцион: ' + d.label, body: d.title + '. Машин: ' + d.n + (d.core ? ', в подборке ' + d.core : '') + '.', tag: 'new-' + d.id });
-    else if (d.results && !o.results) {
-      let st = {}; try { st = JSON.parse(fs.readFileSync('data/' + d.id + '.json', 'utf8')).stats || {}; } catch {}
+    if (!o) {
+      msgs.push({ title: 'Новый аукцион: ' + d.label, body: d.title + '. Машин: ' + d.n + (d.core ? ', в подборке ' + d.core : '') + '.', tag: 'new-' + d.id });
+      const D = readData('HEAD', d.id); if (D) scan.set(d.id, D.lots);
+      continue;
+    }
+    if (d.results && !o.results) {
+      let st = (readData('HEAD', d.id) || {}).stats || {};
       const parts = [];
       if (st.n != null) parts.push('продано ' + st.n);
       if (st.off) parts.push('на оффере ' + st.off);
       if (st.u != null) parts.push('не продано ' + st.u);
       msgs.push({ title: 'Пост-сейл: ' + d.label, body: d.title + (parts.length ? '. Итоги: ' + parts.join(', ') + '.' : '. Итоги загружены.'), tag: 'res-' + d.id });
+      continue;
+    }
+    // та же дата обновилась: добавились машины (новый аукцион в тот же день) или поменялся пост-сейл
+    const A = readData('HEAD~1', d.id), B = readData('HEAD', d.id);
+    if (!A || !B) continue;
+    const am = new Map(A.lots.map(x => [lk(x), x]));
+    const added = B.lots.filter(x => !am.has(lk(x)));
+    if (added.length) {
+      const extra = d.title !== o.title ? d.title + '. ' : '';
+      msgs.push({ title: 'Обновлён аукцион: ' + d.label, body: extra + 'Добавлено машин: ' + added.length + ', всего ' + d.n + (d.core ? ', в подборке ' + d.core : '') + '.', tag: 'upd-' + d.id });
+      scan.set(d.id, added);
+    }
+    if (d.results) {
+      let sold = 0, none = 0, ch = 0;
+      for (const x of B.lots) {
+        const y = am.get(lk(x)); if (!y) continue;
+        if ((x.ss || '') === (y.ss || '') && (x.fact || null) === (y.fact || null)) continue;
+        ch++; if (x.ss === 'sold') sold++; else if (x.ss === 'none') none++;
+      }
+      if (ch) {
+        const parts = [];
+        if (sold) parts.push('продано ' + sold);
+        if (none) parts.push('отказ ' + none);
+        msgs.push({ title: 'Пост-сейл обновлён: ' + d.label, body: d.title + '. Изменилось машин: ' + ch + (parts.length ? ' (' + parts.join(', ') + ')' : '') + '.', tag: 'res-' + d.id });
+      }
     }
   }
 }
-if (!msgs.length && !newIds.length) { console.log('Новых аукционов и пост-сейлов нет'); process.exit(0); }
+if (!msgs.length && !scan.size) { console.log('Новых аукционов, машин и пост-сейлов нет'); process.exit(0); }
+
+if (process.env.DRY) { console.log(JSON.stringify(msgs, null, 1)); console.log('поиск по:', [...scan].map(([k, v]) => k + ' ' + v.length).join(', ')); process.exit(0); }
+if (!PRIV) { console.log('::notice::VAPID_PRIVATE не задан в секретах репозитория, уведомления не отправлены'); process.exit(0); }
+const webpush = (await import('web-push')).default;
+webpush.setVapidDetails(URL_APP, PUB, PRIV);
 
 let subs = [], searches = [], tok = '';
 // Firestore REST -> обычные значения
@@ -93,22 +126,21 @@ if (msgs.length) {
 }
 
 // сохранённые поиски: на новом аукционе есть совпадения — пуш владельцу поиска, по нажатию список карточек
-if (newIds.length && searches.length) {
+if (scan.size && searches.length) {
   const { createRequire } = await import('node:module');
   const SM = createRequire(import.meta.url)('../search-match.js');
   const ix = read('HEAD');
-  for (const id of newIds) {
-    let D; try { D = JSON.parse(fs.readFileSync('data/' + id + '.json', 'utf8')); } catch { continue; }
+  for (const [id, lots] of scan) {
     const dd = ix.dates.find(x => x.id === id) || { label: id, title: '' };
     for (const doc of searches) {
       const mine = subs.filter(s => s.uid && s.uid === doc.uid);
-      if (!mine.length) continue;
+      if (!mine.length) { console.log('Поиски без подписки на этом устройстве:', (doc.list || []).length); continue; }
       for (const sr of doc.list || []) {
         if (!sr || sr.on === false || !sr.q) continue;
-        const hit = D.lots.filter(x => SM.match(x, sr.q));
+        const hit = lots.filter(x => SM.match(x, sr.q));
+        console.log('Поиск', sr.name, id, '->', hit.length);
         if (!hit.length) continue;
         const names = hit.slice(0, 3).map(x => [x.y, x.mk, x.md].filter(Boolean).join(' ')).join(', ');
-        console.log('Поиск', sr.name, '->', hit.length);
         await send(mine, { title: 'По вашему поиску «' + (sr.name || 'Поиск') + '»: ' + hit.length, body: dd.label + ', ' + String(dd.title).split(',')[0] + '. ' + names + (hit.length > 3 ? ' и ещё ' + (hit.length - 3) : '') + '.', tag: 'srch-' + sr.id + '-' + id, url: URL_APP + '?s=' + encodeURIComponent(sr.id) + '&d=' + id });
       }
     }
