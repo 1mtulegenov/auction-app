@@ -5,14 +5,15 @@ on:
     paths: [data/index.json]
   workflow_dispatch:
     inputs:
-      title: { description: 'Заголовок', required: true }
+      title: { description: 'Заголовок (пусто, если сравнение с коммитом)', required: false }
       body: { description: 'Текст', required: false }
+      base: { description: 'Или: коммит, с которым сравнить (разослать пропущенное)', required: false }
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 2 }
+        with: { fetch-depth: 0 }
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - run: npm i --no-save --no-package-lock web-push@3.6.7
@@ -22,3 +23,4 @@ jobs:
           VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
           TITLE: ${{ github.event.inputs.title }}
           BODY: ${{ github.event.inputs.body }}
+          BASE: ${{ github.event.inputs.base }}

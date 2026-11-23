@@ -46,7 +46,8 @@ if (process.env.MODE === 'soon') {
   }
 } else if (process.env.TITLE) msgs.push({ title: process.env.TITLE, body: process.env.BODY || '', tag: 'manual' });
 else {
-  const now = read('HEAD'), old = read('HEAD~1');
+  const BASE = process.env.BASE || 'HEAD~1'; // ручной запуск: с какого коммита сравнивать
+  const now = read('HEAD'), old = read(BASE);
   const om = new Map(old.dates.map(d => [d.id, d]));
   const lk = x => (x.auc || '') + '|' + (x.run || x.vin || '');
   for (const d of now.dates) {
@@ -66,7 +67,7 @@ else {
       continue;
     }
     // та же дата обновилась: добавились машины (новый аукцион в тот же день) или поменялся пост-сейл
-    const A = readData('HEAD~1', d.id), B = readData('HEAD', d.id);
+    const A = readData(BASE, d.id), B = readData('HEAD', d.id);
     if (!A || !B) continue;
     const am = new Map(A.lots.map(x => [lk(x), x]));
     const added = B.lots.filter(x => !am.has(lk(x)));
