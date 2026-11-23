@@ -260,7 +260,10 @@ n_est = sum(1 for l in lots if l['src'].startswith('оценка')); n_pmr = sum
 n_cr = sum(1 for l in lots if (l.get('cr') or '').startswith('Отчёт:') and l['stat'] in ('Основная', 'Флип'))
 n_fl = sum(1 for l in lots if l.get('floor') and l.get('max') is not None and l['floor'] > l['max'] and l['stat'] in ('Основная', 'Флип'))
 n_mmr = sum(1 for l in lots if l['src'].startswith('MMR из'))
-lead = ('AAA North Houston (Conroe), вторник 17 ноября, 12:15. Каталог EDGE снят 16 ноября: %d машин. '
+import datetime as _dt
+_D = _dt.date.fromisoformat(date); _MON = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря']
+DL = '%d %s' % (_D.day, _MON[_D.month-1]); _T = _dt.date.today(); SNAP = '%d %s' % (_T.day, _MON[_T.month-1])
+lead = ('AAA North Houston (Conroe), вторник ' + DL + ', 12:15. Каталог EDGE снят ' + SNAP + ': %d машин. '
         'MMR на EDGE для этого аукциона нет: оценён по похожим лотам прошлых торгов и PMR EDGE. В подборке %d машин.') % (len(lots), len(core) + len(flip))
 how = ('<ul><li><b>Цена покупки.</b> MMR из пре-сейла EDGE (там показан Manheim MMR): %d машин. '
        'Где MMR нет, он оценён по похожим лотам прошлых торгов (та же модель, год ±3, пробег, комплектация) или взят PMR EDGE: %d машин, они помечены «≈».</li>'
@@ -273,7 +276,7 @@ how = ('<ul><li><b>Цена покупки.</b> MMR из пре-сейла EDGE 
        'Убраны: не на ходу, шум двигателя, нет ключа, плохой ремонт кузова. Горящий Check Engine указан в карточке, но машина осталась.</li>'
        '<li><b>Floor price.</b> У %d машин подборки floor price выше нашей макс. ставки: дешевле floor price их, скорее всего, не отдадут.</li>'
        '<li><b>Чего я не проверил.</b> Carfax и AutoCheck не открывал. Свет и оценки утром могут измениться.</li></ul>') % (n_mmr, len(lots) - n_mmr, n_cr, n_fl)
-out = {'id': date, 'label': '17 ноября', 'title': 'AAA North Houston (Conroe), вторник 17 ноября, 12:15', 'lead': lead, 'how': how,
+out = {'id': date, 'label': DL, 'title': 'AAA North Houston (Conroe), вторник ' + DL + ', 12:15', 'lead': lead, 'how': how,
        'lots': lots, 'core': core, 'flip': flip}
 json.dump(out, open('tools/anh_out_%s.json' % date, 'w'), ensure_ascii=False, separators=(',', ':'))
 import collections

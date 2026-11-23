@@ -1,0 +1,84 @@
+A-0006||Tom Peacock Cadillac
+A-0050||Team Gillman
+A-0001||Tom Peacock Cadillac
+A-0002||Tom Peacock Cadillac
+A-0005||Tom Peacock Cadillac
+A-0051||Team Gillman
+A-0003||Tom Peacock Cadillac
+A-0004||Tom Peacock Cadillac
+A-0056||Team Gillman
+A-0052|Bonded Title|Team Gillman
+A-0059||Team Gillman
+A-0058||Team Gillman
+A-0055|Mileage Discrepency|Team Gillman
+A-0057||Team Gillman
+A-0054||Team Gillman
+A-0053||Team Gillman
+B-0001||Westside Chevrolet
+B-0003||Westside Chevrolet
+B-0004||Westside Chevrolet
+A-0061||Team Gillman
+B-0006||Westside Chevrolet
+B-0002||Westside Chevrolet
+B-0005||Westside Chevrolet
+A-0060||Team Gillman
+B-0051|Structural Damage|Fred Haas Toyota World
+B-0053||Fred Haas Toyota World
+B-0007||Westside Chevrolet
+B-0055||Fred Haas Toyota World
+B-0052||Fred Haas Toyota World
+B-0050||Fred Haas Toyota World
+B-0056||Fred Haas Toyota World
+B-0054||Fred Haas Toyota World
+D-0004||Kramer Autoplex
+D-0006|True Miles Unknown|Lithia Motors
+B-0057||Fred Haas Toyota World
+D-0001|Rebuilt Slvg Title; As Is No Arb|Team Gillman
+D-0003||Lithia Motors
+D-0007||Group 1 Automotive
+D-0002||Lithia Motors
+D-0005||Planet Ford
+D-0009||Team Gillman
+D-0008|True Miles Unknown|North Houston Mitsubishi
+FL-0003||
+FL-0001|Structural Damage|
+FL-0005|Green Light|Barco Rent-A-Truck
+FL-0006|Green Light|Barco Rent-A-Truck
+FL-0002||
+FL-0004||
+N-0007||Aggieland Chevrolet
+N-0001||Aggieland Chevrolet
+N-0002||Aggieland Chevrolet
+N-0005||Aggieland Chevrolet
+N-0004||Aggieland Chevrolet
+N-0006||Aggieland Chevrolet
+N-0003||Aggieland Chevrolet
+FL-0007|Hail Damage; Green Light|Barco Rent-A-Truck
+N-0009||Aggieland Chevrolet
+N-0008||Aggieland Chevrolet
+N-0011||College Station Ford
+N-0012||College Station Ford
+N-0010||College Station Ford
+N-0013||College Station Ford
+N-0015|Gooseneck|College Station Nissan
+N-0014||College Station Nissan
+N-0021||Archer Volkswagen
+N-0023||Beck & Masten KIA
+N-0016||College Station Hyundai
+N-0020||Archer Volkswagen
+N-0017||Archer Volkswagen
+N-0022||Archer Volkswagen
+N-0018||Archer Volkswagen
+N-0019||Archer Volkswagen
+N-0024||Beck & Masten KIA
+N-0031||Huntsville Toyota
+N-0030||Huntsville Toyota
+N-0029||Huntsville Toyota
+N-0025||Beck & Masten KIA
+N-0026||Huntsville Toyota
+N-0028||Huntsville Toyota
+N-0027|Rebuilt Slvg Title; As Is No Arb; Bonded Title; History Of Theft|Huntsville Toyota
+N-0033||Huntsville Toyota
+N-0034||Huntsville Toyota
+N-0032||Huntsville Toyota
+N-0035||Huntsville Toyota

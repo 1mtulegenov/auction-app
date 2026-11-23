@@ -1,0 +1,84 @@
+A-0001|2020 Lincoln Navigator Reserve 4WD 4D SUV 3.5 6cyl. Gasoline|5LMJJ2LT4LEL01096|WHITE|95510||Red||22700|Title Absent|835877|708/064811/6758|No|Tom Peacock Cadillac
+A-0002|2023 Acura MDX w/Technology Package FWD 4D SUV 3.5 6cyl. Gasoline|5J8YD9H4XPL004120|SILVER|68204||Green||27950|Title Absent|835878|708/064811/7941|No|Tom Peacock Cadillac
+A-0003|2014 Chevrolet Suburban LT 4WD 4D SUV 5.3 8cyl. Flex Fuel|1GNSKJE71ER240666|BROWN|120702||Red||5950|Title Absent|835879|708/064811/8204|No|Tom Peacock Cadillac
+A-0004|2015 Chevrolet Traverse LTZ FWD 4D SUV 3.6 6cyl. Gasoline|1GNKRJKD6FJ106600|RED|182546||Red||2400|Title Absent|835880|708/064811/8859|No|Tom Peacock Cadillac
+A-0005|2021 Audi Q7 Premium AWD 4D SUV 2.0T 2.0 4cyl. Gasoline|WA1AJAF74MD037847|BLACK|79860||Green||15700|Title Absent|835881|708/064811/9285|No|Tom Peacock Cadillac
+A-0006|2021 Mercedes-Benz GLE 350 4MATIC AWD 4D SAV 4Matic 2.0 4cyl. Gasoline|4JGFB4KB9MA514452|WHITE|60635||Green||22900|Title Absent|835882|708/064811/9412|No|Tom Peacock Cadillac
+A-0050|2023 Honda Accord Sedan EX FWD 4D Sedan 1.5L at 1.5 4cyl. Gasoline|1HGCY1F36PA002094|WHITE|181315||Red||10200|Title Absent|835840|708/064710/2503|No|Team Gillman
+A-0051|2013 Volvo S60 T5 Premier FWD 4D Sedan 2.5 5cyl. Gasoline|YV1612FS8D2180375|BLUE|156830||Red||1500|Title Absent|835859|708/064765/7544|No|Team Gillman
+A-0052|2016 Jeep Wrangler Unlimited Sport 4WD 4D SUV 3.6 6cyl. Gasoline|1C4BJWDG7GL125196|SILVER|87811||Red||9650|Title Absent|835860|708/064765/9438|No|Team Gillman
+A-0053|2014 Acura MDX Advance/Entertainment Pkg FWD 4D SUV 3.5 6cyl. Gasoline|5FRYD3H83EB013402|GRAY|174177|2.8|Red||4600|Title Absent|835490|708/064593/7340|Yes|Team Gillman
+A-0054|2018 Nissan Rogue SV FWD 4D SUV 2.5 4cyl. Gasoline|5N1AT2MT8JC730424|GRAY|157060||Red||3700|Title Absent|835505|708/064539/7142|No|Team Gillman
+A-0055|2007 Honda Civic Sdn LX FWD 4D Sedan 1.8 4cyl. Gasoline|2HGFA165X7H313242|BLACK|155565||Red||1950|Title Absent|835883|708/064812/1052|No|Team Gillman
+A-0056|2008 Hyundai Elantra GLS FWD 4D Sedan 2.0 4cyl. Gasoline|KMHDU46D58U509606|WHITE|169509||Red||1450|Title Absent|835884|708/064812/2532|No|Team Gillman
+A-0057|2017 Porsche Panamera Base RWD 4D Sedan 3.0 6cyl. Gasoline|WP0AA2A7XHL101596|BLACK|100816||Red|||Title Absent|835887|708/064816/1320|No|Team Gillman
+A-0058|2017 Mercedes-Benz GLS 450 4MATIC AWD 4D SUV 4Matic 3.0 6cyl. Gasoline|4JGDF6EE2HA848096|SILVER|126558||Red||7100|Title Absent|835888|708/064816/2019|No|Team Gillman
+A-0059|2005 Honda CR-V LX FWD 4D SUV at 2.4 4cyl. Gasoline|JHLRD68585C009729|BLACK|143585||Red||2100|Title Absent|835889|708/064816/3750|No|Team Gillman
+A-0060|2017 Jeep Cherokee Overland FWD 4D SUV 2.4 4cyl. Gasoline|1C4PJLJB6HW644396|RED|140783||Red||3900|Title Absent|835890|708/064817/5859|No|Team Gillman
+A-0061|2020 Subaru Crosstrek Premium AWD 4D Wagon at 2.0 4cyl. Gasoline|JF2GTAEC2LH225364|WHITE|118049||Red||9700|Title Absent|835891|708/064817/7102|No|Team Gillman
+B-0001|2014 Buick Enclave Convenience FWD 4D SUV 3.6 6cyl. Gasoline|5GAKRAKD4EJ323183|SILVER|132040||Red||2350|Title Absent|835923|708/064886/8914|No|Westside Chevrolet
+B-0002|2015 Honda Pilot EX-L 4WD 4D SUV 3.5 6cyl. Gasoline|5FNYF4H54FB047275|RED|116837||Red||7750|Title Absent|835924|708/064886/6047|No|Westside Chevrolet
+B-0003|2022 Ram 2500 Tradesman 4WD Crew Cab LWB 6.4 8cyl. Gasoline|3C6UR5HJ8NG341660|WHITE|104668||Red||14950|Title Absent|832977|708/063029/5235|No|Westside Chevrolet
+B-0004|2019 Kia Rio S FWD 4D Sedan at 1.6 4cyl. Gasoline|3KPA24AB4KE233007|GRAY|142033||Red||2900|Title Absent|835925|708/064886/6606|No|Westside Chevrolet
+B-0005|2021 Ram 1500 Lone Star 4WD Crew Cab SWB 5.7 8cyl. Gasoline|1C6SRFFT5MN559496|GRAY|146558||Red||13400|Title Absent|835546|708/064589/7797|No|Westside Chevrolet
+B-0006|2019 GMC Sierra 1500 AT4 4WD Crew Cab SWB 6.2 8cyl. Gasoline|3GTP9EEL3KG259388|GRAY|123968||Red||20900|Title Absent|835926|708/064886/3078|No|Westside Chevrolet
+B-0007|2011 Mazda CX-7 i SV FWD 4D SUV 2.5 4cyl. Gasoline|JM3ER2A5XB0359495|BLUE|215515||Red||1350|Title Absent|835931||No|Westside Chevrolet
+B-0050|2019 Mercedes-Benz A-Class A 220 Sedan FWD 4D Sedan 2.0 4cyl. Gasoline|WDD3G4EB7KW009696|WHITE|130204||Red||6950|Title Absent|835868||No|Fred Haas Toyota World
+B-0051|2019 Volkswagen Jetta SEL FWD 4D Sedan at 1.4 4cyl. Gasoline|3VWE57BU9KM055852|WHITE|102930||Red||7400|Title Absent|835871||No|Fred Haas Toyota World
+B-0052|2019 Kia Sorento SX V6 AWD 4D SUV V6 3.3 6cyl. Gasoline|5XYPKDA55KG509847|BLACK|115622||Red|||Title Absent|835872||No|Fred Haas Toyota World
+B-0053|2003 Toyota Tacoma Reg Cab Auto (GS) RWD Reg Cab 2.4 4cyl. Gasoline|5TENL42N73Z167750|WHITE|152917||Red||4650|Title Absent|835917|708/064885/9839|No|Fred Haas Toyota World
+B-0054|2016 Volkswagen Jetta Sedan 1.8T Sport FWD 4D Sedan 1.8 4cyl. Gasoline|3VWD17AJ3GM391583|BLACK|127347||Red||3300|Title Absent|835918|708/064885/7846|No|Fred Haas Toyota World
+B-0055|2023 Chevrolet Silverado 1500 LT RWD Crew Cab 2WD SWB 5.3 8cyl. Gasoline|2GCPACED0P1118928|WHITE|90357||Red||20600|Title Absent|835919|708/064885/7574|No|Fred Haas Toyota World
+B-0056|2001 Nissan Xterra XE 4WD 4D SUV 4X4 V6 3.3 6cyl. Gasoline|5N1ED28Y51C591342|GOLD|154327||Red||1550|Title Absent|835920|708/064885/6508|No|Fred Haas Toyota World
+B-0057|2015 Toyota Highlander LE V6 FWD 4D SUV 3.5 6cyl. Gasoline|5TDZKRFH3FS076224|SILVER|292073||Red|||Title Absent|835921|708/064885/6070|No|Fred Haas Toyota World
+D-0001|2015 Honda Civic Hybrid 4dr Sdn L4 CVT w/Navi & Leather FWD 4D Sedan w/Nav 1.5 Hybrid|19XFB4F33FE201484|GRAY|126587||Red||4050|Title Absent|835839|708/064709/6936|No|Team Gillman
+D-0002|2013 Jeep Wrangler Unlimited Rubicon 4WD 4D SUV 3.6 6cyl. Gasoline|1C4BJWFG7DL619423|WHITE|1||Red||8250|Title Absent|835861|708/064776/7678|Yes|Lithia Motors
+D-0003|2013 Ford Explorer Limited FWD 4D SUV 3.5 6cyl. Gasoline|1FM5K7F8XDGC24424|SILVER|1||Red||3100|Title Absent|835862|708/064776/6139|Yes|Lithia Motors
+D-0004|2002 Mazda 626 LX FWD 4D Sedan 2.0 4cyl. Gasoline|1YVGF22C125307015|TAN|1||Red|||Title Absent|835844|708/064776/0608|Yes|Kramer Autoplex
+D-0005|2013 Lexus RX 350 4dr FWD 4D SUV 3.5 6cyl. Gasoline|2T2ZK1BA7DC119149|GRAY|1||Red||7050|Title Absent|835864|708/064776/5009|Yes|Planet Ford
+D-0006|2013 BMW 5-Series 528i RWD 4D Sedan 2.0 4cyl. Gasoline|WBAXG5C59DD229058|BLACK|1||Red||1600|Title Absent|835873|708/064809/0129|No|Lithia Motors
+D-0007|2017 Hyundai Santa Fe Sport 2.4L FWD 4D SUV 2.4L 2.4 4cyl. Gasoline|5NMZU3LB0HH017872|WHITE|1||Red||5250|Title Absent|835851|708/064761/9284|Yes|Group 1 Automotive
+D-0008|2011 Ford Mustang V6 Premium RWD 2D Convertible 3.7 6cyl. Gasoline|1ZVBP8EM5B5108986|RED|1||Red||2550|Title Absent|835885|708/064812/7164|No|North Houston Mitsubishi
+D-0009|2008 Chrysler Town & Country Touring FWD Wagon LWB 3.8 6cyl. Gasoline|2A8HR54P38R769731|WHITE|230088||Red||1050|Title Absent|835942||No|Team Gillman
+FL-0001|2015 Ram 2500 SLT 4WD Crew Cab 5.7 8cyl. Gasoline|3C6TR5DT8FG593199|WHITE|194051|1.6|Red||5400|At Auction|833771|708/063480/8390|Yes|
+FL-0002|2019 Chevrolet Equinox LT FWD 4D SUV 1.5T 1.5 4cyl. Gasoline|2GNAXKEV4K6158794|BLACK|201703|1.7|Red||3900|Title Absent|834604|708/063912/1076|Yes|
+FL-0003|2020 Ford F250SD XL 4WD Crew Cab SWB 6.7 8cyl. Diesel|1FT7W2BT0LED32396|SILVER|173141|1.9|Red||16000|Title Absent|835674|708/064701/6891|Yes|
+FL-0004|2017 Ford Taurus SEL FWD 4D Sedan 3.5 6cyl. Gasoline|1FAHP2E81HG105809|BLACK|135697|2.8|Red||4050|Title Absent|832037|708/062658/8178|Yes|
+FL-0005|2026 Ram 2500 Laramie 4WD Crew Cab SWB 6.7 6cyl. Diesel|3C63R5FLXTG260026|WHITE|17746|3.7|Green||48250|Title Absent|829451|708/061028/6899|Yes|Barco Rent-A-Truck
+FL-0006|2026 GMC Sierra 2500 2500HD AT4 4WD Crew Cab SWB 6.6 8cyl. Diesel|1GT4UPEY0TF277732|WHITE|3416|4.6|Green||67050|Title Absent|827274|708/059881/2644|Yes|Barco Rent-A-Truck
+FL-0007|2024 Ram 2500 Laramie 4WD Crew Cab SWB 6.7 6cyl. Diesel|3C6UR5FL4RG401864|SILVER|57277|3.7|Green||39400|Title Absent|828496|708/060514/4313|Yes|Barco Rent-A-Truck
+N-0001|2013 Nissan Titan SL 4WD Crew Cab 5.6 8cyl. Flex Fuel|1N6BA0EC2DN312335|BLACK|245362||Red||3600|Title Absent|835934|708/064886/2038|No|Aggieland Chevrolet
+N-0002|2014 Ford F150 King Ranch RWD Supercrew 3.5 6cyl. Gasoline|1FTFW1CT5EKD14646|WHITE|115216||Red||9900|Title Absent|835906|708/064882/8506|No|Aggieland Chevrolet
+N-0003|2022 Ford F150 XLT RWD Supercrew 2WD 145 2.7 6cyl. Gasoline|1FTEW1CP4NKD08996|GRAY|120283||Red||15100|Title Absent|835534|708/064589/0313|No|Aggieland Chevrolet
+N-0004|2018 Jeep Grand Cherokee Limited RWD 4D SUV 3.6 6cyl. Gasoline|1C4RJEBG5JC513904|WHITE|115778||Red||7600|Title Absent|835935|708/064886/7086|No|Aggieland Chevrolet
+N-0005|2014 Chevrolet Silverado 1500 LT 4WD Crew Cab 5.3 8cyl. Flex Fuel|3GCUKREC5EG397405|BLUE|156208||Red||6400|Title Absent|835535|708/064589/0085|No|Aggieland Chevrolet
+N-0006|2018 Ford F250SD XL RWD Crew Cab 2WD LWB 6.2 8cyl. Gasoline|1FT7W2A65JEB35295|WHITE|183456||Red||7200|Title Absent|835114|708/064337/7801|No|Aggieland Chevrolet
+N-0007|2016 Ford F150 XLT RWD Supercrew 5.0 8cyl. Gasoline|1FTEW1CF1GKD45675|SILVER|161228||Red||7000|Title Absent|835938||No|Aggieland Chevrolet
+N-0008|2021 Chevrolet Tahoe LT RWD 4D SUV 5.3 8cyl. Gasoline|1GNSCNKD5MR125100|WHITE|121264||Red||23650|Title Absent|835111|708/064338/1338|No|Aggieland Chevrolet
+N-0009|2016 Ram 3500 Tradesman 4WD Reg Cab 6.4 8cyl. Gasoline|3C7WRDAJ9GG303771|WHITE|217738||Red||5800|Title Absent|835939||No|Aggieland Chevrolet
+N-0010|2012 Toyota Prius Two FWD 4D Hatchback 1.8 Hybrid|JTDKN3DU2C1544975|BLUE|183305||Red||3300|Title Absent|835562|708/064591/1921|No|College Station Ford
+N-0011|2013 Chevrolet Silverado 2500 2500HD LT 4WD Crew Cab 6.0 8cyl. Flex Fuel|1GC1KXCG7DF234025|BROWN|230963||Red||4700|Title Absent|835113|708/064337/9325|No|College Station Ford
+N-0012|2013 Nissan 370Z Touring RWD 2D Coupe 3.7 6cyl. Gasoline|JN1AZ4EHXDM880612|GRAY|167789||Red||6500|Title Absent|835498|708/064538/2400|No|College Station Ford
+N-0013|2020 Hyundai Santa Fe Limited FWD 4D SUV 2.0T 2.0 4cyl. Gasoline|5NMS53AA6LH285472|WHITE|115471||Red||9000|Title Absent|835551|708/064590/4231|No|College Station Ford
+N-0014|2012 Toyota Tundra Limited 5.7L V8 4WD Crew Max 5.7 8cyl. Gasoline|5TFHW5F19CX256437|GRAY|209537||Red||10750|Title Absent|835671|708/064607/0013|No|College Station Nissan
+N-0015|2022 Ford F350SD Platinum 4WD Crew Cab LWB SRW 6.7 8cyl. Diesel|1FT8W3BT5NEC60656|WHITE|180368||Red||35200|Title Absent|835661|708/064606/6106|No|College Station Nissan
+N-0016|2020 Subaru Forester Limited AWD 4D SUV at 2.5 4cyl. Gasoline|JF2SKAUC9LH455501|WHITE|172868||Red||6750|Title Absent|834716|708/064095/6635|No|College Station Hyundai
+N-0017|2016 Ford Taurus SE FWD 4D Sedan 3.5 6cyl. Gasoline|1FAHP2D88GG122039|SILVER|161695||Red||2300|Title Absent|835850|708/064758/0289|No|Archer Volkswagen
+N-0018|2020 Volkswagen Atlas 3.6L V6 SEL FWD 4D SUV V6 3.6 6cyl. Gasoline|1V2ER2CA5LC504654|BLACK|116500||Red||10850|Title Absent|835744|708/064635/5510|No|Archer Volkswagen
+N-0019|2019 Volkswagen Atlas 3.6L V6 SEL FWD 4D SUV V6 3.6 6cyl. Gasoline|1V2ER2CA4KC554363|BLACK|150870||Red||6500|Title Absent|835847|708/064758/3966|No|Archer Volkswagen
+N-0020|2019 Lincoln Nautilus Select FWD 4D SUV 2.0 4cyl. Gasoline|2LMPJ6K99KBL39707|WHITE|63664||Red||11100|Title Absent|835848|708/064758/3040|No|Archer Volkswagen
+N-0021|2020 Hyundai Elantra SE FWD 4D Sedan at 2.0 4cyl. Gasoline|5NPD74LFXLH585326|BLACK|96918||Red||7000|Title Absent|835738|708/064635/1995|No|Archer Volkswagen
+N-0022|2007 Mini Cooper Hardtop S FWD 2D Hatchback 1.6 4cyl. Gasoline|WMWMF73587TT83384|BLUE|188066||Red||1200|Title Absent|835849|708/064758/1987|No|Archer Volkswagen
+N-0023|2010 Chevrolet Equinox LT w/1LT FWD 4D SUV 2.4 4cyl. Gasoline|2CNALDEW7A6390714|BROWN|217273||Red||1300|Title Absent|835834|708/064702/5429|No|Beck & Masten KIA
+N-0024|2016 Ford Fusion Titanium FWD 4D Sedan 2.0 4cyl. Gasoline|3FA6P0K97GR331532|WHITE|127787||Red||3400|Title Absent|835835|708/064703/4292|No|Beck & Masten KIA
+N-0025|2014 Nissan Pathfinder SV FWD 4D SUV 3.5 6cyl. Gasoline|5N1AR2MN4EC607371|WHITE|186020||Red||1500|Title Absent|835856|708/064757/9537|No|Beck & Masten KIA
+N-0026|2011 Toyota Corolla LE FWD 4D Sedan 1.8 4cyl. Gasoline|2T1BU4EEXBC706913|GRAY|173087||Red||3000|Title Absent|835915|708/064884/0829|No|Huntsville Toyota
+N-0027|2014 Nissan Pathfinder SL FWD 4D SUV 3.5 6cyl. Gasoline|5N1AR2MN0EC715311|BROWN|157406||Red||1850|Title Absent|835523|708/064587/4108|No|Huntsville Toyota
+N-0028|2014 Ford Mustang V6 RWD 2D Convertible 3.7 6cyl. Gasoline|1ZVBP8EM5E5317150|BLACK|167485||Red||2950|Title Absent|835916|708/064883/7206|No|Huntsville Toyota
+N-0029|2018 Subaru Outback Touring AWD 4D Wagon 2.5 4cyl. Gasoline|4S4BSATC2J3327476|GREEN|161230||Red||5600|Title Absent|835524|708/064586/7075|No|Huntsville Toyota
+N-0030|2020 Toyota RAV4 XLE Premium FWD 4D SUV 2.5 4cyl. Gasoline|2T3C1RFV3LC036218|BLUE|77191||Red||19450|Title Absent|835912|708/064884/9840|No|Huntsville Toyota
+N-0031|2022 Nissan Frontier SV RWD Crew Cab 2WD SWB at 3.8 6cyl. Gasoline|1N6ED1EJ4NN621346|WHITE|60678||Red||16900|Title Absent|835570|708/064587/3559|No|Huntsville Toyota
+N-0032|2018 Mercedes-Benz C-Class C 300 Sedan RWD 4D Sedan 2.0 4cyl. Gasoline|55SWF4JBXJU246314|BLACK|101782||Red||7050|Title Absent|835914|708/064884/6226|No|Huntsville Toyota
+N-0033|2018 Ford Explorer Sport 4WD 4D SUV 3.5 6cyl. Gasoline|1FM5K8GT1JGA41675|BLACK|153443||Red||6500|Title Absent|835571|708/064586/9317|No|Huntsville Toyota
+N-0034|2014 Lincoln Navigator L 4dr RWD 4D SUV 5.4 8cyl. Gasoline|5LMJJ3H58EEL08720|BLUE|111116||Red||5400|Title Absent|835913|708/064884/3534|No|Huntsville Toyota
+N-0035|2019 BMW X7 XDrive50i AWD 4D SUV 4.4 8cyl. Gasoline|5UXCX4C54KLB39736|GRAY|139038||Red||15350|Title Absent|835922|708/064886/9456|No|Huntsville Toyota
