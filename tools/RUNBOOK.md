@@ -25,6 +25,11 @@
 `python3 tools/build_edge.py <дата> <AUC>` → tools/<pfx>_out_<дата>.json; `python3 tools/merge_day.py <дата> tools/<pfx>_out_<дата>.json "Заголовок дня"` (первый вызов создаёт data/<дата>.json); `python3 tools/apply_pro.py <дата>`; новую дату вставить в начало data/index.json; потом ретейл.
 Неходячие линии и слаги заданы в CFG в build_edge.py (AAA: линии 7 и 77). H1C на EDGE без MMR и отчётов: оценка только по похожим лотам.
 
+## CarMax: фото и звук двигателя
+После сборки каталога, в вкладке carmaxauctions.com: для каждого stock GET /api/media/subject/<stock> -> tools/cmx_media_<дата>.txt (stock|audio-uuid|имена фото, FP3Q первым).
+Звук: вставить tools/engine_audio.js, __eaRun(stocks, 10) (первые 10 с не берём) -> tools/engine_audio_<дата>.txt.
+Затем python3 tools/apply_cmx_media.py <дата>: в лоты пишутся pp (галерея), au (запись), auk (оценка звука). Карточка показывает кнопку ▶ и короткую оценку, в деталях плеер.
+
 ## CarMax: итоги и floor price
 CarMax цены продажи не публикует. В открытой вкладке carmaxauctions.com:
 - floor: GET /api/auction-event/v1/auction-events/{eventId}/run-list-items (eventId — из performance entries на странице vehicledetail любого лота) -> floorPrice.amount, runNumber, lane, StockNum.

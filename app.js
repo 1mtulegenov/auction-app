@@ -402,8 +402,11 @@ function hotLine(x) {
 function phId(x) { if (!x.ph) return -1; const p = x.ph.split('/'); return +(p[1] + p[2]) || -1; }
 function photoUrl(x) { if (x.img) return x.img; if (!x.ph) return ''; const p = x.ph.split('/'); const sf = p.length > 3 ? p.pop() : '00'; return 'https://file3.autolookout.net/' + p.join('/') + '/O3Jlc29sdXRpb246NDAweDMwMDs=/' + sf; }
 const PH_S = 'O3Jlc29sdXRpb246NDAweDMwMDs=', PH_L = 'O3Jlc29sdXRpb246MTAyNHg3Njg7';
+// CarMax: номер машины в адресе главного фото; остальные снимки и запись двигателя лежат рядом на img2.carmax.com
+function cmxStock(x) { const m = /\/assets\/(\d+)\//.exec(x.img || ''); return m ? m[1] : ''; }
 function photoList(x) {
-  if (x.img) return [x.img]; if (!x.ph) return [];
+  if (x.img) { const st = cmxStock(x); return [x.img].concat(st && x.pp ? x.pp.map(n => 'https://img2.carmax.com/assets/' + st + '/image/' + n + '.jpg?width=1024') : []); }
+  if (!x.ph) return [];
   const p = x.ph.split('/'), pre = p[0] + '/' + p[1];
   return [p.slice(0, 3).join('/') + '/' + (p[3] || '00')].concat((x.pp || []).map(s => { const q = s.split('/'); return q.length > 2 ? s : pre + '/' + s; }));
 }
@@ -430,6 +433,31 @@ function rtLine(x, full) {
     + (gap != null ? '<div><b class="' + (gap > 0 ? 'pos' : 'neg') + '">' + (gap > 0 ? '+' : '') + M(gap) + '</b><span>' + T('ретейл минус MMR') + '</span></div>' : '') + '</div>'
     + '<p class="muted">' + T('Подержанные машины этого года и модели на cars.com в 50 милях от центра Хьюстона, обновлено ') + E(fmtDate(r.at)) + '. ' + (r.n < 4 ? T('Объявлений мало: цифра приблизительная.') : '') + '</p></div>';
 }
+/* звук двигателя CarMax: запись + короткая оценка по сигналу (tools/engine_audio.js, без первых 10 с) */
+function sndUrl(x) { const st = cmxStock(x); return x.au && st ? 'https://img2.carmax.com/assets/' + st + '/audio/' + x.au + '.m4a' : ''; }
+const SND = { '-1': ['', 'Запись короткая, оценить нельзя'], 0: ['ok', 'Ровный звук, явного стука нет'], 1: ['mid', 'Лёгкое тиканье, чуть выше обычного'], 2: ['bad', 'Стук сильнее, чем у 9 из 10 машин аукциона: послушайте'] };
+function sndText(x) { return x.auk != null && SND[x.auk] ? SND[x.auk] : ['', 'Запись двигателя от CarMax']; }
+function sndLine(x, fd) {
+  if (!sndUrl(x)) return '';
+  const [c, t] = sndText(x);
+  return '<div class="snd-l"><button class="snd-b" data-au="' + E(x.k) + '"' + (fd || '') + ' aria-label="' + T('Слушать двигатель') + '">▶</button><span class="snd-t ' + c + '">' + T('Звук: ') + T(t) + '</span></div>';
+}
+function sndCard(x) {
+  const u = sndUrl(x); if (!u) return '';
+  const [c, t] = sndText(x);
+  return '<div class="d-card snd-d"><h3>' + T('Звук двигателя') + '</h3><audio controls preload="none" src="' + E(u) + '"></audio>'
+    + '<p class="snd-t ' + c + '">' + T(t) + '</p>'
+    + '<p class="muted">' + T('Запись CarMax. Оценка по сигналу без первых 10 секунд: насколько резкие удары и тиканье по сравнению с остальными машинами этого аукциона. Это повод послушать, а не диагноз: дефект коробки и многие дефекты мотора по записи не слышны.') + '</p></div>';
+}
+let sndA = null, sndBtn = null;
+function playSnd(btn, x) {
+  const u = sndUrl(x); if (!u) return;
+  if (sndA && sndBtn === btn && !sndA.paused) { sndA.pause(); btn.textContent = '▶'; return; }
+  if (sndA) { sndA.pause(); if (sndBtn) sndBtn.textContent = '▶'; }
+  sndA = new Audio(u); sndBtn = btn; btn.textContent = '❚❚';
+  sndA.onended = sndA.onerror = () => { btn.textContent = '▶'; };
+  sndA.play().catch(() => { btn.textContent = '▶'; });
+}
 function thumbBox(x, fd) {
   const n = photoList(x).length; if (!n) return '';
   return '<button class="thumb-w" data-gal="' + E(x.k) + '"' + (fd || '') + ' aria-label="' + T('Фото') + ' (' + n + ')">' + photo(x, 'thumb', true) + (n > 1 ? '<i>' + n + '</i>' : '') + '</button>';
@@ -450,6 +478,7 @@ function lotCard(x) {
     + '<p class="sub">' + [x.o > 500 ? N(x.o) + ' mi' : '', COLOR[x.c] || String(x.c || '').toLowerCase()].filter(Boolean).map(E).join(' · ') + '</p>' + flResTag(x) + '</div></div>'
     + (isInop(x) ? '<div class="money inop"><div class="m-main"><span>MMR</span><b>' + M(x.w) + '</b></div><div class="m-note">' + T('Неходячая: прибыль не считаем') + '</div></div>' : '<div class="money ' + (flOn ? 'three' : 'two') + '"><div class="m-main"><span>' + (x.est ? T('MMR, оценка') : 'MMR') + '</span><b>' + (x.est && x.w != null ? '≈' : '') + M(x.w) + '</b></div>' + (flOn ? '<div class="m-main"><span>Floor price</span><b class="' + (x.max != null && x.floor > x.max ? 'fl-hi' : '') + '">' + M(x.floor) + '</b></div>' : '') + '<div class="m-main"><span>' + T('Ретейл') + '</span><b>' + (x.est && x.r != null ? '≈' : '') + M(x.r) + '</b></div></div>')
     + rtLine(x)
+    + sndLine(x, fd)
     + '<div class="status">' + statusLine(x) + '</div>'
     + pastCard(x)
     + hotLine(x)
@@ -1184,6 +1213,7 @@ function detail(k) {
       + '<div class="calc2"><label>' + T('Доп. расходы: детали, покраска, перегон, $') + '<input id="extra" type="number" inputmode="numeric" placeholder="0" value="' + E((LS.get('extra-v1', {})[x.vin || k]) || '') + '"></label><div id="calcFull"></div></div></div>' : '')
     + (isInop(x) || !x.w ? '' : '<div class="d-card" id="rangeCard" data-k="' + E(k) + '"><h3>' + T('Вероятная цена на торгах') + '</h3><div class="sk-line"></div><div class="sk-line short"></div></div>')
     + rtLine(x, true)
+    + sndCard(x)
     + proCard(x)
     + (x.vin ? '<div class="d-card insp" id="inspCard" data-k="' + E(k) + '">' + inspCard(x) + '</div>' : '')
     + (info ? '<div class="d-card">' + info + '</div>' : '')
@@ -1437,6 +1467,7 @@ document.addEventListener('click', async e => {
   if (e.target === $('#sheetBg')) return;
   const ds = t.dataset;
   if (ds.fav) { e.stopPropagation(); toggleFav(ds.fav, ds.fd); return; }
+  if (ds.au) { e.stopPropagation(); const d = ds.fd && S.cache[ds.fd] ? S.cache[ds.fd] : S.d; if (d.map[ds.au]) playSnd(t, d.map[ds.au]); return; }
   if (ds.gal) { e.stopPropagation(); const d = ds.fd && S.cache[ds.fd] ? S.cache[ds.fd] : S.d; openGal(d.map[ds.gal], +ds.gi || 0); return; }
   if (t.id === 'viewMode') { S.view = S.view === 'table' ? 'cards' : 'table'; LS.set('lots-view', S.view); t.innerHTML = S.view === 'table' ? VM_CARDS : VM_TABLE; t.setAttribute('aria-label', S.view === 'table' ? T('Показать карточками') : T('Показать таблицей')); drawLots(true); return; }
   if (ds.lang) { LS.set('lang', ds.lang); location.reload(); return; }

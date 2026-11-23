@@ -657,3 +657,11 @@ main{overflow-x:clip}
 .rq{border-color:var(--gold,#a8834a)}
 .rq-r{display:grid;gap:8px;padding:10px 0;border-top:1px solid var(--line)}.rq-r:first-of-type{border-top:0}.rq-r small{color:var(--muted);font-size:12.5px}
 .rq-f{display:grid;grid-template-columns:1fr 1fr;gap:8px}.rq-f input{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:9px 11px;font:inherit;font-size:16px;min-width:0}
+
+.snd-l{display:flex;align-items:center;gap:8px;margin:6px 0 0;font-size:13px;color:var(--muted)}
+.snd-b{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--line,#8884);background:transparent;color:inherit;font-size:11px;line-height:1;cursor:pointer;padding:0}
+.snd-t.ok{color:var(--muted)}
+.snd-t.mid{color:#b7791f}
+.snd-t.bad{color:#d64545;font-weight:600}
+.snd-d audio{width:100%;margin:4px 0 8px}
+.snd-d .snd-t{margin:0 0 6px}
