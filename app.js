@@ -433,21 +433,15 @@ function rtLine(x, full) {
     + (gap != null ? '<div><b class="' + (gap > 0 ? 'pos' : 'neg') + '">' + (gap > 0 ? '+' : '') + M(gap) + '</b><span>' + T('ретейл минус MMR') + '</span></div>' : '') + '</div>'
     + '<p class="muted">' + T('Подержанные машины этого года и модели на cars.com в 50 милях от центра Хьюстона, обновлено ') + E(fmtDate(r.at)) + '. ' + (r.n < 4 ? T('Объявлений мало: цифра приблизительная.') : '') + '</p></div>';
 }
-/* звук двигателя CarMax: запись + короткая оценка по сигналу (tools/engine_audio.js, без первых 10 с) */
+/* звук двигателя CarMax: только запись, без оценки */
 function sndUrl(x) { const st = cmxStock(x); return x.au && st ? 'https://img2.carmax.com/assets/' + st + '/audio/' + x.au + '.m4a' : ''; }
-const SND = { '-1': ['', 'Запись короткая, оценить нельзя'], 0: ['ok', 'Ровный звук, явного стука нет'], 1: ['mid', 'Лёгкое тиканье, чуть выше обычного'], 2: ['bad', 'Стук сильнее, чем у 9 из 10 машин аукциона: послушайте'] };
-function sndText(x) { return x.auk != null && SND[x.auk] ? SND[x.auk] : ['', 'Запись двигателя от CarMax']; }
 function sndLine(x, fd) {
   if (!sndUrl(x)) return '';
-  const [c, t] = sndText(x);
-  return '<div class="snd-l"><button class="snd-b" data-au="' + E(x.k) + '"' + (fd || '') + ' aria-label="' + T('Слушать двигатель') + '">▶</button><span class="snd-t ' + c + '">' + T('Звук: ') + T(t) + '</span></div>';
+  return '<div class="snd-l"><button class="snd-b" data-au="' + E(x.k) + '"' + (fd || '') + ' aria-label="' + T('Слушать двигатель') + '">▶</button><span class="snd-t">' + T('Звук двигателя') + '</span></div>';
 }
 function sndCard(x) {
   const u = sndUrl(x); if (!u) return '';
-  const [c, t] = sndText(x);
-  return '<div class="d-card snd-d"><h3>' + T('Звук двигателя') + '</h3><audio controls preload="none" src="' + E(u) + '"></audio>'
-    + '<p class="snd-t ' + c + '">' + T(t) + '</p>'
-    + '<p class="muted">' + T('Запись CarMax. Оценка по сигналу без первых 10 секунд: насколько резкие удары и тиканье по сравнению с остальными машинами этого аукциона. Это повод послушать, а не диагноз: дефект коробки и многие дефекты мотора по записи не слышны.') + '</p></div>';
+  return '<div class="d-card snd-d"><h3>' + T('Звук двигателя') + '</h3><audio controls preload="none" src="' + E(u) + '"></audio></div>';
 }
 let sndA = null, sndBtn = null;
 function playSnd(btn, x) {
