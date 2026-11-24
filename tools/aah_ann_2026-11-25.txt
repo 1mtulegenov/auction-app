@@ -566,3 +566,93 @@ T-0558||Holman Remarketing
 T-0540|Insurance Loss; Prev Titled/Registered To An Insurance Company; Bonded Title; No Arb.|
 T-0551|As-Is/Inop; Diesel|Holman
 T-0552|As-Is/Inop; Diesel|Holman
+C-0022||Tomball Ford
+C-0019||Tomball Ford
+C-0017||Tomball Ford
+C-0023||Honda Cars of Katy
+C-0018||Tomball Ford
+C-0020||Tomball Ford
+C-0024||Honda Cars of Katy
+C-0021||Tomball Ford
+C-0026||Honda Cars of Katy
+C-0025||Honda Cars of Katy
+C-0042||Bolton Ford
+C-0055||Mike Calvert Toyota
+C-0053||Mike Calvert Toyota
+C-0093||Southwest Infiniti
+C-0091||Southwest Infiniti
+C-0103||
+C-0102||
+C-0095||Southwest Infiniti
+C-0106||
+C-0107||
+C-0105||
+C-0130||Davis Chevrolet
+C-0131||Davis Chevrolet
+C-0150||
+D-0050|Green Light; Cel On Bad Cats|Lendbuzz
+D-0092||
+D-0122||
+D-0119||
+D-0115||
+D-0120||
+D-0124||
+D-0118||
+D-0121||
+D-0123||
+D-0125||
+D-0126||
+E-0022|Green Light|Bridgecrest Credit
+E-0025|Green Light|Bridgecrest Credit
+E-0023|Green Light|Bridgecrest Credit
+E-0024|Green Light|Bridgecrest Credit
+E-0046|Green Light; Eng Problem|Bridgecrest Credit
+E-0118|As-Is|Bridgecrest Credit
+E-0120|As-Is|Bridgecrest Credit
+E-0124|As-Is; Frame Damage|Bridgecrest Credit
+E-0119|As-Is|Bridgecrest Credit
+E-0125|Frame Damage; As-Is|Bridgecrest Credit
+E-0126||Holman Remarketing
+E-0121|As-Is; Frame Damage|Bridgecrest Credit
+E-0122|As-Is; Frame Damage|Bridgecrest Credit
+E-0123|As-Is|Bridgecrest Credit
+E-0128||Holman Remarketing
+E-0127||Holman Remarketing
+E-0129||Holman Remarketing
+E-0134||Holman Remarketing
+E-0130||Holman Remarketing
+EC-0033||
+EC-0034||
+EC-0035||
+ED-0020||
+ED-0034||
+EE-0016||
+EE-0017||
+EE-0022||
+EE-0031||Planet Ford
+EE-0025|(A)Frame Damage|
+EE-0032||Planet Ford
+EE-0024||
+EE-0023|Not Actual Miles|
+EE-0028||
+EE-0034||Planet Ford
+EE-0033||Planet Ford
+F-0004||Holman Remarketing
+EF-0032||
+F-0005||Holman Remarketing
+F-0037||Holman Remarketing
+F-0098||Holman Remarketing
+F-0106||Holman Remarketing
+F-0114||Holman Remarketing
+F-0117||Holman Remarketing
+F-0116||Holman Remarketing
+F-0120|(A)Structural Damage|Holman Remarketing
+F-0129|(A)Not Actual Miles|Holman Remarketing
+T-0006||Westside Kia
+T-0007||Mike Calvert Toyota
+T-0021||Sterling McCall Acura
+T-0019|Unit Runs- Needs Tire/Struts; Rebuilt Salvage Title|
+T-0020||Marios Used Cars
+T-0510|As-Is/No Arb; Theft History|Bridgecrest Credit
+T-0511|Frame Damage; As-Is/No Arb|Bridgecrest Credit
+T-0560|Odo Inoperable; Repainted|Holman Remarketing

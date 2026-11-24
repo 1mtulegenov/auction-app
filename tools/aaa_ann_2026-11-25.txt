@@ -398,3 +398,65 @@
 98-0001|As-Is, No Start; Structural|GM Financial Remarketing
 97-0106|As Is. No Start. 724hours.; Cummins B5.9- C Diesel. 12ft Moldboard**. Scarifier.; Sold On A Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde.|
 97-0104|As Is. 1262 Hours. Lot Driven.; 4045 Diesel. 4x4. 16f-16r. Erops, Ac.; Tiger Triple Gang Flail: Tgfl-0910, Tgfr-0965, Trf90-2604.; Hde. Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number|
+11-0006|As-Is|
+1-0025|As-Is|
+11-0005|As-Is|
+11-0015|As-Is|Mainland Investment
+11-0017|As-Is|Mainland Investment
+11-0009|As-Is|Durrett Motor Company
+11-0016||Mainland Investment
+11-0014|As-Is|Mainland Investment
+11-0013||Mainland Investment
+11-0019|Structural|Mainland Investment
+11-0018|As-Is, Exempt|Mainland Investment
+11-0036||
+11-0044|As-Is; Structural|Mi Tierra Auto Sales
+11-0045|As-Is; Structural|Mi Tierra Auto Sales
+11-0047||Mi Tierra Auto Sales
+11-0061|As-Is; Structural|
+11-0063|Green Light Drivetrain Guarantee|
+11-0059|Green Light Drivetrain Guarantee|
+11-0062|As-Is; Diesel. Hail. Structural|
+11-0067|As-Is; Cat Converter Missing|
+11-0068|As-Is|
+22-0003|As-Is|Holman Remarketing
+11-0070|As-Is|
+22-0010|Green Light Drive|Holman Remarketing
+22-0008|Green Light Drivetrain Guarantee; Structural|Holman Remarketing
+22-0018|Green Light Drive|Holman Remarketing
+22-0031|As-Is, (A)Tmu|Holman Remarketing
+22-0072|Green Light Drivetrain Guarantee; Structural|Holman Remarketing
+22-0075|Green Light Drivetrain Guarantee; Salvage - No Arb|Holman Remarketing
+3-0004|Naaa Silver Certified|Exeter Finance Corp
+3-0017|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0012|Naaa Silver Certified|Exeter Finance Corp
+3-0015|Select 3day Guararntee Engine And Transmission|Exeter Finance Corp
+3-0018|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0041|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0042|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0044|Green Light - Caution Engine|Exeter Finance Corp
+3-0102|As-Is|Exeter Finance Corp
+3-0104|As-Is|Exeter Finance Corp
+3-0108|As-Is|Exeter Finance Corp
+3-0106|As-Is|Exeter Finance Corp
+3-0107|As-Is|Exeter Finance Corp
+3-0109|As-Is|Exeter Finance Corp
+3-0111|As-Is; Structural; Prev Titled/Registered To An Insurance Company No Arb|Exeter Finance Corp
+3-0110|As-Is; Prev Reported As Insurance Loss No Arb|Exeter Finance Corp
+3-0112|As-Is|Exeter Finance Corp
+7-0033|As-Is, No Start|Durrett Motor Company
+7-0032|As-Is, No Start|Durrett Motor Company
+7-0046|No Key Odo No Show|
+7-0050|As-Is, Starts And Drives 2 Flat Tires|Mi Tierra Auto Sales
+7-0051|Hood Wont Open, Key Wont Turn , Odo No Show; Mold|Mi Tierra Auto Sales
+7-0052|Starts But Dies Right Away; Hail. Structural|Mi Tierra Auto Sales
+7-0065|As-Is|
+7-0064|As-Is; Structural|
+7-0066|As-Is; Structural; Exempt|
+7-0067|As-Is, No Key, Mold, Front Window Broken; Odo No Show. Structural. Airbags Deployed|
+97-0032|As Is.; Diesel. 4x4. 16500#Gvwr. 203in Wb; Hde.|Mainland Investment
+97-0050|Hde, Diesel|Holman Remarketing
+97-0053|As Is. Structural.; G''''Neck Hitch, Tandem Axle, 12000# Gvwr, Elec Brk, Cargo Trailer.; Interior: 19ft4inl Plus Attic (Partitioned) 80inh, 96inw, 82in Tween Fenders.; Hde.|
+97-0052|As Is. Inop.; Diesel. 12000# Gvwr. 13ft Step Van.; Hde.|
+97-0063|As Is. No Start.; Mxdt-A230 Diesel. Allison. 25500# Gvwr. Hyd Brk.; Supreme 24ft Dry Van.; Hde.|Holman Remarketing
+97-0064|As Is.; 8.1l V8. Allison At545. 25950# Gvwr. Hyd Brk.; Morgan 22ft Van. 2000# Tommygate.; Hde. Lot Driven.|Holman Remarketing
