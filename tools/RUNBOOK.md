@@ -18,6 +18,10 @@
 Нужен вход в EDGE в Chrome Максата. Если не вошёл — попросить войти.
 Время: CRON_TZ=America/Chicago, 18:47.
 
+
+Праздники: если аукцион переносят (День благодарения 2026: AAA Houston с чт 26.11 на ср 25.11, 13:00), все аукционы дня грузятся в одну дату, заголовок перечисляет все. В tools/notify.mjs в SCHED добавить разовую запись `{ day: 'ГГГГ-ММ-ДД', t: 'ЧЧ:ММ', name }` и `{ skip: 'дата по расписанию' }`. Пост-сейл всех аукционов дня делается вечером того же дня, в день-пропуск торгов нет.
+apply_gallery.py берёт код аукциона из имени файла (aah_ph_… → AAH): номера лотов у H1C и AAH совпадают (D-0006), без этого фото перепутаются.
+
 ## Каталог EDGE (любой аукцион): edge_fetch.js + build_edge.py
 Во вкладке edgepipeline.com (без await): `const B='https://1mtulegenov.github.io/auction-app/';eval(await (await fetch(B+'tools/edge_fetch.js',{cache:'no-store'})).text());__edgeFetch('<slug>','<y>/<m>/<d>')`.
 Ждать `window._done` (число), затем `__edgeShow('raw'|'detail'|'ann', i)` + get_page_text по кускам (E<k><i> … ENDE) → tools/<pfx>_raw|detail|ann_<дата>.txt (pfx = код аукциона маленькими: aaa, h1c, anh, aah, ana).

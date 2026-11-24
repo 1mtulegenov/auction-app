@@ -17,6 +17,9 @@ const SCHED = [
   { wd: 3, t: '16:30', name: "Houston's 1st Choice" },
   { wd: 4, t: '13:00', name: 'AAA Houston' },
   { wd: 5, t: '09:15', name: 'AutoNation AA Houston' },
+  // разовые переносы (праздники): day — дата торгов, skip — дата, в которую по расписанию торгов нет
+  { day: '2026-11-25', t: '13:00', name: 'AAA Houston' },
+  { skip: '2026-11-26' },
 ];
 const LEAD = 45; // минут до начала: окно, в котором шлём «скоро начнётся»
 function chicagoNow() {
@@ -25,8 +28,9 @@ function chicagoNow() {
 }
 function upcoming() {
   const n = chicagoNow();
+  if (SCHED.some(a => a.skip === n.day)) return null;
   for (const a of SCHED) {
-    if (a.wd !== n.wd) continue;
+    if (a.skip || (a.day ? a.day !== n.day : a.wd !== n.wd)) continue;
     const [h, m] = a.t.split(':').map(Number), left = h * 60 + m - n.min;
     if (left > 0 && left <= LEAD) return { ...a, left, key: n.day + '-' + a.t.replace(':', '') };
   }

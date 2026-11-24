@@ -1,0 +1,568 @@
+C-0006|Yes|Good|Title Absent|0|39150|||27700|0|
+C-0001|Yes|Good|Title Absent|0|25825|||15300|2|
+C-0008|Yes|Good|Title Absent|28000|27325|||26100|1|
+C-0002|||Title Absent|0|2800|||1450|0|
+C-0004|Yes|Good|Title Absent|49000|49275|||48350|13|Warning Light: Engine - On (Unacceptable); Windshield: Cracked (> 12 Inches)
+C-0003|Yes|Good|Title Absent|0|25050|||21750|2|
+C-0005|Yes|Good|Title Absent|0|4400|||2350|6|Dash: Cracked (Replacement Required); Left Front Seat: Torn (11 To 12 Inches); Right Front Seat: Torn (> 12 Inches); Windshield: Cracked (> 12 Inches)
+C-0007|Yes|Good|Title Absent|0|8425|||6600|9|Left Front Fender Emblem: Broken (Replacement Required); Windshield: Cracked (> 12 Inches); (Replacement Required)
+C-0010|||Title Absent|0|12700|||9100|0|
+C-0011|||Title Absent|0|20425|||18750|0|
+C-0013|||Title Absent|0|15025|||11550|0|
+C-0015|||Title Absent|0|14400|||17450|0|
+C-0014|||Title Absent|0|14625|||11400|0|
+C-0009|Yes|Good|Title Absent|0|2750|||2850|10|Right Running Board: Broken (Replacement Required)
+C-0016|Yes|Good|Title Absent|6000|7775|||4400|4|Right Front Tire: Worn (Replacement Required)
+C-0012|Yes|Good|Title Absent|9000|8625|||5100|8|
+C-0031|||Title Absent|0|12925|||11100|0|
+C-0030|Yes|Good|Title Absent|1500|1600|||1300|12|Front Bumper / Cover: Broken (Replacement Required); Left Front Door Handle: Broken (Replacement Required); Left Head Lamp: Broken (Replacement Required)
+C-0035|Yes|Good|Title Absent|0|6325|||3650|10|Front Emblem: Peeling (Replacement Required); Left Head Lamp: Water Damage (Replacement Required)
+C-0036|Yes|Good|Title Absent|11000|14025|||10450|8|
+C-0037|||Title Absent|0|7325|||6150|0|
+C-0032|Yes|Good|Title Absent|14000|16250||||20|Antenna Base: Missing (Replacement Required); Antenna: Missing (Replacement Required); Grille: Cracked (1/2 To 1 Inch); Left Front Seat: Torn (> 12 Inches)
+C-0034|Yes|Good|Title Absent|13000|11050|||9500|13|Left Front Seat: Worn (Replacement Required); Rear Metal Bumper Painted: Rust (4 To 5 Inches)
+C-0033|Yes|Good|Title Absent|0|17225|||13600|10|
+C-0041|||Title Absent|0|25400|||22950|0|
+C-0039|||Title Absent|0|27975|||23150|0|
+C-0040|||Title Absent|0|13100|||14650|0|
+C-0038|||Title Absent|10000|10250|||8600|0|
+C-0046|Yes|Good|Title Absent|12000|10050|||8350|4|Left Head Lamp: Water Damage (Replacement Required); Warning Light: Engine - On (Unacceptable)
+C-0045|Yes|Good|Title Absent|3500|350|||1300|18|Front Bumper / Cover: Broken (Replacement Required); Left Tail Light: Cracked (Replacement Required); Rear Bumper Step Pad: Broken (Replacement Required); Right Mirror: Broken (Replacement Required)
+C-0043|Yes|Good|Title Absent|12000|12425|||10600|16|Front Bumper: Cracked Paint (9 To 10 Inches)
+C-0044|Yes|Good|Title Absent|16000|14950|||9800|2|
+C-0050|Yes|Good|Title Absent|7000|9575|||7200|6|Warning Light: Engine - On (Unacceptable)
+C-0054|||Title Absent|12500|14150|||11600|0|
+C-0051|Yes|Good|Title Absent|18000|21175|||18500|1|
+C-0047|Yes|Good|Title Absent|6100|4525|||3550|11|Front Bumper / Cover: Broken (Replacement Required); Front Center Armrest: Torn (6 To 7 Inches); Left Front Seat Back: Torn (6 To 7 Inches); Navigation Display Screen: Inoperable (Repair Required)
+C-0049|Yes|Good|Title Absent|25000|20550|||21400|3|
+C-0048|Yes|Good|Title Absent|1300|1325|||1300|16|Front Bumper / Cover: Severe Damage (Replacement Required); Windshield: Cracked (> 12 Inches)
+C-0052|Yes|Good|Title Absent|4500|2350|||2750|14|Left Hood Hinge: Broken (Replacement Required)
+C-0056|Yes|Good|Title Absent|21000|28850|||19400|6|Left Front Mirror Signal Lamp: Hole(S) (Replacement Required)
+C-0073|Yes|Good|Title Absent|8000|10900|||5650|1|
+C-0071|||Title Absent|3000|2300|||1900|0|
+C-0059|||Title Absent|2000|750|||1050|0|
+C-0065|Yes|Good|Title Absent|1200|0|||1350|11|Left Front Mirror Housing: Broken (Replacement Required); Windshield: Cracked (> 12 Inches)
+C-0069|Yes|Good|Title Absent|4200|5050|||5000|5|Left Brake Light: Broken (Replacement Required); Left Drip Rail: Cracked Paint (8 To 9 Inches); Right Front Seat: Torn (> 12 Inches)
+C-0067|Yes|Good|Title Absent|16500|13725|||12400|1|
+C-0064|Yes|Good|Title Absent|0|5675|||3200|7|Front Bumper Tow Hook Cover: Missing (Replacement Required); Rear Bumper / Cover: Missing (Replacement Required); Rear Bumper: Severe Damage (Replacement Required); Warning Light: Engine - On (Unacceptable)
+C-0058|Yes|Good|Title Absent|3000|3025|||2200|14|Dash: Multiple Scratches Heavy (Replacement Required); Left Front Tire: Worn (Replacement Required); Left Rear Tire: Worn (Replacement Required); Rear View Mirror: Missing (Replacement Required)
+C-0080|Yes|Good|Title Absent|0|3950|||2500|5|Warning Light: Engine - On (Unacceptable)
+C-0079|Yes|Good|Title Absent|0|8350|||3900|3|
+C-0077|Yes|Good|Title Absent|0|0|||1250|18|Dash / Panel: Cracked (Replacement Required); Left Brake Light: Cracked (Replacement Required); Odometer Display: Inoperable (Repair Required)
+C-0075|Yes|Good|Title Absent|24000|26250|||19800|3|Windshield: Cracked (> 12 Inches)
+C-0081|Yes|Good|Title Absent|10000|11450|||7950|2|Front Bumper: Cracked (5 To 6 Inches); Windshield: Cracked (> 12 Inches)
+C-0076|Yes|Good|Title Absent|0|1600|||1400|8|Warning Light: Engine - On (Unacceptable)
+C-0078|Yes|Good|Title Absent|0|9600|||7250|5|Right Front Mirror Housing: Broken (Replacement Required)
+C-0074|Yes|Good|Title Absent|27800|27875|||24850|7|Windshield: Cracked (> 12 Inches)
+C-0089|Yes|Good|Title Absent|17000|19275|||15500|2|
+C-0086|Yes|Good|Title Absent|0|13300|||7500|6|Front Bumper / Cover: Cracked (3 To 4 Inches)
+C-0082|Yes|Good|Title Absent|0|14525|||9850|7|Front Bumper: Cracked Paint (> 12 Inches); Windshield: Cracked (> 12 Inches)
+C-0084|Yes|Good|Title Absent|0|7425|||5300|7|Windshield: Cracked (> 12 Inches)
+C-0083|Yes|Good|Title Absent|13200|13150|||9950|3|Windshield: Cracked (> 12 Inches)
+C-0087|Yes|Good|Title Absent|2500|3625|||1450|24|Dash: Cracked (Replacement Required); Deck Lid Emblem: Peeling (Replacement Required); Front Center Armrest: Worn (Replacement Required); Left Front Seat: Torn (> 12 Inches)
+C-0088|Yes|Good|Title Absent|3500|3975|||2300|5|Right Rear Wheel Cover: Missing (Replacement Required)
+C-0085|Yes|Good|Title Absent|14000|11825|||10800|2|
+C-0094|||Title Absent|2000|2975|||3650|0|
+C-0096|||Title Absent|15000|10500|||9900|0|
+C-0099|||Title Absent|2500|1500|||1350|0|
+C-0098|Yes|Good|Title Absent|18000|20825|||18300|4|Warning Light: Engine - On (Unacceptable)
+C-0090|Yes|Good|Title Absent|22000|18900|||19250|11|
+C-0101|||Title Absent|0|8900|||7750|0|
+C-0100|Yes|Good|Title Absent|0|11375|||6650|4|Left Front Seat: Worn (Replacement Required)
+C-0092|Yes|Good|Title Absent|10000|10150|||6000|12|Right Cover Reflectors: Broken (Replacement Required)
+C-0112|||Title Absent|4000|1800|||1950|0|
+C-0111|||Title Absent|13900|14050|||12500|0|
+C-0114|||Title Absent|12000|14800|||13100|0|
+C-0110|Yes|Good|Title Absent|7000|7625|||5750|11|Right Rear Tire: Worn (Replacement Required)
+C-0113|Yes||Title Absent|20000|19675|||16950|3|Satellite Dish Antenna: Broken (Replacement Required)
+C-0109|Yes|Good|Title Absent|6000|6425|||2700|9|
+C-0104|Yes|Good|Title Absent|13000|21725|||11500|5|Warning Light: Engine - On (Unacceptable); Windshield: Cracked (5 To 6 Inches)
+C-0108|Yes|Good|Title Absent|10000|13475|||8750|4|
+C-0117|||Title Absent|11500|11225|||10100|0|
+C-0121|||Title Absent|5000|2200|||2100|0|
+C-0124|||Title Absent|8000|6625|||5550|0|
+C-0120|Yes|Good|Title Absent|15000|12850|||11550|0|
+C-0123|Yes|Good|Title Absent|35000|35675|||34550|10|Front Bumper Molding: Broken (Replacement Required); Right Front Mirror Housing: Broken (Replacement Required); Warning Light: Engine - On (Unacceptable)
+C-0116|||Title Absent|4000|2975|||4350|0|
+C-0115|Yes|Good|Title Absent|9500|12275|||9350|9|Left Front Tire: Worn (Replacement Required); Rear Bumper Left Molding: Broken (Replacement Required); Rear Bumper Right Molding: Broken (Replacement Required); Right Front Tire: Worn (Replacement Required)
+C-0122|Yes|Good|Title Absent|0|17400|||9050|10|Front Center Armrest: Torn (> 12 Inches); Left Front Door Panel: Torn (1/8 To 1/2 Inch); Left Front Mirror Housing: Broken (Replacement Required)
+C-0125|||Title Absent|0|14825|||15850|0|
+C-0127|Yes|Good|Title Absent|24000|33925|||24750|2|
+D-0001|Yes|Good|Title Absent|38200|41050|||35000|2|
+C-0129|Yes|Good|Title Absent|8500|11450|||10050|2|
+D-0003|Yes|Good|At Auction|0|18950|||19000|8|Right Rear Tire: Worn (Replacement Required)
+C-0128|Yes|Good|Title Absent|15000|19725|||17000|3|Rear View Mirror: Broken (Replacement Required); Right Brake Light: Cracked (Replacement Required)
+C-0126|Yes|Good|Title Absent|0|17300|||14700|1|
+D-0002|Yes|Good|At Auction|7300|7900|||7900|10|Left Front Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required); Windshield: Cracked (> 12 Inches)
+D-0012|Yes|Good|At Auction|12400|17325|||13250|1|Right Front Tire: Worn (Replacement Required)
+D-0006|Yes|Good|At Auction|17700|19175|||17050|7|Front Bumper / Cover: Broken (Replacement Required); Right Head Lamp: Broken (Replacement Required)
+D-0005|Yes|Good|At Auction|23700|24550|||24750|4|
+D-0011|Yes|Good|Title Absent|23700|27575|||21200|9|Front Bumper / Cover: Severe Damage (Replacement Required)
+D-0010|Yes|Good|Title Absent|25500|29325|||24400|0|
+D-0009|Yes|Good|Title Absent|42700|44950|||45450|2|
+D-0013|Yes|Good|Title Absent|0|28750|||25800|5|
+D-0004|Yes|Good|At Auction|30100|34975|||32000|2|
+D-0020|Yes|Good|Title Absent|17500|19850|||13850|4|Left Front Marker Lamp: Broken (Replacement Required)
+D-0016|Yes|Good|At Auction|0|25750|||23850|3|Windshield: Broken (Replacement Required)
+D-0014|Yes|Good|Title Absent|18100|19650|||16450|5|Right Rear Tire: Worn (Replacement Required)
+D-0017|Yes|Good|At Auction|28500|28500|||25800|7|Air Conditioner: Inoperable (Repair Required); Keys: Missing (Replacement Required); Right Head Lamp: Broken (Replacement Required)
+D-0019|No|Good|At Auction|9000|11350|||10550|15|Front Bumper / Cover: Missing (Replacement Required); Keys: Missing (Replacement Required); Left Front Mirror Housing: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required)
+D-0018|Yes|Good|At Auction|10000|9725|||8900|19|Front Bumper / Cover: Broken (Replacement Required); Left Front Fender Liner: Missing (Replacement Required)
+D-0021|Yes|Good|At Auction|43400|47825|||40950|14|Front Bumper / Cover: Broken (Replacement Required); Hood Latch: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required); Left Rear Tire: Worn (Replacement Required)
+D-0022|Yes|Good|At Auction|8400|7250|||6150|20|Front Bumper / Cover: Broken (Replacement Required); Front Center Armrest: Broken (Replacement Required); Grille: Broken (Replacement Required); Left Front Seat: Torn (> 12 Inches)
+D-0030|Yes|Good|At Auction|14500|10925|||9850|14|Keys: Missing (Replacement Required); Rear Metal Bumper Chrome: Severe Damage (Replacement Required); Right Bed Side: Severe Damage (Replacement Required); Tailgate Handle: Broken (Replacement Required)
+D-0025|Yes|Good|Title Absent|0|3500|||3700|6|Left Front Door Handle Cap: Missing (Replacement Required); Right Front Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+D-0029|Yes|Good|Title Absent|7000|10350|||7400|33|Center Brake Light: Cracked (Replacement Required); Front Bumper / Cover: Broken (Replacement Required); Left Front Fender Liner: Torn (6 To 7 Inches); Left Front Seat Cushion: Torn (3 To 4 Inches)
+D-0023|Yes|Good|At Auction|9200|13675|||8200|8|Left Rear Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required); Windshield: Cracked (> 12 Inches)
+D-0026|Yes|Good|At Auction|0|6775|||4500|10|Keys: Missing (Replacement Required); Left Front Tire: Worn (Replacement Required)
+D-0028|Yes|Good|Title Absent|30000|29475|||26800|3|Engine: Noise (Repair Required)
+D-0031|Yes|Good|At Auction|6500|3275|||4600|18|Engine: Sludge (Replacement Required); Left Front Seat: Torn (6 To 7 Inches); Radio: Missing (Replacement Required); R Cab Corner Panel: Severe Damage (Replacement Required)
+D-0027|Yes|Good|At Auction|9900|15325|||11100|12|Engine: Noise (Repair Required); Front Bumper / Cover: Broken (Replacement Required); Front Bumper Cover Lower: Broken (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+D-0035|Yes|Good|At Auction|6000|9475|||4300|7|Left Front Tire: Worn (Replacement Required); Left Front Door Handle Cap: Missing (Replacement Required); Rear Bumper / Cover: Broken (Replacement Required); Right Front Tire: Worn (Replacement Required)
+D-0039|Yes|Good|Title Absent|29800|37950|||32650|7|Catalytic Converter: Broken (Replacement Required); Windshield: Cracked (> 12 Inches)
+D-0040|Yes|Good|At Auction|28400|30875|||30750|5|Air Conditioner: Inoperable (Repair Required); Front Bumper / Cover: Cracked (1 To 2 Inches)
+D-0033|Yes|Good|At Auction|2000|7250|||4300|20|Front Bumper / Cover: Missing (Replacement Required); Headlining: Torn (> 12 Inches); Hood: Severe Damage (Replacement Required); Left Front Fender Liner: Broken (Replacement Required)
+D-0038|No|Good|Title Absent|8000|5450|||5550|13|Keys: Missing (Replacement Required); Right Front Wheel Opening Mldg: Multiple Dents / Paint Damage (Replacement Required)
+D-0034|Yes|Good|At Auction|2500|5450|||3050|16|Front Bumper / Cover: Broken (Replacement Required); Grille: Broken (Replacement Required); Left Rear Tire: Worn (Replacement Required); Right Front Door Wind. Molding: Peeling (Replacement Required)
+D-0037|Yes|Good|At Auction|5700|11575|||9550|13|Left Hood Strut: Worn (Replacement Required); Right Hood Strut: Worn (Replacement Required)
+D-0036|Yes|Good|At Auction|11000|14350|||14550|16|Dash: Worn (Replacement Required); Front Center Armrest: Worn (Replacement Required); Hitchplate Cover: Broken (Replacement Required); Left Front Armrest: Worn (Replacement Required)
+D-0046|Yes|Good|At Auction|27000|33625|||28200|4|Fuel Pump: Inoperable (Repair Required)
+D-0041|Yes|Good|At Auction|7200|14275|||7000|9|Left Front Tire: Worn (Replacement Required)
+D-0048|Yes|Good|At Auction|11000|12225|||10450|3|Windshield: Cracked (> 12 Inches)
+D-0042|Yes|Good|At Auction|10800|12050|||5850|9|
+D-0047|Yes|Good|At Auction|11000|17650|||11150|3|
+D-0044|Yes|Good|At Auction|17000|21025|||16750|3|Left Front Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required)
+D-0045|Yes|Good|At Auction|53000|55975|||53550|3|
+D-0043|Yes|Good|At Auction|9000|11125|||8250|17|Brakes: Inoperable (Repair Required); Front Bumper: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required); Rear Glass: Broken (Replacement Required)
+D-0051|Yes|Good|At Auction|18000|24550|||18300|6|Engine: Noise (Repair Required); Left Front Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required)
+D-0057|Yes|Good|At Auction|7000|10600|||9150|11|Front Bumper Cover Lower: Broken (Replacement Required); Left Front Fender Liner: Torn (8 To 9 Inches); Left Front Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required)
+D-0054|Yes|Good|At Auction|11000|12525|||10550|13|Front Bumper / Cover: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required)
+D-0055|Yes|Good|At Auction|12000|14725|||15400|8|Right Mirror: Missing (Replacement Required)
+D-0052|Yes|Good|At Auction|7000|8950|||7050|16|Front Bumper: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required); Left Rear Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+D-0053|No|Good|At Auction|11000|13975|||13350|4|Rear Bumper / Cover: Broken (Replacement Required); Right Front Tire: Worn (Replacement Required)
+D-0049|Yes|Good|At Auction|15500|16700|||15600|6|Left Front Tire: Worn (Replacement Required)
+D-0056|No|Good|At Auction|19000|20075|||19250|14|Rear End / Differential: Inoperable (Repair Required)
+D-0059|Yes|Good|At Auction|3000|4025|||2600|15|Front Bumper Cover Lower: Broken (Replacement Required); Rear Bumper / Cover: Cracked Paint (> 12 Inches); Warning Light: Engine - On (Unacceptable)
+D-0067|Yes|Good|At Auction|2000|1600|||3050|19|Left Front Tire: Worn (Replacement Required); Left Fr Seat Adj. Handle Trim: Broken (Replacement Required); Left Front Mirror Cover: Missing (Replacement Required); Right Tail Light: Broken (Replacement Required)
+D-0066|No|Good|At Auction|5500|6050|||5600|7|Front Bumper: Broken (Replacement Required); Keys: Missing (Replacement Required); Left Front Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required)
+D-0061|Yes|Good|At Auction|6500|4400|||5200|11|Windshield: Cracked (6 To 7 Inches)
+D-0070|Yes|Good|At Auction|0|4925|||3100|13|Radio Display / Touch Screen: Inoperable (Repair Required); Windshield: Cracked (5 To 6 Inches)
+D-0058|Yes|Good|At Auction|2000|5975|||7650|12|Front Bumper / Cover: Broken (Replacement Required); Left Rear Tire: Worn (Replacement Required); Left Tail Light: Broken (Replacement Required); Lift Gate: Severe Damage (Replacement Required)
+D-0060|Yes|Good|At Auction|0|14975|||12150|4|Engine: Noise (Repair Required)
+D-0069|Yes|Good|At Auction|0|14575|||10000|9|Warning Light: Engine - On (Unacceptable); Windshield: Cracked (> 12 Inches)
+D-0077|Yes|Good|Title Absent|50900|58925|||46750|2|Windshield: Cracked (> 12 Inches)
+D-0073|Yes|Good|At Auction|0|5050|||2750|23|Front Bumper / Cover: Broken (Replacement Required); Right Front Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required); Windshield: Cracked (> 12 Inches)
+D-0078|Yes|Good|Title Absent|45700|47100|||48500|9|Headerpanel: Cracked (1 To 2 Inches); Windshield: Cracked (> 12 Inches)
+D-0076|Yes|Good|Title Absent|57200|60950|||57550|1|
+D-0075|Yes|Good|Title Absent|61700|64650|||62300|2|
+D-0072|Yes|Good|At Auction|0|5325|||2850|16|Front Bumper Cover Lower: Broken (Replacement Required); Left Fog Lamp: Broken (Replacement Required); Left Front Carpet: Torn (> 12 Inches); Right Front Mirror Cover: Broken (Replacement Required)
+D-0074|Yes|Good|At Auction|0|5475|||4650|18|Engine: Noise (Repair Required); Front Bumper Cover Lower: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required); Left Fr Seat Adj. Handle Trim: Broken (Replacement Required)
+D-0071|Yes|Good|At Auction|0|8750|||6000|11|Front Bumper / Cover: Broken (Replacement Required); Left Rear Tire: Worn (Replacement Required); Right Front Molding: Broken (Replacement Required); Windshield: Cracked (> 12 Inches)
+D-0079|Yes|Good|Title Absent|50000|52475|||49200|3|
+D-0081|Yes|Good|At Auction|46000|0|||41850|5|Warning Light: Engine - On (Unacceptable)
+D-0094|||Title Absent|6900|6550|||5550|0|
+D-0080|Yes|Good|Title Absent|41500|0|||36650|5|
+D-0096|||Title Absent|14000|10925|||8700|0|
+D-0095|||Title Absent|16000|16900|||15550|0|
+D-0098|||Title Absent|6500|4900|||3250|0|
+D-0097|||Title Absent|7000|4000|||2300|0|
+D-0100|||Title Absent|4100|2175|||1950|0|
+D-0110|||Title Absent|0|23425|||15900|0|
+D-0109|Yes|Good|Title Absent|3500|5800|||4350|6|Front Bumper: Severe Damage (Replacement Required); Right Drip Rail: Cracked Paint (1 To 2 Inches)
+D-0108|Yes|Good|Title Absent|2200|2825|||1300|7|Front Bumper Right Molding: Missing (Replacement Required); Front Bumper: Severe Damage (Replacement Required)
+D-0107|Yes|Good|Title Absent|3000|6075|||3700|9|Right Front Mirror Housing: Missing (Replacement Required)
+D-0101|||At Auction|4000|4275|||3650|0|
+D-0106|Yes|Good|At Auction|6003|9475|||7700|10|Front Bumper / Cover: Broken (Replacement Required); Left Front Fender: Severe Damage (Replacement Required); Left Front Seat Cushion: Torn (> 12 Inches); Right Fog Lamp: Broken (Replacement Required)
+D-0099|||Title Absent|8000|8475|||6750|0|
+D-0113|||Title Absent|0|10850|||7050|0|
+D-0114|||Title Absent|0|18425|||15250|0|
+D-0112|||Title Absent|0|10900|||13100|0|
+E-0002|Yes|Good|At Auction|3003|2950|||2100|8|Keys: Missing (Replacement Required); Left Front Tire: Worn (Replacement Required)
+E-0004|Yes|Good|At Auction|3003|3350|||1900|10|Luggage Carpeting: Missing (Replacement Required); Rain Sensor Cover: Missing (Replacement Required)
+D-0111|||Title Absent|0|13975|||18450|0|
+E-0001|Yes|Damaged|At Auction|3203|2950|||2950|8|Left Rear Tie Down: Torn (3 To 4 Inches); Transmission: Noise (Repair Required)
+E-0003|Yes|Good|At Auction|3003|5625|||2850|2|
+E-0011|Yes|Good|At Auction|32001|33825|||25050|4|
+E-0005|Yes|Good|At Auction|2803|1775|||2700|4|Left Tail Light: Broken (Replacement Required); Lift Gate: Severe Damage (Replacement Required); Rear Bumper / Cover: Severe Damage (Replacement Required)
+E-0012|Yes|Good|At Auction|20001|22175|||20650|7|
+E-0010|No|Good|At Auction|2002|625|||1650|11|Front Bumper / Cover: Broken (Replacement Required); Right Front Trim Ring: Missing (Replacement Required); Sun Roof: Broken (Replacement Required)
+E-0006|Yes|Good|At Auction|2503|2825|||2100|8|Ignition: Broken (Replacement Required); Keys: Missing (Replacement Required); Right Front Door Glass: Broken (Replacement Required)
+E-0007|Yes|Good|At Auction|2303|5850|||3200|11|Engine: Leak (Repair Required); Front Bumper / Cover: Broken (Replacement Required); Left Front Window: Inoperable (Repair Required)
+E-0008|Yes|Good|At Auction|2303|2200|||1550|13|Right Front Tire: Worn (Replacement Required)
+E-0009|Yes|Good|At Auction|2203|2550|||2400|21|Left Front Tire: Worn (Replacement Required); Rear Bumper / Cover: Broken (Replacement Required); Right Front Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+E-0017|Yes|Good|At Auction|5501|6775|||4550|4|
+E-0015|Yes|Good|At Auction|7001|6525|||4650|7|
+E-0020|Yes|Good|At Auction|7001|8225|||5750|4|
+E-0013|Yes|Good|At Auction|17001|20450|||15650|3|Rear Bumper / Cover: Rust (> 12 Inches)
+E-0019|Yes|Good|At Auction|18001|23225|||19900|2|
+E-0018|Yes|Good|At Auction|24001|26725|||25050|7|
+E-0014|Yes|Good|At Auction|7001|6775|||5800|11|Left Front Seat: Torn (> 12 Inches); Left Head Lamp: Water Damage (Replacement Required); Right Head Lamp: Water Damage (Replacement Required)
+E-0016|Yes|Good|At Auction|6001|5000|||2600|5|
+E-0021|Yes|Good|At Auction|5001|5000|||3850|7|
+E-0026|Yes|Good|At Auction|4602|3975|||3150|11|Left Front Tire: Worn (Replacement Required); Windshield: Cracked (9 To 10 Inches)
+E-0029|No|Good|At Auction|19002|14250|||11000|4|Left Rear Door: Severe Damage (Replacement Required); Right Front Tire: Worn (Replacement Required)
+E-0028|Yes|Good|At Auction|21002|16800|||18300|4|Left Head Lamp: Broken (Replacement Required); Right Front Tire: Worn (Replacement Required)
+E-0031|Yes|Good|At Auction|13002|12425|||10550|7|Front Bumper / Cover: Broken (Replacement Required); Left Rear Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+E-0030|Yes|Good|At Auction|16002|14100|||11250|6|Front Bumper: Broken (Replacement Required); Left Head Lamp: Broken (Replacement Required); Right Front Mirror Housing: Broken (Replacement Required)
+E-0027|Yes|Good|At Auction|35002|29375|||32150|10|Left Rear Tire: Worn (Replacement Required); Right Front Fender Liner: Missing (Replacement Required); Right Front Fender: Severe Damage (Replacement Required); Right Front Tire: Worn (Replacement Required)
+E-0032|Yes|Good|At Auction|10802|11875|||12200|12|
+E-0036|Yes|Good|At Auction|4302|3950|||2750|5|
+E-0034|Yes|Good|At Auction|6002|6175|||6250|15|Left Front Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required)
+E-0039|Yes|Good|At Auction|17002|20600|||13850|6|Left Front Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required); Right Rear Door Molding: Unattached (Replacement Required)
+E-0037|Yes|Good|At Auction|3802|1975|||2650|1|Front Bumper / Cover: Broken (Replacement Required)
+E-0035|Yes|Good|At Auction|5002|5175|||4300|16|Hood Latch: Broken (Replacement Required); Left Hood Strut: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required); Right Hood Strut: Worn (Replacement Required)
+E-0033|Yes|Good|At Auction|9502|10650|||8000|6|Front Bumper / Cover: Broken (Replacement Required); Left Fog Light Covers: Broken (Replacement Required); Rear Bumper / Cover: Broken (Replacement Required); Right Front Tire: Worn (Replacement Required)
+E-0040|Yes|Good|At Auction|14202|13900|||13550|9|Front Bumper / Cover: Broken (Replacement Required); Left Rear Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+E-0038|Yes|Good|At Auction|22002|19700|||14050|5|Windshield: Cracked (> 12 Inches)
+E-0041|Yes|Good|At Auction|13004|13975|||13050|9|
+E-0044|Yes|Good|At Auction|6802|8700|||12850|7|
+E-0048|Yes|Good|At Auction|13002|13525|||13600|7|Left Head Lamp: Cracked (Replacement Required); Left Tail Light: Cracked (Replacement Required); Right Front Mirror Signal Lamp: Water Damage (Replacement Required); Right Tail Light: Water Damage (Replacement Required)
+E-0042|Yes|Good|At Auction|9004|7475|||6350|8|Front Bumper: Missing (Replacement Required); Grille: Missing (Replacement Required); Left Front Moulding: Missing (Replacement Required); Right Front Molding: Missing (Replacement Required)
+E-0043|Yes|Good|At Auction|8002|6650|||5000|3|Sunroof Shade: Inoperable (Repair Required)
+E-0049|Yes|Good|At Auction|11002|12625|||6200|11|Front Bumper Right Molding: Missing (Replacement Required); Left Front Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required); Warning Light: Srs - On (Unacceptable)
+E-0047|Yes|Good|At Auction|19002|23300|||18650|8|Warning Light: Engine - On (Unacceptable)
+E-0045|Yes|Good|At Auction|6002|5550|||5850|10|
+E-0052|Yes|Good|At Auction|25602|30800|||20650|6|Front Bumper / Cover: Broken (Replacement Required); Keys: Missing (Replacement Required); Left Front Fender: Severe Damage (Replacement Required)
+E-0051|Yes|Good|At Auction|3603|4675|||3500|11|Right Fog Lamp: Broken (Replacement Required)
+E-0054|Yes|Good|At Auction|9802|14425|||10400|12|Left Front Tire: Worn (Replacement Required); Right Fog Lamp: Cracked (Replacement Required); Right Front Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+E-0057|Yes|Good|At Auction|5202|5250|||3450|10|Front Bumper / Cover: Broken (Replacement Required); Front Valance: Broken (Replacement Required); Left Front Mirror Cover: Broken (Replacement Required); Right Front Fender: Severe Damage (Replacement Required)
+E-0050|Yes|Good|At Auction|10002|10800|||10450|11|Right Front Tire: Worn (Replacement Required); Transmission: Noise (Repair Required); Windshield: Cracked (> 12 Inches)
+E-0056|Yes|Good|At Auction|6002|8125|||6850|15|Rear Bumper / Cover: Broken (Replacement Required); Right Mirror: Broken (Replacement Required); Right Rear Tire: Worn (Replacement Required); Windshield: Cracked (> 12 Inches)
+E-0055|Yes|Good|At Auction|9002|10775|||9200|10|Keys: Missing (Replacement Required); Warning Light: Engine - On (Unacceptable)
+E-0053|Yes|Good|At Auction|14002|14850|||15350|12|Front Bumper / Cover: Broken (Replacement Required); Left Rear Door Molding: Broken (Replacement Required); Rear Bumper / Cover: Broken (Replacement Required); Right Front Fender: Severe Damage (Replacement Required)
+E-0061|Yes|Good|At Auction|4002|6175|||4000|14|Front Bumper / Cover: Cracked (2 To 3 Inches); Left Front Fender Liner: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required)
+E-0062|Yes|Good|At Auction|7502|10725|||11150|5|Engine: Noise (Repair Required)
+E-0065|Yes|Good|At Auction|6002|8025|||4850|5|
+E-0059|Yes|Good|At Auction|4502|4925|||4550|7|Engine: Noise (Repair Required); Left Head Lamp: Melted (Replacement Required)
+E-0063|Yes|Good|At Auction|7002|6175|||4500|15|Brakes: Inoperable (Repair Required); Left Front Tire: Worn (Replacement Required); Rear Bumper / Cover: Broken (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+E-0058|Yes|Good|At Auction|5202|7125|||5300|14|Front Bumper / Cover: Broken (Replacement Required); Heater / Blower: Inoperable (Repair Required); Left Front Power Window: Missing (Replacement Required); Left Front Tire: Worn (Replacement Required)
+E-0064|Yes|Good|At Auction|6004|6600|||5250|10|Front Bumper / Cover: Broken (Replacement Required); Left Front Door Handle Cap: Missing (Replacement Required)
+E-0060|Yes|Good|At Auction|4002|5750|||4000|8|Engine: Noise (Repair Required)
+E-0068|Yes|Damaged|At Auction|1203|1000|||2100|15|Air Compressor: Inoperable (Repair Required); Engine: Noise (Repair Required); Front Bumper / Cover: Broken (Replacement Required); Left Front Fender: Severe Damage (Replacement Required)
+E-0067|Yes|Good|At Auction|2504|3700|||4050|14|Engine: Noise (Repair Required); Front Bumper: Cracked (3 To 4 Inches); Grille: Broken (Replacement Required)
+E-0070|Yes|Good|At Auction|3402|5200|||2400|9|Front Bumper / Cover: Broken (Replacement Required); Left Front Wheel Opening Mldg: Broken (Replacement Required); Right Front Tire: Worn (Replacement Required); Right Front Wheel Opening Mldg: Broken (Replacement Required)
+E-0073|Yes|Good|At Auction|5002|5600|||3900|13|Front Bumper / Cover: Broken (Replacement Required); Front Center Armrest: Torn (5 To 6 Inches); Front Valance: Broken (Replacement Required); Left Front Fender: Severe Damage (Replacement Required)
+E-0069|Yes|Good|At Auction|5003|6500|||4250|9|Windshield: Cracked (2 To 3 Inches); Windshield Molding: Broken (Replacement Required)
+E-0071|Yes||At Auction|0|2250|||1800|5|
+E-0072|Yes||At Auction|8002|8000|||4400|9|Electrical System: Inoperable (Repair Required); Front Bumper / Cover: Broken (Replacement Required); Left Fog Lamp: Missing (Replacement Required); Left Front Tire: Worn (Replacement Required)
+E-0066|Yes|Good|At Auction|5002|5900|||4600|19|Front Bumper Cen. Molding: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required); Left Quarter Panel: Severe Damage (Replacement Required); Left Rear Door Handle: Missing (Replacement Required)
+E-0077|Yes|Good|At Auction|13003|17325|||16800|4|Air Compressor: Inoperable (Repair Required)
+E-0075|Yes|Good|At Auction|6002|7950|||4050|10|Left Front Window: Cracked (Replacement Required); Spare Tire: Missing (Replacement Required)
+E-0074|Yes|Good|At Auction|2802|3475|||2500|4|
+E-0081|Yes|Good|At Auction|8003|7475|||6650|7|Warning Light: Engine - On (Unacceptable)
+E-0076|Yes|Good|At Auction|15003|17025|||14700|4|
+E-0078|Yes|Good|At Auction|12003|8950|||9900|10|Engine: Leak (Repair Required); Front Bumper / Cover: Broken (Replacement Required); Left Fog Light Covers: Missing (Replacement Required)
+E-0079|Yes|Good|At Auction|8803|12925|||9700|3|Front Bumper / Cover: Cracked Paint (> 12 Inches)
+E-0080|Yes|Good|At Auction|8003|8475|||7450|9|Engine: Noise (Repair Required); Tailgate Protective Cap: Broken (Replacement Required)
+E-0084|Yes|Good|At Auction|6503|5400|||6450|5|Keys: Missing (Replacement Required); Left Bed Side: Severe Damage (Replacement Required)
+E-0089|Yes|Good|At Auction|4003|3825|||3350|10|Rear Bumper: Severe Damage (Replacement Required)
+E-0083|Yes|Good|At Auction|7003|8275|||5900|13|Front Bumper / Cover: Replaced (Substandard Repair); Left Quarter Panel: Severe Damage (Replacement Required); Right Front Tire: Worn (Replacement Required); Right Rear Door Molding: Broken (Replacement Required)
+E-0082|Yes|Good|At Auction|7503|6650|||8900|14|Right Rear Window: Missing (Replacement Required); Warning Light: Engine - On (Unacceptable)
+E-0085|Yes|Good|At Auction|4803|4975|||3600|12|Rear Bumper / Cover: Cracked Paint (> 12 Inches); Warning Light: Engine - On (Unacceptable)
+E-0087|Yes|Good|At Auction|4303|4850|||4400|15|Front Bumper / Cover: Broken (Replacement Required); Left Front Fender: Severe Damage (Replacement Required); Left Front Moulding: Broken (Replacement Required); Left Head Lamp: Cracked (Replacement Required)
+E-0088|Yes|Good|At Auction|4003|4475|||3050|20|Engine: Noise (Repair Required); Front Bumper Cover Lower: Broken (Replacement Required); Left Head Lamp: Water Damage (Replacement Required); Left Side Curtain Air Bag: Deployed (Replacement Required)
+E-0086|Yes|Good|At Auction|4503|6150|||3700|15|Left Brake Light: Cracked (Replacement Required); Left Front Door: Severe Damage (Replacement Required); Left Front Seat: Torn (1 To 2 Inches); Left Quarter Panel: Severe Damage (Replacement Required)
+E-0095|Yes|Good|At Auction|12003|13850|||11900|10|Front Bumper / Cover: Broken (Replacement Required); Left Front Window: Missing (Replacement Required); Left Rear Window: Missing (Replacement Required); Right Front Tire: Worn (Replacement Required)
+E-0090|Yes|Good|At Auction|4003|3900|||2800|12|Engine: Noise (Repair Required); Front Bumper / Cover: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required); Warning Light: Engine - On (Unacceptable)
+E-0092|Yes|Good|At Auction|4002|4775|||3150|11|Engine: Noise (Repair Required); Front Bumper / Cover: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required); Left Front Door Handle Cap: Missing (Replacement Required)
+E-0093|Yes|Good|At Auction|3503|2075|||2500|18|Front Bumper Cen. Molding: Broken (Replacement Required); Left Head Lamp: Water Damage (Replacement Required); Rear Bumper / Cover: Cracked Paint (7 To 8 Inches); Right Head Lamp: Water Damage (Replacement Required)
+E-0091|Yes|Good|At Auction|4003|5650|||3950|6|
+E-0096|Yes|Good|At Auction|11003|11075|||11350|11|Front Bumper / Cover: Cracked (1 To 2 Inches); Right Cover Reflectors: Melted (Replacement Required)
+E-0097|Yes|Good|At Auction|9003|9350|||6950|7|Front Bumper: Broken (Replacement Required)
+E-0094|Yes|Good|At Auction|14003|15075|||13600|16|Engine: Noise (Repair Required); Left Brake Light: Cracked (Replacement Required); Right Front Mirror Housing: Broken (Replacement Required)
+E-0101|Yes|Good|At Auction|5303|5325|||6600|13|Front Bumper / Cover: Broken (Replacement Required); Warning Light: Engine - On (Unacceptable)
+E-0098|Yes|Good|At Auction|9003|7250|||7600|20|Front Emblem: Missing (Replacement Required); Grille Molding: Broken (Replacement Required); Left Fr Seat Adj. Handle Trim: Broken (Replacement Required); Right Front Tire: Worn (Replacement Required)
+E-0102|Yes|Good|At Auction|4003|5425|||5900|6|Warning Light: Engine - On (Unacceptable)
+E-0099|Yes|Good|At Auction|7003|7650|||7450|17|Console Cover: Worn (Replacement Required); Right Pillar Trim Cover: Broken (Replacement Required)
+E-0105|Yes|Good|At Auction|3002|4575|||3300|3|Warning Light: Engine - On (Unacceptable); Windshield: Cracked (3 To 4 Inches)
+E-0104|Yes|Good|At Auction|3503|3950|||2950|12|Left Front Seat Cushion: Torn (> 12 Inches); Left Fr Seat Adj. Handle Trim: Broken (Replacement Required); Warning Light: Engine - On (Unacceptable); Windshield: Cracked (> 12 Inches)
+E-0103|Yes|Good|At Auction|4003|5075|||3300|9|Engine: Noise (Repair Required)
+E-0100|Yes|Good|At Auction|6003|9200|||8300|9|Windshield: Cracked (5 To 6 Inches)
+E-0110|Yes|Good|At Auction|2002|3125|||1450|6|Front Bumper: Severe Damage (Replacement Required); Right Front Mirror Housing: Broken (Replacement Required); Windshield: Cracked (7 To 8 Inches)
+E-0107|Yes|Good|At Auction|2602|2850|||1900|11|Left Front Armrest: Torn (3 To 4 Inches); Left Front Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required)
+E-0112|Yes|Damaged|At Auction|1803|2150|||1750|13|Left Tail Light: Broken (Replacement Required); Warning Light: Engine - On (Unacceptable)
+E-0113|Yes|Good|At Auction|1803|3750|||1800|10|
+E-0108|Yes|Good|At Auction|2203|2950|||1800|12|Engine: Noise (Repair Required); Left Front Tire: Worn (Replacement Required); Left Rear Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required)
+E-0111|Yes|Good|At Auction|1803|3000|||2350|29|Front Bumper: Broken (Replacement Required); Front Center Armrest: Torn (4 To 5 Inches); Left Brake Light: Broken (Replacement Required); Left Front Seat: Worn (Replacement Required)
+E-0109|Yes|Good|At Auction|2004|5925|||4200|13|Front Bumper: Broken (Replacement Required); Grille: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required)
+E-0106|Yes|Good|At Auction|2803|6700|||7800|15|Engine: Noise (Repair Required); Right Front Tire: Worn (Replacement Required); Warning Light: Abs - On (Unacceptable); Warning Light: Engine - On (Unacceptable)
+E-0133|||Title Absent|3200|2425|||1850|0|
+E-0131|||Title Absent|3000|2750|||2250|0|
+E-0132|||Title Absent|3000|2500|||2900|0|
+EC-0001|Yes|Good|At Auction|0|3350|||2650|2|Left Front Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required)
+E-0116|Yes|Good|At Auction|1504|1900|||2400|15|Front Bumper / Cover: Broken (Replacement Required); Hood: Severe Damage (Replacement Required)
+E-0115|Yes|Good|At Auction|1703|2500|||1550|19|Front Bumper: Broken (Replacement Required); Front Center Armrest: Worn (Replacement Required)
+E-0114|Yes|Damaged|At Auction|1704|1175|||1400|21|Front Bumper: Cracked (1 To 2 Inches); Front Emblem: Missing (Replacement Required); Left Rocker Panel Molding: Bent (Replacement Required); Left Tail Light: Cracked (Replacement Required)
+E-0117|Yes|Good|At Auction|1004|1250|||1250|15|Left Brake Light: Cracked (Replacement Required); Left Front Seat Cushion: Torn (1 To 2 Inches); Right Brake Light: Cracked (Replacement Required); Right Rear Window: Missing (Replacement Required)
+EC-0004|Yes|Good|Title Absent|0|23600|||17700|4|Left Front Mirror Housing: Broken (Replacement Required); Windshield: Cracked (> 12 Inches)
+EC-0011|Yes|Good|Title Absent|3500|8450|||4200|18|Front Bumper / Cover: Broken (Replacement Required); Front Center Armrest: Worn (Replacement Required); Left Front Tire: Worn (Replacement Required); Warning Light: Abs - On (Unacceptable)
+EC-0007|Yes|Good|Title Absent|6500|5025|||3800|16|Left Front Seat: Torn (> 12 Inches); Right Bumper Sensors: Missing (Replacement Required); Right Front Tire: Worn (Replacement Required); Steering Wheel: Worn (Replacement Required)
+EC-0008|||Title Absent|4500|7500|||5400|11|Left Front Tire: Worn (Replacement Required); Left Front Wheel Cover: Broken (Replacement Required); Right Front Tire: Worn (Replacement Required); Warning Light: Engine - On (Unacceptable)
+EC-0003|Yes|Good|At Auction|0|600|||1550|0|
+EC-0002|Yes|Good|At Auction|2500|3875||||3|Left Rear Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+EC-0010|Yes|Good|Title Absent|3500|3075|||3000|14|Air Conditioner: Inoperable (Repair Required); Radio Controls: Inoperable (Repair Required); Right Rear Tie Down: Torn (2 To 3 Inches); Warning Light: Engine - On (Unacceptable)
+EC-0006|||Title Absent|2000|3050|||2800|0|
+EC-0014|Yes|Good|Title Absent|26000|25100|||23750|3|
+EC-0015|||Title Absent|12000|15900|||15650|0|
+EC-0012|Yes|Damaged|Title Absent|3000|3000|||2700|16|Grille: Broken (Replacement Required); Windshield: Cracked (> 12 Inches)
+EC-0017|Yes|Good|Title Absent|4000|6700|||4500|10|Left Fr Seat Adj. Handle Trim: Broken (Replacement Required); Right Front Door Handle: Broken (Replacement Required); Right Front Tire: Worn (Replacement Required); Spare Tire: Missing (Replacement Required)
+EC-0016|Yes|Good|Title Absent|10000|14925|||13000|10|Left Front Tire: Worn (Replacement Required); Right Front Fender: Severe Damage (Replacement Required); Right Front Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+EC-0013|Yes|Good|Title Absent|3500|3475|||2000|13|Front Bumper: Torn (6 To 7 Inches); Left Tail Light: Broken (Replacement Required); Right Rear Door: Severe Damage (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+EC-0018|Yes|Good|Title Absent|7000|1700|||3550|18|Center Console Trim Panel: Worn (Replacement Required); Dash / Panel: Worn (Replacement Required); Dash: Worn (Replacement Required); Deck Lid Latch: Inoperable (Repair Required)
+EC-0019|Yes|Good|Title Absent|6000|2500|||3050|10|Front Bumper / Cover: Severe Damage (Replacement Required); Grille: Broken (Replacement Required); Right Front Mirror Housing: Broken (Replacement Required); Right Front Wheel Cover: Missing (Replacement Required)
+EC-0023|||Title Absent|0|2625|||1550|0|
+EC-0024|||Title Absent|24500|20000|||18550|0|
+EC-0028|||Title Absent|10500|8800|||8650|0|
+EC-0020|Yes|Good|Title Absent|0|15125|||11400|4|Left Quarter Panel: Cracked Paint (7 To 8 Inches); Lift Gate: Cracked Paint (> 12 Inches)
+EC-0022|Yes|Good|Title Absent|0|18075|||11900|9|Left Fuel Door: Broken (Replacement Required)
+EC-0021|Yes|Good|Title Absent|20000|18325|||17200|17|
+EC-0025|Yes|Good|Title Absent|4500|8600|||6400|16|Front Bumper: Severe Damage (Replacement Required); Hood: Severe Damage (Replacement Required); Left Front Moulding: Broken (Replacement Required); Left Tail Light: Broken (Replacement Required)
+EC-0026|Yes|Good|Title Absent|1200|2625|||1300|9|Warning Light: Engine - On (Unacceptable)
+EC-0031|||Title Absent|0|1000|||1200|0|
+ED-0001|||Title Absent|6000|5525|||5550|0|
+ED-0004|||Title Absent|0|625|||1100|0|
+EC-0029|||Title Absent|1900|1000|||1150|0|
+EC-0030|||Title Absent|0|500|||1550|0|
+ED-0003|||Title Absent|3500|6900|||3200|0|
+ED-0002|||Title Absent|10000|7400|||5850|0|
+ED-0005|Yes|Good|Title Absent|16400|16575|||12300|2|
+ED-0013|||Title Absent|4900|3275|||1850|0|
+ED-0008|Yes|Good|Title Absent|30500|30450|||29600|1|
+ED-0010|||Title Absent|1900|225|||1300|0|
+ED-0009|||Title Absent|0|13750|||10350|0|
+ED-0007|Yes|Good|Title Absent|26000|23575|||20500|3|
+ED-0011|||Title Absent|2900|2250|||1850|0|
+ED-0012|Yes|Good|Title Absent|6000|5700|||5600|22|Left Front Tire: Worn (Replacement Required); Left Rear Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+ED-0014|Yes|Good|Title Absent|4100|3775||||5|Front Bumper: Severe Damage (Replacement Required)
+ED-0021|||Title Absent|3500|2825|||1800|0|
+ED-0023|||Title Absent|8000|8325|||6300|0|
+ED-0022|||Title Absent|3500|4700|||3400|0|
+ED-0019|||Title Absent|4000|4475|||3500|0|
+ED-0016|||Title Absent|1600|725|||1350|0|
+ED-0018|||Title Absent|19500|12775|||12100|0|
+ED-0017|||Title Absent|6200|7225|||5700|0|
+ED-0015|Yes|Good|Title Absent|2900|2400|||1500|15|Half Liftgate Trim Panel: Missing (Replacement Required); Left Front Tire: Worn (Replacement Required); Liftgate Latch: Inoperable (Repair Required); Rear Bumper: Cracked Paint (4 To 5 Inches)
+ED-0027|||Title Absent|6000|5650||||0|
+ED-0029|||Title Absent|0|7000|||5450|0|
+ED-0024|||Title Absent|5000|6425|||6050|0|
+ED-0026|||Title Absent|0|2175|||1050|0|
+ED-0028|||Title Absent|0|4225|||2200|0|
+ED-0031|Yes|Good|Title Absent|42500|47775|||41800|5|Catalytic Converter: Missing (Replacement Required)
+ED-0030|Yes|Good|Title Absent|0|6550|||3350|7|Front Bumper: Severe Damage (Replacement Required); Windshield: Cracked (> 12 Inches)
+ED-0025|Yes|Good|Title Absent|0|900|||1100|11|
+EE-0009|||Title Absent|0|2600|||1550|0|
+EE-0008|||Title Absent|0|7025|||6100|0|
+EE-0007|||Title Absent|12800|17700|||14050|0|
+ED-0032|||Title Absent|0|21550|||24300|0|
+EE-0006|||Title Absent|27800|27600|||26250|0|
+ED-0033|||Title Absent|0|2650|||1900|0|
+EE-0010|Yes|Good|Title Absent|10000|13325|||12000|9|
+EE-0011|Yes|Good|Title Absent|7000|8675|||5350|3|
+EE-0019|||Title Absent|24000|24325|||25050|0|
+EE-0018|||Title Absent|0|15075|||15900|0|
+EE-0013|Yes|Good|Title Absent|14000|13450|||13000|10|Front Bumper Cen. Grille-Scrn: Broken (Replacement Required); Left Brake Light: Broken (Replacement Required)
+EE-0020|||Title Absent|0|17300|||14600|0|
+EE-0021|||Title Absent|16500|15225|||15700|0|
+EE-0015|Yes|Good|Title Absent|20000|22925|||18400|3|
+EE-0014|Yes|Good|Title Absent|9300|10425|||8350|3|Windshield: Cracked (> 12 Inches)
+EE-0012|Yes|Good|Title Absent|19000|24275|||16450|10|Front Bumper Cen. Molding: Multiple Scratches Heavy (Replacement Required); Windshield: Cracked (> 12 Inches)
+EF-0002|Yes|Good|Title Absent|0|6225|||2900|3|
+EE-0027|Yes|Good|Title Absent|26500|29600|||26000|1|
+EF-0005|Yes|Good|Title Absent|0|15700|||11400|4|Left Mirror: Broken (Replacement Required); Left Rear Tire: Worn (Replacement Required); Windshield: Cracked (> 12 Inches)
+EF-0001|Yes|Good|Title Absent|0|2800|||1350|8|Left Brake Light: Broken (Replacement Required); Liftgate Handle: Broken (Replacement Required); Windshield: Cracked (> 12 Inches)
+EF-0007|Yes|Good|Title Absent|0|14200|||11100|2|
+EF-0003|Yes|Good|Title Absent|0|2850|||1400|4|Front Emblem: Missing (Replacement Required)
+EF-0004|Yes|Good|Title Absent|0|6125|||3700|5|Left Brake Light: Light Scratch (Replacement Required)
+EF-0006|Yes|Good|Title Absent|0|1875|||1400|4|
+EF-0009|Yes|Good|Title Absent|0|34525|||22750|1|
+EF-0010|Yes|Good|Title Absent|0|32850||||5|Windshield: Cracked (> 12 Inches)
+EF-0015|Yes|Good|Title Absent|0|16425|||13250|5|
+EF-0011|Yes|Good|Title Absent|0|7650|||4250|5|Front Bumper Cen. Grille-Scrn: Broken (Replacement Required); Right Brake Light: Broken (Replacement Required); Windshield: Cracked (> 12 Inches)
+EF-0008|Yes|Good|Title Absent|0|5625|||2850|3|Left Fog Lamp: Broken (Replacement Required)
+EF-0013|Yes|Good|Title Absent|0|3100|||3050|2|Rear Bumper: Severe Damage (Replacement Required)
+EF-0012|Yes|Good|Title Absent|0|20975|||19350|5|Front Emblem: Missing (Replacement Required)
+EF-0014|Yes|Good|Title Absent|0|8250|||4300|7|Windshield: Cracked (> 12 Inches)
+EF-0022|Yes|Good|Title Absent|28250|0|||20200|8|
+EF-0017|Yes|Good|Title Absent|0|18275|||12200|2|
+EF-0021|Yes|Good|Title Absent|0|19175|||12700|2|
+EF-0016|Yes|Good|Title Absent|0|13800|||15250|6|
+EF-0019|Yes|Good|Title Absent|0|14125|||11550|2|
+EF-0020|Yes|Good|Title Absent|0|29425|||22650|0|
+EF-0018|Yes|Good|Title Absent|0|1900|||1750|4|Warning Light: Engine - On (Unacceptable)
+EF-0023|Yes|Good|Title Absent|0|24175|||16200|2|Windshield: Cracked (> 12 Inches)
+EF-0030|Yes|Good|Title Absent|0|5575|||1900|3|Windshield: Cracked (2 To 3 Inches)
+EF-0025|Yes|Good|Title Absent|0|10175|||5900|4|Left Brake Light: Chipped (Replacement Required)
+EF-0024|Yes|Good|Title Absent|0|13075|||8550|3|
+EF-0029|Yes|Good|Title Absent|0|28925|||32400|2|
+EF-0027|Yes|Good|Title Absent|0|32475|||21800|2|Right Front Mirror Signal Lamp: Broken (Replacement Required)
+EF-0028|Yes|Good|Title Absent|0|18325|||18500|2|
+EF-0026|Yes|Good|Title Absent|0|15175|||10100|5|
+EF-0031|Yes|Good|Title Absent|0|700|||1200|9|Left Mirror: Cracked (5 To 6 Inches); Windshield: Cracked (> 12 Inches)
+F-0007|Yes|Good|At Auction|16000|21000|||14250|2|
+EF-0033|Yes|Good|Title Absent|0|15250|||10000|2|
+EF-0034|Yes|Good|Title Absent|0|9325|||12050|3|L Cab Side Molding: Missing (Replacement Required)
+F-0006|Yes|Good|At Auction|15000|12800|||11100|13|Windshield: Cracked (> 12 Inches)
+F-0003|Yes|Good|At Auction|2000|2025|||2350|24|Front Bumper / Cover: Broken (Replacement Required); Hood Prop Rod: Missing (Replacement Required); Left Front Seat Back: Torn (3 To 4 Inches); Left Rear Tire: Worn (Replacement Required)
+F-0002|Yes|Good|At Auction|2500|3050|||3550|20|Dash: Broken (Replacement Required); Front Center Armrest: Torn (> 12 Inches); Left Front Seat: Torn (> 12 Inches); Left Rear Window: Inoperable (Repair Required)
+F-0001|Yes|Good|At Auction|3000|6375|||4650|12|Front Bumper: Broken (Replacement Required); Front Bumper Cen. Molding: Broken (Replacement Required); Grille: Broken (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+EF-0035|||Title Absent|0|2025|||1500|0|
+F-0012|Yes|Good|At Auction|8000|11975|||6450|6|Left Front Tire: Worn (Replacement Required)
+F-0014|Yes|Good|Title Absent|44500|59075|||36400|2|
+F-0011|Yes|Good|At Auction|7500|8225|||6950|7|Left Front Tire: Worn (Replacement Required); Windshield: Cracked (> 12 Inches)
+F-0015|||Title Absent|38000|26450|||27000|0|
+F-0008|Yes|Good|At Auction|17500|23275|||20050|3|
+F-0010|Yes|Good|At Auction|12500|11000|||10800|10|
+F-0009|Yes|Good|At Auction|6500|8650|||5700|10|Left Head Lamp: Broken (Replacement Required); Left Rear Door Molding: Dent(S) W / No Paint Damage (Replacement Required)
+F-0013|Yes|Good|At Auction|9500|14875|||9600|15|Front Bumper / Cover: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required); Rear Bumper / Cover: Broken (Replacement Required); Right Front Interior Mirror Cover: Broken (Replacement Required)
+F-0022|Yes|Good|At Auction|12500|16400|||11200|5|
+F-0023|Yes|Good|At Auction|9000|7950|||7750|19|Right Front Tire: Worn (Replacement Required)
+F-0021|Yes|Good|At Auction|5500|8075|||5500|15|
+F-0018|Yes|Good|At Auction|5500|7000|||4600|15|Front Bumper: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required); Left Rear Tie Down: Torn (1 To 2 Inches); Right Front Tire: Worn (Replacement Required)
+F-0016|Yes|Good|At Auction|11500|10850|||11700|7|Front Bumper / Cover: Broken (Replacement Required); Warning Light: Engine - On (Unacceptable)
+F-0017|Yes|Good|At Auction|9000|9600|||7200|16|Front Bumper / Cover: Broken (Replacement Required); Hood Prop Rod: Missing (Replacement Required); Left Rear Tire: Worn (Replacement Required); Right Quarter Panel: Cracked Paint (1 To 2 Inches)
+F-0019|Yes|Good|At Auction|14500|12150|||12050|7|Front Bumper: Broken (Replacement Required); Rear Valance: Broken (Replacement Required); Windshield: Cracked (9 To 10 Inches)
+F-0020|Yes|Good|At Auction|21000|21400|||19350|7|
+F-0025|||Title Absent|34000|32550|||28500|0|
+F-0027|Yes|Good|At Auction|13000|11725|||11150|13|Right Brake Light: Broken (Replacement Required); Right Front Tire: Worn (Replacement Required)
+F-0024|Yes|Good|At Auction|10000|14400|||9700|9|Front Bumper / Cover: Broken (Replacement Required)
+F-0026|||Title Absent|28500|19700|||26100|0|
+F-0028|Yes|Good|At Auction|13000|12225|||12050|10|
+F-0032|Yes|Good|At Auction|7500|7425|||6350|12|Left Front Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required)
+F-0030|Yes|Good|At Auction|12500|15400|||11600|9|Front Bumper / Cover: Broken (Replacement Required); Left Fog Light Covers: Missing (Replacement Required)
+F-0029|Yes|Good|At Auction|6500|6825|||6700|14|Front Bumper / Cover: Broken (Replacement Required); Liftgate Handle: Broken (Replacement Required); Warning Light: Engine - On (Unacceptable)
+F-0038|||Title Absent|20000|14025|||16000|0|
+F-0036|Yes|Good|At Auction|9000|16950|||8050|4|
+F-0035|Yes|Good|At Auction|13000|11900|||11100|8|Left Rear Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+F-0034|Yes|Good|At Auction|22500|20375|||21050|9|Front Bumper / Cover: Broken (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+F-0033|Yes|Good|At Auction|14000|15550|||13750|12|
+F-0040|Yes|Good|At Auction|8000|9800|||8050|24|Radio Display / Touch Screen: Broken (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+F-0041|Yes|Good|At Auction|5000|4050|||4000|19|Left Front Tire: Worn (Replacement Required); Right Rear Door Handle: Inoperable (Repair Required); Warning Light: Engine - On (Unacceptable)
+F-0039|Yes|Good|At Auction|12500|17075|||12050|7|Warning Light: Abs - On (Unacceptable)
+F-0044|Yes|Good|At Auction|9000|12925|||7550|9|
+F-0043|Yes|Good|At Auction|9500|13800|||7850|14|
+F-0045|Yes|Good|At Auction|4000|4975|||3550|12|
+F-0047|Yes|Good|At Auction|7500|8125|||6750|4|Engine: Noise (Repair Required); Hood Release: Broken (Replacement Required)
+F-0048|Yes|Good|At Auction|23000|26250|||19600|5|
+F-0042|Yes|Good|At Auction|15500|18050|||15100|12|Front Bumper Right Molding: Multiple Scratches Heavy (Replacement Required)
+F-0049|Yes|Good|At Auction|13500|13050|||11600|21|Engine: Noise (Repair Required); Front Left Bumper / Cover: Missing (Replacement Required); Front Right Bumper / Cover: Missing (Replacement Required); Hood: Hail Damage (Replacement Required)
+F-0046|Yes|Good|At Auction|13000|14225|||10900|8|
+F-0051|||Title Absent|19000|19475|||17350|0|
+F-0057|Yes|Good|At Auction|36000|36125|||33250|10|Left Tail Light: Broken (Replacement Required); Rear Bumper Step Pad: Broken (Replacement Required); Rear Metal Bumper Painted: Severe Damage (Replacement Required); Tailgate Emblem: Broken (Replacement Required)
+F-0053|Yes|Good|At Auction|15000|14925|||12750|10|Exhaust: Leak (Repair Required)
+F-0055|Yes|Good|At Auction|22500|18025|||18850|14|Engine: Noise (Repair Required); Front Metal Bumper Chrome: Severe Damage (Replacement Required); Left Front Interior Mirror Cover: Broken (Replacement Required); Rear Glass: Broken (Replacement Required)
+F-0050|Yes|Good|At Auction|9000|13250|||10800|11|Engine: Noise (Repair Required); Left Front Seat: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required); Windshield: Cracked (> 12 Inches)
+F-0054|Yes|Good|At Auction|10000|9850|||9550|7|Front Bumper Cen. Molding: Missing (Replacement Required); Warning Light: Engine - On (Unacceptable)
+F-0052|Yes|Good|Title Absent|17500|20125|||15450|2|
+F-0056|Yes|Damaged|At Auction|19000|20350|||18600|9|Left Rear Rail: Broken (Replacement Required); Rear Bumper: Severe Damage (Replacement Required); Right Front Tire: Worn (Replacement Required); Right Rear Rail: Broken (Replacement Required)
+F-0063|||Title Absent|16500|16100|||11500|0|
+F-0062|||Title Absent|17000|14125|||15300|0|
+F-0061|Yes|Good|At Auction|10000|9050|||7600|8|Left Front Door Handle: Inoperable (Repair Required)
+F-0064|Yes|Good|At Auction|5000|4725|||4650|9|Windshield: Cracked (> 12 Inches)
+F-0058|Yes|Good|At Auction|6500|9075|||6300|13|Left Front Door Handle Cap: Broken (Replacement Required); Rear Bumper: Broken (Replacement Required)
+F-0060|Yes|Good|At Auction|5000|8250|||4250|11|Front Bumper: Replaced (Substandard Repair); Right Front Tire: Worn (Replacement Required); Warning Light: Engine - On (Unacceptable); Warning Light: Srs - On (Unacceptable)
+F-0065|Yes|Good|At Auction|7500|7425|||6600|11|Front Bumper / Cover: Broken (Replacement Required); Warning Light: Abs - On (Unacceptable)
+F-0059|Yes|Good|At Auction|5000|7175|||6000|31|Front Bumper / Cover: Broken (Replacement Required); Left Front Door: Severe Damage (Replacement Required); Left Front Tire: Worn (Replacement Required); Left Fr Seat Adj. Handle Trim: Broken (Replacement Required)
+F-0071|||Title Absent|14800|11200|||12500|0|
+F-0072|Yes|Good|At Auction|14000|18975|||11250|3|Grille Molding: Missing (Replacement Required)
+F-0067|Yes|Good|At Auction|9000|10575|||6550|7|Front Bumper: Cracked Paint (4 To 5 Inches); Left Front Seat: Torn (> 12 Inches); Rear Bumper: Torn (1 To 2 Inches)
+F-0068|Yes|Good|At Auction|4000|4625|||3350|6|
+F-0070|||Title Absent|16000|14800|||13500|0|
+F-0066|Yes|Good|At Auction|6000|8700|||5350|5|
+F-0069|Yes|Good|At Auction|13000|13575|||10950|15|Battery: Inoperable (Repair Required); Left Front Seat Cushion: Torn (7 To 8 Inches); Left Mirror: Broken (Replacement Required)
+F-0073|Yes|Good|At Auction|14000|17050|||12600|14|Engine: Noise (Repair Required); Windshield: Cracked (> 12 Inches)
+F-0076|||Title Absent|14000|15700|||10400|0|
+F-0080|||Title Absent|14000|12400|||11850|0|
+F-0074|||Title Absent|14500|14300|||8800|0|
+F-0075|||Title Absent|14000|14700|||12750|0|
+F-0081|||Title Absent|14000|8025|||9050|0|
+F-0079|Yes|Good|At Auction|10500|9200|||8500|17|Warning Light: Air Bag - On (Unacceptable)
+F-0077|Yes|Good|At Auction|12500|14125|||15100|9|Front Center Armrest: Worn (Replacement Required); Left Front Mirror Housing: Broken (Replacement Required)
+F-0078|Yes|Good|At Auction|12000|18850|||11950|5|Engine: Noise (Repair Required); Grille: Broken (Replacement Required)
+F-0083|Yes|Good|At Auction|9000|13675|||8250|11|Brakes: Inoperable (Repair Required); Front Bumper / Cover: Broken (Replacement Required); Turbo: Worn (Replacement Required); Warning Light: Abs - On (Unacceptable)
+F-0082|Yes|Good|At Auction|10500|13850|||7100|5|Windshield: Cracked (> 12 Inches)
+F-0084|Yes|Good|At Auction|8500|8025|||7450|13|Right Front Mirror Housing: Broken (Replacement Required)
+F-0089|No|Good|At Auction|4500|5100|||4400|11|Front Bumper / Cover: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required); Rear Bumper / Cover: Broken (Replacement Required); Right Front Tire: Worn (Replacement Required)
+F-0086|Yes|Good|At Auction|6500|11000|||8000|17|Front Bumper / Cover: Broken (Replacement Required); Right Front Tire: Worn (Replacement Required); Warning Light: Engine - On (Unacceptable)
+F-0087|Yes|Good|At Auction|6000|6825|||5950|19|Engine: Noise (Repair Required); Left Rear Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+F-0085|Yes|Good|At Auction|7000|7575|||6100|10|Air Conditioner: Missing (Replacement Required)
+F-0088|Yes|Good|At Auction|5000|5825|||5050|18|Left Tail Light: Cracked (Replacement Required); Windshield: Cracked (> 12 Inches)
+F-0093|Yes|Good|At Auction|3500|3750|||2450|7|Front Bumper / Cover: Broken (Replacement Required); Rear Bumper / Cover: Broken (Replacement Required); Right Fog Light Covers: Missing (Replacement Required); Windshield: Broken (Replacement Required)
+F-0090|Yes|Good|At Auction|4500|6200|||4600|9|Left Front Tire: Worn (Replacement Required)
+F-0096|||Title Absent|12500|8475|||9250|0|
+F-0092|Yes|Good|At Auction|3500|4000|||3550|10|Engine: Noise (Repair Required); Left Rear Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+F-0095|Yes|Good|Title Absent|14000|10950|||6450|7|
+F-0091|No|Good|At Auction|3500|7725|||4950|13|Engine: Noise (Repair Required); Left Rear Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required); Right Rear Tire: Worn (Replacement Required)
+F-0094|Yes|Damaged|At Auction|3000|5050|||3450|10|Engine: Noise (Repair Required); (Replacement Required)
+F-0097|||Title Absent|12000|12800|||11850|0|
+F-0104|||Title Absent|10000|9925|||6450|0|
+F-0103|||Title Absent|11000|8325|||7300|0|
+F-0099|||Title Absent|12000|12250||||0|
+F-0110|||Title Absent|8000|6750|||5750|0|
+F-0107|||Title Absent|9000|9675|||6950|0|
+F-0105|||Title Absent|10000|12925|||11050|0|
+F-0108|Yes|Good|Title Absent|9000|7925|||4550|9|
+F-0101|||Title Absent|11000|6950|||7650|0|
+F-0122|||Title Absent|17500|20000|||17500|0|
+F-0112|||Title Absent|7500|5375|||4950|0|
+F-0119|||Title Absent|4400|3850|||2900|0|
+F-0111|||Title Absent|8000|4950|||3450|0|
+F-0113|||Title Absent|7000|3900|||3550|0|
+F-0115|||Title Absent|6000|2800|||3550|0|
+F-0121|||Title Absent|18000|18375|||14750|0|
+F-0118|||Title Absent|4500|8050|||2850|0|
+F-0131|||Title Absent|8000|8300|||6050|0|
+F-0128|||Title Absent|10500|10175|||8950|0|
+F-0125|||Title Absent|7700|6400|||3900|0|
+F-0123|||Title Absent|14000|12400|||9650|0|
+F-0130|||Title Absent|8000|12850|||12100|0|
+F-0127|||Title Absent|13000|12700|||11300|0|
+F-0124|||Title Absent|11000|7675|||8000|0|
+F-0126|||Title Absent|0|21125|||17450|1|Warning Light: Engine - On (Unacceptable)
+F-0133|||Title Absent|7800|8300|||5400|0|
+F-0137|||Title Absent|5000|3050|||1750|0|
+F-0136|||Title Absent|5500|8150|||6700|0|
+F-0134|||Title Absent|7500|13700|||11000|0|
+F-0139|||Title Absent|4000|5475|||2800|0|
+F-0132|||Title Absent|8000|7975|||7450|0|
+F-0138|||Title Absent|4500|5825|||3250|0|
+F-0135|||Title Absent|7000|6050|||3650|0|
+PS-0001|No|Good|At Auction|1200|0||||0|
+S-0001|||Title Absent|8000|0||||0|
+F-0141|||Title Absent|3500|3000|||2050|0|
+F-0140|||Title Absent|3500|1300|||1700|0|
+PS-0002|No|Good|At Auction|500|0||||0|
+T-0003|No|Good|At Auction|0|3150|||2650|0|
+T-0001|No|Good|At Auction|600|0||||6|Rear Bumper / Cover: Broken (Replacement Required); Right Mirror: Broken (Replacement Required)
+T-0002|Yes|Good|At Auction|1000|2900|||1850|1|
+T-0009|||Title Absent|0|4600|||5150|0|
+T-0005|||Title Absent|2000|4650|||1900|0|
+T-0012|||Title Absent|0|1375|||1300|0|
+T-0011|||Title Absent|0|2825|||1850|0|
+T-0013|||Title Absent|0|2500|||1450|0|
+T-0008|||Title Absent|0|825|||1300|0|
+T-0004|||Title Absent|1000|2150|||1600|0|
+T-0010|No|Good|Title Absent|6000|12550|||14050|19|Grille: Broken (Replacement Required); Left Bed Side: Severe Damage (Replacement Required); Left Front Seat: Torn (5 To 6 Inches); Right Bed Side: Severe Damage (Replacement Required)
+T-0015|||Title Absent|0|1900|||1650|0|
+T-0016|Yes|Good|Title Absent|3500|2625|||1650|0|
+T-0014|||Title Absent|0|3975|||2900|0|
+T-0018|No|Good|Title Absent|0|6200|||4000|7|Left Front Tire: Worn (Replacement Required); Right Front Tire: Worn (Replacement Required)
+T-0017|No|Good|At Auction|0|1550|||1400|8|Front Bumper / Cover: Broken (Replacement Required); Keys: Missing (Replacement Required); Left Apron: Torn (1/2 To 1 Inch); Left Front Tire: Worn (Replacement Required)
+T-0501|No|Good|At Auction|5009|9050|||7250|10|Front Bumper / Cover: Missing (Replacement Required); Hood: Severe Damage (Replacement Required); Left Head Lamp: Broken (Replacement Required); Radiator: Bent (Replacement Required)
+T-0502|No|Good|At Auction|4009|6725|||5850|5|Engine: Noise (Repair Required); Fuel Pump: Inoperable (Repair Required); Right Front Tire: Worn (Replacement Required)
+T-0500|No|Good|At Auction|11009|20425|||18800|8|Engine: Inoperable (Repair Required)
+T-0504|No|Good|At Auction|2009|4200|||3700|11|Engine: Inoperable (Repair Required); Right Front Fender: Severe Damage (Replacement Required); Right Front Tire: Worn (Replacement Required)
+T-0508|No|Good|At Auction|1009|300|||1400|10|Front Bumper: Broken (Replacement Required); Transmission: Inoperable (Repair Required)
+T-0505|No|Good|At Auction|1809|2725|||2900|10|Keys: Missing (Replacement Required); Left Front Seat: Torn (10 To 11 Inches); Left Front Tire: Worn (Replacement Required)
+T-0507|No|Good|At Auction|1509|3900|||2350|5|Left Front Tire: Worn (Replacement Required); Left Rear Tire: Worn (Replacement Required)
+T-0539|No|Good|At Auction|5000|8175|||6600|13|Battery: Missing (Replacement Required); Front Bumper Cover Lower: Broken (Replacement Required); Left Front Seat Cushion: Torn (5 To 6 Inches); Right Front Mirror Signal Lamp: Broken (Replacement Required)
+T-0509|No|Good|At Auction|1009|4075|||2700|11|Console Cover: Torn (6 To 7 Inches); Engine: Inoperable (Repair Required)
+T-0506|No|Good|At Auction|1509|5900|||3850|10|Electrical System: Inoperable (Repair Required); Glove Box: Broken (Replacement Required); Keys: Missing (Replacement Required)
+T-0503|No|Good|At Auction|2009|3425|||3650|18|Engine: Inoperable (Repair Required); Front Bumper / Cover: Broken (Replacement Required); Fuel Pump: Inoperable (Repair Required); Left Fog Lamp: Broken (Replacement Required)
+TR-0001|Yes|Good|At Auction|1500|0||||0|
+T-0559|||Title Absent|3000|10625|||8950|0|
+T-0553|No|Good|At Auction|1500|0||||3|
+T-0550|No|Good|At Auction|3000|0||||11|Keys: Missing (Replacement Required); Right Rear Cargo Door: Severe Damage (Replacement Required)
+T-0558|||Title Absent|3500|7300|||3700|0|
+T-0540|No|Good|Title Absent|1400|5200|||3150|13|Front Bumper / Cover: Broken (Replacement Required); Front Ornaments: Missing (Replacement Required); Keys: Missing (Replacement Required); Left Front Seat Cushion: Torn (9 To 10 Inches)
+T-0551|No|Good|At Auction|2000|0||||6|Grille: Missing (Replacement Required); Left Mirror: Broken (Replacement Required); Right Front Fender: Cracked (3 To 4 Inches); Right Front Inter. Door Handle: Missing (Replacement Required)
+T-0552|No|Good|At Auction|2000|0||||11|Front Bumper / Cover: Cracked (4 To 5 Inches); Hood: Torn (1/8 To 1/2 Inch); Left Front Tire: Worn (Replacement Required); Left Rear Tire: Worn (Replacement Required)

@@ -1,0 +1,400 @@
+1-0007|Green Light Drive|Flexco Fleet Lease Exchange Company
+1-0001|As-Is|Fleet Lease Disposal
+1-0003|As-Is|Fleet Lease Disposal
+1-0002|As-Is|Fleet Lease Disposal
+1-0008|Green Light Drive; Hail Damage; Diesel|Flexco Fleet Lease Exchange Company
+1-0004|As-Is|Fleet Lease Disposal
+1-0009|As-Is|Flexco Fleet Lease Exchange Company
+1-0005|As Is|Fleet Lease Disposal
+1-0014|Green Light|
+1-0012||Flexco Fleet Lease Exchange Company
+1-0021|As Is|Advanced Remarketing Services
+1-0020|As-Is; Odo No Show|Advanced Remarketing Services
+1-0010|As-Is|Flexco Fleet Lease Exchange Company
+1-0015|Green Light|
+1-0011||Flexco Fleet Lease Exchange Company
+1-0016|Green Light|
+1-0022|As Is Exempt|Advanced Remarketing Services
+1-0051|Tommy Gate 1000 Lbs|
+1-0050|As-Is; Structural, Hail Damage, Ex Police,|
+11-0012|As-Is|Durrett Motor Company
+11-0011|As-Is; Structural|Durrett Motor Company
+1-0052|As-Is; Structural, Ex Police|
+1-0023|As-Is; Odo No Show|Advanced Remarketing Services
+1-0054|As-Is; Ex Police, Structural|
+11-0024|As-Is|Mainland Investment
+11-0020|As-Is; Hail; Bos Only No Title|Mainland Investment
+11-0022|As-Is; Bill Of Sale Only No Title|Mainland Investment
+11-0023|As-Is; Structural|Mainland Investment
+11-0021|As-Is; Structural|Mainland Investment
+11-0028|As-Is|Emmons Autoplex
+11-0027|As-Is|Mainland Investment
+11-0026|As-Is; Structural|Mainland Investment
+11-0029|As Is, Exempt|Emmons Autoplex
+11-0032|As-Is|
+11-0030|As Is; Structural|Emmons Autoplex
+11-0031|As Is, Exempt|Emmons Autoplex
+11-0035|Green Light Drive; Structural|
+11-0038|As-Is; Structural|Mi Tierra Auto Sales
+11-0033|As-Is|
+11-0034|As-Is|
+11-0051|As-Is; Structural|Mi Tierra Auto Sales
+11-0041|As-Is|Mi Tierra Auto Sales
+11-0052|As-Is|
+11-0050|As-Is|
+11-0042|As-Is|Mi Tierra Auto Sales
+11-0049|As-Is|
+11-0048|As-Is|
+11-0039|As-Is; Structural|Mi Tierra Auto Sales
+11-0060|As-Is; Rebuilt Salvage No Arb|
+11-0064|As Is Exempt; Prev Theft Reported On History Report|
+11-0058||
+11-0054||
+11-0057|As-Is|
+11-0065|As-Is|
+11-0056|As-Is|
+11-0053|As-Is|
+11-0069|As-Is|
+22-0005||Holman Remarketing
+22-0004||Holman Remarketing
+22-0009||Holman Remarketing
+22-0006|Naaa Platinum Certified|Holman
+11-0066|As Is; Prev Reported As Insurance Loss No Arb; Exempt|
+22-0007|Naaa Platinum Certified|Holman
+22-0011|Structural|Holman Remarketing
+22-0016|Naaa Silver Certified|Holman
+22-0013|Naaa Gold Certified|Holman
+22-0012|Naaa Gold Certified|Holman
+22-0019|Naaa Silver Certification|Holman
+22-0020|Green Light Drive|Holman
+22-0017|Naaa Silver Certified|Holman
+22-0014|Naaa Gold Certified|Holman
+22-0015|Naaa Gold Certified|Holman
+22-0029|Green Light|Holman
+22-0026|Green Light|Holman
+22-0021|Green Light Drive|Holman
+22-0032|Green Light Drive; Ac Issue|Holman
+22-0022|Green Light Drive|Holman
+22-0027|Green Light; Caution Engine; Parking Brake Inop|Holman
+22-0028|Green Light|Holman
+22-0033|Green Light|Holman
+22-0040||Holman Remarketing
+22-0037|America''S Certified; Structural|Holman Remarketing
+22-0034|Green Light|Holman
+22-0038||Holman Remarketing
+22-0035|Green Light|Holman
+22-0039|As-Is|Holman Remarketing
+22-0036|Green Light Drive|Holman
+22-0041|Green Light; Structural|Holman
+22-0046|As-Is; Structural; Exempt|Holman Remarketing
+22-0048|Pending Reps Response|Holman
+22-0049|As-Is; Frame Damage Per Autocheck|Holman Remarketing
+22-0042|As-Is; Structural|Holman
+22-0044||Holman Remarketing
+22-0045||Holman Remarketing
+22-0047|As-Is|Holman
+22-0043|As Is|Holman
+22-0051|As-Is, Deployed Airbag Passenger And Wheel; Structural; Salvage Title No Arb|Holman Remarketing
+22-0054|As-Is|Holman
+22-0057|As Is|Holman Remarketing
+22-0055|As Is; Decals|Holman
+22-0053|As Is|Holman
+22-0056|As Is|Holman
+22-0050|As-Is|Holman Remarketing
+22-0052|As-Is|Holman
+22-0064|Exempt|Holman Remarketing
+22-0058|As-Is; Structural, Rebuilt Salvage No Arb|Holman Remarketing
+22-0065||Holman Remarketing
+22-0063|As-Is|Holman
+22-0061|As Is|Holman
+22-0062|As-Is|Holman
+22-0059|Green Light|Holman Remarketing
+22-0060|As Is|Holman
+22-0067|As-Is|Holman Remarketing
+22-0066|As-Is|Holman Remarketing
+22-0073|As-Is; Hi Rails|Holman
+22-0068|As Is|Holman
+22-0071|As-Is|Holman
+22-0069|As-Is|Holman
+22-0070|As Is|Holman
+22-0074|As Is; Structural|Holman
+22-0082|Green Light|Holman Remarketing
+22-0079|Green Light|Holman Remarketing
+22-0080|Green Light|Holman Remarketing
+22-0085|Green Light|Holman Remarketing
+22-0076|As-Is|Holman
+22-0077|As-Is; Structural|Holman
+22-0084|Green Light; Caution Engine|Holman Remarketing
+22-0081|Green Light|Holman Remarketing
+22-0086|Green Light|Holman Remarketing
+22-0088|Green Light Drive; Caution Engine|Holman Remarketing
+22-0094|Green Light Drive; Caution Transmission|Holman Remarketing
+22-0091|Green Light; Caution Engine|Holman Remarketing
+22-0090|Green Light (Caution Engine)|Holman Remarketing
+22-0089|Green Light|Holman Remarketing
+22-0093|Green Light|Holman Remarketing
+22-0092|Green Light|Holman Remarketing
+22-0095|Green Light; Caution Transmission|Holman Remarketing
+22-0097|Green Light; Caution Transmission|Holman Remarketing
+22-0103|Green Light; Caution Transmission. Structural|Holman Remarketing
+22-0096|Green Light|Holman Remarketing
+22-0102|Green Light Drive; Caution Transmission|Holman Remarketing
+22-0100|Green Light|Holman Remarketing
+22-0101|Green Light|Holman Remarketing
+22-0098|Green Light; Caution Engine|Holman Remarketing
+22-0113|As-Is|Holman Remarketing
+22-0104|Green Light Drivetrain Guarantee|Holman Remarketing
+22-0114|As Is|Holman Remarketing
+22-0108|As Is|Holman Remarketing
+22-0105|As-Is|Holman Remarketing
+22-0106|As Is|Holman Remarketing
+22-0107|As Is|Holman Remarketing
+22-0115|As-Is; Structural|Holman Remarketing
+22-0118|As-Is|Holman Remarketing
+22-0116|As-Is|Holman Remarketing
+22-0122|As-Is|Holman Remarketing
+22-0123|As-Is|Holman Remarketing
+22-0121|As Is|Holman Remarketing
+22-0119|As-Is|Holman Remarketing
+22-0120|As-Is; Active Theft|Holman Remarketing
+22-0117|As-Is|Holman Remarketing
+22-0128|As-Is|Holman Remarketing
+22-0124|As Is|Holman Remarketing
+22-0126|As-Is|Holman Remarketing
+22-0129|As Is|Holman Remarketing
+22-0132|As-Is|Holman Remarketing
+22-0130|As-Is|Holman Remarketing
+22-0131|As-Is|Holman Remarketing
+22-0125|As Is|Holman Remarketing
+22-0135|As-Is|Holman Remarketing
+22-0138|As-Is; Structural|Holman Remarketing
+22-0134|As-Is; Key Broken|Holman Remarketing
+22-0140|As-Is|Holman Remarketing
+22-0136|As-Is|Holman Remarketing
+22-0137|As-Is|Holman Remarketing
+22-0141|As-Is; Structural|Holman Remarketing
+22-0133|As-Is|Holman Remarketing
+22-0148|As-Is|Holman Remarketing
+22-0147|As-Is|Holman Remarketing
+22-0149|As-Is|Holman Remarketing
+22-0144|As-Is; Structural|Holman Remarketing
+22-0143|As Is; Structural|Holman Remarketing
+22-0145|As Is; Structural|Holman Remarketing
+3-0002|Naaa Silver Certified|Exeter Finance Corp
+22-0146|As-Is|Holman Remarketing
+3-0003|Naaa Silver Certified; Needs Windshield Replacement|Exeter Finance Corp
+3-0011|Naaa Silver Certified; Aftermarket Suspension|Exeter Finance Corp
+3-0008|Naaa Silver Certified|Exeter Finance Corp
+3-0009|Naaa Silver Certified; Structural|Exeter Finance Corp
+3-0006|Naaa Silver Certified|Exeter Finance Corp
+3-0010|Naaa Silver Certified|Exeter Finance Corp
+3-0007|Naaa Silver Certified|Exeter Finance Corp
+3-0005|Naaa Silver Certified|Exeter Finance Corp
+3-0013|Naaa Silver Certified|Exeter Finance Corp
+3-0016|Naaa Silver Certified; Needs Windshiled|Exeter Finance Corp
+3-0023|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0019|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0021|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0022|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0014|Naaa Silver Certified|Exeter Finance Corp
+3-0020|Select 3day Guarantee Engine And Transmission; Structural|Exeter Finance Corp
+3-0028|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0024|Select 3day Guarantee Engine And Transmission; Structural|Exeter Finance Corp
+3-0029|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0031|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0027|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0025|Select 3day Guarantee Engine And Transmission; Structural|Exeter Finance Corp
+3-0030|Select 3day Guarantee Engine And Transmission; Structural,Decals|Exeter Finance Corp
+3-0026|Select 3day Guarantee Engine And Transmission; Lowered Suspension|Exeter Finance Corp
+3-0034|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0032|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0038|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0037|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0039|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0036|Select 3day Guarrantee Engine And Transmission|Exeter Finance Corp
+3-0033|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0035|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0048|Green Light; Caution Engine.|Exeter Finance Corp
+3-0049|Green Light - Caution Trans|Exeter Finance Corp
+3-0050|Green Light - Caution Emission|Exeter Finance Corp
+3-0047|Greenlight Caution Engine; Structural; Prev Theft Reported On History Report|Exeter Finance Corp
+3-0043|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0046|Green Light - Caution Engine; Structural|Exeter Finance Corp
+3-0040|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0045|Select 3day Guarantee Engine And Transmission|Exeter Finance Corp
+3-0051|Green Light - Caution Engine|Exeter Finance Corp
+3-0056|Green Light - Caution Engine; Aftermarket Exhaust|Exeter Finance Corp
+3-0054|Green Light - Caution Trans|Exeter Finance Corp
+3-0055|Green Light - Caution Engine|Exeter Finance Corp
+3-0058|Green Light Drive; Structural|Exeter Finance Corp
+3-0052|Green Light - Caution Abs/Airbag; Airbags Deployed|Exeter Finance Corp
+3-0057|Green Light|Exeter Finance Corp
+3-0053|Green Light - Caution Engine|Exeter Finance Corp
+3-0063|Green Light - Caution Engine|Exeter Finance Corp
+3-0064|Green Light - Caution Engine|Exeter Finance Corp
+3-0059|Green Light - Caution Trans|Exeter Finance Corp
+3-0066|Green Light - Caution Engine|Exeter Finance Corp
+3-0062|Green Light - Caution Engine|Exeter Finance Corp
+3-0061|Green Light - Caution Trans|Exeter Finance Corp
+3-0065|Green Light - Caution Engine|Exeter Finance Corp
+3-0060|Green Light - Caution Engine|Exeter Finance Corp
+3-0072|As-Is|Exeter Finance Corp
+3-0071|As-Is|Exeter Finance Corp
+3-0074|As-Is; Prev Reported As Insurance Loss No Arb|Exeter Finance Corp
+3-0070|As-Is|Exeter Finance Corp
+3-0069|Green Light; Caution Hybrid Battery Issue|Exeter Finance Corp
+3-0068|Green Light - Caution Engine; Aftermarket Rims|Exeter Finance Corp
+3-0067|Green Light; Structural.Caution Engine|Exeter Finance Corp
+3-0073|As-Is|Exeter Finance Corp
+3-0078|As-Is; Hail|Exeter Finance Corp
+3-0077|As-Is|Exeter Finance Corp
+3-0076|As-Is|Exeter Finance Corp
+3-0081|As-Is; Structural Per Autocheck|Exeter Finance Corp
+3-0079|As-Is|Exeter Finance Corp
+3-0075|As-Is; Structural; Prev Titled/Registered To An Insurance Company No Arb|Exeter Finance Corp
+3-0082|As-Is; Structural|Exeter Finance Corp
+3-0080|As-Is|Exeter Finance Corp
+3-0088|As-Is|Exeter Finance Corp
+3-0086|As-Is|Exeter Finance Corp
+3-0084|As-Is|Exeter Finance Corp
+3-0089|As-Is|Exeter Finance Corp
+3-0087|As-Is|Exeter Finance Corp
+3-0085|As-Is|Exeter Finance Corp
+3-0083|As-Is|Exeter Finance Corp
+3-0091|As Is|Exeter Finance Corp
+3-0093|As Is; Structural|Exeter Finance Corp
+3-0096|As-Is|Exeter Finance Corp
+3-0094|As Is|Exeter Finance Corp
+3-0098|As Is|Exeter Finance Corp
+3-0092|As-Is|Exeter Finance Corp
+3-0097|As-Is|Exeter Finance Corp
+3-0095|As Is; Aftermarket Rims|Exeter Finance Corp
+3-0099|As-Is,|Exeter Finance Corp
+3-0131|As-Is,; Structural|InvesTex Credit Union
+3-0101|As-Is|Exeter Finance Corp
+3-0103|As-Is,|Exeter Finance Corp
+3-0100|As-Is|Exeter Finance Corp
+3-0130|As-Is|InvesTex Credit Union
+7-0001|As-Is.Inop|Exeter Finance Corp
+7-0002|As-Is. Eng Starts; Inop|Exeter Finance Corp
+3-0105|As-Is|Exeter Finance Corp
+7-0009|As-Is.Inop|Exeter Finance Corp
+7-0005|As-Is. Inop.; Tmu. Biohazard (Mold)|Exeter Finance Corp
+7-0004|As-Is Inop; Airbags Deployed. Structural|Exeter Finance Corp
+7-0003|As-Is; Inop; Mold. Structural. Airbags Deployed|Exeter Finance Corp
+7-0010|As-Is.Inop|Exeter Finance Corp
+7-0008|As-Is.Inop|Exeter Finance Corp
+7-0007|As-Is.Inop|Exeter Finance Corp
+7-0006|As-Is. Engine Starts; Inop|Exeter Finance Corp
+7-0027|As-Is,Engine Runs,Non-Drivable Transmission Inop|Fleet Lease Disposal
+7-0014|As-Is. Eng Starts; Inop|Exeter Finance Corp
+7-0026|As-Is. Inop.|Fleet Lease Disposal
+7-0024|As-Is, Not Drivable (Excessive Smoke)|Bj's Autohaus
+7-0025|As-Is(Inop)|Fleet Lease Disposal
+7-0022|As-Is No Key|
+7-0023|As-Is, No Key|
+7-0012|As-Is . Inop; Structural|Exeter Finance Corp
+7-0034|As Is Starts Won''T Stay Running|Mainland Investment
+7-0037|As-Is No Start; Prev Theft Reported On History Report|
+7-0038|As-Is, No Key|
+7-0039|As-Is; Exempt|
+7-0028|As-Is (Inop) Mold|Fleet Lease Disposal
+7-0030|As-Is, Not Drivable (No Brakes); Decals|Flexco Fleet Lease Exchange Company
+7-0036|As-Is No Key, Odo No Show; Structural; Exempt|
+7-0035|As-Is, No Start; Airbags Deployed|
+7-0045|As-Is|
+7-0040|As-Is No Start|
+7-0048|As-Is, No Start|Mi Tierra Auto Sales
+7-0042|As-Is, Not Drivable (Little To No Brakes); Won''T Stay Running. Structural; Exempt|
+7-0043|As-Is|
+7-0041|As-Is No Key|
+7-0044|As-Is|
+7-0047|As-Is, No Start|Mi Tierra Auto Sales
+7-0049|As-Is,; Structural|Mi Tierra Auto Sales
+7-0057|As-Is,; Airbags Deployed Structural|
+7-0059|As-Is, Won'T Stay Running|
+7-0058|As-Is, Transmission Wont Engage. Starts|
+7-0063|As-Is, Drivable (Missing 3 Studs Fr); Structural; Nam; Salvage No Arb|
+7-0062|As-Is, No Key; Odo No Show|
+7-0060|As-Is, Wont Stay Running; Structural; Rebuilt Salvage No Arb|
+7-0061|As-Is,No Start Drive-Shaft Disconnected; Major Rust On Undercarriage|
+7-0070|As-Is, No Start ( No Power); Odo No Show; Altered Suspension|InvesTex Credit Union
+7-0072|As Is Exempt; Interior Water Damage|Advanced Remarketing Services
+77-0001|As Is. Inop. 1653hours.; Hde.|Holman
+77-0004|As Is; Structural|Holman Remarketing
+77-0003|As-Is (Inop)|Holman Remarketing
+77-0002|As-Is (Inop); Structural|Holman Remarketing
+7-0101|As-Is, Not Drivable ( Lr Tire Flat); X Police, Airbags Deployed; Spare In Unit|
+7-0100|As-Is, Inop; No Start; Structural, Ex Police|
+97-0004|As-Is|Holman
+97-0002|As-Is (Inop); 12300# Gvwr. 12ft Van.; Hde.|Holman
+97-0003|As Is Inop; Diesel. 12000# Gvwr. 13ft Step Van.; Hde.|Holman
+77-0015|As-Is (Inop)|Holman
+77-0016|As-Is (Inop); Odo No Show|Holman
+97-0001|As-Is.; Ball Hitch, Tandem Axle, Elec Brk (1 Axle) Cargo Trailer.; Interior: 142l X 68h X 55w Inch. 45inh X 68inw Doorway.; Hde.Sold On Bos|Holman
+77-0017|As-Is|Holman
+77-0014|As-Is, No Start. Odo No Show.; 48volt.; Sold On Bos; Hde|Holman
+97-0012|As Is. Inop. 14752hours.; Cushion Tire, 4500# Capacity, 3stage, 189in Lift.; Propane.; Hde.|Flexco Fleet Lease Exchange Company
+97-0009|No Start.; 12300# Gvwr. Supreme 12ft Service Body.|Fleet Lease Disposal
+97-0007|As Is. Odometer Missing. Nam. Not Drivable.; Mx13-455 Diesel. Fao16810c-Ea3. 52000# Gvwr. Air Suspn.; Exempt; Hde.|Fleet Lease Disposal
+97-0013|As Is. No Start.; Cummins Isb6.7-220 Diesel. Allison 2200rds. 26000# Gvwr. Hyd Brk.; Conyers 24ft Dry Van.; Hde.|Flexco Fleet Lease Exchange Company
+97-0005|As-Is, Nam, Odometer Replaced.; Dd13-450 Diesel. Allison 4500rds. 66000# Gvwr. Air Suspn. Air; Tag Axle. Hiab 435k-4 Hipro Crane W/ Drywall Cradle. 24x8ft Flatbed.; Hde, Lot Driven.|Fleet Lease Disposal
+97-0008|As Is.; 7.7l-220 Diesel. Allison. 25950# Gvwr. Hyd Brk.; Supreme 24ft Van.; Hde. Lot Driven.|Fleet Lease Disposal
+97-0010|As-Is. Inop. Odo No Show. Nam.; 22000# Gvwr. Utilimaster 22ft Step Van. Thieman 1600# Liftgate.; Branded Title - Exempt; Hde.|Fleet Lease Disposal
+97-0006|As-Is; Px7-260diesel. Allison 2500rds. 26000# Gvwr. Air Brk.; Supreme 24ft Dry Van.; Hde. Lot Driven.|Fleet Lease Disposal
+97-0019|As Is. Inop.; 36volt. 4500# Capacity, 301in Lift, Narrow Aisle, Forklift.; Sold On Bos; Hde.|Element Fleet Management
+97-0021|As Is. Inop.; 24volt, 3000# Capacity, 240in Lift, Order Picker; Sold On Bos; Hde.|Element Fleet Management
+97-0014|As Is. Frame Damage.; Pintle Hook, Tandem Axle (9990# Gvwr) Elec Brk, Utility Trailer.; 20ft X 83in Deck. 16in Rails.; Hde.|Flexco Fleet Lease Exchange Company
+97-0022|As-Is; 19500# Gvwr. Utilimaster 16ft Step Van.; Hde, Lot Driven.|Element Fleet Management
+97-0018|As Is. No Start.; Dt466-C230 Diesel. Allison. 33000# Gvwr. Air Brk.; Altec Aa755-Mh, Insulating, Articulating, 55.6ft Aerial Lift.; Hde.|Element Fleet Management
+97-0020|As Is. No Start; 19500# Gvwr. Utilimaster 16ft Step Van.|Element Fleet Management
+97-0017|As Is. Inop.; Cummins Isb6.7-240 Diesel. No Transmission. 26000# Gvwr.; Morgan 24ft Van. Maxon 3500# Liftgate.; Hde.|Element Fleet Management
+97-0015|As Is. Inop.; Diesel. 16500# Gvwr. Auto Crane Ehc4 Hoist.; Hde.|Flexco Fleet Lease Exchange Company
+97-0023|As Is. Frame Damage.; 7.7l Diesel. Allison. 25950# Gvwr. Air Brk. 18ft Bed.; Hde. Lot Driven.|Element Fleet Management
+97-0027|As-Is; 26000# Gvwr. Hyd Brk. 24ft Bed. 2500# Liftgate.; Hde|Mainland Investment
+97-0030|As Is. Inop. Undercarriage Rust.; Diesel. 4x4. 19500# Gvwr. Altec L37mr, Insulating, Articulating,; 37ft Aerial Lift.; Hde.|Mainland Investment
+97-0028|Flatbed; Lot Driven.|Mainland Investment
+97-0024|As Is. Not Drivable.; Diesel. 16500# Gvwr. 9ft Flatbed, G'Neck Ball.; Hde.|Element Fleet Management
+97-0029|Flatbed; Hail Dmg On Hood; Lot Driven.|Mainland Investment
+97-0026|As Is. No Key. Structural.; Diesel. 19500# Gvwr. 20ft X 96in Bed. Interlift Liftgate; Hde.|Element Fleet Management
+97-0025|As Is.; 5.2l-210 Diesel. 19500# Gvwr. Morgan 20ft Bed.; Palfinger 3300# Liftgate.; Hde, Decals|Element Fleet Management
+97-0058|As Is; Mbenz 6.4l-260 Diesel. Allison. 31000# Gvwr. Air Suspn.; 71student. Ac.; Hde. Lot Driven.|Holman Remarketing
+97-0051|As-Is; Rebuilt Salvage No Arb,Structural; Lot Driven.|Holman Remarketing
+97-0057|As Is.; Cummins Isl9-300 Diesel. Allison 3000rds. 33000# Gvwr. Air Suspn.; Hi-Ranger Nr46m, Insulating Articulating, 46ft Aerial Lift.; Hde. Lot Driven, Operated At Inspection.|Holman Remarketing
+97-0048|No Engine Or Outdive; No Key, Odo No Show / Hours; Four Winns Trailer Vin. 42kembt2412050042|
+97-0047|As Is . No Start.; Dd13-470 12.8l Diesel. Fro16210c 10speed. 52000# Gvwr. Air Suspn.; Air Ride 5th. 10 Alum Wheels. 100gall Tank.; Hde|
+97-0031|3 Day Engine & Drivetrain Guarantee; Cummins Isb6.7-325 Diesel. Allison. 25999# Gvwr. Hyd Brk.; Hippo Multipower Unit.; Hde. Lot Driven.|Mainland Investment
+97-0056|As Is. No Start.; Diesel.; Hde.|Holman Remarketing
+97-0055|As-Is,; 444e-A175f Diesel. Allison. Hyd Brk. 5yd Bed.; Hde. Lot Driven.|
+97-0082|As Is. No Serial Number Plate.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde.|
+97-0084|As Is. No Serial Number Plate.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde.|
+97-0081|As Is.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde.|
+97-0061|As-Is, Structure.; 5.2ldiesel. 19500# Gvwr. Morgan 24ft Dry Van, Side Door. Maxon 2200# Liftgate.; Hde. Lot Driven.|Holman Remarketing
+97-0083|As Is. No Serial Plate.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde.|
+97-0062|As-Is,; 14599# Gvwr. 13ft Dry Van.; Hde|
+97-0060|As-Is Undercarriage Rust.; 5.2l-210 Diesel. 17950# Gvwr. Supreme 14ft Van. Palfinger Liftgate Door; Hde. Lot Driven.|Holman Remarketing
+97-0080|As Is. No Gear Box. Serial Illegible.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde.|
+97-0086|As-Is,; Ball Hitch, Single Axle (3000# Gvwr) Inertia Brk, Sign Trailer; 4 Line Message Board.; Hde. Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number|
+97-0085|As Is.; Ball Hitch, Single Axle (3000# Gvwr) Inertia Brk, Sign Trailer; 4 Line Message Board.; Hde.Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number|
+97-0089|As Is. Not Driveable. 2444hours.; Yanmar 1.3l Diesel. 72in De K.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde.|
+97-0091|As Is. 848 Hours.; Kubota D902 Diesel.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde. Operated At Inspection.|
+97-0087|As Is.; Ball Hitch, Single Axle (3000# Gvwr) Inertia Brk, Sign Trailer.; 4 Line Message Board.; Hde. Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number|
+97-0090|As Is. 1573hours. Not Drivable.; Kohler Cv682, 48in Deck.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde.|
+97-0088|As Is.; Ball Hitch, Single Axle (3000# Gvwr) Inertia Brk, Sign Trailer.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; 4 Line Message Board|
+97-0092|Is-Is. No Start.; Yanmar Diesel. 4x4.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde|
+97-0097|As Is.; Yanmar Diesel. 4x4. Winch. Dump Bed. 4seater.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde. Lot Driven.|
+97-0094|As Is.; Yanmar Diesel. 4x4. Dump Bed.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde. Lot Driven.|
+97-0100|As Is. No Serial Number Plate.; Skid Steer Loader Bucket.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde.|
+97-0093|As Is. No Start. No Odom Reading.; Yanmar Diesel. 4x4. Dump Bed.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde.|
+97-0098|As Is. Only Showing 14 Hours.; 3029 Diesel. Gs78 Loader With Claw. Sn: Kvgs78x100129.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde. Operated At Inspection.|
+97-0095|As Is.; Yanmar Diesel. 4x4. Dump Bed.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde. Lot Driven.|
+97-0099|As Is.; Skid Steer Attachment. Adjustable Blade And Rake Angles.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde.|
+97-0096|As Is.; Yanmar Diesel. 4x4. Dump Bed. 4 Seater.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde. Lot Driven.|
+97-0101|As-Is,; Diesel. 17950# Gvwr. 11ft Bed, G'Neck Ball.; Hde. Lot Driven.|
+97-0105|As Is. 327 Hours. Inop.; Hatz Diesel. 9-Tire Roller.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde.|
+97-0103|As-Is, 1305 Hours.; 5030 Diesel. 9f-3r.; Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde. Lot Driven With Elec Issues.|
+97-0107|As Is. 413 Hours.; Cummins 3.9l Diesel. Sheepfoot Roller.; Hde.Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde. Lot Driven.|
+97-0102|As-Is,; 5.2l-200 Diesel. 14500# Gvwr. 16ft Bed.; Hde. Lot Driven.|
+98-0001|As-Is, No Start; Structural|GM Financial Remarketing
+97-0106|As Is. No Start. 724hours.; Cummins B5.9- C Diesel. 12ft Moldboard**. Scarifier.; Sold On A Bos Buyer Must Pay 8.25 Tax If No Resale Number; Hde.|
+97-0104|As Is. 1262 Hours. Lot Driven.; 4045 Diesel. 4x4. 16f-16r. Erops, Ac.; Tiger Triple Gang Flail: Tgfl-0910, Tgfr-0965, Trf90-2604.; Hde. Sold On Bos Buyer Must Pay 8.25 Tax If No Resale Number|

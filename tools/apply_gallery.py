@@ -6,7 +6,11 @@ import json, os, sys
 T = os.path.dirname(os.path.abspath(__file__))
 date = sys.argv[1]
 m = {}
+auc = None
 for fn in sys.argv[2:]:
+    b = os.path.basename(fn)
+    if '_ph_' in b:
+        auc = b.split('_ph_')[0].upper()  # aaa_ph_… -> AAA: номера лотов у разных аукционов дня совпадают (D-0006 у H1C и AAH)
     for line in open(fn, encoding='utf-8'):
         q = line.rstrip('\n').split('|')
         if len(q) < 2 or not q[1] or q[1] == 'ERR':
@@ -15,7 +19,10 @@ for fn in sys.argv[2:]:
 path = os.path.join(T, '..', 'data', date + '.json')
 d = json.load(open(path, encoding='utf-8'))
 n = 0
+own = auc and any(l.get('auc') == auc for l in d['lots'])
 for l in d['lots']:
+    if own and l.get('auc') != auc:
+        continue
     ph = m.get(str(l.get('run', '')).replace(' ', ''))
     if not ph:
         continue

@@ -1,0 +1,568 @@
+C-0006||Tomball Ford
+C-0001||Tomball Ford
+C-0008||Tomball Ford
+C-0002||Tomball Ford
+C-0004||Tomball Ford
+C-0003||Tomball Ford
+C-0005||Tomball Ford
+C-0007||Tomball Ford
+C-0010||Tomball Ford
+C-0011|Theft History|Tomball Ford
+C-0013||Tomball Ford
+C-0015||Tomball Ford
+C-0014||Tomball Ford
+C-0009||Tomball Ford
+C-0016|Americas Certified|Tomball Ford
+C-0012|Structural Damage|Tomball Ford
+C-0031||Bolton Ford
+C-0030||Lithia Motors
+C-0035||Bolton Ford
+C-0036|Prev Local Government Use.|Bolton Ford
+C-0037||Bolton Ford
+C-0032||Bolton Ford
+C-0034||Bolton Ford
+C-0033||Bolton Ford
+C-0041||Bolton Ford
+C-0039||Bolton Ford
+C-0040||Bolton Ford
+C-0038||Bolton Ford
+C-0046||Westside Kia
+C-0045||Westside Kia
+C-0043|Frame|Westside Kia
+C-0044||Westside Kia
+C-0050||Westside Kia
+C-0054||Mike Calvert Toyota
+C-0051||Westside Kia
+C-0047||Westside Kia
+C-0049|Green Light|Westside Kia
+C-0048||Westside Kia
+C-0052|Frame Damage- Both A Pillars Dented|Mike Calvert Toyota
+C-0056||Mike Calvert Toyota
+C-0073||Honda of Lake Jackson
+C-0071||Clear Lake Nissan
+C-0059||
+C-0065||West Houston Hyundai
+C-0069||Clear Lake Nissan
+C-0067||West Houston Hyundai
+C-0064|Bonded Title; No Arb.|West Houston Hyundai
+C-0058||
+C-0080||Honda of Clear Lake
+C-0079||Honda of Clear Lake
+C-0077|Unable To Get Miles|John Eagle Acura
+C-0075||Kramer Autoplex
+C-0081||Honda of Clear Lake
+C-0076||John Eagle Acura
+C-0078||John Eagle Acura
+C-0074|Green Light|Kramer Autoplex
+C-0089||
+C-0086||Honda of Clear Lake
+C-0082||Honda of Clear Lake
+C-0084||Honda of Clear Lake
+C-0083||Honda of Clear Lake
+C-0087||
+C-0088||
+C-0085|Green Light|Honda of Clear Lake
+C-0094|Manufacturer Buyback; No Arb.|Southwest Infiniti
+C-0096||Southwest Infiniti
+C-0099||Clear Lake Infiniti
+C-0098|Structural Damage|Russell & Smith Mazda
+C-0090||
+C-0101||Sterling McCall Acura
+C-0100||Sterling McCall Acura
+C-0092||Southwest Infiniti
+C-0112||Gillman Subaru
+C-0111||
+C-0114||
+C-0110||Baker Nissan
+C-0113||John Eagle Auto Group
+C-0109||Baker Nissan
+C-0104||
+C-0108||Archer KIA
+C-0117||
+C-0121||Superior Subaru of Houston
+C-0124||
+C-0120||Superior Subaru of Houston
+C-0123|Powertrain Guarantee; Green Light|
+C-0116||
+C-0115||
+C-0122||Southwest Mitsubishi
+C-0125||
+C-0127|Theft History; Americas Certified; Green Light|
+D-0001|Lanelink Silver Certified; First Community Credit Union|LaneLink
+C-0129|Americas Certified; Green Light|
+D-0003|Lane Link Certified Silver; Vantage West Credit Union|LaneLink
+C-0128|Theft History; Green Light; Caution Adas; Electrical Issues|
+C-0126||
+D-0002|Lanelink Certified Silver; State Employees Credit Union|LaneLink
+D-0012|Lanelink Certified Silver; First Community Credit Union|LaneLink
+D-0006|Lanelink Certified Silver; First Community Credit Union|LaneLink
+D-0005|Lanelink Certified Silver; Hail Damage; Green Light; Openlane|LaneLink
+D-0011|Lanelink Certified Silver; First Community Credit Union|LaneLink
+D-0010|Lanelink Certified Silver; First Community Credit Union|LaneLink
+D-0009|Lanelink Silver Certified; First Community Credit Union|LaneLink
+D-0013|First Community Credit Union|LaneLink
+D-0004|Lanelink Ceritfied Silver; First Community Credit Union|LaneLink
+D-0020|Green Light; Alt Suspension; First Community Credit Union|LaneLink
+D-0016|Green Light; Srs On; Randolph-Brooks Federal Credit Union|LaneLink
+D-0014|Lanelink Certified Silver; First Community Credit Union|LaneLink
+D-0017|Green Light; Ac Inop; First Community Cu|LaneLink
+D-0019|Green Light; First Community Credit Union|LaneLink
+D-0018|Frame Damage; Green Light; Consumers Cu|LaneLink
+D-0021|Green Light; Securian Casualty Company|LaneLink
+D-0022|Green Light; Skopos Financial Llc|LaneLink
+D-0030|Red Light; State Employees'' Cu|LaneLink
+D-0025|Red Light; Auto Advantage Finance|LaneLink
+D-0029|Red Light; Frame Damage; Heights Finance Corporation|LaneLink
+D-0023|Green Light; First Community Credit Union|LaneLink
+D-0026|Not Actual Miles; Red Light; Securian Casualty Company|LaneLink
+D-0028|Red Light; First Community Credit Union|LaneLink
+D-0031|Altered Suspension; Red Light; Quill Bank|LaneLink
+D-0027|Red Light; First Community Credit Union|LaneLink
+D-0035|Exempt; Red Light; Quill Bank|LaneLink
+D-0039|Red Light|LaneLink
+D-0040|Green Light; Caution Transmission; University Fcu|LaneLink
+D-0033|Red Light; Frame Damage; Skopos Financial Llc|LaneLink
+D-0038|Red Light; Lendmark Financial Services Llc|LaneLink
+D-0034|As Is / No Arb.; Frame Damage / Water Damage; Rebuilt Salvage Title/ Ins Loss/ Total Loss; Skopos Financial Llc|LaneLink
+D-0037|Red Light; Quill Bank|LaneLink
+D-0036|Red Light; Rebuilt Salvage Title / No Arb./ Canadian Renewal; Not Actual Mileage / Insurance Loss; Quill Bank|LaneLink
+D-0046||Lendbuzz
+D-0041|Red Light; University Fcu|LaneLink
+D-0048|Frame Damage; Green Light|Lendbuzz
+D-0042|Red Light|LaneLink
+D-0047|Silver Certified|Lendbuzz
+D-0044|Silver Certified|Lendbuzz
+D-0045|Silver Certified|Lendbuzz
+D-0043|As Is; Frame Damage; First Community Credit Union|LaneLink
+D-0051|Green Light; Caution Eng|Lendbuzz
+D-0057|Frame Damage; Red Light|Lendbuzz
+D-0054|Green Light; History Of Theft|Lendbuzz
+D-0055|Green Light|Lendbuzz
+D-0052|Green Light|Lendbuzz
+D-0053|Green Light; Structural Damage|Lendbuzz
+D-0049|Frame Damage; Green Light|Lendbuzz
+D-0056|Red Light|Lendbuzz
+D-0059|Frame Damage; Red Light|Lendbuzz
+D-0067|Red Light|
+D-0066||Caprock Remarketing
+D-0061|Frame Damage; Red Light|Lendbuzz
+D-0070|As-Is|Westlake Financial Services
+D-0058|Red Light|Lendbuzz
+D-0060|Red Light|Lendbuzz
+D-0069|Bwc Gold|Westlake Financial Services
+D-0077|Green Light|Barco Rent-A-Truck
+D-0073|As-Is|Westlake Financial Services
+D-0078|Green Light|Barco Rent-A-Truck
+D-0076|Green Light|Barco Rent-A-Truck
+D-0075|Green Light|Barco Rent-A-Truck
+D-0072|As-Is|Westlake Financial Services
+D-0074|As-Is; Frame Damage|Westlake Financial Services
+D-0071|As-Is|Westlake Financial Services
+D-0079|Green Light|Barco Rent-A-Truck
+D-0081|Green Light|Barco Rent-A-Truck
+D-0094|(A)Frame Damage|
+D-0080|Green Light|Barco Rent-A-Truck
+D-0096|Manufacturer Buyback; No Arb.|
+D-0095|Rebuilt Salvage Title; Prev Titled/Registered To An Insurance Company; No Arb.|
+D-0098||
+D-0097||
+D-0100||
+D-0110|Structural Damage|Strategic Auto Remarketing
+D-0109||
+D-0108||
+D-0107||
+D-0101||Primeritus
+D-0106||
+D-0099||
+D-0113||Strategic Auto Remarketing
+D-0114||Strategic Auto Remarketing
+D-0112||Strategic Auto Remarketing
+E-0002|As-Is|Bridgecrest Credit
+E-0004|As-Is|Bridgecrest Credit
+D-0111||Strategic Auto Remarketing
+E-0001|As-Is; Frame Damage|Bridgecrest Credit
+E-0003|As-Is|Bridgecrest Credit
+E-0011|Silver Certified|Bridgecrest Credit
+E-0005|As-Is|Bridgecrest Credit
+E-0012|Silver Certified|Bridgecrest Credit
+E-0010|As-Is; Frame Damage|Bridgecrest Credit
+E-0006|As-Is|Bridgecrest Credit
+E-0007|As-Is; Frame Damage|Bridgecrest Credit
+E-0008|As-Is|Bridgecrest Credit
+E-0009|As-Is; Frame Damage|Bridgecrest Credit
+E-0017|Silver Certified|Bridgecrest Credit
+E-0015|Silver Certified|Bridgecrest Credit
+E-0020|Silver Certified|Bridgecrest Credit
+E-0013|Silver Certified|Bridgecrest Credit
+E-0019|Silver Certified|Bridgecrest Credit
+E-0018|Silver Certified|Bridgecrest Credit
+E-0014|Silver Certified|Bridgecrest Credit
+E-0016|Silver Certified|Bridgecrest Credit
+E-0021|Silver Certified|Bridgecrest Credit
+E-0026|Green Light|Bridgecrest Credit
+E-0029|Green Light|Bridgecrest Credit
+E-0028|Green Light|Bridgecrest Credit
+E-0031|Green Light|Bridgecrest Credit
+E-0030|Green Light|Bridgecrest Credit
+E-0027|Green Light|Bridgecrest Credit
+E-0032|Green Light|Bridgecrest Credit
+E-0036|Green Light|Bridgecrest Credit
+E-0034|Green Light|Bridgecrest Credit
+E-0039|Green Light|Bridgecrest Credit
+E-0037|Green Light|Bridgecrest Credit
+E-0035|Green Light|Bridgecrest Credit
+E-0033|Green Light|Bridgecrest Credit
+E-0040|Green Light|Bridgecrest Credit
+E-0038|Green Light|Bridgecrest Credit
+E-0041|Green Light|Bridgecrest Credit
+E-0044|Green Light|Bridgecrest Credit
+E-0048|Green Light; Engine Problem|Bridgecrest Credit
+E-0042|Green Light|Bridgecrest Credit
+E-0043|Green Light|Bridgecrest Credit
+E-0049|Green Light; Srs Problem|Bridgecrest Credit
+E-0047|Green Light; Eng Problem|Bridgecrest Credit
+E-0045|Green Light|Bridgecrest Credit
+E-0052|Green Light; Trans Problem|Bridgecrest Credit
+E-0051|Green Light; Trans Probblem|Bridgecrest Credit
+E-0054|Green Light; Frame Damage|Bridgecrest Credit
+E-0057|Green Light; Abs Problem|Bridgecrest Credit
+E-0050|Green Light; Eng Problem|Bridgecrest Credit
+E-0056|Green Light; Trans Problem|Bridgecrest Credit
+E-0055|Green Light; Rear Diff Problem|Bridgecrest Credit
+E-0053|Green Light; Abs Problem|Bridgecrest Credit
+E-0061|Green Light; Engine Problem|Bridgecrest Credit
+E-0062|Green Light; Eng Problem|Bridgecrest Credit
+E-0065|Green Light; Trans Problem|Bridgecrest Credit
+E-0059|Green Light; Eng Problem|Bridgecrest Credit
+E-0063|Green Light; Eng Problem|Bridgecrest Credit
+E-0058|Green Light; Eng Problem|Bridgecrest Credit
+E-0064|Green Light; Trans Problem|Bridgecrest Credit
+E-0060|Green Light; Eng Problem|Bridgecrest Credit
+E-0068|As-Is; Frame Damage|Bridgecrest Credit
+E-0067|Green Light; Eng Problem|Bridgecrest Credit
+E-0070|As-Is|Bridgecrest Credit
+E-0073|As-Is|Bridgecrest Credit
+E-0069|As-Is|Bridgecrest Credit
+E-0071|As-Is|Bridgecrest Credit
+E-0072|As-Is|Bridgecrest Credit
+E-0066|Frame Damage; Green Light; Engine Problem|Bridgecrest Credit
+E-0077|As-Is|Bridgecrest Credit
+E-0075|As-Is|Bridgecrest Credit
+E-0074|Green Light|Bridgecrest Credit
+E-0081|As-Is|Bridgecrest Credit
+E-0076|As-Is|Bridgecrest Credit
+E-0078|As-Is|Bridgecrest Credit
+E-0079|As-Is|Bridgecrest Credit
+E-0080|As-Is; Frame Damage|Bridgecrest Credit
+E-0084|As-Is|Bridgecrest Credit
+E-0089|As-Is|Bridgecrest Credit
+E-0083|As-Is|Bridgecrest Credit
+E-0082|As-Is; Frame Damage|Bridgecrest Credit
+E-0085|As-Is; Frame Damage|Bridgecrest Credit
+E-0087|As-Is|Bridgecrest Credit
+E-0088|As-Is|Bridgecrest Credit
+E-0086|As-Is|Bridgecrest Credit
+E-0095|As-Is|Bridgecrest Credit
+E-0090|As-Is|Bridgecrest Credit
+E-0092|As-Is|Bridgecrest Credit
+E-0093|As-Is|Bridgecrest Credit
+E-0091|As-Is|Bridgecrest Credit
+E-0096|As-Is|Bridgecrest Credit
+E-0097|As-Is|Bridgecrest Credit
+E-0094|As-Is|Bridgecrest Credit
+E-0101|As-Is|Bridgecrest Credit
+E-0098|As-Is|Bridgecrest Credit
+E-0102|As-Is|Bridgecrest Credit
+E-0099|As-Is; Frame Damage|Bridgecrest Credit
+E-0105|As-Is|Bridgecrest Credit
+E-0104|As-Is|Bridgecrest Credit
+E-0103|As-Is|Bridgecrest Credit
+E-0100|As-Is|Bridgecrest Credit
+E-0110|As-Is|Bridgecrest Credit
+E-0107|As-Is|Bridgecrest Credit
+E-0112|As-Is; Frame Damage|Bridgecrest Credit
+E-0113|As-Is|Bridgecrest Credit
+E-0108|As-Is|Bridgecrest Credit
+E-0111|As-Is; Frame Damage|Bridgecrest Credit
+E-0109|As-Is|Bridgecrest Credit
+E-0106|As-Is|Bridgecrest Credit
+E-0133|Tmu|Holman Remarketing
+E-0131||Holman Remarketing
+E-0132|Structural Damage|Holman Remarketing
+EC-0001||NCS Vehicle Donations
+E-0116|As-Is|Bridgecrest Credit
+E-0115|As-Is|Bridgecrest Credit
+E-0114|Frame Damage; As-Is|Bridgecrest Credit
+E-0117|As-Is; Exempt|Bridgecrest Credit
+EC-0004||Dealer Direct
+EC-0011|(A)Frame Damage|
+EC-0007||
+EC-0008||
+EC-0003||NCS Vehicle Donations
+EC-0002||NCS Vehicle Donations
+EC-0010|(A)Frame Damage|
+EC-0006||
+EC-0014||
+EC-0015||
+EC-0012|(A)Frame Damage; Not Actual Miles|
+EC-0017||
+EC-0016|(A)Structural Damage|
+EC-0013|(A)Frame Damage|
+EC-0018||
+EC-0019||
+EC-0023||
+EC-0024|360 Amg Package|
+EC-0028||
+EC-0020|Frame Damage; Rebuilt Salvage Title; Ins Loss / Total Loss / No Arb.; Prev Titled/Registered To An Insurance Company|
+EC-0022||
+EC-0021||
+EC-0025|(A)Frame Damage|
+EC-0026|Not Actual Miles|
+EC-0031||
+ED-0001||
+ED-0004||
+EC-0029||
+EC-0030||
+ED-0003||
+ED-0002||
+ED-0005||
+ED-0013||
+ED-0008|America''S Certified; Green Light|
+ED-0010||
+ED-0009||
+ED-0007|America''S Certified; Green Light|
+ED-0011||
+ED-0012||
+ED-0014||
+ED-0021||
+ED-0023||
+ED-0022||
+ED-0019||
+ED-0016||
+ED-0018|Structural Damage|
+ED-0017||
+ED-0015|No Key; Bonded Title; Not Actual Mileage; No Arb.|
+ED-0027||
+ED-0029||
+ED-0024||
+ED-0026||
+ED-0028||
+ED-0031|Emissions Deleted|
+ED-0030|Frame Damage|
+ED-0025||
+EE-0009|Rebuilt Salvage Title; No Arb.|Ron Carter Ford
+EE-0008||Ron Carter Ford
+EE-0007||Gulf Coast Ford
+ED-0032|Theft History|
+EE-0006||Gulf Coast Ford
+ED-0033|(A)Frame Damage|
+EE-0010||Ron Carter Ford
+EE-0011||Ron Carter Ford
+EE-0019||
+EE-0018||
+EE-0013||Ron Carter Ford
+EE-0020||
+EE-0021||
+EE-0015|Structural Damage|Helfman Ford
+EE-0014||Ron Carter Ford
+EE-0012||Ron Carter Ford
+EF-0002||Classic Chevrolet Sugar Land
+EE-0027||
+EF-0005||Classic Chevrolet Sugar Land
+EF-0001||Classic Chevrolet Sugar Land
+EF-0007||Classic Chevrolet Sugar Land
+EF-0003||Classic Chevrolet Sugar Land
+EF-0004||Classic Chevrolet Sugar Land
+EF-0006||Classic Chevrolet Sugar Land
+EF-0009||Classic Chevrolet Sugar Land
+EF-0010||Classic Chevrolet Sugar Land
+EF-0015||Classic Chevrolet Sugar Land
+EF-0011||Classic Chevrolet Sugar Land
+EF-0008||Classic Chevrolet Sugar Land
+EF-0013||Classic Chevrolet Sugar Land
+EF-0012||Classic Chevrolet Sugar Land
+EF-0014||Classic Chevrolet Sugar Land
+EF-0022||Classic Chevrolet Sugar Land
+EF-0017||Classic Chevrolet Sugar Land
+EF-0021||Classic Chevrolet Sugar Land
+EF-0016||Classic Chevrolet Sugar Land
+EF-0019||Classic Chevrolet Sugar Land
+EF-0020||Classic Chevrolet Sugar Land
+EF-0018||Classic Chevrolet Sugar Land
+EF-0023|Alt Suspension,.. Lifted|Classic Chevrolet Sugar Land
+EF-0030||
+EF-0025||
+EF-0024||
+EF-0029||
+EF-0027||
+EF-0028||
+EF-0026||
+EF-0031||
+F-0007|Green Light|Holman Remarketing
+EF-0033||
+EF-0034||
+F-0006|Green Light|Holman
+F-0003|As-Is; Frame Damage|Holman Remarketing
+F-0002|As-Is; Frame Damage|Holman
+F-0001|As-Is; Frame Damage|Holman Remarketing
+EF-0035||
+F-0012|Green Light|Holman Remarketing
+F-0014||Holman Remarketing
+F-0011|Green Light|Holman Remarketing
+F-0015|Lift Kit; Egr; 5 Positions|Holman Remarketing
+F-0008|Green Light|Holman Remarketing
+F-0010|Green Light|Holman Remarketing
+F-0009|Green Light|Holman Remarketing
+F-0013|Green Light|Holman Remarketing
+F-0022|Green Light|Holman Remarketing
+F-0023|Green Light|Holman Remarketing
+F-0021|Green Light|Holman Remarketing
+F-0018|Green Light|Holman Remarketing
+F-0016|Green Light|Holman Remarketing
+F-0017|Green Light|Holman Remarketing
+F-0019|Green Light|Holman Remarketing
+F-0020|Green Light|Holman Remarketing
+F-0025||Holman Remarketing
+F-0027|Green Light|Holman Remarketing
+F-0024|Green Light|Holman Remarketing
+F-0026||Holman Remarketing
+F-0028|Green Light|Holman Remarketing
+F-0032|Green Light|Holman Remarketing
+F-0030|Green Light|Holman Remarketing
+F-0029|Green Light|Holman Remarketing
+F-0038|Green Light; No Cats; Emissions Deleted|Holman Remarketing
+F-0036|Green Light|Holman Remarketing
+F-0035|Green Light|Holman Remarketing
+F-0034|Green Light|Holman Remarketing
+F-0033|Green Light|Holman Remarketing
+F-0040|Green Light; Ac Inop|Holman Remarketing
+F-0041|Green Light; Ac Inop|Holman Remarketing
+F-0039|Green Light; Abs Problem|Holman
+F-0044|Green Light; Caution Engine|Holman Remarketing
+F-0043|Green Light; Caution Adas|Holman Remarketing
+F-0045|Green Light; Caution Trans|Holman Remarketing
+F-0047|Green Light; Eng Noise|Holman Remarketing
+F-0048|Green Light; Eng Problem|Holman
+F-0042|Green Light; Adas Inop|Holman Remarketing
+F-0049|Green Light; Eng Problem|Holman
+F-0046|Green Light; Caution Trans|Holman Remarketing
+F-0051||Holman Remarketing
+F-0057|Green Light; Frame Damage|Holman
+F-0053|Green Light; Eng Problem|Holman Remarketing
+F-0055|Green Light; Eng Problem; Fire Damage|Holman
+F-0050|Green Light; Eng Problem|Holman Remarketing
+F-0054|Green Light; Eng Problem|Holman Remarketing
+F-0052||Holman Remarketing
+F-0056|Green Light; Eng Problem; Frame Damage; Theft History|Holman Remarketing
+F-0063||Holman Remarketing
+F-0062||Holman Remarketing
+F-0061|Green Light; Frame Damage|Holman Remarketing
+F-0064|Green Light; Frame Damage|Holman Remarketing
+F-0058|Green Light; Frame Damage|Holman Remarketing
+F-0060|Green Light; Frame Damage|Holman Remarketing
+F-0065|Green Light; Frame Damage|Holman Remarketing
+F-0059|Green Light; Frame Damage|Holman Remarketing
+F-0071||Holman Remarketing
+F-0072|As-Is; Altered Suspension|Holman Remarketing
+F-0067|Green Light; Trans Issue|Holman Remarketing
+F-0068|Green Light; Trans Issue|Holman Remarketing
+F-0070||Holman Remarketing
+F-0066|Green Light; Trans Issue|Holman Remarketing
+F-0069|Green Light; Trans Problem|Holman
+F-0073|As-Is|Holman
+F-0076||Holman Remarketing
+F-0080|(A)Tmu|Holman Remarketing
+F-0074||Holman Remarketing
+F-0075||Holman Remarketing
+F-0081|Structural Damage|Holman Remarketing
+F-0079|As-Is|Holman Remarketing
+F-0077|As-Is|Holman Remarketing
+F-0078|As-Is|Holman
+F-0083|As-Is|Holman Remarketing
+F-0082|As-Is|Holman Remarketing
+F-0084|As-Is|Holman Remarketing
+F-0089|As-Is|Holman Remarketing
+F-0086|As-Is; Frame Damage|Holman Remarketing
+F-0087|As-Is|Holman Remarketing
+F-0085|As-Is|Holman Remarketing
+F-0088|As-Is|Holman Remarketing
+F-0093|As-Is|Holman Remarketing
+F-0090|As-Is|Holman Remarketing
+F-0096||Holman Remarketing
+F-0092|As-Is|Holman Remarketing
+F-0095|Frame Alteration|Holman Remarketing
+F-0091|As-Is|Holman Remarketing
+F-0094|As-Is; Frame Damage|Holman Remarketing
+F-0097|True Mileage Unknown/Nam|Holman Remarketing
+F-0104||Holman Remarketing
+F-0103||Holman Remarketing
+F-0099||Holman Remarketing
+F-0110||Holman Remarketing
+F-0107|Not Actual Miles|Holman Remarketing
+F-0105|Missing Air Bag|Holman Remarketing
+F-0108||Holman Remarketing
+F-0101||Holman Remarketing
+F-0122||Holman Remarketing
+F-0112||Holman Remarketing
+F-0119||Holman Remarketing
+F-0111||Holman Remarketing
+F-0113||Holman Remarketing
+F-0115||Holman Remarketing
+F-0121||Holman Remarketing
+F-0118||Holman Remarketing
+F-0131||Holman Remarketing
+F-0128||Holman Remarketing
+F-0125|Prev Local Government Use|Holman Remarketing
+F-0123|Insurance Title; Rebuilt Salvage Title; Prev Titled/Registered To An Insurance Company; No Arb.|Holman Remarketing
+F-0130||Holman Remarketing
+F-0127||Holman Remarketing
+F-0124||Holman Remarketing
+F-0126||Holman Remarketing
+F-0133||Holman Remarketing
+F-0137||Holman Remarketing
+F-0136|Nam|Holman Remarketing
+F-0134|Rebuilt Salvage Title; Insurance Loss; Rebuilt; No Arb.|Holman Remarketing
+F-0139||Holman Remarketing
+F-0132|(A)Frame Damage|Holman Remarketing
+F-0138||Holman Remarketing
+F-0135|Red Light|Holman Remarketing
+PS-0001|Bos/Parts Only; No Title|NCS Vehicle Donations
+S-0001||Holman Remarketing
+F-0141||Holman Remarketing
+F-0140||Holman Remarketing
+PS-0002|As-Is/No Arb; Off Highway Use Only|Holman
+T-0003||NCS Vehicle Donations
+T-0001|Bos/Parts Only; No Title|NCS Vehicle Donations
+T-0002|Frame Damage; Bos/Parts Only; No Title|NCS Vehicle Donations
+T-0009||Ron Carter Ford
+T-0005||
+T-0012||
+T-0011||
+T-0013||
+T-0008||West Houston Hyundai
+T-0004|Red Light|
+T-0010||Elite Motor Group Limited LLC
+T-0015||
+T-0016||Mike Calvert Toyota
+T-0014||
+T-0018||Tomball Ford
+T-0017|Frame Dmg|NCS Vehicle Donations
+T-0501|As-Is/No Arb|Bridgecrest Credit
+T-0502|As-Is/No Arb|Bridgecrest Credit
+T-0500|As-Is/No Arb|Bridgecrest Credit
+T-0504|As-Is/No Arb|Bridgecrest Credit
+T-0508|As-Is/No Arb; Eng Runs|Bridgecrest Credit
+T-0505|As-Is/No Arb|Bridgecrest Credit
+T-0507|As-Is/No Arb|Bridgecrest Credit
+T-0539|Red Light/ No Arb; Bad Starter|
+T-0509|As-Is/No Arb|Bridgecrest Credit
+T-0506|As-Is/No Arb; Nam|Bridgecrest Credit
+T-0503|As-Is/No Arb|Bridgecrest Credit
+TR-0001||NCS Vehicle Donations
+T-0559|Rebuilt Salvage Title; Insurance Loss; Prev Titled/Registered To An Insurance Company; Structural Damage / No Arb.|Holman Remarketing
+T-0553|As-Is/Inop; Diesel; Exempt|Holman
+T-0550|As-Is/Inop; Diesel|Holman
+T-0558||Holman Remarketing
+T-0540|Insurance Loss; Prev Titled/Registered To An Insurance Company; Bonded Title; No Arb.|
+T-0551|As-Is/Inop; Diesel|Holman
+T-0552|As-Is/Inop; Diesel|Holman
