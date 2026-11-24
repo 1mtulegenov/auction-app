@@ -1,295 +1,320 @@
-A-0005||Tom Peacock Cadillac
-A-0007||Tom Peacock Cadillac
-A-0006||Tom Peacock Cadillac
-A-0010||Keating Honda
 A-0002||Tom Peacock Cadillac
+A-0010||Keating Honda
+A-0006||Tom Peacock Cadillac
 A-0001||Tom Peacock Cadillac
-A-0008||Tom Peacock Cadillac
 A-0004||Tom Peacock Cadillac
+A-0007||Tom Peacock Cadillac
+A-0008||Tom Peacock Cadillac
+A-0005||Tom Peacock Cadillac
+A-0029||Keating Chevrolet
+A-0014||America's Auto Auction
+A-0032||Keating Chevrolet
+A-0028||Keating Chevrolet
+A-0013||America's Auto Auction
+A-0031||Keating Chevrolet
+A-0033||Keating Chevrolet
+A-0030||Keating Chevrolet
+A-0036||Keating Chevrolet
+A-0035||Keating Chevrolet
 A-0038||Keating Chevrolet
 A-0040|Gooseneck|Keating Chevrolet
-A-0039||Keating Chevrolet
 A-0042||Keating Chevrolet
-A-0041||Keating Chevrolet
-A-0036||Keating Chevrolet
 A-0037||Keating Chevrolet
-A-0043||Keating Chevrolet
-A-0049||Texan Hyundai
-A-0044|Mileage Discrepency|Texan Hyundai
-A-0051||Team Gillman
+A-0039||Keating Chevrolet
+A-0041||Keating Chevrolet
+A-0049|Not Actual Miles|Texan Hyundai
+A-0048||Texan Hyundai
 A-0045||Texan Hyundai
+A-0043||Keating Chevrolet
+A-0044||Texan Hyundai
+A-0050||Team Gillman
 A-0046||Texan Hyundai
 A-0047||Texan Hyundai
-A-0048||Texan Hyundai
-A-0050||Team Gillman
-A-0056||Team Gillman
 A-0055|Mileage Discrepency|Team Gillman
-A-0053||Team Gillman
-A-0057||Team Gillman
-A-0052|Bonded Title|Team Gillman
-A-0054||Team Gillman
+A-0056||Team Gillman
 A-0058||Team Gillman
+A-0051||Team Gillman
+A-0057||Team Gillman
 A-0059||Team Gillman
-A-0087||Tom Peacock Nissan
-A-0088||Group 1 Automotive
+A-0052|Bonded Title; Metal Bumper Modification|Team Gillman
+A-0053||Team Gillman
 A-0063||Team Gillman
 A-0064||Team Gillman
-A-0061||Team Gillman
 A-0060||Team Gillman
-A-0065||Team Gillman
+A-0067||Team Gillman
+A-0061|Structural Damage|Team Gillman
 A-0062|Insurance Title; As Is No Arb|Team Gillman
+A-0066||Team Gillman
+A-0065||Team Gillman
 A-0091||Group 1 Automotive
 A-0095||Group 1 Automotive
-A-0089||Group 1 Automotive
 A-0093||Group 1 Automotive
-A-0090||Friendly Chrysler Dodge Jeep Ram
-A-0097||Cook Chrysler Jeep Dodge Ram
+A-0087||Tom Peacock Nissan
+A-0068||Team Gillman
 A-0094|Gooseneck|Group 1 Automotive
-A-0096||
-A-0104||Classic Chevrolet
-A-0099||Classic Chevrolet
-A-0103||Classic Chevrolet
-A-0100||Classic Chevrolet
+A-0089||Group 1 Automotive
+A-0090||Friendly Chrysler Dodge Jeep Ram
 A-0102||Classic Chevrolet
-A-0107||West Point Lincol
-A-0101||Classic Chevrolet
+A-0096||
+A-0103||Classic Chevrolet
+A-0099||Classic Chevrolet
 A-0098||Cook Chrysler Jeep Dodge Ram
-A-0108||West Point Lincol
-B-0002||Westside Chevrolet
-A-0114||
-B-0003||Westside Chevrolet
-A-0111||Robbins Nissan
+A-0100||Classic Chevrolet
+A-0097||Cook Chrysler Jeep Dodge Ram
+A-0101||Classic Chevrolet
+A-0107||West Point Lincol
 B-0001||Westside Chevrolet
-A-0113|Green Light|Doggett Ford
 A-0112|Susp Alt|Robbins Nissan
-B-0004||Westside Chevrolet
-B-0010|Bill Of Sale; No Title; Parts Only|America's Auto Auction
+A-0114||
+A-0108||West Point Lincol
+A-0111||Robbins Nissan
+A-0104||Classic Chevrolet
+A-0113|Green Light|Doggett Ford
 B-0007||Westside Chevrolet
-B-0006||Westside Chevrolet
-B-0011|After Market 5th Wheel|Gullo Mazda
-B-0012||Gullo Mazda
-B-0016||Gullo Ford
+B-0004||Westside Chevrolet
 B-0005||Westside Chevrolet
-B-0020||Gullo Ford
-B-0023||Gullo Ford
-B-0017||Gullo Ford
-B-0021||Gullo Ford
-B-0024||Gullo Ford
-B-0022|Insurance Title; As Is No Arb|Gullo Ford
+B-0003||Westside Chevrolet
+B-0002||Westside Chevrolet
+B-0010|Bill Of Sale; No Title; Parts Only|America's Auto Auction
+B-0011|After Market 5th Wheel|Gullo Mazda
+B-0006||Westside Chevrolet
 B-0018||Gullo Ford
+B-0017||Gullo Ford
+B-0014||Gullo Mazda
 B-0019||Gullo Ford
-B-0045|Mileage Discrepency|Fred Haas Toyota World
-B-0048|Rebuilt Slvg Title; As Is No Arb|Fred Haas Toyota World
-B-0046|Gooseneck|Fred Haas Toyota World
-B-0025||Gullo Ford
-B-0049||Fred Haas Toyota World
+B-0016||Gullo Ford
+B-0013||Gullo Mazda
+B-0012||Gullo Mazda
+B-0015||Gullo Mazda
+B-0022|Insurance Title; As Is No Arb|Gullo Ford
+B-0024||Gullo Ford
+B-0026|Floor Pan Damage|Gullo Ford
+B-0023||Gullo Ford
+B-0020||Gullo Ford
+B-0021||Gullo Ford
 B-0027||Gullo Ford
+B-0025||Gullo Ford
+B-0045|Mileage Discrepency|Fred Haas Toyota World
+B-0049||Fred Haas Toyota World
+B-0046|Gooseneck|Fred Haas Toyota World
+B-0048|Rebuilt Slvg Title; As Is No Arb|Fred Haas Toyota World
+B-0029||Gullo Ford
 B-0042||Fred Haas Toyota World
 B-0044|Canadian Import|Fred Haas Toyota World
-B-0052||Fred Haas Toyota World
 B-0050||Fred Haas Toyota World
-B-0055||Fred Haas Toyota World
 B-0056||Fred Haas Toyota World
+B-0051|Structural Damage|Fred Haas Toyota World
+B-0052||Fred Haas Toyota World
+B-0057||Fred Haas Toyota World
+B-0055||Fred Haas Toyota World
+B-0058|Mileage Discrepency|Fred Haas Toyota World
 B-0053||Fred Haas Toyota World
 B-0054||Fred Haas Toyota World
-B-0057||Fred Haas Toyota World
-B-0051|Structural Damage|Fred Haas Toyota World
-B-0061||Fred Haas Toyota World
-B-0060||Fred Haas Toyota World
-B-0058|Mileage Discrepency|Fred Haas Toyota World
-B-0062||Fred Haas Toyota World
 B-0063||Fred Haas Toyota World
-B-0064||Fred Haas Toyota World
-B-0065||Fred Haas Toyota World
-B-0059||Fred Haas Toyota World
 B-0066||Fred Haas Toyota World
-B-0068||Fred Haas Toyota World
+B-0064||Fred Haas Toyota World
+B-0060||Fred Haas Toyota World
+B-0065||Fred Haas Toyota World
+B-0062||Fred Haas Toyota World
+B-0059||Fred Haas Toyota World
+B-0061||Fred Haas Toyota World
 B-0067||Fred Haas Toyota World
 B-0071||Fred Haas Toyota World
-B-0074||Fred Haas Toyota World
-B-0073||Fred Haas Toyota World
-B-0075||Fred Haas Toyota World
 B-0069||Fred Haas Toyota World
 B-0077|Rebuilt Slvg Title; As Is No Arb; Not Actual Miles|Fred Haas Toyota World
-B-0088||
+B-0075||Fred Haas Toyota World
+B-0073||Fred Haas Toyota World
+B-0074||Fred Haas Toyota World
+B-0068||Fred Haas Toyota World
+B-0089|Altered For Lift|
 B-0084|Rebuilt Slvg Title; As Is No Arb; Water Damage|Wiesner Buick GMC
+B-0088||
 B-0082||Wiesner Buick GMC
-B-0080||Wiesner Buick GMC
-B-0087||
 B-0078||Wiesner Buick GMC
 B-0086||
-B-0089|Altered For Lift|
-B-0093||
-B-0091||
-B-0090||
-C-0001||DeMontrond Auto Group
-B-0092||
-C-0003|Gooseneck|DeMontrond Auto Group
+B-0080||Wiesner Buick GMC
+B-0087||
 C-0002||DeMontrond Auto Group
-C-0005|Structural Damage|DeMontrond Auto Group
+B-0090||
+B-0093||
+C-0003|Gooseneck|DeMontrond Auto Group
+C-0001||DeMontrond Auto Group
+B-0091||
+B-0092||
+C-0004|Gooseneck; Green Light|DeMontrond Auto Group
 C-0009||DeMontrond Auto Group
-C-0006||DeMontrond Auto Group
-C-0008||DeMontrond Auto Group
+C-0005|Structural Damage|DeMontrond Auto Group
 C-0007||DeMontrond Auto Group
+C-0008||DeMontrond Auto Group
+C-0014||Planet Ford
+C-0006||DeMontrond Auto Group
 C-0010||DeMontrond Auto Group
 C-0013||Planet Ford
-C-0004|Gooseneck; Green Light|DeMontrond Auto Group
-C-0014||Planet Ford
-C-0043||Don McGill Toyota
+C-0017||Planet Ford
+C-0018||Planet Ford
+C-0020||Planet Ford
+C-0021||Planet Ford
+C-0019||Planet Ford
+C-0015||Planet Ford
 C-0016||Planet Ford
 C-0041||Don McGill Toyota
-C-0015||Planet Ford
-C-0018||Planet Ford
-C-0017||Planet Ford
 C-0042||Don McGill Toyota
-C-0050||Don McGill Toyota
-C-0048||Don McGill Toyota
-C-0046||Don McGill Toyota
 C-0044||Don McGill Toyota
-C-0049||Don McGill Toyota
+C-0046||Don McGill Toyota
+C-0043||Don McGill Toyota
+C-0048||Don McGill Toyota
 C-0045||Don McGill Toyota
+C-0049||Don McGill Toyota
 C-0047||Don McGill Toyota
-C-0051||Don McGill Toyota
+C-0050||Don McGill Toyota
 C-0053|Not Actual Miles; Rebuilt Slvg Title; As Is No Arb|Don McGill Toyota
-C-0059||Don McGill Toyota
-C-0056||Don McGill Toyota
-C-0055||Don McGill Toyota
 C-0057||Don McGill Toyota
-C-0052||Don McGill Toyota
-D-0001|Rebuilt Slvg Title; As Is No Arb|Team Gillman
 C-0054||Don McGill Toyota
-D-0009||Team Gillman
+C-0056||Don McGill Toyota
+C-0051||Don McGill Toyota
+C-0052||Don McGill Toyota
+C-0055||Don McGill Toyota
+D-0001|Rebuilt Slvg Title; As Is No Arb|Team Gillman
 D-0004||Kramer Autoplex
+C-0059||Don McGill Toyota
 D-0006|True Miles Unknown|Lithia Motors
 D-0005||Planet Ford
-D-0003||Lithia Motors
 D-0002||Lithia Motors
 D-0007||Group 1 Automotive
-D-0008|True Miles Unknown; Insurance Title; As Is No Arb|North Houston Mitsubishi
-D-0012||Westside Chevrolet
-EA-0003||Keating Nissan
-D-0010|True Miles Unknown|Fred Haas Toyota World
-EA-0002|Mileage Discrepency|Keating Honda
+D-0003||Lithia Motors
 D-0013||Team Gillman
+D-0012||Westside Chevrolet
 EA-0001||Keating Honda
 D-0011||Huntsville Toyota
 D-0014||Keating Chevrolet
-EA-0007||Keating Nissan
+D-0008|True Miles Unknown; Insurance Title; As Is No Arb|North Houston Mitsubishi
+D-0010|True Miles Unknown|Fred Haas Toyota World
+D-0009||Team Gillman
+EA-0002|Mileage Discrepency|Keating Honda
 EA-0005||Keating Nissan
-EA-0010||College Station Ford
 EA-0004||Keating Nissan
-EA-0006||Keating Nissan
-EA-0008||Keating Nissan
-EA-0011||College Station Ford
 EA-0009||College Station Ford
-EA-0015||College Station Ford
-EA-0012||College Station Ford
-FL-0004||
-EA-0013||College Station Ford
-FL-0003||
+EA-0008||Keating Nissan
+EA-0007||Keating Nissan
+EA-0006||Keating Nissan
+EA-0003||Keating Nissan
 EA-0014||College Station Ford
-FL-0002||
+EA-0015||College Station Ford
+EA-0010||College Station Ford
+EA-0011||College Station Ford
+EA-0013||College Station Ford
+EA-0012||College Station Ford
 FL-0001|Structural Damage|
-N-0005||Aggieland Chevrolet
-N-0004||Aggieland Chevrolet
-N-0002||Aggieland Chevrolet
+FL-0002||
 N-0001||Aggieland Chevrolet
-N-0003||Aggieland Chevrolet
-FL-0006|Green Light|Barco Rent-A-Truck
+N-0002||Aggieland Chevrolet
+FL-0008|Hail Damage|Meridian Remarketing
+FL-0004||
+FL-0003||
 FL-0007|Hail Damage; Green Light|Barco Rent-A-Truck
 FL-0005|Green Light|Barco Rent-A-Truck
-N-0006||Aggieland Chevrolet
-N-0009||Aggieland Chevrolet
-N-0012||College Station Ford
+FL-0006|Green Light|Barco Rent-A-Truck
+N-0010||College Station Ford
 N-0007||Aggieland Chevrolet
 N-0011||College Station Ford
-N-0010||College Station Ford
-N-0013||College Station Ford
+N-0009||Aggieland Chevrolet
+N-0005||Aggieland Chevrolet
+N-0003||Aggieland Chevrolet
 N-0008||Aggieland Chevrolet
-N-0014||College Station Nissan
-N-0019||Archer Volkswagen
-N-0021||Archer Volkswagen
-N-0016||College Station Hyundai
-N-0018||Archer Volkswagen
+N-0004||Aggieland Chevrolet
 N-0017||Archer Volkswagen
-N-0020|Structural Damage|Archer Volkswagen
+N-0013||College Station Ford
+N-0016||College Station Hyundai
+N-0012||College Station Ford
+N-0014||College Station Nissan
 N-0015|Gooseneck|College Station Nissan
+N-0019||Archer Volkswagen
+N-0018||Archer Volkswagen
 N-0022||Archer Volkswagen
-N-0028||Huntsville Toyota
+N-0026||Huntsville Toyota
+N-0021||Archer Volkswagen
+N-0020|Structural Damage|Archer Volkswagen
+N-0027|Rebuilt Slvg Title; As Is No Arb; Bonded Title; History Of Theft|Huntsville Toyota
 N-0024||Beck & Masten KIA
 N-0023||Beck & Masten KIA
-N-0026||Huntsville Toyota
-N-0029||Huntsville Toyota
 N-0025||Beck & Masten KIA
-N-0027|Rebuilt Slvg Title; As Is No Arb; Bonded Title; History Of Theft|Huntsville Toyota
-N-0033||Huntsville Toyota
-N-0037||Huntsville Toyota
-N-0038||Huntsville Toyota
-N-0034||Huntsville Toyota
-N-0030||Huntsville Toyota
-N-0032||Huntsville Toyota
 N-0031||Huntsville Toyota
+N-0029||Huntsville Toyota
+N-0030||Huntsville Toyota
+N-0028||Huntsville Toyota
 N-0035||Huntsville Toyota
+N-0034||Huntsville Toyota
+N-0032||Huntsville Toyota
+N-0033||Huntsville Toyota
+N-0040||Huntsville Toyota
+N-0038||Huntsville Toyota
+N-0042||Lithia Motors
+N-0039|Mileage Discrepency|Huntsville Toyota
+N-0037||Huntsville Toyota
 N-0044||North Houston Mitsubishi
 N-0043|Rebuilt Slvg Title; As Is No Arb; Not Actual Miles|North Houston Mitsubishi
-N-0040||Huntsville Toyota
-N-0039|Mileage Discrepency|Huntsville Toyota
 N-0041||Huntsville Toyota
+N-0047||North Houston Mitsubishi
+N-0051||Loving Nissan
 N-0045|Insurance Title; As Is No Arb|North Houston Mitsubishi
-N-0042||Lithia Motors
+N-0049||San Augustine Motor Company
 N-0046||North Houston Mitsubishi
+N-0052||Loving Nissan
+N-0050||Loving Nissan
 N-0053||Gabriel Jordan Ford
+N-0060||Wright Buick GMC
+N-0058||Wright Buick GMC
 N-0055|Gooseneck|Gabriel Jordan Ford
 N-0056||Gabriel Jordan Ford
-N-0054||Gabriel Jordan Ford
-N-0052||Loving Nissan
-N-0051||Loving Nissan
-N-0047||North Houston Mitsubishi
-N-0050||Loving Nissan
-N-0068||Parkway Automotive
 N-0061|Rebuilt Slvg Title; As Is No Arb|Gulf Coast Ford
-N-0058||Wright Buick GMC
-N-0062||Appel Ford
-N-0059||Wright Buick GMC
 N-0057||Gabriel Jordan Ford
+N-0059||Wright Buick GMC
+N-0054||Gabriel Jordan Ford
+N-0068||Parkway Automotive
+N-0067||San Augustine Motor Company
+N-0065||Parkway Automotive
+N-0069||San Augustine Motor Company
+N-0066||Parkway Automotive
+N-0064||Parkway Automotive
 N-0063||Appel Ford
-N-0060||Wright Buick GMC
-N-0070||San Augustine Motor Company
-N-0071||San Augustine Motor Company
+N-0062||Appel Ford
 N-0076||ThisCar
-N-0075||ThisCar
-N-0073||ThisCar
-N-0074||ThisCar
 N-0072||ThisCar
+N-0074||ThisCar
+N-0073||ThisCar
+N-0071||San Augustine Motor Company
+N-0070||San Augustine Motor Company
 N-0077||ThisCar
+N-0075||ThisCar
 N-0078||ThisCar
-N-0079||ThisCar
-N-0080||ThisCar
-N-0085||West Point Lincol
 N-0086||Woodlake Motors
-N-0084||West Point Lincol
-N-0083||West Point Lincol
 N-0082||West Point Lincol
-N-0091||
-N-0090|Lift Gate|
-N-0094||
-N-0087||Woodlake Motors
+N-0079||ThisCar
+N-0084||West Point Lincol
+N-0080||ThisCar
+N-0083||West Point Lincol
+N-0085||West Point Lincol
 N-0092||
+N-0094||
+N-0090|Lift Gate|
 N-0093||
+N-0087||Woodlake Motors
 N-0088|(A)Structural Damage|
 N-0089|Altered For Lift|
-N-0097||
-N-0101|Salvage; Water Damage; As Is No Arb|
-N-0095||
+N-0091||
 N-0099||
+N-0101|Salvage; Water Damage; As Is No Arb|
 N-0102|Reported As Total Loss; As Is No Arb|
+N-0097||
 N-0100||
+N-0095||
 N-0096|Structural Damage|
 N-0098||
-N-0107|Not Actual Miles|
-N-0104|Rebuilt Slvg Title; As Is No Arb|
-N-0109||
 N-0105||
 N-0106|Rebuilt Slvg Title; As Is No Arb|
-N-0108|Structural Damage; Mileage Discrepency|
+N-0104|Rebuilt Slvg Title; As Is No Arb|
+N-0107|Not Actual Miles|
 N-0103||
+N-0109||
+N-0108|Structural Damage; Mileage Discrepency|
+N-0110|Mileage Discrepency|
