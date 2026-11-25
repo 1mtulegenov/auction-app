@@ -5,6 +5,10 @@ const LOCALE = { en: 'en-US', ru: 'ru-RU', uk: 'uk-UA', es: 'es-US', kk: 'kk-KZ'
 const LI = { en: 0, uk: 1, es: 2, kk: 3 }[LANG];
 document.documentElement.lang = LANG;
 const I18N = {
+"Подборка строится по вашим сохранённым поискам, а их пока нет. Сохраните поиск, и здесь появятся подходящие машины с хорошей прибылью.": ["Picks are built from your saved searches, and you have none yet. Save a search and profitable matching cars will show up here.", "Добірка будується за вашими збереженими пошуками, а їх поки немає. Збережіть пошук, і тут з'являться відповідні машини з хорошим прибутком.", "La selección se basa en sus búsquedas guardadas y aún no tiene ninguna. Guarde una búsqueda y aquí aparecerán autos rentables que coincidan.", "Іріктеме сақталған іздеулеріңіз бойынша жасалады, ал олар әзірге жоқ. Іздеуді сақтаңыз, сонда мұнда пайдалы көліктер шығады."],
+"На эту дату среди машин по вашим поискам нет выгодных.": ["No profitable cars from your searches on this date.", "На цю дату серед машин за вашими пошуками немає вигідних.", "No hay autos rentables de sus búsquedas en esta fecha.", "Бұл күнге іздеулеріңіз бойынша пайдалы көлік жоқ."],
+"Несколько марок сразу": ["Several makes at once", "Кілька марок одразу", "Varias marcas a la vez", "Бірнеше марка бірден"],
+"Отметьте марки: подойдёт любая модель каждой из них. Можно вместе с машинами выше.": ["Tick makes: any model of each will match. Works together with the cars above.", "Позначте марки: підійде будь-яка модель кожної з них. Можна разом з машинами вище.", "Marque las marcas: coincidirá cualquier modelo de cada una. Se combina con los autos de arriba.", "Маркаларды белгілеңіз: әрқайсысының кез келген моделі сәйкес келеді. Жоғарыдағы көліктермен бірге болады."],
 "Все права защищены.": ["All rights reserved.", "Усі права захищені.", "Todos los derechos reservados.", "Барлық құқықтар қорғалған."],
 " — лота больше нет в каталоге": [" — lot no longer in the catalog", " — лота більше немає в каталозі", " — el lote ya no está en el catálogo", " — лот каталогта енді жоқ"],
 "Избранное": ["Favorites", "Обране", "Favoritos", "Таңдаулылар"],

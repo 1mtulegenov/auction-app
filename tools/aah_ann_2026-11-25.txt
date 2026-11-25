@@ -656,3 +656,8 @@ T-0020||Marios Used Cars
 T-0510|As-Is/No Arb; Theft History|Bridgecrest Credit
 T-0511|Frame Damage; As-Is/No Arb|Bridgecrest Credit
 T-0560|Odo Inoperable; Repainted|Holman Remarketing
+C-0152||Tomball Ford
+D-0068||
+EE-0029||
+EE-0035||Planet Ford
+T-0022||Superior Subaru of Houston

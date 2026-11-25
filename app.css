@@ -665,3 +665,6 @@ main{overflow-x:clip}
 .snd-t.bad{color:#d64545;font-weight:600}
 .snd-d audio{width:100%;margin:4px 0 8px}
 .snd-d .snd-t{margin:0 0 6px}
+.srch-mkd{margin:10px 0}
+.srch-mkd summary{cursor:pointer;font-weight:600;padding:8px 0}
+.srch-mks{max-height:300px;overflow:auto}

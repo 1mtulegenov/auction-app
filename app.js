@@ -594,27 +594,30 @@ function home() {
     + '<div class="hd"><h1>' + E(dTitle(d)) + '</h1>' + (LANG === 'ru' ? '<p>' + E(d.lead) + '</p>' : '') + '</div>' + feesCard()
     + '<div class="tiles">'
     + '<button class="tile" data-go="lots" data-quick=""><b>' + d.lots.length + '</b><span>' + T('лотов в каталоге') + '</span></button>'
-    + '<button class="tile" data-go="picks" data-pick="core"><b>' + d.core.length + '</b><span>' + T('дороже $5 000 в подборке') + '</span></button>'
-    + '<button class="tile" data-go="picks" data-pick="flip"><b>' + d.flip.length + '</b><span>' + T('для флипа до $5 000') + '</span></button>'
+    + '<button class="tile" data-go="picks" data-pick="core"><b>' + pickList('core').length + '</b><span>' + T('дороже $5 000 в подборке') + '</span></button>'
+    + '<button class="tile" data-go="picks" data-pick="flip"><b>' + pickList('flip').length + '</b><span>' + T('для флипа до $5 000') + '</span></button>'
     + '<button class="tile" data-go="fav"><b>' + favN + '</b><span>' + T('в избранном') + (notesN ? T(', заметок ') + notesN : '') + '</span></button>'
     + '</div>'
     + (Object.keys(aucs).length > 1 ? '<h2>' + T('Площадки') + '</h2><div class="rows">' + Object.entries(aucs).map(([a, o]) => '<button class="r" data-go="lots" data-au="' + a + '"><div class="l"><b>' + E(AUC[a] || a) + '</b><br><small>' + T('старт около ') + o.t + '</small></div><div class="rt"><b>' + o.n + '</b><small>' + T('лотов') + '</small></div></button>').join('') + '</div>' : '')
     + (best.length ? '<h2>' + T('Лучшие по прибыли') + '</h2><div class="list" id="bestList">' + best.map(lotCard).join('') + '</div><button class="more" data-go="picks">' + T('Вся подборка') + '</button>' : '')
     + '<p class="foot">' + T('Данные обновлены ') + E(fmtUpdated(S.index.updated)) + T('. Комиссия ') + M(FEE) + T(' на машину.') + '</p>';
 }
-function bestLots() { const d = S.d; return d.core.concat(d.flip).map(k => d.map[k]).filter(Boolean).sort((a, b) => (b.prof || 0) - (a.prof || 0)).slice(0, 6); }
+// подборка у каждого аккаунта своя: только машины, подходящие под его сохранённые поиски
+const srchHit = x => (S.srch || []).some(s => s && s.q && SearchMatch.match(x, s.q));
+function pickList(kind) { const d = S.d; return (d[kind] || []).map(k => d.map[k]).filter(Boolean).filter(srchHit); }
+function bestLots() { return pickList('core').concat(pickList('flip')).sort((a, b) => (b.prof || 0) - (a.prof || 0)).slice(0, 6); }
 function picks() {
   const d = S.d;
   if (S.picks === 'fav') S.picks = 'core';
-  const seg = [['core', '$5 000+', d.core.length], ['flip', T('Флип'), d.flip.length]];
-  let list = (d[S.picks] || []).map(k => d.map[k]).filter(Boolean);
+  const seg = [['core', '$5 000+', pickList('core').length], ['flip', T('Флип'), pickList('flip').length]];
+  let list = pickList(S.picks);
   const aucs = [...new Set(list.map(x => x.auc))];
   const pa = S.pickAuc && aucs.includes(S.pickAuc) ? S.pickAuc : '';
   if (pa) list = list.filter(x => x.auc === pa);
   return '<div class="seg" role="group">' + seg.map(([k, l, n]) => '<button data-pick="' + k + '" aria-pressed="' + (S.picks === k) + '">' + l + ' <span class="muted">' + n + '</span></button>').join('') + '</div>'
     + (aucs.length > 1 ? '<div class="qf">' + [''].concat(aucs).map(a => '<button data-pauc="' + a + '" aria-pressed="' + (pa === a) + '">' + (a ? E(AUC[a] || a) : T('Все площадки')) + '</button>').join('') + '</div>' : '')
     + (list.length ? '<div class="list">' + list.map(lotCard).join('') + '</div>'
-      : '<p class="empty">' + (S.picks === 'fav' ? T('Пока пусто. Нажмите ☆ на карточке машины, чтобы собрать свой список на торги.') : T('В подборке на эту дату машин нет.')) + '</p>');
+      : '<p class="empty">' + (S.picks === 'fav' ? T('Пока пусто. Нажмите ☆ на карточке машины, чтобы собрать свой список на торги.') : !(S.srch || []).length ? T('Подборка строится по вашим сохранённым поискам, а их пока нет. Сохраните поиск, и здесь появятся подходящие машины с хорошей прибылью.') + '</p><button class="btn pri srch-new" data-act="srch-new">＋ ' + T('Новый поиск') + '</button><p>' : T('На эту дату среди машин по вашим поискам нет выгодных.')) + '</p>');
 }
 // избранное со всех дат: ближайшие торги сверху
 async function favScreen() {
@@ -878,7 +881,9 @@ async function inspLoad(x) {
 document.addEventListener('change', e => { if (e.target.id === 'inFile') { const fs = [...e.target.files]; e.target.value = ''; if (fs.length) inspAdd(fs); } });
 
 /* ---------- сохранённые поиски: свои у каждого аккаунта, пуш при новом аукционе с совпадениями ---------- */
-S.srch = LS.get('srch-v1', []);
+// на телефоне поиски лежат отдельно для каждого аккаунта (srch-v1:<uid>), чтобы при смене входа не смешивались
+const srchKey = () => 'srch-v1' + (window.Sync && Sync.st.user ? ':' + Sync.st.user.uid : '');
+S.srch = [];
 let ALL_LOTS = null, ALL_V = null;
 async function allLots() {
   if (ALL_LOTS && ALL_V === S.index.version) return ALL_LOTS;
@@ -888,7 +893,7 @@ async function allLots() {
 }
 const todayCT = () => { try { return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Chicago' }); } catch (e) { return new Date().toISOString().slice(0, 10); } };
 function srchSave() {
-  LS.set('srch-v1', S.srch);
+  LS.set(srchKey(), S.srch);
   if (window.Sync && Sync.st.user && Sync.saveSearches) Sync.saveSearches(S.srch).catch(e => toast(T('Поиск сохранён только на телефоне: ') + (e.message || e)));
 }
 async function srchPull() {
@@ -896,8 +901,8 @@ async function srchPull() {
   const l = await Sync.loadSearches();
   if (l == null) return;
   if (!l.length && S.srch.length) { srchSave(); return; } // первый раз: отправляем то, что было на телефоне
-  S.srch = l; LS.set('srch-v1', l);
-  if ((S.tab === 'srch' || S.tab === 'srchres') && !sheetOpen) render();
+  S.srch = l; LS.set(srchKey(), l);
+  if (['srch', 'srchres', 'home', 'picks'].includes(S.tab) && !sheetOpen) render();
 }
 function srchMatches(s, lots, from) { return lots.filter(x => (!from || x._d >= from) && SearchMatch.match(x, s.q)); }
 async function srchScreen() {
@@ -932,7 +937,10 @@ async function srchEdit(id) {
   const mks = [...new Set(lots.map(x => x.mk).filter(Boolean))].sort();
   const mdBy = {}; lots.forEach(x => { if (x.mk && x.md) (mdBy[x.mk] = mdBy[x.mk] || new Set()).add(x.md); });
   S.srchMd = Object.fromEntries(Object.entries(mdBy).map(([k, v]) => [k, [...v].sort()]));
-  const q = s.q, cars = (q.cars && q.cars.length ? q.cars : [{}]);
+  const q = s.q, bare = c => c && c.mk && !c.md && !c.y1 && !c.y2;
+  // марка без модели и годов показывается галочкой в списке марок, остальные машины строками
+  const mkOn = new Set((q.cars || []).filter(bare).map(c => c.mk));
+  let cars = (q.cars || []).filter(c => c && (c.mk || c.md) && !bare(c)); if (!cars.length) cars = [{}];
   const aucs = [...new Set(lots.map(x => x.auc))].sort();
   const num = (id, v, ph) => '<input id="' + id + '" type="number" inputmode="numeric" value="' + E(v == null ? '' : v) + '" placeholder="' + E(ph) + '">';
   const chk = (id, v, l) => '<label class="srch-ck"><input type="checkbox" id="' + id + '"' + (v ? ' checked' : '') + '> ' + l + '</label>';
@@ -940,6 +948,7 @@ async function srchEdit(id) {
     + '<label class="srch-l">' + T('Название') + '<input id="sq_name" value="' + E(s.name) + '" placeholder="' + T('Например: Тако и 4Runner') + '"></label>'
     + '<h3>' + T('Машины') + '</h3><p class="muted">' + T('Можно несколько: подойдёт любая из них. Модель можно не выбирать: тогда вся марка.') + '</p><div id="sq_cars">' + cars.map((c, i) => srchCarRow(c, mks)).join('') + '</div>'
     + '<button class="btn" data-act="srch-addcar">＋ ' + T('Ещё машина') + '</button>'
+    + '<details class="srch-mkd"' + (mkOn.size ? ' open' : '') + '><summary>' + T('Несколько марок сразу') + ' <span class="muted" id="sq_mkn">' + (mkOn.size ? mkOn.size : '') + '</span></summary><p class="muted">' + T('Отметьте марки: подойдёт любая модель каждой из них. Можно вместе с машинами выше.') + '</p><div class="srch-aucs srch-mks">' + mks.map(m => '<label class="srch-ck"><input type="checkbox" class="sq-mk" value="' + E(m) + '"' + (mkOn.has(m) ? ' checked' : '') + '> ' + E(m) + '</label>').join('') + '</div></details>'
     + '<h3>' + T('Годы для всех машин') + '</h3><div class="srch-2">' + num('sq_y1', q.y1, T('от')) + num('sq_y2', q.y2, T('до')) + '</div>'
     + '<h3>' + T('Пробег до, миль') + '</h3>' + num('sq_o2', q.o2, '120000')
     + '<h3>MMR, $</h3><div class="srch-2">' + num('sq_w1', q.w1, T('от')) + num('sq_w2', q.w2, T('до')) + '</div>'
@@ -963,7 +972,8 @@ function srchCarRow(c, mks) {
 function srchRead() {
   const v = id => { const el = $('#' + id); return el ? el.value.trim() : ''; }, c = id => { const el = $('#' + id); return !!(el && el.checked); };
   const cars = [...document.querySelectorAll('#sq_cars .srch-car')].map(r => ({ mk: r.querySelector('.sc-mk').value, md: r.querySelector('.sc-md').value, y1: r.querySelector('.sc-y1').value, y2: r.querySelector('.sc-y2').value })).filter(x => x.mk || x.md);
-  const auc = [...document.querySelectorAll('.srch-aucs input:checked')].map(i => i.id.replace('sq_auc_', ''));
+  [...document.querySelectorAll('.srch-mks input:checked')].forEach(i => { if (!cars.some(c => c.mk === i.value && !c.md && !c.y1 && !c.y2)) cars.push({ mk: i.value }); });
+  const auc = [...document.querySelectorAll('.srch-aucs:not(.srch-mks) input:checked')].map(i => i.id.replace('sq_auc_', ''));
   const q = { cars, y1: v('sq_y1'), y2: v('sq_y2'), o2: v('sq_o2'), w1: v('sq_w1'), w2: v('sq_w2'), prof1: v('sq_prof1'), auc, clean: c('sq_clean'), noInop: c('sq_noInop'), green: c('sq_green'), awd: c('sq_awd'), txt: v('sq_txt') };
   Object.keys(q).forEach(k => { if (q[k] === '' || q[k] === false || (Array.isArray(q[k]) && !q[k].length)) delete q[k]; });
   return { name: v('sq_name'), on: c('sq_on'), q };
@@ -1005,13 +1015,22 @@ function srchFromUrl() {
 }
 document.addEventListener('change', e => {
   if (!e.target.closest('.srch-f')) return;
+  if (e.target.matches('.sq-mk')) { const n = document.querySelectorAll('.srch-mks input:checked').length, el = $('#sq_mkn'); if (el) el.textContent = n || ''; }
   if (e.target.matches('.sc-mk')) { const r = e.target.closest('.srch-car'), md = (S.srchMd || {})[e.target.value] || []; r.querySelector('.sc-md').innerHTML = '<option value="">' + T('Любая модель') + '</option>' + md.map(m => '<option>' + E(m) + '</option>').join(''); }
   srchCount();
 });
 document.addEventListener('input', e => { if (e.target.closest('.srch-f') && e.target.matches('input[type=number],#sq_txt')) { clearTimeout(srchCount._t); srchCount._t = setTimeout(srchCount, 300); } });
 window.addEventListener('sync-state', () => {
-  if (!(window.Sync && Sync.st.user)) return;
-  if (!srchPull._done) { srchPull._done = true; srchPull(); }
+  const u = window.Sync && Sync.st.user;
+  if (!u) { if (srchPull._uid) { srchPull._uid = ''; S.srch = []; if (!sheetOpen) render(); } return; }
+  if (srchPull._uid !== u.uid) {
+    srchPull._uid = u.uid;
+    // старые поиски без аккаунта достаются первому, кто вошёл на этом телефоне
+    if (!LS.get('srch-owner', '')) { LS.set('srch-owner', u.uid); const old = LS.get('srch-v1', []); if (old.length && !LS.get(srchKey(), null)) LS.set(srchKey(), old); }
+    S.srch = LS.get(srchKey(), []);
+    srchPull();
+    if (!sheetOpen) render();
+  }
   // подписка устройства с uid аккаунта: нужна, чтобы пуш о совпадениях пришёл именно вам
   if (!srchPull._sub && window.Notification && Notification.permission === 'granted' && LS.get('push-on', '') && navigator.serviceWorker) {
     srchPull._sub = true;

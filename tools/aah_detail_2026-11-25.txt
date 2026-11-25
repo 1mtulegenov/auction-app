@@ -656,3 +656,8 @@ T-0020|||Title Absent|0|4900|||3650|0|
 T-0510|No|Good|At Auction|2009|4475|||3900|19|Engine: Inoperable (Repair Required); Front Bumper / Cover: Broken (Replacement Required); Left Front Tire: Worn (Replacement Required); Left Tail Light: Cracked (Replacement Required)
 T-0511|No|Good|At Auction|2009|3300|||2500|23|Front Bumper / Cover: Broken (Replacement Required); Left Front Fender Liner: Missing (Replacement Required); Left Front Tire: Worn (Replacement Required); Left Rear Tire: Worn (Replacement Required)
 T-0560|||Title Absent|0|12775|||9250|0|
+C-0152|||Title Absent|0|1650|||1750|0|
+D-0068|||Title Absent|3500|5875|||4050|0|
+EE-0029|||Title Absent|0|32850|||23350|0|
+EE-0035|||Title Absent|0|24625|||19350|0|
+T-0022|||Title Absent|5000|2200|||2100|0|
