@@ -526,7 +526,7 @@ function applyFilters(list) {
     if (f.quick === 'hid' ? !isHidden(x) : isHidden(x)) return false;
     switch (f.quick) {
       case 'fav': return isFav(x);
-      case 'pick': return x.C || x.F;
+      case 'pick': return (x.C || x.F) && srchHit(x);
       case 'seven': return !isMax() || (MAXB.test(x.mk || '') && !isInop(x));
       case 'clean': return x.cls === 'clean' && !x.hist && !x.ttlbad && !ANN_MARK.test(x.a || '');
       case 'floor': return !!x.floor;
