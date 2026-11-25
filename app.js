@@ -596,12 +596,12 @@ function home() {
   return installBanner()
     + '<div class="hd"><h1>' + E(dTitle(d)) + '</h1>' + (LANG === 'ru' ? '<p>' + E(d.lead) + '</p>' : '') + '</div>' + feesCard()
     + '<div class="tiles">'
-    + '<button class="tile" data-go="lots" data-quick=""><b>' + d.lots.length + '</b><span>' + T('лотов в каталоге') + '</span></button>'
+    + '<button class="tile" data-go="lots" data-quick="" data-fau=""><b>' + d.lots.length + '</b><span>' + T('лотов в каталоге') + '</span></button>'
     + '<button class="tile" data-go="picks" data-pick="core"><b>' + d.core.length + '</b><span>' + T('дороже $5 000 в подборке') + '</span></button>'
     + '<button class="tile" data-go="picks" data-pick="flip"><b>' + d.flip.length + '</b><span>' + T('для флипа до $5 000') + '</span></button>'
     + '<button class="tile" data-go="fav"><b>' + favN + '</b><span>' + T('в избранном') + (notesN ? T(', заметок ') + notesN : '') + '</span></button>'
     + '</div>'
-    + (Object.keys(aucs).length > 1 ? '<h2>' + T('Площадки') + '</h2><div class="rows">' + Object.entries(aucs).map(([a, o]) => '<button class="r" data-go="lots" data-au="' + a + '"><div class="l"><b>' + E(AUC[a] || a) + '</b><br><small>' + T('старт около ') + o.t + '</small></div><div class="rt"><b>' + o.n + '</b><small>' + T('лотов') + '</small></div></button>').join('') + '</div>' : '')
+    + (Object.keys(aucs).length > 1 ? '<h2>' + T('Площадки') + '</h2><div class="rows">' + Object.entries(aucs).map(([a, o]) => '<button class="r" data-go="lots" data-quick="" data-fau="' + a + '"><div class="l"><b>' + E(AUC[a] || a) + '</b><br><small>' + T('старт около ') + o.t + '</small></div><div class="rt"><b>' + o.n + '</b><small>' + T('лотов') + '</small></div></button>').join('') + '</div>' : '')
     + (best.length ? '<h2>' + T('Лучшие по прибыли') + '</h2><div class="list" id="bestList">' + best.map(lotCard).join('') + '</div><button class="more" data-go="picks">' + T('Вся подборка') + '</button>' : '')
     + '<p class="foot">' + T('Данные обновлены ') + E(fmtUpdated(S.index.updated)) + T('. Комиссия ') + M(FEE) + T(' на машину.') + '</p>';
 }
@@ -682,10 +682,16 @@ function saveListInput(t) {
   if (t.dataset.gn) { const d = S.cache[t.dataset.d] || S.d, x = d && d.map[t.dataset.k]; setNote(t.dataset.gn, t.value, x, t.dataset.d); }
   else if (t.dataset.bn) { const f = S.favs[t.dataset.bn]; if (!f) return; const v = t.value.trim(); if ((f.bn || '') === v) return; if (v) f.bn = v; else delete f.bn; f.ts2 = Date.now(); saveFavs(); }
 }
+// площадки дня: быстрый выбор во «Всех лотах» (тот же фильтр, что «Площадка» в фильтрах)
+function aucChips() {
+  const aucs = [...new Set(S.d.lots.map(x => x.auc))].sort((p, q) => slotMin(S.d.lots.find(x => x.auc === p)) - slotMin(S.d.lots.find(x => x.auc === q)));
+  if (aucs.length < 2) return '';
+  return '<div class="qf">' + [''].concat(aucs).map(a => '<button data-go="lots" data-fau="' + a + '" aria-pressed="' + ((S.f.au || '') === a) + '">' + (a ? E(AUC[a] || a) : T('Все площадки')) + '</button>').join('') + '</div>';
+}
 function lotsScreen() {
   const fc = activeFilterCount();
   return '<div class="searchbar"><input type="search" id="q" placeholder="' + T('Модель, лот или VIN') + '" value="' + E(S.f.q) + '" autocomplete="off" enterkeyhint="search" aria-label="' + T('Поиск') + '"><button id="btnFilters" class="' + (fc ? 'on' : '') + '">' + T('Фильтры') + (fc ? ' · ' + fc : '') + '</button></div>'
-    + qfHtml()
+    + aucChips() + qfHtml()
     + '<div class="count"><span id="cnt"></span><button id="viewMode" class="vm" aria-label="' + (S.view === 'table' ? T('Показать карточками') : T('Показать таблицей')) + '" title="' + (S.view === 'table' ? T('Карточки') : T('Таблица')) + '">' + (S.view === 'table' ? VM_CARDS : VM_TABLE) + '</button><select id="sort" aria-label="' + T('Сортировка') + '">' + SORTS.map(([k, l]) => '<option value="' + k + '"' + (S.f.sort === k ? ' selected' : '') + '>' + l + '</option>').join('') + '</select></div>'
     + '<div class="list" id="lotlist"></div><div id="lotmore"></div>';
 }
@@ -1513,7 +1519,7 @@ document.addEventListener('click', async e => {
   if (ds.fz) { setFont('z', +ds.fz); return; }
   if (ds.tab) { if (sheetOpen) closeSheet(); go(ds.tab); return; }
   if (ds.date) { if (!S.cache[ds.date] && ['home', 'picks', 'lots', 'results'].includes(S.tab)) $('#view').innerHTML = skel(4); await loadDate(ds.date); S.f.quick = S.f.quick === 'fav' ? 'fav' : S.f.quick; render(); window.scrollTo(0, 0); return; }
-  if (ds.go) { if (ds.pick) S.picks = ds.pick; if (ds.au != null) { S.f.au = ds.au; } if (ds.quick != null) S.f.quick = ds.quick; go(ds.go); return; }
+  if (ds.go) { if (ds.pick) S.picks = ds.pick; if (ds.fau != null) { S.f.au = ds.fau; } if (ds.quick != null) S.f.quick = ds.quick; go(ds.go); return; }
   if (ds.pick) { S.picks = ds.pick; render(); return; }
   if (ds.pauc != null) { S.pickAuc = ds.pauc; render(); return; }
   if (ds.quick != null) { S.f.quick = ds.quick; document.querySelectorAll('[data-quick]').forEach(b => b.setAttribute('aria-pressed', b.dataset.quick === ds.quick)); drawLots(); return; }
