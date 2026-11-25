@@ -5,6 +5,11 @@ const LOCALE = { en: 'en-US', ru: 'ru-RU', uk: 'uk-UA', es: 'es-US', kk: 'kk-KZ'
 const LI = { en: 0, uk: 1, es: 2, kk: 3 }[LANG];
 document.documentElement.lang = LANG;
 const I18N = {
+"Мой поиск": ["My search", "Мій пошук", "Mi búsqueda", "Менің іздеуім"],
+"Мои поиски": ["My searches", "Мої пошуки", "Mis búsquedas", "Менің іздеулерім"],
+"Все поиски": ["All searches", "Усі пошуки", "Todas las búsquedas", "Барлық іздеулер"],
+" в ближайших торгах": [" in upcoming auctions", " на найближчих торгах", " en próximas subastas", " жақын саудаларда"],
+"Здесь собираются все машины ближайших торгов по вашим сохранённым поискам. Поисков пока нет.": ["All cars from upcoming auctions that match your saved searches show up here. You have no searches yet.", "Тут збираються всі машини найближчих торгів за вашими збереженими пошуками. Пошуків поки немає.", "Aquí aparecen todos los autos de las próximas subastas que coinciden con sus búsquedas guardadas. Aún no tiene búsquedas.", "Мұнда сақталған іздеулеріңізге сай жақын саудалардағы барлық көліктер жиналады. Іздеулер әзірге жоқ."],
 "Подборка строится по вашим сохранённым поискам, а их пока нет. Сохраните поиск, и здесь появятся подходящие машины с хорошей прибылью.": ["Picks are built from your saved searches, and you have none yet. Save a search and profitable matching cars will show up here.", "Добірка будується за вашими збереженими пошуками, а їх поки немає. Збережіть пошук, і тут з'являться відповідні машини з хорошим прибутком.", "La selección se basa en sus búsquedas guardadas y aún no tiene ninguna. Guarde una búsqueda y aquí aparecerán autos rentables que coincidan.", "Іріктеме сақталған іздеулеріңіз бойынша жасалады, ал олар әзірге жоқ. Іздеуді сақтаңыз, сонда мұнда пайдалы көліктер шығады."],
 "На эту дату среди машин по вашим поискам нет выгодных.": ["No profitable cars from your searches on this date.", "На цю дату серед машин за вашими пошуками немає вигідних.", "No hay autos rentables de sus búsquedas en esta fecha.", "Бұл күнге іздеулеріңіз бойынша пайдалы көлік жоқ."],
 "Несколько марок сразу": ["Several makes at once", "Кілька марок одразу", "Varias marcas a la vez", "Бірнеше марка бірден"],

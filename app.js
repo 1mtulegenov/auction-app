@@ -526,7 +526,7 @@ function applyFilters(list) {
     if (f.quick === 'hid' ? !isHidden(x) : isHidden(x)) return false;
     switch (f.quick) {
       case 'fav': return isFav(x);
-      case 'pick': return (x.C || x.F) && srchHit(x);
+      case 'pick': return x.C || x.F;
       case 'seven': return !isMax() || (MAXB.test(x.mk || '') && !isInop(x));
       case 'clean': return x.cls === 'clean' && !x.hist && !x.ttlbad && !ANN_MARK.test(x.a || '');
       case 'floor': return !!x.floor;
@@ -544,6 +544,7 @@ function activeFilterCount() { const f = S.f; return ['au', 'cl', 'st', 'y', 'o'
 
 /* ---------- экраны ---------- */
 const ICONS = {
+  my: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
   home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>',
   fav: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>',
   picks: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>',
@@ -553,7 +554,7 @@ const ICONS = {
   more: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>'
 };
 function tabs() {
-  const t = [['home', T('Главное')], ['fav', T('Избранное')], ['flist', T('Список')], ['lots', T('Все лоты')]];
+  const t = [['home', T('Главное')], ['my', T('Мой поиск')], ['fav', T('Избранное')], ['flist', T('Список')], ['lots', T('Все лоты')]];
   if (S.d && S.d.results) t.push(['results', T('Итоги')]);
   t.push(['more', T('Ещё')]);
   if (S.tab === 'results' && !(S.d && S.d.results)) S.tab = 'home';
@@ -574,6 +575,7 @@ function render() {
   else if (S.tab === 'flist') { v.innerHTML = skel(3); favListScreen().then(h => { if (S.tab === 'flist') v.innerHTML = h; }); }
   else if (S.tab === 'lots') { v.innerHTML = lotsScreen(); drawLots(S.keepShown ? true : undefined); }
   else if (S.tab === 'results') { v.innerHTML = resultsScreen(); drawResults(); }
+  else if (S.tab === 'my') { v.innerHTML = skel(3); myScreen().then(h => { if (S.tab === 'my') v.innerHTML = h; }); }
   else if (S.tab === 'srch') { v.innerHTML = skel(2); srchScreen().then(h => { if (S.tab === 'srch') v.innerHTML = h; }); }
   else if (S.tab === 'srchres') { v.innerHTML = skel(3); srchResScreen().then(h => { if (S.tab === 'srchres') v.innerHTML = h; }); }
   else v.innerHTML = more();
@@ -594,30 +596,27 @@ function home() {
     + '<div class="hd"><h1>' + E(dTitle(d)) + '</h1>' + (LANG === 'ru' ? '<p>' + E(d.lead) + '</p>' : '') + '</div>' + feesCard()
     + '<div class="tiles">'
     + '<button class="tile" data-go="lots" data-quick=""><b>' + d.lots.length + '</b><span>' + T('лотов в каталоге') + '</span></button>'
-    + '<button class="tile" data-go="picks" data-pick="core"><b>' + pickList('core').length + '</b><span>' + T('дороже $5 000 в подборке') + '</span></button>'
-    + '<button class="tile" data-go="picks" data-pick="flip"><b>' + pickList('flip').length + '</b><span>' + T('для флипа до $5 000') + '</span></button>'
+    + '<button class="tile" data-go="picks" data-pick="core"><b>' + d.core.length + '</b><span>' + T('дороже $5 000 в подборке') + '</span></button>'
+    + '<button class="tile" data-go="picks" data-pick="flip"><b>' + d.flip.length + '</b><span>' + T('для флипа до $5 000') + '</span></button>'
     + '<button class="tile" data-go="fav"><b>' + favN + '</b><span>' + T('в избранном') + (notesN ? T(', заметок ') + notesN : '') + '</span></button>'
     + '</div>'
     + (Object.keys(aucs).length > 1 ? '<h2>' + T('Площадки') + '</h2><div class="rows">' + Object.entries(aucs).map(([a, o]) => '<button class="r" data-go="lots" data-au="' + a + '"><div class="l"><b>' + E(AUC[a] || a) + '</b><br><small>' + T('старт около ') + o.t + '</small></div><div class="rt"><b>' + o.n + '</b><small>' + T('лотов') + '</small></div></button>').join('') + '</div>' : '')
     + (best.length ? '<h2>' + T('Лучшие по прибыли') + '</h2><div class="list" id="bestList">' + best.map(lotCard).join('') + '</div><button class="more" data-go="picks">' + T('Вся подборка') + '</button>' : '')
     + '<p class="foot">' + T('Данные обновлены ') + E(fmtUpdated(S.index.updated)) + T('. Комиссия ') + M(FEE) + T(' на машину.') + '</p>';
 }
-// подборка у каждого аккаунта своя: только машины, подходящие под его сохранённые поиски
-const srchHit = x => (S.srch || []).some(s => s && s.q && SearchMatch.match(x, s.q));
-function pickList(kind) { const d = S.d; return (d[kind] || []).map(k => d.map[k]).filter(Boolean).filter(srchHit); }
-function bestLots() { return pickList('core').concat(pickList('flip')).sort((a, b) => (b.prof || 0) - (a.prof || 0)).slice(0, 6); }
+function bestLots() { const d = S.d; return d.core.concat(d.flip).map(k => d.map[k]).filter(Boolean).sort((a, b) => (b.prof || 0) - (a.prof || 0)).slice(0, 6); }
 function picks() {
   const d = S.d;
   if (S.picks === 'fav') S.picks = 'core';
-  const seg = [['core', '$5 000+', pickList('core').length], ['flip', T('Флип'), pickList('flip').length]];
-  let list = pickList(S.picks);
+  const seg = [['core', '$5 000+', d.core.length], ['flip', T('Флип'), d.flip.length]];
+  let list = (d[S.picks] || []).map(k => d.map[k]).filter(Boolean);
   const aucs = [...new Set(list.map(x => x.auc))];
   const pa = S.pickAuc && aucs.includes(S.pickAuc) ? S.pickAuc : '';
   if (pa) list = list.filter(x => x.auc === pa);
   return '<div class="seg" role="group">' + seg.map(([k, l, n]) => '<button data-pick="' + k + '" aria-pressed="' + (S.picks === k) + '">' + l + ' <span class="muted">' + n + '</span></button>').join('') + '</div>'
     + (aucs.length > 1 ? '<div class="qf">' + [''].concat(aucs).map(a => '<button data-pauc="' + a + '" aria-pressed="' + (pa === a) + '">' + (a ? E(AUC[a] || a) : T('Все площадки')) + '</button>').join('') + '</div>' : '')
     + (list.length ? '<div class="list">' + list.map(lotCard).join('') + '</div>'
-      : '<p class="empty">' + (S.picks === 'fav' ? T('Пока пусто. Нажмите ☆ на карточке машины, чтобы собрать свой список на торги.') : !(S.srch || []).length ? T('Подборка строится по вашим сохранённым поискам, а их пока нет. Сохраните поиск, и здесь появятся подходящие машины с хорошей прибылью.') + '</p><button class="btn pri srch-new" data-act="srch-new">＋ ' + T('Новый поиск') + '</button><p>' : T('На эту дату среди машин по вашим поискам нет выгодных.')) + '</p>');
+      : '<p class="empty">' + (S.picks === 'fav' ? T('Пока пусто. Нажмите ☆ на карточке машины, чтобы собрать свой список на торги.') : T('В подборке на эту дату машин нет.')) + '</p>');
 }
 // избранное со всех дат: ближайшие торги сверху
 async function favScreen() {
@@ -902,7 +901,7 @@ async function srchPull() {
   if (l == null) return;
   if (!l.length && S.srch.length) { srchSave(); return; } // первый раз: отправляем то, что было на телефоне
   S.srch = l; LS.set(srchKey(), l);
-  if (['srch', 'srchres', 'home', 'picks'].includes(S.tab) && !sheetOpen) render();
+  if (['srch', 'srchres', 'my'].includes(S.tab) && !sheetOpen) render();
 }
 function srchMatches(s, lots, from) { return lots.filter(x => (!from || x._d >= from) && SearchMatch.match(x, s.q)); }
 async function srchScreen() {
@@ -917,6 +916,23 @@ async function srchScreen() {
   return '<div class="hd"><h1>' + T('Мои поиски') + '</h1><p>' + T('Свои у каждого аккаунта. Когда загружается новый аукцион и в нём есть машины по вашему поиску, приходит пуш, а по нажатию открывается список.') + '</p></div>'
     + pushHint + '<button class="btn pri srch-new" data-act="srch-new">＋ ' + T('Новый поиск') + '</button>'
     + (rows || '<p class="empty">' + T('Поисков пока нет. Например: Tacoma и 4Runner 2016–2020, до 120k миль, прибыль от $1 500.') + '</p>');
+}
+// вкладка «Мой поиск»: все машины ближайших торгов, подходящие под сохранённые поиски этого аккаунта
+async function myScreen() {
+  const list = S.srch || [];
+  const manage = '<button class="chip" data-act="srch-list">⚙ ' + T('Мои поиски') + ' · ' + list.length + '</button><button class="chip" data-act="srch-new">＋ ' + T('Новый поиск') + '</button>';
+  if (!list.length) return '<div class="hd"><h1>' + T('Мой поиск') + '</h1><p>' + T('Здесь собираются все машины ближайших торгов по вашим сохранённым поискам. Поисков пока нет.') + '</p></div><button class="btn pri srch-new" data-act="srch-new">＋ ' + T('Новый поиск') + '</button>';
+  const lots = await allLots(), from = S.myAll ? '' : todayCT();
+  const sel = list.find(z => z.id === S.mySel) ? S.mySel : '';
+  const use = sel ? list.filter(z => z.id === sel) : list;
+  const m = lots.filter(x => (!from || x._d >= from) && use.some(s => SearchMatch.match(x, s.q)));
+  const by = {}; m.forEach(x => (by[x._d] = by[x._d] || []).push(x));
+  const ids = Object.keys(by).sort();
+  const body = ids.map(id => { const dd = S.index.dates.find(d => d.id === id); return '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + ' · ' + by[id].length + '</span></h2><div class="lots">' + by[id].sort(LOT_SORT.stat).map(lotCard).join('') + '</div>'; }).join('');
+  const chips = list.length > 1 ? '<div class="qf">' + [['', T('Все поиски')]].concat(list.map(z => [z.id, z.name || T('Поиск')])).map(([k, l]) => '<button data-act="my-sel" data-id="' + E(k) + '" aria-pressed="' + (sel === k) + '">' + E(l) + '</button>').join('') + '</div>' : '';
+  return '<div class="hd"><h1>' + T('Мой поиск') + '</h1><p>' + T('Машин: ') + m.length + (S.myAll ? '' : T(' в ближайших торгах')) + '</p></div>'
+    + chips + '<div class="chips">' + manage + '<button class="chip" data-act="my-past" aria-pressed="' + !!S.myAll + '">' + (S.myAll ? T('Только ближайшие торги') : T('Показать и прошедшие торги')) + '</button></div>'
+    + (body || '<p class="empty">' + T('Совпадений нет. Как только загрузится аукцион с подходящими машинами, придёт пуш.') + '</p>');
 }
 async function srchResScreen() {
   const s = S.srch.find(z => z.id === S.srchId);
@@ -1533,6 +1549,8 @@ document.addEventListener('click', async e => {
     case 'stats': statsSheet(); break;
     case 'push': pushOn(); break;
     case 'in-set': case 'in-note': case 'in-view': inspAct(ds.act, ds); break;
+    case 'my-sel': S.mySel = ds.id || ''; render(); break;
+    case 'my-past': S.myAll = !S.myAll; render(); break;
     case 'srch-list': if (sheetOpen) closeSheet(); S.tab = 'srch'; render(); window.scrollTo(0, 0); break;
     case 'srch-new': case 'srch-edit': case 'srch-open': case 'srch-back': case 'srch-past': case 'srch-alld': case 'srch-push': case 'srch-del': case 'srch-addcar': case 'srch-rmcar': case 'srch-save': srchAct(ds.act, ds.id, t); break;
     case 'changelog': if (isMax()) changelogSheet(); break;
