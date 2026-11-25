@@ -917,6 +917,9 @@ async function srchScreen() {
     + pushHint + '<button class="btn pri srch-new" data-act="srch-new">＋ ' + T('Новый поиск') + '</button>'
     + (rows || '<p class="empty">' + T('Поисков пока нет. Например: Tacoma и 4Runner 2016–2020, до 120k миль, прибыль от $1 500.') + '</p>');
 }
+S.mySort = LS.get('my-sort', 'stat');
+const mySortFn = () => (u, v) => (LOT_SORT[S.mySort] || LOT_SORT.stat)(u, v) || LOT_SORT.run(u, v);
+const mySortSel = () => '<select id="mysort" class="my-sort" aria-label="' + T('Сортировка') + '">' + SORTS.map(([k, l]) => '<option value="' + k + '"' + (S.mySort === k ? ' selected' : '') + '>' + l + '</option>').join('') + '</select>';
 // вкладка «Мой поиск»: все машины ближайших торгов, подходящие под сохранённые поиски этого аккаунта
 async function myScreen() {
   const list = S.srch || [];
@@ -928,10 +931,10 @@ async function myScreen() {
   const m = lots.filter(x => (!from || x._d >= from) && use.some(s => SearchMatch.match(x, s.q)));
   const by = {}; m.forEach(x => (by[x._d] = by[x._d] || []).push(x));
   const ids = Object.keys(by).sort();
-  const body = ids.map(id => { const dd = S.index.dates.find(d => d.id === id); return '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + ' · ' + by[id].length + '</span></h2><div class="lots">' + by[id].sort(LOT_SORT.stat).map(lotCard).join('') + '</div>'; }).join('');
+  const body = ids.map(id => { const dd = S.index.dates.find(d => d.id === id); return '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + ' · ' + by[id].length + '</span></h2><div class="lots">' + by[id].sort(mySortFn()).map(lotCard).join('') + '</div>'; }).join('');
   const chips = list.length > 1 ? '<div class="qf">' + [['', T('Все поиски')]].concat(list.map(z => [z.id, z.name || T('Поиск')])).map(([k, l]) => '<button data-act="my-sel" data-id="' + E(k) + '" aria-pressed="' + (sel === k) + '">' + E(l) + '</button>').join('') + '</div>' : '';
   return '<div class="hd"><h1>' + T('Мой поиск') + '</h1><p>' + T('Машин: ') + m.length + (S.myAll ? '' : T(' в ближайших торгах')) + '</p></div>'
-    + chips + '<div class="chips">' + manage + '<button class="chip" data-act="my-past" aria-pressed="' + !!S.myAll + '">' + (S.myAll ? T('Только ближайшие торги') : T('Показать и прошедшие торги')) + '</button></div>'
+    + chips + '<div class="count"><span>' + T('Сортировка') + '</span>' + mySortSel() + '</div>' + '<div class="chips">' + manage + '<button class="chip" data-act="my-past" aria-pressed="' + !!S.myAll + '">' + (S.myAll ? T('Только ближайшие торги') : T('Показать и прошедшие торги')) + '</button></div>'
     + (body || '<p class="empty">' + T('Совпадений нет. Как только загрузится аукцион с подходящими машинами, придёт пуш.') + '</p>');
 }
 async function srchResScreen() {
@@ -942,9 +945,9 @@ async function srchResScreen() {
   if (S.srchD) m = m.filter(x => x._d === S.srchD);
   const by = {}; m.forEach(x => (by[x._d] = by[x._d] || []).push(x));
   const ids = Object.keys(by).sort();
-  const body = ids.map(id => { const dd = S.index.dates.find(d => d.id === id); return '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + ' · ' + by[id].length + '</span></h2><div class="lots">' + by[id].sort(LOT_SORT.stat).map(lotCard).join('') + '</div>'; }).join('');
+  const body = ids.map(id => { const dd = S.index.dates.find(d => d.id === id); return '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + ' · ' + by[id].length + '</span></h2><div class="lots">' + by[id].sort(mySortFn()).map(lotCard).join('') + '</div>'; }).join('');
   return '<div class="hd"><button class="btn" data-act="srch-back">← ' + T('Мои поиски') + '</button><h1>' + E(s.name || T('Поиск')) + '</h1><p>' + E(SearchMatch.describe(s.q)) + '</p></div>'
-    + '<div class="chips">' + (S.srchD ? '<button class="chip" data-act="srch-alld">' + T('Показать все даты') + '</button>' : '') + '<button class="chip" data-act="srch-past" aria-pressed="' + !!S.srchAll + '">' + (S.srchAll ? T('Только ближайшие торги') : T('Показать и прошедшие торги')) + '</button><button class="chip" data-act="srch-edit" data-id="' + E(s.id) + '">✎ ' + T('Изменить поиск') + '</button></div>'
+    + '<div class="count"><span>' + T('Сортировка') + '</span>' + mySortSel() + '</div><div class="chips">' + (S.srchD ? '<button class="chip" data-act="srch-alld">' + T('Показать все даты') + '</button>' : '') + '<button class="chip" data-act="srch-past" aria-pressed="' + !!S.srchAll + '">' + (S.srchAll ? T('Только ближайшие торги') : T('Показать и прошедшие торги')) + '</button><button class="chip" data-act="srch-edit" data-id="' + E(s.id) + '">✎ ' + T('Изменить поиск') + '</button></div>'
     + (body || '<p class="empty">' + T('Совпадений нет. Как только загрузится аукцион с подходящими машинами, придёт пуш.') + '</p>');
 }
 async function srchEdit(id) {
@@ -1602,6 +1605,7 @@ document.addEventListener('change', e => {
   if (e.target.id === 'obdFile') { const fs = [...e.target.files]; e.target.value = ''; if (fs.length) obdAdd(fs); return; }
   if (e.target.id === 'sort') { S.f.sort = e.target.value; drawLots(); }
   else if (e.target.id === 'rsort') { S.rf.sort = e.target.value; drawResults(); }
+  else if (e.target.id === 'mysort') { S.mySort = e.target.value; LS.set('my-sort', S.mySort); keepScroll(render); }
   else if (e.target.id === 'favsort') { S.favSort = e.target.value; LS.set('fav-sort', S.favSort); keepScroll(render); }
   else if (e.target.id === 'flsort') { S.flSort = e.target.value; LS.set('flist-sort', S.flSort); keepScroll(render); }
   else if (/^sst_/.test(e.target.id)) { SST[e.target.id.slice(4)] = e.target.value; statsDraw(); }
