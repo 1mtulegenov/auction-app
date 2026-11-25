@@ -104,6 +104,7 @@ function fmtUpdated(iso) {
 }
 
 /* ---------- помощники ---------- */
+const slotMin = x => { const [h, m] = slot(x).split(':'); return +h * 60 + +m; };
 function slot(x) { if (x.auc === 'CMX') return '8:00'; if (x.auc === 'ANA') return x.cls === 'noinop' ? '9:30' : '10:00'; if (x.auc === 'AAH') return '13:00'; if (x.auc === 'H1C') return '16:30'; return String(x.run)[0] === '7' ? '13:00' : '11:45'; }
 function carName(x) { return [x.y, x.mk, x.md, x.st].filter(Boolean).join(' '); }
 /* заголовок: год, марка, модель · объём и название мотора · комплектация */
@@ -654,7 +655,12 @@ async function favListScreen() {
     if (!rows.length) continue;
     n += rows.length;
     const dd = S.index.dates.find(x => x.id === id);
-    h += '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + '</span></h2><div class="flist' + (man ? ' man' : '') + '">'
+    // в один день может быть несколько аукционов: каждый своим блоком, по времени начала
+    const groups = []; rows.forEach(r => { const au = r[2].auc; let g = groups.find(z => z[0] === au); if (!g) groups.push(g = [au, []]); g[1].push(r); });
+    groups.sort((p, q) => slotMin(q[1][0][2]) < slotMin(p[1][0][2]) ? 1 : -1);
+    const multi = groups.length > 1;
+    h += '<h2>' + E(dd ? dLabel(dd) : fmtDate(id)) + ' <span class="muted">' + E(dd ? shortAuc(dd.title) : '') + '</span></h2>';
+    for (const [au, rows] of groups) h += (multi ? '<h3 class="fl-auc">' + E(AUC[au] || au) + ' <span class="muted">' + T('старт около ') + slot(rows[0][2]) + ' · ' + rows.length + '</span></h3>' : '') + '<div class="flist' + (man ? ' man' : '') + '">'
       + '<div class="fl-h"><span>' + T('Лот') + '</span><span>' + T('Машина') + '</span><span>MMR</span><span>' + T('Для покупки') + '</span><span></span><span></span></div>'
       + rows.map(([fid, f, x]) => {         return '<div class="fl-r' + (f.x ? ' gone' : '') + '" data-fid="' + E(fid) + '"><button class="fl-run" data-lot="' + E(x.k) + '"' + (id !== S.date ? ' data-fd="' + E(id) + '"' : '') + '>' + E(x.run) + '</button>'
           + '<span class="fl-car">' + ((nf => nf ? (nf.stop ? ' <em class="fl-tag bad">' + T('не смотреть') + '</em>' : '') + (nf.bid ? ' <em class="fl-tag">' + T('до ') + M(nf.bid) + '</em>' : '') : '')(noteFlags(noteOf(x)))) + ((ov => ov ? ' <em class="fl-tag' + (ov.s === 3 ? ' bad' : ov.s === 1 ? ' ok' : '') + '">OBD</em>' : '')(obdOf(x) && window.OBD && OBD.verdict(obdOf(x).codes, x.mk)))  + ' ' + E(carName(x))+ '</span><span class="fl-mmr">' + (x.est && x.w ? '≈' : '') + M(x.w) + '</span>'
