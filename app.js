@@ -1131,8 +1131,10 @@ function statsDraw() {
   if (!set.length) { box.innerHTML = '<p class="empty">' + T('За эти даты итогов торгов нет.') + '</p>'; return; }
   const sold = set.filter(x => x.ss === 'sold' && x.fact), sAll = set.filter(x => x.ss === 'sold'), offer = set.filter(x => x.ss === 'offer'), none = set.length - sAll.length - offer.length;
   // MMR: только настоящий Manheim, явные ошибки данных (меньше 40% или больше 200%) не считаем
-  const okM = x => x.w > 0 && !x.est && x.fact / x.w > .4 && x.fact / x.w < 2;
-  const vm = sold.filter(okM), rm = vm.map(x => x.fact / x.w);
+  // MMR Manheim: выгрузка по VIN (mw), иначе MMR из пре-сейла EDGE (w без пометки est)
+  const wM = x => x.mw || (!x.est ? x.w : 0);
+  const okM = x => wM(x) > 0 && x.fact / wM(x) > .4 && x.fact / wM(x) < 2;
+  const vm = sold.filter(okM), rm = vm.map(x => x.fact / wM(x));
   const vf = sold.filter(x => x.floor > 0), rf = vf.map(x => x.fact / x.floor);
   const pc = (n, t) => t ? Math.round(100 * n / t) : 0;
   // полоса из частей: [доля, класс, подпись]
@@ -1155,6 +1157,22 @@ function statsDraw() {
       + stack([[cheap, 'c-g', T('Дешевле MMR')], [near, 'c-n', T('Около MMR')], [dear, 'c-r', T('Дороже MMR')]])
       + '<p class="sv-note">' + T('Машин с MMR Manheim: ') + vm.length + '</p></section>';
   }
+  // 2б. расчётный MMR против выгрузки Manheim и цены продажи
+  const cm = set.filter(x => x.mw > 0 && x.w > 0 && x.w / x.mw > .3 && x.w / x.mw < 3);
+  if (cm.length) {
+    const dv = cm.map(x => Math.abs(x.w / x.mw - 1)), cs = cm.filter(x => x.ss === 'sold' && x.fact && x.fact / x.mw > .4 && x.fact / x.mw < 2);
+    const grp = f => { const g = cm.filter(f); return g.length ? Math.round(100 * sMed(g.map(x => Math.abs(x.w / x.mw - 1)))) + '% (' + g.length + T(' шт.') + ')' : '—'; };
+    let ln = T('Сравнил ') + cm.length + T(' машин, по которым есть и наш MMR, и выгрузка Manheim по VIN с пробегом. Из пре-сейла EDGE: ') + grp(x => !x.est) + T(', наша оценка по похожим: ') + grp(x => x.est) + '.';
+    let ex = '';
+    if (cs.length) {
+      const eM = sMed(cs.map(x => Math.abs(x.mw - x.fact) / x.fact)), eW = sMed(cs.map(x => Math.abs(x.w - x.fact) / x.fact));
+      const bM = cs.filter(x => Math.abs(x.mw - x.fact) < Math.abs(x.w - x.fact)).length, bW = cs.filter(x => Math.abs(x.w - x.fact) < Math.abs(x.mw - x.fact)).length;
+      ex = '<p class="sv-line">' + T('Против цены продажи (') + cs.length + T(' проданных): продали за ') + sPct(sMed(cs.map(x => x.fact / x.mw))) + T(' от MMR Manheim и за ') + sPct(sMed(cs.map(x => x.fact / x.w))) + T(' от расчётного. Обычная ошибка: Manheim ') + sPct(eM) + T(', расчёт ') + sPct(eW) + '.</p>'
+        + stack([[bM, 'c-g', T('Ближе Manheim')], [cs.length - bM - bW, 'c-n', T('Одинаково')], [bW, 'c-y', T('Ближе расчёт')]]);
+    }
+    h += '<section class="sv-card"><h3>' + T('Расчётный MMR против Manheim') + '</h3>'
+      + hero('±' + Math.round(100 * sMed(dv)) + '%', T('расчёт от Manheim'), ln) + ex + '</section>';
+  }
   // 3. против floor
   h += '<section class="sv-card"><h3>' + T('Цена продажи от floor price') + '</h3>';
   if (vf.length) {
@@ -1175,9 +1193,10 @@ function statsDraw() {
           + '<span class="sv-bar"><i class="sv-c"></i><i class="' + (d < 0 ? 'c-g l' : 'c-r r') + '" style="width:' + w + '%"></i></span><b>' + (dp > 0 ? '+' : dp < 0 ? '−' : '') + Math.abs(dp) + '%</b></' + (act ? 'button' : 'div') + '>'; }).join('')
       + '</div></section>';
   };
-  h += SST.mk ? div(T('Модели: цена от MMR'), T('Слева зелёным: отдают дешевле MMR, справа красным: дороже. Серая цифра: сколько продано.'), x => x.md, g => g, x => okM(x) ? x.fact / x.w : null, 3)
-    : div(T('Марки: цена от MMR'), T('Слева зелёным: отдают дешевле MMR, справа красным: дороже. Серая цифра: сколько продано. Нажмите на марку, чтобы посмотреть только её.'), x => x.mk, g => g, x => okM(x) ? x.fact / x.w : null, 5, 'sst-mk');
-  if (!SST.auc) h += div(T('Аукционы: цена от MMR'), T('Слева зелёным: дешевле MMR, справа красным: дороже.'), x => x.auc, g => AUC[g] || g, x => okM(x) ? x.fact / x.w : null, 5, 'sst-auc');
+  h += SST.mk ? div(T('Модели: цена от MMR'), T('Слева зелёным: отдают дешевле MMR, справа красным: дороже. Серая цифра: сколько продано.'), x => x.md, g => g, x => okM(x) ? x.fact / wM(x) : null, 3)
+    : div(T('Марки: цена от MMR'), T('Слева зелёным: отдают дешевле MMR, справа красным: дороже. Серая цифра: сколько продано. Нажмите на марку, чтобы посмотреть только её.'), x => x.mk, g => g, x => okM(x) ? x.fact / wM(x) : null, 5, 'sst-mk');
+  if (!SST.auc) h += div(T('Аукционы: расчётный MMR от Manheim'), T('Слева: наш расчёт ниже Manheim, справа: выше. Только проданные машины с выгрузкой Manheim.'), x => x.mw ? x.auc : '', g => AUC[g] || g, x => x.mw && x.w && x.w / x.mw > .3 && x.w / x.mw < 3 ? x.w / x.mw : null, 5);
+  if (!SST.auc) h += div(T('Аукционы: цена от MMR'), T('Слева зелёным: дешевле MMR, справа красным: дороже.'), x => x.auc, g => AUC[g] || g, x => okM(x) ? x.fact / wM(x) : null, 5, 'sst-auc');
   if (!SST.mk) h += div(T('Продавцы: цена от floor'), T('Слева зелёным: отдают ниже floor, справа красным: выше.'), x => x.floor ? x.cons : '', g => g, x => x.floor ? x.fact / x.floor : null, 5);
   h += '<p class="sv-note">' + T('Считаются только машины, которые отдали сразу на аукционе. Офферы не входят.') + '</p>';
   box.innerHTML = h;
