@@ -764,7 +764,7 @@ function more() {
     + '<button data-act="push"><span class="ic">🔔</span><span>' + T('Уведомления') + '<small>' + pushLabel() + '</small></span></button>'
     + (canSend() ? '<button data-act="clients"><span class="ic">🤝</span><span>' + T('Покупатели') + (S.reqN ? ' · ' + T('заявок: ') + S.reqN : '') + '<small>' + (isMax() ? T('Пары «дилер → покупатель», комиссия, отправленные лоты') : T('Ваши покупатели и отправленные им лоты')) + '</small></span></button>' : '')
     + '<button data-act="stats"><span class="ic">📈</span><span>' + T('Статистика продаж') + '<small>' + T('Продано сразу против MMR и floor price: даты, марка, аукцион') + '</small></span></button>'
-    + '<button data-act="mmrc"><span class="ic">🧮</span><span>' + T('Калькулятор MMR') + '<small>' + T('MMR по модели или VIN с поправкой на пробег и грейд, как у Manheim') + '</small></span></button>'
+    + '<button data-act="mmrc"><span class="ic">🧮</span><span>' + T('Калькулятор MMR') + '<small>' + T('MMR по модели или VIN: наши пресейлы и постсейлы, поправка на пробег и грейд, скан VIN') + '</small></span></button>'
     + '<button data-act="notes"><span class="ic">📝</span><span>' + T('Заметки') + '<small>' + (notes.length ? notes.length + T(' шт., привязаны к VIN') : T('Пока нет. Пишутся в карточке машины.')) + '</small></span></button>'
     + '<button data-act="how"><span class="ic">🧮</span><span>' + T('Как считается прибыль') + '<small>' + T('MMR, сбор, цена продажи, максимальная ставка') + '</small></span></button>'
     + '<button data-act="install"><span class="ic">📲</span><span>' + installTitle() + '<small>' + (isStandalone() ? T('Уже установлено') : platform() === 'desktop' ? T('Windows и Mac, без магазина приложений') : T('iPhone и Android, без App Store')) + '</small></span></button>'
@@ -1207,7 +1207,7 @@ function statsDraw() {
    пробег считается от среднего пробега модели; до +50% от среднего поправка линейная и симметричная,
    от +50% до +100% вдвое мягче, дальше ещё втрое мягче. Цена мили растёт со стоимостью машины (≈ 3,4e-5 × MMR^0,83 $/миля).
    Грейд считается от среднего грейда модели: каждый балл ниже отнимает $900 + 3,5% MMR, выше прибавляет меньше.
-   База берётся из выгрузок Manheim по похожим машинам наших аукционов (та же модель, год ±1). */
+   База берётся из наших же данных: MMR из пресейла и продажи из постсейла похожих машин (та же модель, год ±2). Сайт Manheim не нужен. */
 const MC = {
   rate: b => 3.37e-5 * Math.pow(Math.max(300, b), .83),
   avgMi: y => Math.round(30446 * Math.pow(Math.max(.5, new Date().getFullYear() + .5 - y), .6215) / 100) * 100,
@@ -1217,16 +1217,33 @@ const MC = {
   grade(dg, b) { return dg < 0 ? dg * (900 + .035 * b) : Math.min(dg, 1) * (600 + .025 * b) + Math.max(0, dg - 1) * (420 + .035 * b); },
   base(v, o, A) { let b = v; for (let i = 0; i < 4; i++) b = Math.max(100, v - MC.odo(o, A, b)); return b; },
 };
-let MC_ALL = null, MC_V = '';
+let MC_ALL = null, MC_V = '', MC_R = { all: .9 };
 async function mmrcLoad() {
   if (MC_ALL && MC_V === S.index.version) return MC_ALL;
   MC_V = S.index.version; const out = [];
   for (const dd of S.index.dates) { let d; try { d = await getDate(dd.id); } catch (e) { continue; }
-    d.lots.forEach(x => { const v = x.mw || (!x.est && x.w); if (v > 0 && x.y && x.mk && x.md) out.push({ d: dd.id, k: x.k, run: x.run, auc: x.auc, vin: x.vin, y: +x.y, mk: x.mk, md: x.md, st: x.st || '', o: +x.o || 0, g: parseFloat(x.g) || null, v, man: !!x.mw, fact: x.ss === 'sold' ? x.fact : null }); }); }
-  // одна машина на нескольких торгах: берём последние торги, но цену продажи с любых
-  const by = {}; out.forEach(z => { const o = by[z.vin]; if (!o) { by[z.vin] = z; return; } const n = z.d > o.d ? z : o, m = n === z ? o : z; if (!n.fact && m.fact) n.fact = m.fact; by[z.vin] = n; });
-  return (MC_ALL = Object.values(by));
+    d.lots.forEach(x => { const v = x.mw || (!x.est && x.w) || 0, fact = x.ss === 'sold' && x.fact > 0 ? x.fact : null;
+      if ((v > 0 || fact) && x.y && x.mk && x.md) out.push({ d: dd.id, k: x.k, run: x.run, auc: x.auc, vin: x.vin, y: +x.y, mk: x.mk, md: x.md, st: x.st || '', o: +x.o || 0, g: parseFloat(x.g) || null, v, man: !!x.mw, fact }); }); }
+  // одна машина на нескольких торгах: берём последние торги, но MMR и цену продажи с любых
+  const by = {}; out.forEach(z => { const o = by[z.vin]; if (!o) { by[z.vin] = z; return; } const n = z.d > o.d ? z : o, m = n === z ? o : z;
+    if (!n.fact && m.fact) n.fact = m.fact; if (!n.v && m.v) { n.v = m.v; n.man = m.man; } by[z.vin] = n; });
+  MC_ALL = Object.values(by);
+  // доля цены продажи от MMR по каждому аукциону, из постсейла: ею продажу переводим в MMR
+  const r = {}; MC_ALL.forEach(z => { if (z.v > 0 && z.fact && z.fact / z.v > .4 && z.fact / z.v < 2) (r[z.auc] = r[z.auc] || []).push(z.fact / z.v); });
+  const allR = [].concat(...Object.values(r)); MC_R = { all: allR.length >= 20 ? sMed(allR) : .9 };
+  Object.entries(r).forEach(([a, v]) => { if (v.length >= 20) MC_R[a] = sMed(v); });
+  return MC_ALL;
 }
+// точки для базы: MMR из пресейла (вес 1, выгрузка Manheim 1,5) и продажи из постсейла, переведённые в MMR (вес 0,6);
+// каждая точка приводится к среднему пробегу и к году Y (±1 год ≈ 12%); вес: тот же год 1, ±1 год 0,4, ±2 года 0,15,
+// тот же кузов ×3, свежие данные важнее (вдвое меньше вес через 90 дней)
+MC.points = (comps, Y, st, opt) => { opt = opt || {}; const now = Date.now(), pts = [];
+  comps.forEach(z => { const A = MC.avgMi(z.y), o = z.o > 1 ? z.o : A, yk = Math.pow(1.12, Y - z.y);
+    const w = [1, .4, .15][Math.abs(z.y - Y)] * (st && z.st === st ? 3 : 1) * Math.pow(.5, Math.max(0, now - new Date(z.d + 'T12:00:00')) / 864e5 / 90);
+    if (z.v > 0 && !(opt.noMan && z.man)) pts.push({ z, src: 'mmr', b: MC.base(z.v, o, A) * yk, w: w * (z.man ? 1.5 : 1) });
+    if (z.fact && !opt.noSale) pts.push({ z, src: 'sale', b: MC.base(z.fact / (MC_R[z.auc] || MC_R.all), o, A) * yk, w: w * .6 }); });
+  return pts.sort((p, q) => p.b - q.b); };
+MC.wq = (pts, f) => { const t = pts.reduce((s, p) => s + p.w, 0); let a = 0; for (const p of pts) { a += p.w; if (a >= t * f) return p.b; } return pts[pts.length - 1].b; };
 const MCS = { y: '', mk: '', md: '', st: '', o: '', g: '', vin: '' };
 async function mmrcSheet(x) {
   if (x) Object.assign(MCS, { y: String(x.y || ''), mk: x.mk || '', md: x.md || '', st: x.st || '', o: x.o > 1 ? String(x.o) : '', g: x.g ? String(x.g) : '', vin: x.vin || '' });
@@ -1241,7 +1258,7 @@ function mmrcForm(all) {
   const mds = [...new Set(all.filter(z => z.mk === MCS.mk).map(z => z.md))].sort((a, b) => a.localeCompare(b));
   const sts = [...new Set(all.filter(z => z.mk === MCS.mk && z.md === MCS.md && z.st).map(z => z.st))].sort((a, b) => a.localeCompare(b));
   const now = new Date().getFullYear(), ys = []; for (let y = now + 1; y >= 2000; y--) ys.push(y);
-  $('#mcF').innerHTML = '<div class="mc-vin"><input id="mc_vin" placeholder="' + T('VIN (необязательно)') + '" value="' + E(MCS.vin) + '" maxlength="17" autocapitalize="characters" spellcheck="false"><button class="btn" data-act="mc-vin">' + T('Найти') + '</button></div>'
+  $('#mcF').innerHTML = '<div class="mc-vin"><input id="mc_vin" placeholder="' + T('VIN (необязательно)') + '" value="' + E(MCS.vin) + '" maxlength="17" autocapitalize="characters" spellcheck="false"><button class="btn" data-act="mc-scan" aria-label="' + T('Сканировать VIN') + '">📷</button><button class="btn" data-act="mc-vin">' + T('Найти') + '</button></div>'
     + '<div class="sst-f">'
     + '<label><span>' + T('Год') + '</span><select id="mc_y">' + opt('', '—', MCS.y) + ys.map(y => opt(y, y, MCS.y)).join('') + '</select></label>'
     + '<label><span>' + T('Марка') + '</span><select id="mc_mk">' + opt('', '—', MCS.mk) + mks.map(m => opt(m, m, MCS.mk)).join('') + '</select></label>'
@@ -1256,12 +1273,9 @@ function mmrcDraw() {
   const Y = +MCS.y, mk = MCS.mk, md = MCS.md;
   if (!Y || !mk || !md) { box.innerHTML = '<p class="sv-line muted">' + T('Выберите год, марку и модель или введите VIN. Пробег и грейд можно менять, MMR пересчитается сразу.') + '</p>'; return; }
   let comps = MC_ALL.filter(z => z.mk === mk && z.md === md && Math.abs(z.y - Y) <= 2);
-  if (!comps.length) { box.innerHTML = '<p class="sv-line">' + T('На наших аукционах такой модели с MMR Manheim пока не было. Попробуйте соседний год или похожую модель.') + '</p>'; return; }
-  // база каждой похожей машины к среднему пробегу и к году Y (±1 год ≈ 12%), вес: тот же год 1, ±1 год 0,4, ±2 года 0,15, выгрузка Manheim ×1,5, тот же кузов ×3
-  const pts = comps.map(z => { const A = MC.avgMi(z.y), b = MC.base(z.v, z.o > 1 ? z.o : A, A) * Math.pow(1.12, Y - z.y);
-    return { z, b, w: [1, .4, .15][Math.abs(z.y - Y)] * (z.man ? 1.5 : 1) * (MCS.st && z.st === MCS.st ? 3 : 1) }; }).sort((p, q) => p.b - q.b);
-  const wq = f => { const t = pts.reduce((s, p) => s + p.w, 0); let a = 0; for (const p of pts) { a += p.w; if (a >= t * f) return p.b; } return pts[pts.length - 1].b; };
-  const B = wq(.5), lo = wq(.25), hi = wq(.75), A = MC.avgMi(Y), G = MC.avgGr(Y);
+  const pts = comps.length ? MC.points(comps, Y, MCS.st) : [];
+  if (!pts.length) { box.innerHTML = '<p class="sv-line">' + T('На наших аукционах такой модели пока не было: ни MMR в пресейле, ни продаж в постсейле. Попробуйте соседний год или похожую модель.') + '</p>'; return; }
+  const B = MC.wq(pts, .5), lo = MC.wq(pts, .25), hi = MC.wq(pts, .75), A = MC.avgMi(Y), G = MC.avgGr(Y);
   const o = parseInt(String(MCS.o).replace(/\D/g, '')) || A, g = parseFloat(String(MCS.g).replace(',', '.'));
   const ao = MC.odo(o, A, B), ag = isNaN(g) ? 0 : MC.grade(Math.max(0, Math.min(5, g)) - G, B);
   const V = Math.max(Math.round(B * .1), B + ao + ag), r25 = v => Math.round(v / 25) * 25;
@@ -1274,13 +1288,13 @@ function mmrcDraw() {
     + '<div><span>' + T('Пробег ') + o.toLocaleString('en-US') + T(' миль') + (o === A ? '' : ' (' + (o > A ? '+' : '−') + Math.abs(o - A).toLocaleString('en-US') + ')') + '</span><b>' + (Math.round(ao) >= 0 ? '+' : '') + M(r25(ao)) + '</b></div>'
     + '<div><span>' + T('Грейд ') + (isNaN(g) ? T('средний') : g.toFixed(1)) + '</span><b>' + (Math.round(ag) >= 0 ? '+' : '') + M(r25(ag)) + '</b></div>'
     + '</div>'
-    + '<p class="sv-note">' + T('По ') + comps.length + T(' похожим машинам с наших аукционов') + (same < comps.length ? T(' (того же года ') + same + ')' : '') + T('. Цена мили для такой машины около ') + (MC.rate(B) * 100).toFixed(1) + T(' цента.') + (sr ? T(' Такие уходят на аукционе в среднем за ') + Math.round(sr * 100) + T('% от MMR, это около ') + M(r25(V * sr)) + '.' : '') + '</p></section>';
+    + '<p class="sv-note">' + T('По ') + comps.length + T(' похожим машинам с наших аукционов') + (same < comps.length ? T(' (того же года ') + same + ')' : '') + ': ' + T('MMR из пресейла ') + pts.filter(p => p.src === 'mmr').length + T(', продаж из постсейла ') + pts.filter(p => p.src === 'sale').length + T('. Цена мили для такой машины около ') + (MC.rate(B) * 100).toFixed(1) + T(' цента.') + (sr ? T(' Такие уходят на аукционе в среднем за ') + Math.round(sr * 100) + T('% от MMR, это около ') + M(r25(V * sr)) + '.' : '') + '</p></section>';
   // таблица: как меняется MMR от пробега
   const steps = [.5, .75, 1, 1.25, 1.5, 2].map(f => Math.round(A * f / 1000) * 1000);
   h += '<section class="sv-card"><h3>' + T('MMR при другом пробеге') + '</h3><div class="mc-rows">' + steps.map(m => '<div><span>' + m.toLocaleString('en-US') + T(' миль') + '</span><b>' + M(r25(Math.max(B * .1, B + MC.odo(m, A, B) + ag))) + '</b></div>').join('') + '</div></section>';
   h += '<section class="sv-card"><h3>' + T('Похожие машины') + '</h3><div class="mc-rows">' + comps.slice().sort((p, q) => Math.abs(p.y - Y) - Math.abs(q.y - Y) || Math.abs(p.o - o) - Math.abs(q.o - o)).slice(0, 12).map(z =>
-    '<button class="mc-c" data-nv="' + E(z.vin) + '" data-nd="' + E(z.d) + '"><span>' + z.y + ' ' + E(z.md) + ' ' + E(z.st.split(' ')[0] || '') + '<small>' + fmtDate(z.d) + ' · ' + E(AUC[z.auc] || z.auc) + ' · ' + (z.o > 1 ? z.o.toLocaleString('en-US') + T(' миль') : T('пробег ?')) + (z.g ? ' · ' + z.g : '') + '</small></span><b>' + M(z.v) + (z.fact ? '<small>' + T('продана ') + M(z.fact) + '</small>' : '') + '</b></button>').join('') + '</div>'
-    + '<p class="sv-note">' + T('Справа MMR машины на день торгов (выгрузка Manheim с её пробегом) и цена, за которую её отдали.') + '</p></section>';
+    '<button class="mc-c" data-nv="' + E(z.vin) + '" data-nd="' + E(z.d) + '"><span>' + z.y + ' ' + E(z.md) + ' ' + E(z.st.split(' ')[0] || '') + '<small>' + fmtDate(z.d) + ' · ' + E(AUC[z.auc] || z.auc) + ' · ' + (z.o > 1 ? z.o.toLocaleString('en-US') + T(' миль') : T('пробег ?')) + (z.g ? ' · ' + z.g : '') + '</small></span><b>' + (z.v ? M(z.v) : '—') + (z.fact ? '<small>' + T('продана ') + M(z.fact) + '</small>' : '') + '</b></button>').join('') + '</div>'
+    + '<p class="sv-note">' + T('Справа MMR машины на день торгов (из пресейла, с её пробегом) и цена, за которую её отдали. Продажа переводится в MMR по доле для аукциона: ') + Object.entries(MC_R).filter(([a]) => a !== 'all').map(([a, v]) => (AUC[a] || a) + ' ' + Math.round(v * 100) + '%').join(', ') + '.' + '</p></section>';
   box.innerHTML = h;
 }
 async function mmrcVin() {
@@ -1338,7 +1352,7 @@ function closeSheet(fromPop) {
   if (S.tab === 'lots') drawLots(true); else if (S.tab !== 'results') keepScroll(render);
   saveView();
 }
-window.addEventListener('popstate', () => { if (closeGal(true)) return; if (sheetOpen) closeSheet(true); });
+window.addEventListener('popstate', () => { if (S.popSkip) { S.popSkip = false; return; } if ($('#scan')) return; if (closeGal(true)) return; if (sheetOpen) closeSheet(true); });
 
 function detail(k) {
   const x = S.d.map[k]; if (!x) return;
@@ -1682,6 +1696,7 @@ document.addEventListener('click', async e => {
     case 'stats': statsSheet(); break;
     case 'mmrc': mmrcSheet(ds.k && S.d && S.d.map[ds.k]); break;
     case 'mc-vin': mmrcVin(); break;
+    case 'mc-scan': SCAN_CB = v => { const i = $('#mc_vin'); if (i) i.value = v; MCS.vin = v; mmrcVin(); }; openScan(); break;
     case 'push': pushOn(); break;
     case 'in-set': case 'in-note': case 'in-view': inspAct(ds.act, ds); break;
     case 'my-sel': S.mySel = ds.id || ''; render(); break;
@@ -1911,7 +1926,7 @@ start();
 
 /* ---------- сканер VIN ---------- */
 const VIN_RE = /[A-HJ-NPR-Z0-9]{17}/;
-let VINS = null, scanStop = null;
+let VINS = null, scanStop = null, SCAN_CB = null;   // SCAN_CB: скан для калькулятора, VIN отдаётся ему, а не открывает лот
 async function vinIndex() {
   if (!VINS) VINS = await getJSON('data/vins.json?v=' + S.index.version);
   return VINS;
@@ -2004,7 +2019,7 @@ async function openScan() {
     + '<form id="scanForm"><input id="vinIn" placeholder="' + T('VIN или последние 6 символов') + '" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="search" aria-label="VIN"><button>' + T('Найти') + '</button></form>';
   document.body.appendChild(el); document.body.style.overflow = 'hidden';
   try { history.pushState({ scan: 1 }, ''); } catch (e) {}
-  el.querySelector('#scanForm').onsubmit = e => { e.preventDefault(); handleVin($('#vinIn').value, false); };
+  el.querySelector('#scanForm').onsubmit = e => { e.preventDefault(); if (SCAN_CB) { const v = cleanVin($('#vinIn').value); if (v.length !== 17) { toast(T('VIN: 17 знаков, без I, O и Q')); return; } const cb = SCAN_CB; closeScan(); cb(v); return; } handleVin($('#vinIn').value, false); };
   const video = el.querySelector('video'), hint = $('#scanHint');
   let stream, alive = true, raf = 0;
   scanStop = () => { alive = false; cancelAnimationFrame(raf); swCb = null; if (stream) camPark(stream); };
@@ -2034,6 +2049,7 @@ async function openScan() {
   };
   const accept = async (vin, how) => {
     if (done || !alive) return; $('#vinIn').value = vin;
+    if (SCAN_CB) { const cb = SCAN_CB; done = true; closeScan(); cb(vin); return; }
     if (how === 'unknown') { if (vin === last) return; last = vin; const res = $('#scanRes'); res.hidden = false; res.innerHTML = T('Прочитал VIN ') + '<b class="vin">' + E(vin) + '</b>' + T('. Сверьте с надписью: если есть ошибка, исправьте в поле внизу. Этой машины нет в каталогах приложения.') + '<br><button class="btn" data-act="copy" data-v="' + E(vin) + '">' + T('Скопировать VIN') + '</button>'; if (navigator.vibrate) navigator.vibrate(60); return; }
     done = true; await handleVin(vin, false); done = !!$('#scan') ? false : true;
   };
@@ -2089,9 +2105,9 @@ async function openScan() {
 }
 function closeScan(fromPop) {
   const el = $('#scan'); if (!el) return;
-  if (scanStop) scanStop(); scanStop = null;
-  el.remove(); document.body.style.overflow = '';
-  if (!fromPop) { try { history.back(); } catch (e) {} }
+  if (scanStop) scanStop(); scanStop = null; SCAN_CB = null;
+  el.remove(); document.body.style.overflow = sheetOpen ? 'hidden' : '';
+  if (!fromPop) { if (sheetOpen) S.popSkip = true; try { history.back(); } catch (e) {} }
 }
 window.addEventListener('popstate', () => { if ($('#scan')) closeScan(true); });
 document.addEventListener('click', e => {
