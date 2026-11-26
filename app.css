@@ -669,3 +669,9 @@ main{overflow-x:clip}
 .srch-mkd summary{cursor:pointer;font-weight:600;padding:8px 0}
 .srch-mks{max-height:300px;overflow:auto}
 .fl-auc{font-size:15px;margin:14px 0 6px}
+.mc-vin{display:flex;gap:8px;margin-bottom:10px}.mc-vin input{flex:1;min-width:0;font:inherit;font-size:15px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:inherit;text-transform:uppercase}
+.sst-f input{width:100%;min-width:0;box-sizing:border-box;font:inherit;font-size:14px;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:inherit}
+.mc-rows>div,.mc-c{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:14px}
+.mc-rows>:first-child{border-top:0}.mc-rows span{color:var(--muted);min-width:0}.mc-rows b{white-space:nowrap;text-align:right}
+.mc-c{width:100%;background:none;border-left:0;border-right:0;border-bottom:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.mc-c span{color:inherit}.mc-c small{display:block;color:var(--muted);font-size:12px;font-weight:400}
