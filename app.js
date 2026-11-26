@@ -1308,7 +1308,7 @@ async function mmrcVin() {
     const mk = (MC_ALL || []).map(z => z.mk).find(m => m.toLowerCase() === String(r.Make).toLowerCase()) || r.Make;
     const want = String(r.Model || '').toLowerCase().replace(/[^a-z0-9]/g, '');
     const mds = [...new Set((MC_ALL || []).filter(z => z.mk === mk).map(z => z.md))];
-    const md = mds.find(m => m.toLowerCase().replace(/[^a-z0-9]/g, '') === want) || mds.find(m => want.startsWith(m.toLowerCase().replace(/[^a-z0-9]/g, '')) || m.toLowerCase().replace(/[^a-z0-9]/g, '').startsWith(want)) || '';
+    mds.sort((a, b) => a.length - b.length); const md = mds.find(m => m.toLowerCase().replace(/[^a-z0-9]/g, '') === want) || mds.find(m => want.startsWith(m.toLowerCase().replace(/[^a-z0-9]/g, '')) || m.toLowerCase().replace(/[^a-z0-9]/g, '').startsWith(want)) || '';
     Object.assign(MCS, { y: String(r.ModelYear), mk, md, st: '' }); mmrcForm(); mmrcDraw();
     toast(r.ModelYear + ' ' + r.Make + ' ' + r.Model + (md ? '' : T(': такой модели у нас нет, выберите похожую')));
   } catch (e) { toast(T('Не удалось расшифровать VIN')); }
@@ -2015,7 +2015,7 @@ async function openScan() {
   LS.set('scan-used', true);
   const el = document.createElement('div'); el.className = 'scan'; el.id = 'scan';
   el.innerHTML = '<div class="bar"><button data-act="scan-close">' + T('Закрыть') + '</button><button data-act="torch" id="torch" hidden>' + T('Фонарик') + '</button></div><video playsinline muted autoplay></video><div class="frame"></div><canvas id="scanLine" class="scan-line" hidden></canvas>'
-    + '<p class="hint" id="scanHint">' + T('Наведите полосу на строку VIN или штрихкод.') + '</p><div class="res" id="scanRes" hidden></div>'
+    + '<p class="hint" id="scanHint">' + T('Наведите полосу на строку VIN, штрихкод или квадратный код рядом с VIN.') + '</p><div class="res" id="scanRes" hidden></div>'
     + '<form id="scanForm"><input id="vinIn" placeholder="' + T('VIN или последние 6 символов') + '" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="search" aria-label="VIN"><button>' + T('Найти') + '</button></form>';
   document.body.appendChild(el); document.body.style.overflow = 'hidden';
   try { history.pushState({ scan: 1 }, ''); } catch (e) {}
@@ -2100,7 +2100,7 @@ async function openScan() {
     }
     raf = requestAnimationFrame(loop);
   };
-  hint.textContent = T('Наведите полосу на строку VIN или штрихкод.');
+  hint.textContent = T('Наведите полосу на строку VIN, штрихкод или квадратный код рядом с VIN.');
   loop();
 }
 function closeScan(fromPop) {
