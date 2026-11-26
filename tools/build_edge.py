@@ -128,6 +128,14 @@ def past(vin):
     return out
 
 ANN = ann_load('tools/%s_ann_%s.txt' % (PFX, date))
+# MMR Manheim по VIN с пробегом (tools/<pfx>_mmr_<дата>.txt: run|MMR с поправкой|ретейл Manheim|базовый MMR|вариантов|диапазон)
+MAN = {}
+try:
+    for line in open('tools/%s_mmr_%s.txt' % (PFX, date)):
+        q = line.rstrip('\n').split('|')
+        if len(q) >= 5 and q[1].isdigit() and int(q[1]) > 0: MAN[q[0]] = q
+except FileNotFoundError:
+    pass
 DET = {}
 try:
     for line in open('tools/%s_detail_%s.txt' % (PFX, date)):
@@ -153,6 +161,8 @@ for line in open('tools/%s_raw_%s.txt' % (PFX, date)):
     if len(p) < 13: continue
     run, title, vin, col, odo, g, li, mmr, pmr, tt, stock, ph, cr = p[:13]
     mmr = int(mmr) if mmr else None
+    edge_mmr, M = mmr, MAN.get(run)
+    if M: mmr = int(M[1])
     if not title[:4].isdigit(): continue
     y = int(title[:4]); title = title[5:]
     title = re.sub(r'(\d)c\b', r'\1cyl.', title)
@@ -208,7 +218,11 @@ for line in open('tools/%s_raw_%s.txt' % (PFX, date)):
                     if acc >= tot / 2: adj = max(0.85, min(1.15, v)); break
         w, ret, rough = mmr, mmr * band(mmr) * adj, False
         lot.pop('est', None)
-        lot['src'] = 'MMR из пре-сейла EDGE; ретейл по отношению ретейл/MMR для этой цены' + (' с поправкой модели %+d%%' % round(100 * (adj - 1)) if abs(adj - 1) >= 0.02 else '')
+        lot['src'] = ('MMR Manheim по VIN с поправкой на пробег'
+                      + (' (вариантов комплектации %s, взято среднее)' % M[4] if M[4] not in ('', '1') else '')
+                      + ('; в пре-сейле EDGE был $%s' % format(edge_mmr, ',') if edge_mmr and edge_mmr != mmr else '')
+                      + ('; ретейл Manheim $%s' % format(int(M[2]), ',') if M[2] else '') + ';') if M else 'MMR из пре-сейла EDGE;'
+        lot['src'] += ' ретейл по отношению ретейл/MMR для этой цены' + (' с поправкой модели %+d%%' % round(100 * (adj - 1)) if abs(adj - 1) >= 0.02 else '')
     if w:
         w = round(w / 25) * 25; ret = round(ret / 50) * 50
         lot['w'], lot['r'] = w, ret
